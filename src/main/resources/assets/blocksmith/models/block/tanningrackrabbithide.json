@@ -1,0 +1,45 @@
+{      
+
+    "textures": 
+    {
+        "leather": "items/rabbit_hide",
+        "pole": "blocks/log_big_oak"
+    },
+   "elements":[  
+      { 
+         "__comment":"The skin on the tanning rack", 
+         "from":[ 3, 11, 7.5 ],
+         "to":[ 13, 23, 7.5 ],
+         "faces":{  
+            "north":{ "uv": [ 2, 2, 14, 14 ], "texture":"#leather" },
+            "south":{ "uv": [ 2, 2, 14, 14 ],  "texture":"#leather" }
+         }
+      },
+      {  
+         "__comment":"The right post of the tanning rack", 
+         "from":[ 13, 0, 7 ],
+         "to":[ 15, 24, 8 ],
+         "faces":{  
+            "down":{ "uv": [ 0, 0, 15, 15 ], "texture":"#pole" },
+            "up":{ "uv": [ 0, 0, 15, 15 ], "texture": "#pole" },
+            "north":{ "uv": [ 0, 0, 15, 15 ], "texture":"#pole" },
+            "south":{ "uv": [ 0, 0, 15, 15 ], "texture":"#pole" },
+            "west":{ "uv": [ 0, 0, 15, 15 ], "texture":"#pole" },
+            "east":{ "uv": [ 0, 0, 15, 15 ], "texture":"#pole" }
+         }
+      },
+      {  
+         "__comment":"The left post of the tanning rack",      
+         "from":[ 1, 0, 7 ],
+         "to":[ 3, 24, 8 ],
+         "faces":{  
+            "down":{ "uv": [ 0, 0, 15, 15 ], "texture": "#pole" },
+            "up":{ "uv": [ 0, 0, 15, 15 ], "texture": "#pole" },
+            "north":{ "uv": [ 0, 0, 15, 15 ], "texture": "#pole" },
+            "south":{ "uv": [ 0, 0, 15, 15 ], "texture": "#pole" },
+            "west":{ "uv": [ 0, 0, 15, 15 ], "texture": "#pole" },
+            "east":{ "uv": [ 0, 0, 15, 15 ], "texture": "#pole" }
+         }
+      }
+   ]
+}

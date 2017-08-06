@@ -1,0 +1,9 @@
+{
+    "forge_marker": 1,
+    "variants": {
+        "facing=north": { "model": "blocksmith:compactor" },
+        "facing=south": { "model": "blocksmith:compactor", "y": 180 },
+        "facing=west":  { "model": "blocksmith:compactor", "y": 270 },
+        "facing=east":  { "model": "blocksmith:compactor", "y": 90 }
+    }
+}

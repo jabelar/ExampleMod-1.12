@@ -1,0 +1,13 @@
+{
+    "forge_marker": 1,
+    "variants": 
+    {
+        "tanning_ingredient=0": { "model": "blocksmith:tanningrack" },
+        "tanning_ingredient=1": { "model": "blocksmith:tanningrackcowhide" },
+        "tanning_ingredient=2": { "model": "blocksmith:tanningracksheepskin" },
+        "tanning_ingredient=3": { "model": "blocksmith:tanningrackpigskin" },
+        "tanning_ingredient=4": { "model": "blocksmith:tanningrackhorsehide" },
+        "tanning_ingredient=5": { "model": "blocksmith:tanningrackrabbithide" },
+        "tanning_ingredient=6": { "model": "blocksmith:tanningrackcomplete" }
+    }
+}

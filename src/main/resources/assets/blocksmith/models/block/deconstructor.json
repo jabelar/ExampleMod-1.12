@@ -1,0 +1,9 @@
+{
+    "parent": "block/orientable",
+    "textures": 
+    {
+        "top": "blocksmith:blocks/deconstructor_top",
+        "front": "blocksmith:blocks/deconstructor_front",
+        "side": "blocksmith:blocks/deconstructor_side"
+    }
+}

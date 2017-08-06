@@ -1,0 +1,16 @@
+[
+{
+  "modid": "blocksmith",
+  "name": "Block Smith",
+  "description": "",
+  "version": "1.0.0",
+  "mcversion": "1.8",
+  "url": "",
+  "updateUrl": "",
+  "authorList": [],
+  "credits": "",
+  "logoFile": "modconfiggraphic.png",
+  "screenshots": [],
+  "dependencies": []
+}
+]
