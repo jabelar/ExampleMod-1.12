@@ -16,13 +16,13 @@
 
 package com.blogspot.jabelarminecraft.blocksmith.networking;
 
+import com.blogspot.jabelarminecraft.blocksmith.MainMod;
+
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
-
-import com.blogspot.jabelarminecraft.blocksmith.BlockSmith;
 
 /**
  * @author jabelar
@@ -43,7 +43,7 @@ public class MessageSendItemStackRegistryToServer implements IMessage
     {
         // DEBUG
         System.out.println("toBytes encoded");
-        BlockSmith.proxy.convertItemStackListToPayload(parBuffer); // appends directly to the buffer passed in
+        MainMod.proxy.convertItemStackListToPayload(parBuffer); // appends directly to the buffer passed in
     }
 
     @Override
@@ -51,7 +51,7 @@ public class MessageSendItemStackRegistryToServer implements IMessage
     {
         // DEBUG
         System.out.println("fromBytes");
-        BlockSmith.proxy.setItemStackRegistry(BlockSmith.proxy.convertPayloadToItemStackList(parBuffer)); 
+        MainMod.proxy.setItemStackRegistry(MainMod.proxy.convertPayloadToItemStackList(parBuffer)); 
     }
 
     public static class Handler implements IMessageHandler<MessageSendItemStackRegistryToServer, IMessage> 
@@ -62,7 +62,7 @@ public class MessageSendItemStackRegistryToServer implements IMessage
             // DEBUG
             System.out.println("Message received");
             // Know it will be on the server so make it thread-safe
-            final EntityPlayerMP thePlayer = (EntityPlayerMP) BlockSmith.proxy.getPlayerEntityFromContext(ctx);
+            final EntityPlayerMP thePlayer = (EntityPlayerMP) MainMod.proxy.getPlayerEntityFromContext(ctx);
             thePlayer.getServer().addScheduledTask(
                     new Runnable()
                     {

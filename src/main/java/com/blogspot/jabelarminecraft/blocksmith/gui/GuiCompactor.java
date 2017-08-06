@@ -16,16 +16,16 @@
 
 package com.blogspot.jabelarminecraft.blocksmith.gui;
 
+import com.blogspot.jabelarminecraft.blocksmith.MainMod;
+import com.blogspot.jabelarminecraft.blocksmith.containers.ContainerCompactor;
+
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-
-import com.blogspot.jabelarminecraft.blocksmith.BlockSmith;
-import com.blogspot.jabelarminecraft.blocksmith.containers.ContainerCompactor;
+import net.minecraftforge.fml.relauncher.SideOnly;;
 
 /**
  * @author jabelar
@@ -34,7 +34,7 @@ import com.blogspot.jabelarminecraft.blocksmith.containers.ContainerCompactor;
 @SideOnly(Side.CLIENT)
 public class GuiCompactor extends GuiContainer
 {
-	private static final ResourceLocation COMPACTOR_GUI_TEXTURES = new ResourceLocation(BlockSmith.MODID+":textures/gui/container/compactor.png");
+	private static final ResourceLocation COMPACTOR_GUI_TEXTURES = new ResourceLocation(MainMod.MODID+":textures/gui/container/compactor.png");
     private final InventoryPlayer inventoryPlayer;
     private final IInventory tileCompactor;
 

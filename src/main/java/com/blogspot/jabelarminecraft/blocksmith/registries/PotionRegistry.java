@@ -3,7 +3,8 @@ package com.blogspot.jabelarminecraft.blocksmith.registries;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.blogspot.jabelarminecraft.blocksmith.BlockSmith;
+import com.blogspot.jabelarminecraft.blocksmith.MainMod;
+
 import net.minecraft.block.Block;
 import net.minecraft.potion.Potion;
 import net.minecraftforge.event.RegistryEvent;
@@ -12,7 +13,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry.ObjectHolder;
 import net.minecraftforge.registries.IForgeRegistry;
 
-@ObjectHolder(BlockSmith.MODID)
+@ObjectHolder(MainMod.MODID)
 public class PotionRegistry 
 {
     // instantiate Potions
@@ -25,7 +26,7 @@ public class PotionRegistry
 	{
 	}
 
-	@Mod.EventBusSubscriber(modid = BlockSmith.MODID)
+	@Mod.EventBusSubscriber(modid = MainMod.MODID)
 	public static class RegistrationHandler 
 	{
 		public static final Set<Potion> SET_POTIONS = new HashSet<>();

@@ -3,7 +3,7 @@ package com.blogspot.jabelarminecraft.blocksmith.registries;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.blogspot.jabelarminecraft.blocksmith.BlockSmith;
+import com.blogspot.jabelarminecraft.blocksmith.MainMod;
 import com.blogspot.jabelarminecraft.blocksmith.items.ItemCowHide;
 import com.blogspot.jabelarminecraft.blocksmith.items.ItemHorseHide;
 import com.blogspot.jabelarminecraft.blocksmith.items.ItemPigSkin;
@@ -18,7 +18,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry.ObjectHolder;
 import net.minecraftforge.registries.IForgeRegistry;
 
-@ObjectHolder(BlockSmith.MODID)
+@ObjectHolder(MainMod.MODID)
 public class ItemRegistry {
 //	public static class ArmorMaterials {
 //		public static final ItemArmor.ArmorMaterial ARMOUR_MATERIAL_REPLACEMENT = EnumHelper.addArmorMaterial(Constants.RESOURCE_PREFIX + "replacement", Constants.RESOURCE_PREFIX + "replacement", 15, new int[]{1, 4, 5, 2}, 12, SoundEvents.ITEM_ARMOR_EQUIP_CHAIN, (float) 0);
@@ -42,7 +42,7 @@ public class ItemRegistry {
 	{
 	}
 
-	@Mod.EventBusSubscriber(modid = BlockSmith.MODID)
+	@Mod.EventBusSubscriber(modid = MainMod.MODID)
 	public static class RegistrationHandler 
 	{
 		public static final Set<Item> SET_ITEMS = new HashSet<>();

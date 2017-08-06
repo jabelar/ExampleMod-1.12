@@ -16,13 +16,13 @@
 
 package com.blogspot.jabelarminecraft.blocksmith.networking;
 
+import com.blogspot.jabelarminecraft.blocksmith.MainMod;
+
 import io.netty.buffer.ByteBuf;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
-
-import com.blogspot.jabelarminecraft.blocksmith.BlockSmith;
 
 /**
  * @author jabelar
@@ -67,7 +67,7 @@ public class MessageToClient implements IMessage
         @Override
         public IMessage onMessage(MessageToClient message, MessageContext ctx) 
         {
-            System.out.println(String.format("Received %s from %s", message.text, BlockSmith.proxy.getPlayerEntityFromContext(ctx).getDisplayName()));
+            System.out.println(String.format("Received %s from %s", message.text, MainMod.proxy.getPlayerEntityFromContext(ctx).getDisplayName()));
             return null; // no response in this case
         }
     }

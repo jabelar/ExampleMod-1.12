@@ -18,7 +18,7 @@ package com.blogspot.jabelarminecraft.blocksmith.utilities;
 
 import java.util.List;
 
-import com.blogspot.jabelarminecraft.blocksmith.BlockSmith;
+import com.blogspot.jabelarminecraft.blocksmith.MainMod;
 import com.blogspot.jabelarminecraft.blocksmith.entities.IEntity;
 import com.blogspot.jabelarminecraft.blocksmith.networking.MessageSyncEntityToClient;
 import com.blogspot.jabelarminecraft.blocksmith.networking.MessageSyncEntityToServer;
@@ -227,7 +227,7 @@ public class Utilities
         {
         	// DEBUG
         	System.out.println("sendEntitySyncPacket from server for entity ID ="+theEntity.getEntityId());
-            BlockSmith.network.sendToAll(new MessageSyncEntityToClient(theEntity.getEntityId(), parEntity.getSyncDataCompound()));           
+            MainMod.network.sendToAll(new MessageSyncEntityToClient(theEntity.getEntityId(), parEntity.getSyncDataCompound()));           
         }
     }
 
@@ -238,7 +238,7 @@ public class Utilities
         {
         	// DEBUG
         	System.out.println("sendEntitySyncPacket from client");
-            BlockSmith.network.sendToServer(new MessageSyncEntityToServer(theEntity.getEntityId(), parEntity.getSyncDataCompound()));           
+            MainMod.network.sendToServer(new MessageSyncEntityToServer(theEntity.getEntityId(), parEntity.getSyncDataCompound()));           
         }
     }
     

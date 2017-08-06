@@ -16,14 +16,13 @@
 
 package com.blogspot.jabelarminecraft.blocksmith.slots;
 
+import com.blogspot.jabelarminecraft.blocksmith.recipes.CompactorRecipes;
+
 import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.MathHelper;
-
-import com.blogspot.jabelarminecraft.blocksmith.recipes.CompactorRecipes;
 
 /**
  * @author jabelar

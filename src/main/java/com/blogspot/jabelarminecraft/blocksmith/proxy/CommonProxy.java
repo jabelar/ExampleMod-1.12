@@ -23,8 +23,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import com.blogspot.jabelarminecraft.blocksmith.BlockSmith;
 import com.blogspot.jabelarminecraft.blocksmith.EventHandler;
+import com.blogspot.jabelarminecraft.blocksmith.MainMod;
 import com.blogspot.jabelarminecraft.blocksmith.OreGenEventHandler;
 import com.blogspot.jabelarminecraft.blocksmith.TerrainGenEventHandler;
 import com.blogspot.jabelarminecraft.blocksmith.commands.CommandStructureCapture;
@@ -37,23 +37,14 @@ import com.blogspot.jabelarminecraft.blocksmith.networking.MessageSyncEntityToCl
 import com.blogspot.jabelarminecraft.blocksmith.networking.MessageToClient;
 import com.blogspot.jabelarminecraft.blocksmith.networking.MessageToServer;
 import com.blogspot.jabelarminecraft.blocksmith.tileentities.TileEntityCompactor;
-import com.blogspot.jabelarminecraft.blocksmith.tileentities.TileEntityForge;
-import com.blogspot.jabelarminecraft.blocksmith.tileentities.TileEntityGrinder;
-import com.blogspot.jabelarminecraft.blocksmith.tileentities.TileEntityMovingLightSource;
-import com.blogspot.jabelarminecraft.blocksmith.tileentities.TileEntityTanningRack;
 
 import io.netty.buffer.ByteBuf;
-import net.minecraft.advancements.Advancement;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.stats.StatBasic;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
@@ -120,7 +111,7 @@ public class CommonProxy
     
     public void registerGuiHandlers() 
     {
-        NetworkRegistry.INSTANCE.registerGuiHandler(BlockSmith.instance, new GuiHandler());     
+        NetworkRegistry.INSTANCE.registerGuiHandler(MainMod.instance, new GuiHandler());     
     }
 
     public void fmlLifeCycleEvent(FMLPostInitializationEvent event)
@@ -169,17 +160,17 @@ public class CommonProxy
     {
         // DEBUG
         System.out.println("registering simple networking");
-        BlockSmith.network = NetworkRegistry.INSTANCE.newSimpleChannel(BlockSmith.NETWORK_CHANNEL_NAME);
+        MainMod.network = NetworkRegistry.INSTANCE.newSimpleChannel(MainMod.NETWORK_CHANNEL_NAME);
 
         int packetId = 0;
         // register messages from client to server
-        BlockSmith.network.registerMessage(MessageToServer.Handler.class, MessageToServer.class, packetId++, Side.SERVER);
+        MainMod.network.registerMessage(MessageToServer.Handler.class, MessageToServer.class, packetId++, Side.SERVER);
         // register messages from server to client
-        BlockSmith.network.registerMessage(MessageToClient.Handler.class, MessageToClient.class, packetId++, Side.CLIENT);
-        BlockSmith.network.registerMessage(MessageSyncEntityToClient.Handler.class, MessageSyncEntityToClient.class, packetId++, Side.CLIENT);
-        BlockSmith.network.registerMessage(MessageExtendedReachAttack.Handler.class, MessageExtendedReachAttack.class, packetId++, Side.SERVER);
-        BlockSmith.network.registerMessage(MessageSendItemStackRegistryToServer.Handler.class, MessageSendItemStackRegistryToServer.class, packetId++, Side.SERVER);
-        BlockSmith.network.registerMessage(MessageRequestItemStackRegistryFromClient.Handler.class, MessageRequestItemStackRegistryFromClient.class, packetId++, Side.CLIENT);
+        MainMod.network.registerMessage(MessageToClient.Handler.class, MessageToClient.class, packetId++, Side.CLIENT);
+        MainMod.network.registerMessage(MessageSyncEntityToClient.Handler.class, MessageSyncEntityToClient.class, packetId++, Side.CLIENT);
+        MainMod.network.registerMessage(MessageExtendedReachAttack.Handler.class, MessageExtendedReachAttack.class, packetId++, Side.SERVER);
+        MainMod.network.registerMessage(MessageSendItemStackRegistryToServer.Handler.class, MessageSendItemStackRegistryToServer.class, packetId++, Side.SERVER);
+        MainMod.network.registerMessage(MessageRequestItemStackRegistryFromClient.Handler.class, MessageRequestItemStackRegistryFromClient.class, packetId++, Side.CLIENT);
     }
     
     /*   
@@ -200,12 +191,12 @@ public class CommonProxy
     protected void initConfig(FMLPreInitializationEvent event)
     {
         // might need to use suggestedConfigFile (event.getSuggestedConfigFile) location to publish
-        BlockSmith.configFile = event.getSuggestedConfigurationFile();
+        MainMod.configFile = event.getSuggestedConfigurationFile();
         // DEBUG
-        System.out.println(BlockSmith.MODNAME+" config path = "+BlockSmith.configFile.getAbsolutePath());
-        System.out.println("Config file exists = "+BlockSmith.configFile.canRead());
+        System.out.println(MainMod.MODNAME+" config path = "+MainMod.configFile.getAbsolutePath());
+        System.out.println("Config file exists = "+MainMod.configFile.canRead());
         
-        BlockSmith.config = new Configuration(BlockSmith.configFile);
+        MainMod.config = new Configuration(MainMod.configFile);
 
         syncConfig();
     }
@@ -216,23 +207,23 @@ public class CommonProxy
      */
     public void syncConfig()
     {
-        BlockSmith.config.load();
-        BlockSmith.allowDeconstructUnrealistic = BlockSmith.config.get(Configuration.CATEGORY_GENERAL, "All Craftables Can Deconstruct", false, "Allow unrealistic deconstruction like pumpkins back from pumpkin seeds").getBoolean(false);
+        MainMod.config.load();
+        MainMod.allowDeconstructUnrealistic = MainMod.config.get(Configuration.CATEGORY_GENERAL, "All Craftables Can Deconstruct", false, "Allow unrealistic deconstruction like pumpkins back from pumpkin seeds").getBoolean(false);
         // DEBUG
-        System.out.println("Allow unrealistic deconstruction = "+BlockSmith.allowDeconstructUnrealistic);
-        BlockSmith.allowHorseArmorCrafting = BlockSmith.config.get(Configuration.CATEGORY_GENERAL, "Can Craft Horse Armor", true, "Allow crafting of horse armor and SADDLEs").getBoolean(true);
+        System.out.println("Allow unrealistic deconstruction = "+MainMod.allowDeconstructUnrealistic);
+        MainMod.allowHorseArmorCrafting = MainMod.config.get(Configuration.CATEGORY_GENERAL, "Can Craft Horse Armor", true, "Allow crafting of horse armor and SADDLEs").getBoolean(true);
         // DEBUG
-        System.out.println("Allow horse armor crafting = "+BlockSmith.allowHorseArmorCrafting);
-        BlockSmith.allowDeconstructEnchantedBooks  = BlockSmith.config.get(Configuration.CATEGORY_GENERAL, "Can Deconstruct Enchanted Books", true, "Allow enchanted books to deconstruct like a regular book").getBoolean(true);
+        System.out.println("Allow horse armor crafting = "+MainMod.allowHorseArmorCrafting);
+        MainMod.allowDeconstructEnchantedBooks  = MainMod.config.get(Configuration.CATEGORY_GENERAL, "Can Deconstruct Enchanted Books", true, "Allow enchanted books to deconstruct like a regular book").getBoolean(true);
         // DEBUG
-        System.out.println("Allow enchanted book deconstruction = "+BlockSmith.allowDeconstructEnchantedBooks);
-        BlockSmith.allowPartialDeconstructing = BlockSmith.config.get(Configuration.CATEGORY_GENERAL, "Allow Partial Deconstruction", true, "Allow deconstruction of stacks that are less than crafting output").getBoolean(true);
+        System.out.println("Allow enchanted book deconstruction = "+MainMod.allowDeconstructEnchantedBooks);
+        MainMod.allowPartialDeconstructing = MainMod.config.get(Configuration.CATEGORY_GENERAL, "Allow Partial Deconstruction", true, "Allow deconstruction of stacks that are less than crafting output").getBoolean(true);
         // DEBUG
-        System.out.println("Allow partial deconstruction = "+BlockSmith.allowPartialDeconstructing);
+        System.out.println("Allow partial deconstruction = "+MainMod.allowPartialDeconstructing);
 
         
         // save is useful for the first run where config might not exist, and doesn't hurt
-        BlockSmith.config.save();
+        MainMod.config.save();
     }
 
     /**
@@ -287,13 +278,8 @@ public class CommonProxy
     {
         // DEBUG
         System.out.println("Registering tile entities");
-        GameRegistry.registerTileEntity(TileEntityGrinder.class, "tileEntityGrinder");               
         GameRegistry.registerTileEntity(TileEntityCompactor.class, "tileEntityCompactor");               
-        GameRegistry.registerTileEntity(TileEntityTanningRack.class, "tileEntityTanningRack");               
-        GameRegistry.registerTileEntity(TileEntityForge.class, "tileEntityForge");               
-        GameRegistry.registerTileEntity(TileEntityMovingLightSource.class, "tileEntityMovingLightSource");               
-        // example: GameRegistry.registerTileEntity(TileEntityMagicBeanStalk.class, "tileEntityMagicBeanStalk");
-    }
+   }
 
     /**
      * Registers recipes
@@ -381,8 +367,8 @@ public class CommonProxy
      */
      protected void registerModEntity(Class parEntityClass, String parEntityName)
      {
- 		final ResourceLocation resourceLocation = new ResourceLocation(BlockSmith.MODID, parEntityName);
-        EntityRegistry.registerModEntity(resourceLocation, parEntityClass, parEntityName, ++modEntityID, BlockSmith.instance, 80, 3, false);
+ 		final ResourceLocation resourceLocation = new ResourceLocation(MainMod.MODID, parEntityName);
+        EntityRegistry.registerModEntity(resourceLocation, parEntityClass, parEntityName, ++modEntityID, MainMod.instance, 80, 3, false);
      }
 
      /**
@@ -392,15 +378,15 @@ public class CommonProxy
       */
      protected void registerModEntityFastTracking(Class parEntityClass, String parEntityName)
      {
-  		final ResourceLocation resourceLocation = new ResourceLocation(BlockSmith.MODID, parEntityName);
-        EntityRegistry.registerModEntity(resourceLocation, parEntityClass, parEntityName, ++modEntityID, BlockSmith.instance, 80, 10, true);
+  		final ResourceLocation resourceLocation = new ResourceLocation(MainMod.MODID, parEntityName);
+        EntityRegistry.registerModEntity(resourceLocation, parEntityClass, parEntityName, ++modEntityID, MainMod.instance, 80, 10, true);
      }
 
      public void registerModEntityWithEgg(Class parEntityClass, String parEntityName, 
               int parEggColor, int parEggSpotsColor)
      {
-   		final ResourceLocation resourceLocation = new ResourceLocation(BlockSmith.MODID, parEntityName);
-        EntityRegistry.registerModEntity(resourceLocation, parEntityClass, parEntityName, ++modEntityID, BlockSmith.instance, 80, 3, false, parEggColor, parEggSpotsColor);
+   		final ResourceLocation resourceLocation = new ResourceLocation(MainMod.MODID, parEntityName);
+        EntityRegistry.registerModEntity(resourceLocation, parEntityClass, parEntityName, ++modEntityID, MainMod.instance, 80, 3, false, parEggColor, parEggSpotsColor);
      }
 
      /**

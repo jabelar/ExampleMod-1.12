@@ -24,7 +24,7 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.glu.GLU;
 import org.lwjgl.util.glu.Sphere;
 
-import com.blogspot.jabelarminecraft.blocksmith.BlockSmith;
+import com.blogspot.jabelarminecraft.blocksmith.MainMod;
 import com.blogspot.jabelarminecraft.blocksmith.VersionChecker;
 import com.blogspot.jabelarminecraft.blocksmith.entities.EntityPigTest;
 import com.blogspot.jabelarminecraft.blocksmith.registries.BlockRegistry;
@@ -109,8 +109,8 @@ public class ClientProxy extends CommonProxy
         super.fmlLifeCycleEvent(event);
 
         // do client-specific stuff
-        BlockSmith.versionChecker = new VersionChecker();
-        Thread versionCheckThread = new Thread(BlockSmith.versionChecker, "Version Check");
+        MainMod.versionChecker = new VersionChecker();
+        Thread versionCheckThread = new Thread(MainMod.versionChecker, "Version Check");
         versionCheckThread.start();
 
 }
@@ -163,7 +163,7 @@ public class ClientProxy extends CommonProxy
     {
         RenderItem renderItem = Minecraft.getMinecraft().getRenderItem();
 
-        renderItem.getItemModelMesher().register(parItem, 0, new ModelResourceLocation(BlockSmith.MODID + ":" + parItem.getUnlocalizedName().substring(5), "inventory"));
+        renderItem.getItemModelMesher().register(parItem, 0, new ModelResourceLocation(MainMod.MODID + ":" + parItem.getUnlocalizedName().substring(5), "inventory"));
     }
     
     public void registerBlockRenderers()
@@ -173,13 +173,7 @@ public class ClientProxy extends CommonProxy
         
         RenderItem renderItem = Minecraft.getMinecraft().getRenderItem();
         
-        renderItem.getItemModelMesher().register(Item.getItemFromBlock(BlockRegistry.TANNING_RACK), 0, new ModelResourceLocation(BlockSmith.MODID + ":" + BlockRegistry.TANNING_RACK.getUnlocalizedName().substring(5), "inventory"));
-        renderItem.getItemModelMesher().register(Item.getItemFromBlock(BlockRegistry.GRINDER), 0, new ModelResourceLocation(BlockSmith.MODID + ":" + BlockRegistry.GRINDER.getUnlocalizedName().substring(5), "inventory"));
-        renderItem.getItemModelMesher().register(Item.getItemFromBlock(BlockRegistry.COMPACTOR), 0, new ModelResourceLocation(BlockSmith.MODID + ":" + BlockRegistry.COMPACTOR.getUnlocalizedName().substring(5), "inventory"));
-        renderItem.getItemModelMesher().register(Item.getItemFromBlock(BlockRegistry.DECONSTRUCTOR), 0, new ModelResourceLocation(BlockSmith.MODID + ":" + BlockRegistry.DECONSTRUCTOR.getUnlocalizedName().substring(5), "inventory"));
-        renderItem.getItemModelMesher().register(Item.getItemFromBlock(BlockRegistry.FORGE), 0, new ModelResourceLocation(BlockSmith.MODID + ":" + BlockRegistry.FORGE.getUnlocalizedName().substring(5), "inventory"));
-//        renderItem.getItemModelMesher().register(Item.getItemFromBlock(BlockSmith.blockForgeLit), 0, new ModelResourceLocation(BlockSmith.MODID + ":" + BlockSmith.blockForgeLit.getUnlocalizedName().substring(5), "inventory"));
-        renderItem.getItemModelMesher().register(Item.getItemFromBlock(BlockRegistry.MOVING_LIGHT_SOURCE), 0, new ModelResourceLocation("torch"));
+        renderItem.getItemModelMesher().register(Item.getItemFromBlock(BlockRegistry.COMPACTOR), 0, new ModelResourceLocation(MainMod.MODID + ":" + BlockRegistry.COMPACTOR.getUnlocalizedName().substring(5), "inventory"));
     }
     
     /*     
@@ -221,7 +215,7 @@ public class ClientProxy extends CommonProxy
        //Create a new list to hold our sphere data.
         GL11.glNewList(sphereIdOutside, GL11.GL_COMPILE);
        //binds the texture 
-       ResourceLocation rL = new ResourceLocation(BlockSmith.MODID+":textures/entities/sphere.png");
+       ResourceLocation rL = new ResourceLocation(MainMod.MODID+":textures/entities/sphere.png");
        Minecraft.getMinecraft().getTextureManager().bindTexture(rL);
        //The drawing the sphere is automatically doing is getting added to our list. Careful, the last 2 variables
        //control the detail, but have a massive impact on performance. 32x32 is a good balance on my machine.s

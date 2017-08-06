@@ -7,7 +7,7 @@ import net.minecraft.world.storage.WorldSavedData;
 public class WorldData extends WorldSavedData 
 {
 
-	private static final String IDENTIFIER = BlockSmith.MODID;
+	private static final String IDENTIFIER = MainMod.MODID;
 	
 //	private boolean hasCastleSpawned = false;
 //	private boolean familyCowHasGivenLead = false;

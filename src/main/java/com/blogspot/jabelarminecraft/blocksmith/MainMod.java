@@ -45,12 +45,12 @@ import net.minecraftforge.fml.common.event.FMLServerStoppingEvent;
 import net.minecraftforge.fml.common.network.FMLEventChannel;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 
-@Mod( modid = BlockSmith.MODID, 
-      name = BlockSmith.MODNAME, 
-      version = BlockSmith.MODVERSION,
-      guiFactory = "com.blogspot.jabelarminecraft."+BlockSmith.MODID+".gui.GuiFactory",
+@Mod( modid = MainMod.MODID, 
+      name = MainMod.MODNAME, 
+      version = MainMod.MODVERSION,
+      guiFactory = "com.blogspot.jabelarminecraft."+MainMod.MODID+".gui.GuiFactory",
       acceptedMinecraftVersions = "[1.8,1.8.9]")
-public class BlockSmith
+public class MainMod
 {
     public static final String MODID = "blocksmith";
     public static final String MODNAME = "Block Smith";
@@ -119,14 +119,14 @@ public class BlockSmith
     // enumerate guis
     public enum GUI_ENUM 
     {
-        GRINDER, COMPACTOR, DECONSTRUCTOR, TANNING_RACK, FORGE
+        COMPACTOR
     }
     
     public static StatBasic deconstructedItemsStat;
     
     // instantiate the mod
     @Instance(MODID)
-    public static BlockSmith instance;
+    public static MainMod instance;
     
     // create custom creativetab for mod items
         

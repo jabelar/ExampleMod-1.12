@@ -3,7 +3,8 @@ package com.blogspot.jabelarminecraft.blocksmith.registries;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.blogspot.jabelarminecraft.blocksmith.BlockSmith;
+import com.blogspot.jabelarminecraft.blocksmith.MainMod;
+
 import net.minecraft.block.Block;
 import net.minecraft.util.SoundEvent;
 import net.minecraftforge.event.RegistryEvent;
@@ -12,7 +13,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry.ObjectHolder;
 import net.minecraftforge.registries.IForgeRegistry;
 
-@ObjectHolder(BlockSmith.MODID)
+@ObjectHolder(MainMod.MODID)
 public class SoundEventRegistry1 
 {
     // instantiate SoundEvents
@@ -25,7 +26,7 @@ public class SoundEventRegistry1
 	{
 	}
 
-	@Mod.EventBusSubscriber(modid = BlockSmith.MODID)
+	@Mod.EventBusSubscriber(modid = MainMod.MODID)
 	public static class RegistrationHandler 
 	{
 		public static final Set<SoundEvent> SET_SOUND_EVENTS = new HashSet<>();

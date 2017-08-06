@@ -69,7 +69,7 @@ public class VersionChecker implements Runnable
             IOUtils.closeQuietly(in);
         }
         System.out.println("Latest mod version = "+latestVersion);
-        isLatestVersion = BlockSmith.MODVERSION.equals(latestVersion);
+        isLatestVersion = MainMod.MODVERSION.equals(latestVersion);
         System.out.println("Are you running latest version = "+isLatestVersion);
     }
     

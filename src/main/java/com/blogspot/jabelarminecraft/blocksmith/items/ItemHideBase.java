@@ -16,18 +16,12 @@
 
 package com.blogspot.jabelarminecraft.blocksmith.items;
 
-import com.blogspot.jabelarminecraft.blocksmith.BlockSmith;
-import com.blogspot.jabelarminecraft.blocksmith.registries.BlockRegistry;
 import com.blogspot.jabelarminecraft.blocksmith.utilities.Utilities;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.stats.StatList;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
@@ -78,16 +72,18 @@ public class ItemHideBase extends Item
                     return new ActionResult(EnumActionResult.FAIL, parPlayer.getActiveItemStack());
                 }
 
-                IBlockState theBlockState = parWorld.getBlockState(blockPos);
-                Block theBlock = theBlockState.getBlock();
-                if (theBlock == BlockRegistry.TANNING_RACK)
-                {
-                    // DEBUG
-                    System.out.println("ItemHorseHide onRightClick() interacting with Tanning Rack");
+                // if you want to do special stuff with interaction of item with specific blocks
+                // you can do that here
+//                IBlockState theBlockState = parWorld.getBlockState(blockPos);
+//                Block theBlock = theBlockState.getBlock();
+//                if (theBlock == BlockRegistry.TANNING_RACK)
+//                {
+//                    // DEBUG
+//                    System.out.println("ItemHorseHide onRightClick() interacting with Tanning Rack");
 //                    parPlayer.addStat(BlockSmith.achievementTanningAHide);
-                    parPlayer.addStat(StatList.getObjectUseStats(this));
-                    return new ActionResult(EnumActionResult.SUCCESS, exchangeItemStack(parPlayer.getActiveItemStack(), parPlayer, Items.LEATHER));
-                }
+//                    parPlayer.addStat(StatList.getObjectUseStats(this));
+//                    return new ActionResult(EnumActionResult.SUCCESS, exchangeItemStack(parPlayer.getActiveItemStack(), parPlayer, Items.LEATHER));
+//                }
             }
 
             return new ActionResult(EnumActionResult.FAIL, parPlayer.getActiveItemStack());

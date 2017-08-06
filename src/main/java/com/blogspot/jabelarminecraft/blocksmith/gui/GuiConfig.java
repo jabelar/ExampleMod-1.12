@@ -16,6 +16,9 @@
 
 package com.blogspot.jabelarminecraft.blocksmith.gui;
 
+import com.blogspot.jabelarminecraft.blocksmith.MainMod;
+import com.blogspot.jabelarminecraft.blocksmith.utilities.Utilities;
+
 /**
  * @author jabelar
  *
@@ -23,22 +26,18 @@ package com.blogspot.jabelarminecraft.blocksmith.gui;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.resources.I18n;
-import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.ConfigElement;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.client.config.GuiMessageDialog;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent.OnConfigChangedEvent;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent.PostConfigChangedEvent;
-import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.eventhandler.Event.Result;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
-import com.blogspot.jabelarminecraft.blocksmith.BlockSmith;
-import com.blogspot.jabelarminecraft.blocksmith.utilities.Utilities;
 
 @SideOnly(Side.CLIENT)
 public class GuiConfig extends net.minecraftforge.fml.client.config.GuiConfig 
@@ -46,12 +45,12 @@ public class GuiConfig extends net.minecraftforge.fml.client.config.GuiConfig
     public GuiConfig(GuiScreen parent) 
     {
         super(parent,
-                new ConfigElement(BlockSmith.config.getCategory(Configuration.CATEGORY_GENERAL)).getChildElements(),
-                BlockSmith.MODID, 
+                new ConfigElement(MainMod.config.getCategory(Configuration.CATEGORY_GENERAL)).getChildElements(),
+                MainMod.MODID, 
                 false, 
                 false, 
                 Utilities.stringToGolden("Craft The Way You Want", 7));
-    	titleLine2 = BlockSmith.configFile.getAbsolutePath();
+    	titleLine2 = MainMod.configFile.getAbsolutePath();
     }
     
     @Override
@@ -81,9 +80,9 @@ public class GuiConfig extends net.minecraftforge.fml.client.config.GuiConfig
                     if (Loader.isModLoaded(modID))
                     {
                         ConfigChangedEvent event = new OnConfigChangedEvent(modID, configID, isWorldRunning, requiresMcRestart);
-                        FMLCommonHandler.instance().bus().post(event);
+                        MinecraftForge.EVENT_BUS.post(event);
                         if (!event.getResult().equals(Result.DENY))
-                            FMLCommonHandler.instance().bus().post(new PostConfigChangedEvent(modID, configID, isWorldRunning, requiresMcRestart));
+                            MinecraftForge.EVENT_BUS.post(new PostConfigChangedEvent(modID, configID, isWorldRunning, requiresMcRestart));
                         
                         if (requiresMcRestart)
                         {

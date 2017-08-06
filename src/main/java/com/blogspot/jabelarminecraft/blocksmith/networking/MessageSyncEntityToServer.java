@@ -16,6 +16,9 @@
 
 package com.blogspot.jabelarminecraft.blocksmith.networking;
 
+import com.blogspot.jabelarminecraft.blocksmith.MainMod;
+import com.blogspot.jabelarminecraft.blocksmith.entities.IEntity;
+
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
@@ -23,9 +26,6 @@ import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
-
-import com.blogspot.jabelarminecraft.blocksmith.BlockSmith;
-import com.blogspot.jabelarminecraft.blocksmith.entities.IEntity;
 
 /**
  * @author jabelar
@@ -73,7 +73,7 @@ public class MessageSyncEntityToServer implements IMessage
         public IMessage onMessage(final MessageSyncEntityToServer message, MessageContext ctx) 
         {
             // Know it will be on the server so make it thread-safe
-            final EntityPlayerMP thePlayer = (EntityPlayerMP) BlockSmith.proxy.getPlayerEntityFromContext(ctx);
+            final EntityPlayerMP thePlayer = (EntityPlayerMP) MainMod.proxy.getPlayerEntityFromContext(ctx);
             thePlayer.getServer().addScheduledTask(
                     new Runnable()
                     {

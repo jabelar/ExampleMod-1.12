@@ -21,8 +21,6 @@ package com.blogspot.jabelarminecraft.blocksmith;
 
 import com.blogspot.jabelarminecraft.blocksmith.items.IExtendedReach;
 import com.blogspot.jabelarminecraft.blocksmith.networking.MessageExtendedReachAttack;
-import com.blogspot.jabelarminecraft.blocksmith.networking.MessageRequestItemStackRegistryFromClient;
-import com.blogspot.jabelarminecraft.blocksmith.registries.BlockRegistry;
 import com.blogspot.jabelarminecraft.blocksmith.registries.ItemRegistry;
 import com.blogspot.jabelarminecraft.blocksmith.utilities.Utilities;
 
@@ -34,12 +32,8 @@ import net.minecraft.entity.passive.EntityMooshroom;
 import net.minecraft.entity.passive.EntityPig;
 import net.minecraft.entity.passive.EntitySheep;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
-import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextComponentString;
@@ -680,7 +674,7 @@ public class EventHandler
                             {
                                 if (mov.entityHit != thePlayer )
                                 {
-                                    BlockSmith.network.sendToServer(new MessageExtendedReachAttack(mov.entityHit.getEntityId()));
+                                    MainMod.network.sendToServer(new MessageExtendedReachAttack(mov.entityHit.getEntityId()));
                                 }
                             }
                         }
@@ -1001,14 +995,14 @@ public class EventHandler
         if (event.phase == TickEvent.Phase.START && event.player.world.isRemote) // only proceed if START phase otherwise, will execute twice per tick
         {
             EntityPlayer thePlayer = event.player;
-            if (!BlockSmith.haveWarnedVersionOutOfDate && !BlockSmith.versionChecker.isLatestVersion())
+            if (!MainMod.haveWarnedVersionOutOfDate && !MainMod.versionChecker.isLatestVersion())
             {
                 ClickEvent versionCheckChatClickEvent = new ClickEvent(ClickEvent.Action.OPEN_URL, "http://jabelarminecraft.blogspot.com");
                 Style clickableStyle = new Style().setClickEvent(versionCheckChatClickEvent);
                 TextComponentString versionWarningChatComponent = new TextComponentString("Your Magic Beans Mod is not latest version!  Click here to update.");
                 versionWarningChatComponent.setStyle(clickableStyle);
                 thePlayer.sendMessage(versionWarningChatComponent);
-                BlockSmith.haveWarnedVersionOutOfDate = true;
+                MainMod.haveWarnedVersionOutOfDate = true;
             }
         }
         else if (event.phase == TickEvent.Phase.START && !event.player.world.isRemote)
@@ -1030,31 +1024,6 @@ public class EventHandler
 //                haveGivenGift = true;
 //            }
             
-            if (event.player.getHeldItemMainhand() != null)
-            {
-                if (event.player.getHeldItemMainhand().getItem() == ItemBlock.getItemFromBlock(Blocks.TORCH))
-                {
-                    int blockX = MathHelper.floor(event.player.posX);
-                    int blockY = MathHelper.floor(event.player.posY-0.2D - event.player.getYOffset());
-                    int blockZ = MathHelper.floor(event.player.posZ);
-                    // place light at head level
-                    BlockPos blockLocation = new BlockPos(blockX, blockY, blockZ).up();
-                    if (event.player.world.getBlockState(blockLocation).getBlock() == Blocks.AIR)
-                    {
-                        event.player.world.setBlockState(blockLocation, BlockRegistry.MOVING_LIGHT_SOURCE.getDefaultState());
-                    }
-                    else 
-                        if (event.player.world.getBlockState(blockLocation.add(event.player.getLookVec().x, event.player.getLookVec().y, event.player.getLookVec().y)).getBlock() == Blocks.AIR)
-                    {
-                        event.player.world.setBlockState(blockLocation.add(
-                        		event.player.getLookVec().x, 
-                        		event.player.getLookVec().y, 
-                        		event.player.getLookVec().y), 
-                        		BlockRegistry.MOVING_LIGHT_SOURCE.getDefaultState()
-                        		);
-                    }
-                }
-            }
         }
     }
 
@@ -1092,11 +1061,11 @@ public class EventHandler
     {
         // DEBUG
         System.out.println("OnConfigChangedEvent");
-        if(eventArgs.getModID().equals(BlockSmith.MODID))
+        if(eventArgs.getModID().equals(MainMod.MODID))
         {
             System.out.println("Syncing config for mod ="+eventArgs.getModID());
-            BlockSmith.config.save();
-            BlockSmith.proxy.syncConfig();
+            MainMod.config.save();
+            MainMod.proxy.syncConfig();
         }
     }
 
