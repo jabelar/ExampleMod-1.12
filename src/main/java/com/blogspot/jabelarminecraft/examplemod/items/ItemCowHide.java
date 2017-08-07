@@ -16,6 +16,8 @@
 
 package com.blogspot.jabelarminecraft.examplemod.items;
 
+import com.blogspot.jabelarminecraft.examplemod.MainMod;
+
 /**
  * @author jabelar
  *
@@ -25,5 +27,6 @@ public class ItemCowHide extends ItemHideBase
 	public ItemCowHide() 
     {
 		super("cowhide");
+		this.setCreativeTab(MainMod.CREATIVE_TAB);
     }
 }

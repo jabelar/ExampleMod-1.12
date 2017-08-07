@@ -21,13 +21,11 @@ package com.blogspot.jabelarminecraft.examplemod;
 
 import java.io.File;
 
-import com.blogspot.jabelarminecraft.examplemod.materials.MaterialTanningRack;
+import com.blogspot.jabelarminecraft.examplemod.creativetabs.CustomCreativeTab;
 import com.blogspot.jabelarminecraft.examplemod.proxy.CommonProxy;
 
 import net.minecraft.advancements.Advancement;
-//import net.minecraft.stats.Achievement;
 import net.minecraft.stats.StatBasic;
-//import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.common.Mod;
@@ -76,42 +74,24 @@ public class MainMod
     public static boolean allowHorseArmorCrafting = true;
     public static boolean allowPartialDeconstructing = true;
     
+    // instantiate creative tabs
+	public static final CustomCreativeTab CREATIVE_TAB = new CustomCreativeTab();
+
     // instantiate materials
-    public final static MaterialTanningRack materialTanningRack = new MaterialTanningRack();
+    // public final static MaterialTanningRack materialTanningRack = new MaterialTanningRack();
     // see custom armor tutorial at: http://bedrockminer.jimdo.com/modding-tutorials/basic-modding/custom-armor/
     // public final static ArmorMaterial SAFEFALLINGLEATHER = EnumHelper.addArmorMaterial("SAFEFALLINGLEATHER", "safe_falling", 5, new int[]{2, 6, 5, 2}, 15);
     
-//    // instantiate blocks
-//    // need to instantiate some blocks before related item if the item constructor associates with block
-//	public final static BlockTanningRack blockTanningRack = new BlockTanningRack();
-//	public final static BlockGrinder blockGrinder = new BlockGrinder();
-//	public final static BlockCompactor blockCompactor = new BlockCompactor();
-//    public final static BlockDeconstructor blockDeconstructor = new BlockDeconstructor();
-//    public final static BlockForge blockForge = new BlockForge(false);
-////    public final static BlockForge blockForgeLit = new BlockForge(true);
-//    public final static BlockMovingLightSource blockMovingLightSource = new BlockMovingLightSource();
-	
-//    // instantiate items
-//	// important to do this after blocks where item is associated with custom block, like with crop
-//	public final static ItemCowHide cowHide = new ItemCowHide();
-//	public final static ItemSheepSkin sheepSkin = new ItemSheepSkin();
-//	public final static ItemPigSkin pigSkin = new ItemPigSkin();
-//	public final static ItemHorseHide horseHide = new ItemHorseHide();
-//	public final static ItemSwordExtended swordExtended = new ItemSwordExtended(ToolMaterial.IRON);
+    // blocks are instantiated in BlockRegistry class
     
-	// initiate spawn egg items
+    // items are instantiated in ItemRegistry class
    
     // instantiate structures
     // important to do this after blocks in case structure uses custom block
 
-	// instantiate achievements
-    public static Advancement achievementTanningAHide;
-    public static Advancement craftTable;
-    public static Advancement deconstructAny;
-    public static Advancement deconstructDiamondHoe;
-    public static Advancement deconstructJunk;
-    public static Advancement deconstructDiamondShovel;
-    public static Advancement theHatStandAchievement;
+	// instantiate advancements and stats
+    public static Advancement advancementUseCompactor;
+    public static StatBasic deconstructedItemsStat;
     
     // enumerate guis
     public enum GUI_ENUM 
@@ -119,13 +99,9 @@ public class MainMod
         COMPACTOR
     }
     
-    public static StatBasic deconstructedItemsStat;
-    
     // instantiate the mod
     @Instance(MODID)
     public static MainMod instance;
-    
-    // create custom creativetab for mod items
         
     // Says where the client and server 'proxy' code is loaded.
     @SidedProxy(clientSide="com.blogspot.jabelarminecraft.examplemod.proxy.ClientProxy", serverSide="com.blogspot.jabelarminecraft.examplemod.proxy.CommonProxy")

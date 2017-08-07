@@ -29,7 +29,6 @@ import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
@@ -58,10 +57,12 @@ public class BlockCompactor extends BlockContainer
     public BlockCompactor()
     {
         super(Material.ROCK);
+        // DEBUG
+        System.out.println("Constructing BlockCompactor instance");
         Utilities.setBlockName(this, "compactor");
         setDefaultState(blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH));
         isCompacting = false;
-        setCreativeTab(CreativeTabs.DECORATIONS);
+        setCreativeTab(MainMod.CREATIVE_TAB);
         setSoundType(SoundType.SNOW);
         blockParticleGravity = 1.0F;
         slipperiness = 0.6F;

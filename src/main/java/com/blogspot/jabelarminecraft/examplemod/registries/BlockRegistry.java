@@ -5,8 +5,12 @@ import java.util.Set;
 
 import com.blogspot.jabelarminecraft.examplemod.MainMod;
 import com.blogspot.jabelarminecraft.examplemod.blocks.BlockCompactor;
+import com.google.common.base.Preconditions;
 
 import net.minecraft.block.Block;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -37,6 +41,7 @@ public class BlockRegistry {
 	public static class RegistrationHandler 
 	{
 		public static final Set<Block> SET_BLOCKS = new HashSet<>();
+		public static final Set<Item> SET_ITEM_BLOCKS = new HashSet<>();
 
 		/**
 		 * Register this mod's {@link Block}s.
@@ -52,12 +57,37 @@ public class BlockRegistry {
 
 			final IForgeRegistry<Block> registry = event.getRegistry();
 
-			for (final Block Block : arrayBlocks) {
-				registry.register(Block);
-				SET_BLOCKS.add(Block);
+			for (final Block block : arrayBlocks) {
+				registry.register(block);
+				SET_BLOCKS.add(block);
+				// DEBUG
+				System.out.println("Registering block: "+block.getRegistryName());
 			}
 
 			initialize();
 		}
-	}
+
+		/**
+		 * Register this mod's {@link ItemBlock}s.
+		 *
+		 * @param event The event
+		 */
+		@SubscribeEvent
+		public static void registerItemBlocks(final RegistryEvent.Register<Item> event) 
+		{
+			final ItemBlock[] items = {
+					new ItemBlock(COMPACTOR)
+			};
+
+			final IForgeRegistry<Item> registry = event.getRegistry();
+
+			for (final ItemBlock item : items) {
+				final Block block = item.getBlock();
+				final ResourceLocation registryName = Preconditions.checkNotNull(block.getRegistryName(), "Block %s has null registry name", block);
+				registry.register(item.setRegistryName(registryName));
+				SET_ITEM_BLOCKS.add(item);
+				// DEBUG
+				System.out.println("Registering Item Block for "+registryName);			}
+		}		
+	}	
 }

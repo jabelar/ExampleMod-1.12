@@ -70,6 +70,8 @@ public class ItemRegistry {
 			for (final Item item : arrayItems) {
 				registry.register(item);
 				SET_ITEMS.add(item);
+				// DEBUG
+				System.out.println("Registering item: "+item.getRegistryName());
 			}
 
 			initialize();
