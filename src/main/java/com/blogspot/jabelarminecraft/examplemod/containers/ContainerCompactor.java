@@ -36,7 +36,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
  */
 public class ContainerCompactor extends Container
 {
-    private final IInventory tileCompactor;
+    private final TileEntityCompactor tileCompactor;
     private final int sizeInventory;
     private int ticksCompactingItemSoFar;
     private int ticksPerItem;
@@ -47,13 +47,17 @@ public class ContainerCompactor extends Container
     	// DEBUG
     	System.out.println("ContainerCompactor constructor()");
     	
-        tileCompactor = parIInventory;
+        tileCompactor = (TileEntityCompactor) parIInventory;
         sizeInventory = tileCompactor.getSizeInventory();
+        // DEBUG
+        System.out.println("Compactor inventory size = "+sizeInventory);
         addSlotToContainer(new Slot(tileCompactor, TileEntityCompactor.slotEnum.INPUT_SLOT.ordinal(), 56, 35));
         addSlotToContainer(new SlotCompactorOutput(parInventoryPlayer.player, tileCompactor, TileEntityCompactor.slotEnum.OUTPUT_SLOT.ordinal(), 116, 35));
         
         // add player inventory slots
         // note that the slot numbers are within the player inventory so can be same as the tile entity inventory
+        // DEBUG
+        System.out.println("Adding player inventory slots to Compactor container");
         int i;
         for (i = 0; i < 3; ++i)
         {
@@ -64,6 +68,8 @@ public class ContainerCompactor extends Container
         }
 
         // add hotbar slots
+        // DEBUG
+        System.out.println("Adding hotbar slots to Compactor container");
         for (i = 0; i < 9; ++i)
         {
             addSlotToContainer(new Slot(parInventoryPlayer, i, 8 + i * 18, 142));
@@ -76,8 +82,14 @@ public class ContainerCompactor extends Container
     @Override
     public void addListener(IContainerListener listener)
     {
+    	// DEBUG
+    	System.out.println("Adding listener to Compactor container = "+listener);
         super.addListener(listener);
-        listener.sendAllWindowProperties(this, this.tileCompactor);
+    	// DEBUG
+    	System.out.println("Sending all window properties listener");
+        listener.sendAllWindowProperties(this, tileCompactor);
+    	// DEBUG
+    	System.out.println("Finished adding listener to Compactor container");
     }
 
     /**
@@ -132,7 +144,7 @@ public class ContainerCompactor extends Container
     @Override
 	public ItemStack transferStackInSlot(EntityPlayer playerIn, int slotIndex)
     {
-        ItemStack itemStack1 = null;
+        ItemStack itemStack1 = ItemStack.EMPTY;
         Slot slot = inventorySlots.get(slotIndex);
 
         if (slot != null && slot.getHasStack())
@@ -144,7 +156,7 @@ public class ContainerCompactor extends Container
             {
                 if (!mergeItemStack(itemStack2, sizeInventory, sizeInventory+36, true))
                 {
-                    return null;
+                    return ItemStack.EMPTY;
                 }
 
                 slot.onSlotChange(itemStack2, itemStack1);
@@ -152,33 +164,33 @@ public class ContainerCompactor extends Container
             else if (slotIndex != TileEntityCompactor.slotEnum.INPUT_SLOT.ordinal())
             {
             	// check if there is a compacting recipe for the stack
-                if (CompactorRecipes.instance().getCompactingResult(itemStack2) != null)
+                if (CompactorRecipes.instance().getCompactingResult(itemStack2) != ItemStack.EMPTY)
                 {
                     if (!mergeItemStack(itemStack2, 0, 1, false))
                     {
-                        return null;
+                        return ItemStack.EMPTY;
                     }
                 }
                 else if (slotIndex >= sizeInventory && slotIndex < sizeInventory+27) // player inventory slots
                 {
                     if (!mergeItemStack(itemStack2, sizeInventory+27, sizeInventory+36, false))
                     {
-                        return null;
+                        return ItemStack.EMPTY;
                     }
                 }
                 else if (slotIndex >= sizeInventory+27 && slotIndex < sizeInventory+36 && !mergeItemStack(itemStack2, sizeInventory+1, sizeInventory+28, false)) // hotbar slots
                 {
-                    return null;
+                    return ItemStack.EMPTY;
                 }
             }
             else if (!mergeItemStack(itemStack2, sizeInventory, sizeInventory+36, false))
             {
-                return null;
+                return ItemStack.EMPTY;
             }
 
             if (itemStack2.getCount() == 0)
             {
-                slot.putStack((ItemStack)null);
+                slot.putStack(ItemStack.EMPTY);
             }
             else
             {
@@ -187,7 +199,7 @@ public class ContainerCompactor extends Container
 
             if (itemStack2.getCount() == itemStack1.getCount())
             {
-                return null;
+                return ItemStack.EMPTY;
             }
 
             slot.onTake(playerIn, itemStack2);

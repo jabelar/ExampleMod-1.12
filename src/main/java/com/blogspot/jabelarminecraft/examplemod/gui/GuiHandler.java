@@ -12,7 +12,7 @@ import net.minecraftforge.fml.common.network.IGuiHandler;
 
 public class GuiHandler implements IGuiHandler
 {
-
+	// On server side you return the container (not the GUI!)
     @Override
     public Object getServerGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) 
     { 
@@ -24,6 +24,8 @@ public class GuiHandler implements IGuiHandler
         {
             if (ID == MainMod.GUI_ENUM.COMPACTOR.ordinal())
             {
+            	// DEBUG
+            	System.out.println("GUI handler server element creating ContainerCompactor");
                 return new ContainerCompactor(player.inventory, (IInventory)tileEntity);
             }
         }
@@ -32,6 +34,7 @@ public class GuiHandler implements IGuiHandler
         return null;
     }
 
+    // On the client side you return the GUI (not the container!)
     @Override
     public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z)
     {
@@ -42,6 +45,8 @@ public class GuiHandler implements IGuiHandler
         {
             if (ID == MainMod.GUI_ENUM.COMPACTOR.ordinal())
             {
+               	// DEBUG
+            	System.out.println("GUI handler client element creating GUICompactor");
                 return new GuiCompactor(player.inventory, (IInventory)tileEntity);
             }
         }
