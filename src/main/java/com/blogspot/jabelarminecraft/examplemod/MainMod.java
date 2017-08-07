@@ -49,23 +49,20 @@ import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
       name = MainMod.MODNAME, 
       version = MainMod.MODVERSION,
       guiFactory = "com.blogspot.jabelarminecraft."+MainMod.MODID+".gui.GuiFactory",
-      acceptedMinecraftVersions = "[1.8,1.8.9]")
+      acceptedMinecraftVersions = "[1.12]")
 public class MainMod
 {
-    public static final String MODID = "blocksmith";
-    public static final String MODNAME = "Block Smith";
+    public static final String MODID = "examplemod";
+    public static final String MODNAME = "Example Mod";
     public static final String MODVERSION = "1.0.0";
-    public static final String MODDESCRIPTION = "Crafting just got more realistic";
+    public static final String MODDESCRIPTION = "Describe your mod here";
     public static final String MODAUTHOR = "jabelar";
     public static final String MODCREDITS = "Jnaejnae";
     public static final String MODURL = "www.jabelarminecraft.blogspot.com";
     public static final String MODLOGO = "modconfigraphic.png";
-
-    // this is tag used for sub-compound in extended properties and packet syncing
-	public final static String EXT_PROPS_NAME = "extendedPropertiesMagicBeans";
  
 	// use a named channel to identify packets related to this mod
-    public static final String NETWORK_CHANNEL_NAME = "BlockSmith";
+    public static final String NETWORK_CHANNEL_NAME = MODID;
 	public static FMLEventChannel channel;
 
 	// networking
@@ -131,7 +128,7 @@ public class MainMod
     // create custom creativetab for mod items
         
     // Says where the client and server 'proxy' code is loaded.
-    @SidedProxy(clientSide="com.blogspot.jabelarminecraft.blocksmith.proxy.ClientProxy", serverSide="com.blogspot.jabelarminecraft.blocksmith.proxy.CommonProxy")
+    @SidedProxy(clientSide="com.blogspot.jabelarminecraft.examplemod.proxy.ClientProxy", serverSide="com.blogspot.jabelarminecraft.examplemod.proxy.CommonProxy")
     public static CommonProxy proxy;
     
     // Version checking instance
