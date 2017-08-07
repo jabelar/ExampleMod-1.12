@@ -1,5 +1,5 @@
 {
-    "parent": "blocksmith:block/compactor",
+    "parent": "examplemod:block/tanningrack",
     "display": {
         "thirdperson": {
             "rotation": [ 10, -45, 170 ],

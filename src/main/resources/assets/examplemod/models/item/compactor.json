@@ -1,5 +1,5 @@
 {
-    "parent": "blocksmith:block/grinder",
+    "parent": "examplemod:block/compactor",
     "display": {
         "thirdperson": {
             "rotation": [ 10, -45, 170 ],

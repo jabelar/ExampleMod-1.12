@@ -16,6 +16,7 @@
 
 package com.blogspot.jabelarminecraft.examplemod.tileentities;
 
+import com.blogspot.jabelarminecraft.examplemod.MainMod;
 import com.blogspot.jabelarminecraft.examplemod.blocks.BlockCompactor;
 import com.blogspot.jabelarminecraft.examplemod.containers.ContainerCompactor;
 import com.blogspot.jabelarminecraft.examplemod.recipes.CompactorRecipes;
@@ -505,7 +506,7 @@ public class TileEntityCompactor extends TileEntityLockable implements ITickable
     @Override
 	public String getGuiID()
     {
-        return "blocksmith:compactor";
+        return MainMod.MODID+":compactor";
     }
 
     @Override

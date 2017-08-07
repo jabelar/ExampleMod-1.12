@@ -1,9 +1,0 @@
-{
-    "forge_marker": 1,
-    "variants": {
-        "facing=north": { "model": "blocksmith:grinder" },
-        "facing=south": { "model": "blocksmith:grinder", "y": 180 },
-        "facing=west":  { "model": "blocksmith:grinder", "y": 270 },
-        "facing=east":  { "model": "blocksmith:grinder", "y": 90 }
-    }
-}

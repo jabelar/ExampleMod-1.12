@@ -1,9 +1,0 @@
-{
-    "forge_marker": 1,
-    "variants": {
-        "facing=north": { "model": "blocksmith:deconstructor" },
-        "facing=south": { "model": "blocksmith:deconstructor", "y": 180 },
-        "facing=west":  { "model": "blocksmith:deconstructor", "y": 270 },
-        "facing=east":  { "model": "blocksmith:deconstructor", "y": 90 }
-    }
-}

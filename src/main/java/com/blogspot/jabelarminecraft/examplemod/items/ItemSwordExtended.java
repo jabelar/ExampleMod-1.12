@@ -17,6 +17,7 @@ public class ItemSwordExtended extends ItemSword implements IExtendedReach
 	{
 		super(parMaterial);
 		Utilities.setItemName(this, "swordExtended");
+		setCreativeTab(null);
 	}
 
 	@Override

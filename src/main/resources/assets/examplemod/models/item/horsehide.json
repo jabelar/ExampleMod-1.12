@@ -1,7 +1,7 @@
 {
     "parent": "builtin/generated",
     "textures": {
-        "layer0": "blocksmith:items/horsehide"
+        "layer0": "examplemod:items/horsehide"
     },
     "display": {
         "thirdperson": {
