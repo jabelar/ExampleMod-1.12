@@ -24,6 +24,7 @@ import com.blogspot.jabelarminecraft.examplemod.recipes.CompactorRecipes;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.inventory.ItemStackHelper;
 import net.minecraft.item.ItemStack;
@@ -33,6 +34,8 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.NonNullList;
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.IItemHandler;
 
 /**
@@ -210,6 +213,20 @@ public class TileEntityCompactor extends TileEntityLockable implements ITickable
         return 64;
     }
 
+    /**
+     * Furnace isBurning
+     */
+    public boolean compactingSomething()
+    {
+        return timeCanCompact > 0;
+    }
+
+    @SideOnly(Side.CLIENT)
+    public static boolean compactingSomething(IInventory inventory)
+    {
+        return inventory.getField(0) > 0;
+    }
+
     @Override
 	public void update()
     {
@@ -303,9 +320,13 @@ public class TileEntityCompactor extends TileEntityLockable implements ITickable
         }
         else // check if it has a compacting recipe
         {
+        	// DEBUG
+        	System.out.println("Checking if it has a valid compacting recipe");
             ItemStack itemStackToOutput = CompactorRecipes.instance().getCompactingResult(stackInInputSlot);
             if (itemStackToOutput == ItemStack.EMPTY) // no valid recipe for compacting this item
             {
+            	// DEBUG
+            	System.out.println("Does not have a valid compacting recipe");
             	return false;
             }
             if (stackInOutputSlot == ItemStack.EMPTY) // output slot is empty
