@@ -35,8 +35,8 @@ public class CompactorRecipes
 {
     private static final CompactorRecipes compactingBase = new CompactorRecipes();
     /** The list of compacting results. */
-    private final Map compactingList = Maps.newHashMap();
-    private final Map experienceList = Maps.newHashMap();
+    private final Map<ItemStack, ItemStack> compactingList = Maps.newHashMap();
+    private final Map<ItemStack, Float> experienceList = Maps.newHashMap();
 
     public static CompactorRecipes instance()
     {
@@ -68,7 +68,7 @@ public class CompactorRecipes
         {
             if (!iterator.hasNext())
             {
-                return null;
+                return ItemStack.EMPTY;
             }
 
             entry = (Entry)iterator.next();
@@ -103,7 +103,7 @@ public class CompactorRecipes
         return parItemStack2.getItem() == parItemStack1.getItem() && (parItemStack2.getMetadata() == parItemStack1.getMetadata());
     }
 
-    public Map getCompactingList()
+    public Map<ItemStack, ItemStack> getCompactingList()
     {
         return compactingList;
     }

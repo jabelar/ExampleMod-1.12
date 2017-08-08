@@ -27,12 +27,13 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
+import net.minecraft.inventory.ItemStackHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntityLockable;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
@@ -55,7 +56,7 @@ public class TileEntityCompactor extends TileEntityLockable implements ITickable
     protected static final int[] slotsBottom = new int[] {slotEnum.OUTPUT_SLOT.ordinal()};
     protected static final int[] slotsSides = new int[] {};
     /** The ItemStacks that hold the items currently being used in the compactor */
-    protected ItemStack[] compactorItemStackArray = new ItemStack[2];
+    protected NonNullList<ItemStack> compactorItemStacks = NonNullList.<ItemStack>withSize(3, ItemStack.EMPTY);
     /** The number of ticks that the compactor will keep compacting */
     protected int timeCanCompact;
     /** The number of ticks that a fresh copy of the currently-compacting item would keep the compactor compacting for */
@@ -85,7 +86,7 @@ public class TileEntityCompactor extends TileEntityLockable implements ITickable
     @Override
 	public int getSizeInventory()
     {
-        return compactorItemStackArray.length;
+        return compactorItemStacks.size();
     }
 
     /**
@@ -94,7 +95,7 @@ public class TileEntityCompactor extends TileEntityLockable implements ITickable
     @Override
 	public ItemStack getStackInSlot(int index)
     {
-        return compactorItemStackArray[index];
+        return compactorItemStacks.get(index);
     }
 
     /**
@@ -104,23 +105,23 @@ public class TileEntityCompactor extends TileEntityLockable implements ITickable
     @Override
 	public ItemStack decrStackSize(int index, int count)
     {
-        if (compactorItemStackArray[index] != null)
+        if (compactorItemStacks.get(index) != ItemStack.EMPTY)
         {
             ItemStack itemstack;
 
-            if (compactorItemStackArray[index].getCount() <= count)
+            if (compactorItemStacks.get(index).getCount() <= count)
             {
-                itemstack = compactorItemStackArray[index];
-                compactorItemStackArray[index] = null;
+                itemstack = compactorItemStacks.get(index);
+                compactorItemStacks.set(index, ItemStack.EMPTY);
                 return itemstack;
             }
             else
             {
-                itemstack = compactorItemStackArray[index].splitStack(count);
+                itemstack = compactorItemStacks.get(index).splitStack(count);
 
-                if (compactorItemStackArray[index].getCount() == 0)
+                if (compactorItemStacks.get(index).getCount() == 0)
                 {
-                    compactorItemStackArray[index] = null;
+                    compactorItemStacks.set(index, ItemStack.EMPTY);
                 }
 
                 return itemstack;
@@ -128,7 +129,7 @@ public class TileEntityCompactor extends TileEntityLockable implements ITickable
         }
         else
         {
-            return null;
+            return ItemStack.EMPTY;
         }
     }
 
@@ -160,10 +161,10 @@ public class TileEntityCompactor extends TileEntityLockable implements ITickable
     	// DEBUG
     	System.out.println("TileEntityCompactor setInventorySlotContents()");
     	
-        boolean isSameItemStackAlreadyInSlot = stack != null && stack.isItemEqual(compactorItemStackArray[index]) && ItemStack.areItemStackTagsEqual(stack, compactorItemStackArray[index]);
-        compactorItemStackArray[index] = stack;
+        boolean isSameItemStackAlreadyInSlot = stack != ItemStack.EMPTY && stack.isItemEqual(compactorItemStacks.get(index)) && ItemStack.areItemStackTagsEqual(stack, compactorItemStacks.get(index));
+        compactorItemStacks.set(index, stack);
 
-        if (stack != null && stack.getCount() > getInventoryStackLimit())
+        if (stack != ItemStack.EMPTY && stack.getCount() > getInventoryStackLimit())
         {
             stack.setCount(getInventoryStackLimit());
         }
@@ -204,19 +205,8 @@ public class TileEntityCompactor extends TileEntityLockable implements ITickable
 	public void readFromNBT(NBTTagCompound compound)
     {
         super.readFromNBT(compound);
-        NBTTagList nbttaglist = compound.getTagList("Items", 10);
-        compactorItemStackArray = new ItemStack[getSizeInventory()];
-
-        for (int i = 0; i < nbttaglist.tagCount(); ++i)
-        {
-            NBTTagCompound nbtTagCompound = nbttaglist.getCompoundTagAt(i);
-            byte b0 = nbtTagCompound.getByte("Slot");
-
-            if (b0 >= 0 && b0 < compactorItemStackArray.length)
-            {
-                compactorItemStackArray[b0] = new ItemStack(nbtTagCompound);
-            }
-        }
+        compactorItemStacks = NonNullList.<ItemStack>withSize(this.getSizeInventory(), ItemStack.EMPTY);
+        ItemStackHelper.loadAllItems(compound, compactorItemStacks);
 
         timeCanCompact = compound.getShort("CompactTime");
         ticksCompactingItemSoFar = compound.getShort("CookTime");
@@ -235,20 +225,7 @@ public class TileEntityCompactor extends TileEntityLockable implements ITickable
         compound.setShort("CompactTime", (short)timeCanCompact);
         compound.setShort("CookTime", (short)ticksCompactingItemSoFar);
         compound.setShort("CookTimeTotal", (short)ticksPerItem);
-        NBTTagList nbttaglist = new NBTTagList();
-
-        for (int i = 0; i < compactorItemStackArray.length; ++i)
-        {
-            if (compactorItemStackArray[i] != null)
-            {
-                NBTTagCompound nbtTagCompound = new NBTTagCompound();
-                nbtTagCompound.setByte("Slot", (byte)i);
-                compactorItemStackArray[i].writeToNBT(nbtTagCompound);
-                nbttaglist.appendTag(nbtTagCompound);
-            }
-        }
-
-        compound.setTag("Items", nbttaglist);
+        ItemStackHelper.saveAllItems(compound, compactorItemStacks);
 
         if (hasCustomName())
         {
@@ -297,7 +274,7 @@ public class TileEntityCompactor extends TileEntityLockable implements ITickable
         if (!world.isRemote)
         {
         	// if something in input slot
-            if (compactorItemStackArray[slotEnum.INPUT_SLOT.ordinal()] != null)
+            if (compactorItemStacks.get(slotEnum.INPUT_SLOT.ordinal()) != ItemStack.EMPTY)
             {            	
              	// start compacting
                 if (!compactingSomething() && canCompact())
@@ -328,7 +305,7 @@ public class TileEntityCompactor extends TileEntityLockable implements ITickable
 //                    	System.out.println("Compacting completed another output cycle");
                     	
                         ticksCompactingItemSoFar = 0;
-                        ticksPerItem = timeToCompactOneItem(compactorItemStackArray[0]);
+                        ticksPerItem = timeToCompactOneItem(compactorItemStacks.get(0));
                         compactItem();
                         changedCompactingState = true;
                     }
@@ -363,22 +340,22 @@ public class TileEntityCompactor extends TileEntityLockable implements ITickable
      */
     private boolean canCompact()
     {
-    	ItemStack stackInOutputSlot = compactorItemStackArray[slotEnum.OUTPUT_SLOT.ordinal()];
-    	ItemStack stackInInputSlot = compactorItemStackArray[slotEnum.INPUT_SLOT.ordinal()];
+    	ItemStack stackInOutputSlot = compactorItemStacks.get(slotEnum.OUTPUT_SLOT.ordinal());
+    	ItemStack stackInInputSlot = compactorItemStacks.get(slotEnum.INPUT_SLOT.ordinal());
     			
     	// if nothing in input slot
-        if (stackInInputSlot == null)
+        if (stackInInputSlot == ItemStack.EMPTY)
         {
             return false;
         }
         else // check if it has a compacting recipe
         {
             ItemStack itemStackToOutput = CompactorRecipes.instance().getCompactingResult(stackInInputSlot);
-            if (itemStackToOutput == null) // no valid recipe for compacting this item
+            if (itemStackToOutput == ItemStack.EMPTY) // no valid recipe for compacting this item
             {
             	return false;
             }
-            if (stackInOutputSlot == null) // output slot is empty
+            if (stackInOutputSlot == ItemStack.EMPTY) // output slot is empty
             {
             	// check if enough of the input item (to allow recipes that consume multiple amounts)            }
             	if (stackInInputSlot.getCount() >= CompactorRecipes.instance().getInputAmount(stackInInputSlot))
@@ -430,27 +407,27 @@ public class TileEntityCompactor extends TileEntityLockable implements ITickable
     {
         if (canCompact())
         {
-            ItemStack itemstack = CompactorRecipes.instance().getCompactingResult(compactorItemStackArray[slotEnum.INPUT_SLOT.ordinal()]);
+            ItemStack itemstack = CompactorRecipes.instance().getCompactingResult(compactorItemStacks.get(slotEnum.INPUT_SLOT.ordinal()));
 
             // check if output slot is empty
-            if (compactorItemStackArray[slotEnum.OUTPUT_SLOT.ordinal()] == null)
+            if (compactorItemStacks.get(slotEnum.OUTPUT_SLOT.ordinal()) == ItemStack.EMPTY)
             {
-                compactorItemStackArray[slotEnum.OUTPUT_SLOT.ordinal()] = itemstack.copy();
+                compactorItemStacks.set(slotEnum.OUTPUT_SLOT.ordinal(), itemstack.copy());
             }
-            else if (compactorItemStackArray[slotEnum.OUTPUT_SLOT.ordinal()].getItem() == itemstack.getItem())
+            else if (compactorItemStacks.get(slotEnum.OUTPUT_SLOT.ordinal()).getItem() == itemstack.getItem())
             {
-                compactorItemStackArray[slotEnum.OUTPUT_SLOT.ordinal()].setCount(compactorItemStackArray[slotEnum.OUTPUT_SLOT.ordinal()].getCount() + itemstack.getCount()); // Forge BugFix: Results may have multiple items
+                compactorItemStacks.get(slotEnum.OUTPUT_SLOT.ordinal()).setCount(compactorItemStacks.get(slotEnum.OUTPUT_SLOT.ordinal()).getCount() + itemstack.getCount()); // Forge BugFix: Results may have multiple items
             }
 
             // consume the number of input items based on recipe
-            compactorItemStackArray[slotEnum.INPUT_SLOT.ordinal()].setCount(
-            		compactorItemStackArray[slotEnum.INPUT_SLOT.ordinal()].getCount() 
-            		- CompactorRecipes.instance().getInputAmount(compactorItemStackArray[slotEnum.INPUT_SLOT.ordinal()])
+            compactorItemStacks.get(slotEnum.INPUT_SLOT.ordinal()).setCount(
+            		compactorItemStacks.get(slotEnum.INPUT_SLOT.ordinal()).getCount() 
+            		- CompactorRecipes.instance().getInputAmount(compactorItemStacks.get(slotEnum.INPUT_SLOT.ordinal()))
             		);
 
-            if (compactorItemStackArray[slotEnum.INPUT_SLOT.ordinal()].getCount() <= 0)
+            if (compactorItemStacks.get(slotEnum.INPUT_SLOT.ordinal()).getCount() <= 0)
             {
-                compactorItemStackArray[slotEnum.INPUT_SLOT.ordinal()] = null;
+                compactorItemStacks.set(slotEnum.INPUT_SLOT.ordinal(), ItemStack.EMPTY);
             }
         }
     }
@@ -566,9 +543,9 @@ public class TileEntityCompactor extends TileEntityLockable implements ITickable
     @Override
 	public void clear()
     {
-        for (int i = 0; i < compactorItemStackArray.length; ++i)
+        for (int i = 0; i < compactorItemStacks.size(); ++i)
         {
-            compactorItemStackArray[i] = null;
+            compactorItemStacks.set(i, ItemStack.EMPTY);
         }
     }
 
@@ -579,7 +556,7 @@ public class TileEntityCompactor extends TileEntityLockable implements ITickable
     public ItemStack removeStackFromSlot(int index)
     {
         // TODO Auto-generated method stub
-        return null;
+        return ItemStack.EMPTY;
     }
 
     /* (non-Javadoc)
