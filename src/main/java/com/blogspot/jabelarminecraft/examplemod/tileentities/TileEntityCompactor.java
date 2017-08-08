@@ -210,24 +210,12 @@ public class TileEntityCompactor extends TileEntityLockable implements ITickable
         return 64;
     }
 
-    /**
-     * Compactor is compacting
-     */
-    public boolean compactingSomething()
-    {
-        return true; // this is where you can add a condition like fuel or redstone power
-    }
-
-//    // this function indicates whether container texture should be drawn
-//    @SideOnly(Side.CLIENT)
-//    public static boolean func_174903_a(IInventory parIInventory)
-//    {
-//        return true ; // parIInventory.getField(0) > 0;
-//    }
-
     @Override
 	public void update()
     {
+//    	// DEBUG
+//    	System.out.println("update() in TileEntityCompactor");
+    	
         boolean hasBeenCompacting = compactingSomething();
         boolean changedCompactingState = false;
 
@@ -244,8 +232,8 @@ public class TileEntityCompactor extends TileEntityLockable implements ITickable
              	// start compacting
                 if (!compactingSomething() && canCompact())
                 {
-//	            	// DEBUG
-//	            	System.out.println("TileEntityCompactor update() started compacting");
+	            	// DEBUG
+	            	System.out.println("TileEntityCompactor update() started compacting");
 	            	
 	                timeCanCompact = 150;
 	
@@ -258,16 +246,16 @@ public class TileEntityCompactor extends TileEntityLockable implements ITickable
                 // continue compacting
                 if (compactingSomething() && canCompact())
                 {
-//	            	// DEBUG
-//	            	System.out.println("TileEntityCompactor update() continuing compacting");
+	            	// DEBUG
+	            	System.out.println("TileEntityCompactor update() continuing compacting");
 	            	
                     ++ticksCompactingItemSoFar;
                     
                     // check if completed compacting an item
                     if (ticksCompactingItemSoFar == ticksPerItem)
                     {
-//                    	// DEBUG
-//                    	System.out.println("Compacting completed another output cycle");
+                    	// DEBUG
+                    	System.out.println("Compacting completed another output cycle");
                     	
                         ticksCompactingItemSoFar = 0;
                         ticksPerItem = timeToCompactOneItem(compactorItemStacks.get(0));
