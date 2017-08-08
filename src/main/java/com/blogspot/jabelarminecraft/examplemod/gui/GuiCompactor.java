@@ -41,6 +41,8 @@ public class GuiCompactor extends GuiContainer
     public GuiCompactor(InventoryPlayer parInventoryPlayer, IInventory parInventoryCompactor)
     {
         super(new ContainerCompactor(parInventoryPlayer, parInventoryCompactor));
+    	// DEBUG
+    	System.out.println("GUI Compactor constructor");
         inventoryPlayer = parInventoryPlayer;
         tileCompactor = parInventoryCompactor;
     }
@@ -68,13 +70,6 @@ public class GuiCompactor extends GuiContainer
         int marginVertical = (height - ySize) / 2;
         drawTexturedModalRect(marginHorizontal, marginVertical, 0, 0, xSize, ySize);
 
-//        // Draw fuel level indicator
-//        if (TileEntityCompactor.func_174903_a(tileCompactor))
-//        {
-//            int fuelLevel = getFuelLevel(13);
-//            drawTexturedModalRect(marginHorizontal + 56, marginVertical + 36 + 12 - fuelLevel, 176, 12 - fuelLevel, 14, fuelLevel + 1);
-//        }
-
         // Draw progress indicator
         int progressLevel = getProgressLevel(24);
         drawTexturedModalRect(marginHorizontal + 79, marginVertical + 34, 176, 14, progressLevel + 1, 16);
@@ -87,15 +82,4 @@ public class GuiCompactor extends GuiContainer
         return ticksPerItem != 0 && ticksCompactingItemSoFar != 0 ? ticksCompactingItemSoFar * progressIndicatorPixelWidth / ticksPerItem : 0;
     }
 
-//    private int getFuelLevel(int fuelIndicatorPixelHeight)
-//    {
-//        int currentItemCompactTime = tileCompactor.getField(1); // this is currentItemCompactTime
-//
-//        if (currentItemCompactTime == 0)
-//        {
-//            currentItemCompactTime = 200;
-//        }
-//
-//        return tileCompactor.getField(0) * fuelIndicatorPixelHeight / currentItemCompactTime;
-//    }
  }

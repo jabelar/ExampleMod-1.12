@@ -19,6 +19,7 @@
 
 package com.blogspot.jabelarminecraft.examplemod;
 
+import com.blogspot.jabelarminecraft.examplemod.gui.GuiCompactor;
 import com.blogspot.jabelarminecraft.examplemod.items.IExtendedReach;
 import com.blogspot.jabelarminecraft.examplemod.networking.MessageExtendedReachAttack;
 import com.blogspot.jabelarminecraft.examplemod.registries.ItemRegistry;
@@ -612,7 +613,12 @@ public class EventHandler
     @SideOnly(Side.CLIENT)
     @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
     public void onEvent(GuiOpenEvent event)
-    {
+    { 
+    	if (event.getGui() instanceof GuiCompactor)
+    	{
+    		// DEBUG
+    		System.out.println("GuiOpenEvent for GuiCompactor");
+    	}
 //        if (event.getGui() instanceof GuiIngameMenu)
 //        {
 //            System.out.println("GuiOpenEvent for GuiIngameModOptions");

@@ -21,11 +21,9 @@ import com.blogspot.jabelarminecraft.examplemod.blocks.BlockCompactor;
 import com.blogspot.jabelarminecraft.examplemod.containers.ContainerCompactor;
 import com.blogspot.jabelarminecraft.examplemod.recipes.CompactorRecipes;
 
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
-import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.inventory.ItemStackHelper;
 import net.minecraft.item.ItemStack;
@@ -34,11 +32,7 @@ import net.minecraft.tileentity.TileEntityLockable;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.NonNullList;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.IItemHandler;
 
 /**
@@ -69,16 +63,6 @@ public class TileEntityCompactor extends TileEntityLockable implements ITickable
     protected IItemHandler handlerBottom = new net.minecraftforge.items.wrapper.SidedInvWrapper(this, net.minecraft.util.EnumFacing.DOWN);
     protected IItemHandler handlerSide = new net.minecraftforge.items.wrapper.SidedInvWrapper(this, net.minecraft.util.EnumFacing.WEST);
 
-    
-    /**
-     * This controls whether the tile entity gets replaced whenever the block state is changed.
-     * Normally only want this when block actually is replaced.
-     */
-	@Override
-	public boolean shouldRefresh(World world, BlockPos pos, IBlockState oldState, IBlockState newSate)
-	{
-	    return (oldState.getBlock() != newSate.getBlock());
-	}
 
     /**
      * Returns the number of slots in the inventory.
@@ -88,6 +72,22 @@ public class TileEntityCompactor extends TileEntityLockable implements ITickable
     {
         return compactorItemStacks.size();
     }
+
+	@Override
+	public boolean isEmpty() 
+	{
+	    {
+	        for (ItemStack itemstack : compactorItemStacks)
+	        {
+	            if (!itemstack.isEmpty())
+	            {
+	                return false;
+	            }
+	        }
+
+	        return true;
+	    }
+	}
 
     /**
      * Returns the stack in slot i
@@ -105,52 +105,17 @@ public class TileEntityCompactor extends TileEntityLockable implements ITickable
     @Override
 	public ItemStack decrStackSize(int index, int count)
     {
-        if (compactorItemStacks.get(index) != ItemStack.EMPTY)
-        {
-            ItemStack itemstack;
-
-            if (compactorItemStacks.get(index).getCount() <= count)
-            {
-                itemstack = compactorItemStacks.get(index);
-                compactorItemStacks.set(index, ItemStack.EMPTY);
-                return itemstack;
-            }
-            else
-            {
-                itemstack = compactorItemStacks.get(index).splitStack(count);
-
-                if (compactorItemStacks.get(index).getCount() == 0)
-                {
-                    compactorItemStacks.set(index, ItemStack.EMPTY);
-                }
-
-                return itemstack;
-            }
-        }
-        else
-        {
-            return ItemStack.EMPTY;
-        }
+        return ItemStackHelper.getAndSplit(this.compactorItemStacks, index, count);
     }
 
-//    /**
-//     * When some containers are closed they call this on each slot, then drop whatever it returns as an EntityItem -
-//     * like when you close a workbench GUI.
-//     */
-//    @Override
-//	public ItemStack getStackInSlotOnClosing(int index)
-//    {
-//        if (compactorItemStackArray[index] != null)
-//        {
-//            ItemStack itemstack = compactorItemStackArray[index];
-//            compactorItemStackArray[index] = null;
-//            return itemstack;
-//        }
-//        else
-//        {
-//            return null;
-//        }
-//    }
+    /**
+     * Removes a stack from the given slot and returns it.
+     */
+    @Override
+	public ItemStack removeStackFromSlot(int index)
+    {
+        return ItemStackHelper.getAndRemove(this.compactorItemStacks, index);
+    }
 
     /**
      * Sets the given item stack to the specified slot in the inventory (can be crafting or armor sections).
@@ -178,14 +143,14 @@ public class TileEntityCompactor extends TileEntityLockable implements ITickable
         }
     }
 
-//    /**
-//     * Gets the name of this command sender (usually username, but possibly "Rcon")
-//     */
-//    @Override
-//	public String getCommandSenderName()
-//    {
-//        return hasCustomName() ? compactorCustomName : "container.compactor";
-//    }
+    /**
+     * Gets the name of this command sender (usually username, but possibly "Rcon")
+     */
+    @Override
+	public String getName()
+    {
+        return hasCustomName() ? compactorCustomName : "container.compactor";
+    }
 
     /**
      * Returns true if this thing is named
@@ -253,12 +218,12 @@ public class TileEntityCompactor extends TileEntityLockable implements ITickable
         return true; // this is where you can add a condition like fuel or redstone power
     }
 
-    // this function indicates whether container texture should be drawn
-    @SideOnly(Side.CLIENT)
-    public static boolean func_174903_a(IInventory parIInventory)
-    {
-        return true ; // parIInventory.getField(0) > 0;
-    }
+//    // this function indicates whether container texture should be drawn
+//    @SideOnly(Side.CLIENT)
+//    public static boolean func_174903_a(IInventory parIInventory)
+//    {
+//        return true ; // parIInventory.getField(0) > 0;
+//    }
 
     @Override
 	public void update()
@@ -432,16 +397,6 @@ public class TileEntityCompactor extends TileEntityLockable implements ITickable
         }
     }
 
-//    /**
-//     * Do not make give this method the name canInteractWith because it clashes with Container
-//     */
-//    @Override
-//	public boolean isUseableByPlayer(EntityPlayer playerIn)
-//    {
-//    	this.
-//        return world.getTileEntity(pos) != this ? false : playerIn.getDistanceSq(pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D) <= 64.0D;
-//    }
-
     @Override
 	public void openInventory(EntityPlayer playerIn) {}
 
@@ -543,30 +498,7 @@ public class TileEntityCompactor extends TileEntityLockable implements ITickable
     @Override
 	public void clear()
     {
-        for (int i = 0; i < compactorItemStacks.size(); ++i)
-        {
-            compactorItemStacks.set(i, ItemStack.EMPTY);
-        }
-    }
-
-    /* (non-Javadoc)
-     * @see net.minecraft.inventory.IInventory#removeStackFromSlot(int)
-     */
-    @Override
-    public ItemStack removeStackFromSlot(int index)
-    {
-        // TODO Auto-generated method stub
-        return ItemStack.EMPTY;
-    }
-
-    /* (non-Javadoc)
-     * @see net.minecraft.world.IWorldNameable#getName()
-     */
-    @Override
-    public String getName()
-    {
-        // TODO Auto-generated method stub
-        return null;
+        compactorItemStacks.clear();
     }
     
     @Override
@@ -583,15 +515,9 @@ public class TileEntityCompactor extends TileEntityLockable implements ITickable
     }
 
 	@Override
-	public boolean isEmpty() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean isUsableByPlayer(EntityPlayer player) {
-		// TODO Auto-generated method stub
-		return false;
+	public boolean isUsableByPlayer(EntityPlayer player) 
+	{
+		return true;
 	}
 
 }
