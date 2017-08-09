@@ -16,6 +16,8 @@
 
 package com.blogspot.jabelarminecraft.examplemod.items;
 
+import net.minecraft.creativetab.CreativeTabs;
+
 /**
  * @author jabelar
  *
@@ -25,5 +27,6 @@ public class ItemHorseHide extends ItemHideBase
 	public ItemHorseHide() 
     {
 		super("horsehide");
+        setCreativeTab(CreativeTabs.MATERIALS);
     }
 }

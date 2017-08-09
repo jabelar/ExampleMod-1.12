@@ -16,6 +16,8 @@
 
 package com.blogspot.jabelarminecraft.examplemod.items;
 
+import net.minecraft.creativetab.CreativeTabs;
+
 /**
  * @author jabelar
  *
@@ -25,5 +27,6 @@ public class ItemPigSkin extends ItemHideBase
 	public ItemPigSkin() 
     {
 		super("pigskin");
+        setCreativeTab(CreativeTabs.MATERIALS);
     }
 }
