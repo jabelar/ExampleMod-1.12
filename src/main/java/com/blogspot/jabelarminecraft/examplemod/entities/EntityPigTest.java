@@ -22,6 +22,7 @@ import net.minecraft.entity.passive.EntityPig;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.MobEffects;
 import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
@@ -29,7 +30,7 @@ import net.minecraft.world.World;
  * @author jabelar
  *
  */
-public class EntityPigTest extends EntityPig
+public class EntityPigTest extends EntityPig implements IEntity
 {
 	public EntityPigTest(World worldIn) 
 	{
@@ -42,7 +43,7 @@ public class EntityPigTest extends EntityPig
 	{
 		// DEBUG
 		System.out.println("Test pig has been attacked");
-        if (this.isEntityInvulnerable(parDamageSource))
+        if (isEntityInvulnerable(parDamageSource))
         {
         	// DEBUG
         	System.out.println("Entity is invulnerable");
@@ -53,7 +54,7 @@ public class EntityPigTest extends EntityPig
             if (!net.minecraftforge.common.ForgeHooks.onLivingAttack(this, parDamageSource, parDamageAmount)) return false;
             // DEBUG
             System.out.println("ForgeHooks.onLivingAttack returned true");
-            if (this.world.isRemote)
+            if (world.isRemote)
             {
             	// DEBUG
             	System.out.println("Don't process attack on client");
@@ -61,15 +62,15 @@ public class EntityPigTest extends EntityPig
             }
             else
             {
-                this.setGrowingAge(0);
+                setGrowingAge(0);
 
-                if (this.getHealth() <= 0.0F)
+                if (getHealth() <= 0.0F)
                 {
                 	// DEBUG
                 	System.out.println("Health is already below 0");
                     return false;
                 }
-                else if (parDamageSource.isFireDamage() && this.isPotionActive(MobEffects.FIRE_RESISTANCE))
+                else if (parDamageSource.isFireDamage() && isPotionActive(MobEffects.FIRE_RESISTANCE))
                 {
                 	// DEBUG
                 	System.out.println("Attacked with fire but has resistance");
@@ -77,56 +78,56 @@ public class EntityPigTest extends EntityPig
                 }
                 else
                 {
-                    if ((parDamageSource == DamageSource.ANVIL || parDamageSource == DamageSource.FALLING_BLOCK) && this.getItemStackFromSlot(EntityEquipmentSlot.HEAD) != null)
+                    if ((parDamageSource == DamageSource.ANVIL || parDamageSource == DamageSource.FALLING_BLOCK) && getItemStackFromSlot(EntityEquipmentSlot.HEAD) != null)
                     {
                     	// DEBUG
                     	System.out.println("Attacked by falling block without a helmet");
-                        this.getItemStackFromSlot(EntityEquipmentSlot.HEAD).damageItem((int)(parDamageAmount * 4.0F + this.rand.nextFloat() * parDamageAmount * 2.0F), this);
+                        getItemStackFromSlot(EntityEquipmentSlot.HEAD).damageItem((int)(parDamageAmount * 4.0F + rand.nextFloat() * parDamageAmount * 2.0F), this);
                         parDamageAmount *= 0.75F;
                     }
 
-                    this.limbSwingAmount = 1.5F;
+                    limbSwingAmount = 1.5F;
                     boolean flag = true;
 
-                    if (this.hurtResistantTime > this.maxHurtResistantTime / 2.0F)
+                    if (hurtResistantTime > maxHurtResistantTime / 2.0F)
                     {
                     	// DEBUG
                     	System.out.println("Attacked within hurt resistance time");
-                        if (parDamageAmount <= this.lastDamage)
+                        if (parDamageAmount <= lastDamage)
                         {
                             return false;
                         }
 
-                        this.damageEntity(parDamageSource, parDamageAmount - this.lastDamage);
-                        this.lastDamage = parDamageAmount;
+                        damageEntity(parDamageSource, parDamageAmount - lastDamage);
+                        lastDamage = parDamageAmount;
                         flag = false;
                     }
                     else
                     {
                     	// DEBUG
                     	System.out.println("Full attack");
-                        this.lastDamage = parDamageAmount;
-                        this.hurtResistantTime = this.maxHurtResistantTime;
-                        this.damageEntity(parDamageSource, parDamageAmount);
-                        this.hurtTime = this.maxHurtTime = 10;
+                        lastDamage = parDamageAmount;
+                        hurtResistantTime = maxHurtResistantTime;
+                        damageEntity(parDamageSource, parDamageAmount);
+                        hurtTime = maxHurtTime = 10;
                     }
 
-                    this.attackedAtYaw = 0.0F;
+                    attackedAtYaw = 0.0F;
                     Entity entity = parDamageSource.getImmediateSource();
 
                     if (entity != null)
                     {
                         if (entity instanceof EntityLivingBase)
                         {
-                            this.setRevengeTarget((EntityLivingBase)entity);
+                            setRevengeTarget((EntityLivingBase)entity);
                         }
 
                         if (entity instanceof EntityPlayer)
                         {
                         	// DEBUG
                         	System.out.println("Attacked by player");
-                            this.recentlyHit = 100;
-                            this.attackingPlayer = (EntityPlayer)entity;
+                            recentlyHit = 100;
+                            attackingPlayer = (EntityPlayer)entity;
                         }
                         else if (entity instanceof net.minecraft.entity.passive.EntityTameable)
                         {
@@ -134,66 +135,66 @@ public class EntityPigTest extends EntityPig
 
                             if (entitywolf.isTamed())
                             {
-                                this.recentlyHit = 100;
-                                this.attackingPlayer = null;
+                                recentlyHit = 100;
+                                attackingPlayer = null;
                             }
                         }
                     }
 
                     if (flag)
                     {
-                        this.world.setEntityState(this, (byte)2);
+                        world.setEntityState(this, (byte)2);
 
                         if (parDamageSource != DamageSource.DROWN)
                         {
                         	// DEBUG
                         	System.out.println("Not drowning");
-                            this.setBeenAttacked();
+                            setBeenAttacked();
                         }
 
                         if (entity != null)
                         {
                         	// DEBUG
                         	System.out.println("Processing knockback");
-                            double d1 = entity.posX - this.posX;
+                            double d1 = entity.posX - posX;
                             double d0;
 
-                            for (d0 = entity.posZ - this.posZ; d1 * d1 + d0 * d0 < 1.0E-4D; d0 = (Math.random() - Math.random()) * 0.01D)
+                            for (d0 = entity.posZ - posZ; d1 * d1 + d0 * d0 < 1.0E-4D; d0 = (Math.random() - Math.random()) * 0.01D)
                             {
                                 d1 = (Math.random() - Math.random()) * 0.01D;
                             }
 
-                            this.attackedAtYaw = (float)(Math.atan2(d0, d1) * 180.0D / Math.PI - this.rotationYaw);
-                            this.knockBack(entity, parDamageAmount, d1, d0);
+                            attackedAtYaw = (float)(Math.atan2(d0, d1) * 180.0D / Math.PI - rotationYaw);
+                            knockBack(entity, parDamageAmount, d1, d0);
                         }
                         else
                         {
-                            this.attackedAtYaw = (int)(Math.random() * 2.0D) * 180;
+                            attackedAtYaw = (int)(Math.random() * 2.0D) * 180;
                         }
                     }
 
                     SoundEvent s;
 
-                    if (this.getHealth() <= 0.0F)
+                    if (getHealth() <= 0.0F)
                     {
                     	// DEBUG
                     	System.out.println("Health now below 0");
-                        s = this.getDeathSound();
+                        s = getDeathSound();
 
                         if (flag && s != null)
                         {
-                            this.playSound(s, this.getSoundVolume(), this.getSoundPitch());
+                            playSound(s, getSoundVolume(), getSoundPitch());
                         }
 
-                        this.onDeath(parDamageSource);
+                        onDeath(parDamageSource);
                     }
                     else
                     {
-                        s = this.getHurtSound(parDamageSource);
+                        s = getHurtSound(parDamageSource);
 
                         if (flag && s != null)
                         {
-                            this.playSound(s, this.getSoundVolume(), this.getSoundPitch());
+                            playSound(s, getSoundVolume(), getSoundPitch());
                         }
                     }
 
@@ -202,4 +203,52 @@ public class EntityPigTest extends EntityPig
             }
         }
     }
+
+	@Override
+	public void setupAI() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void clearAITasks() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void initSyncDataCompound() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public NBTTagCompound getSyncDataCompound() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void setSyncDataCompound(NBTTagCompound parCompound) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void sendEntitySyncPacket() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setScaleFactor(float parScaleFactor) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public float getScaleFactor() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
 }

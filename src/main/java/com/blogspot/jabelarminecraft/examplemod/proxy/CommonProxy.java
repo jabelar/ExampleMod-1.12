@@ -80,11 +80,9 @@ public class CommonProxy
         initConfig(event);
 
         // register stuff
-//        registerBlocks();
-//        registerItems();
         registerTileEntities();
-//        registerModEntities();
-//        registerEntitySpawns();
+        registerModEntities();
+        registerEntitySpawns();
         registerFuelHandlers();
         registerSimpleNetworking();
 //        VillagerRegistry.instance().registerVillagerId(10);
@@ -226,25 +224,6 @@ public class CommonProxy
         MainMod.config.save();
     }
 
-    /**
-     * Registers blocks
-     */
-//    public void registerBlocks()
-//    {
-//        //example: GameRegistry.registerBlock(blockTomato, "tomatoes");
-//        GameRegistry.register(BlockSmith.blockTanningRack);
-//        GameRegistry.register(BlockSmith.blockGrinder);
-//        GameRegistry.register(BlockSmith.blockCompactor);
-//        GameRegistry.register(BlockSmith.blockDeconstructor);
-//        GameRegistry.register(BlockSmith.blockForge);
-////        GameRegistry.registerBlock(BlockSmith.blockForgeLit, BlockSmith.blockForgeLit.getUnlocalizedName().substring(5));
-//        GameRegistry.register(BlockSmith.blockMovingLightSource);
-//        
-//        // each instance of your block should have a name that is unique within your mod.  use lower case.
-//        // you don't need to register an item corresponding to the block, GameRegistry.registerBlock does this automatically.
-//        
-//    }
-
     /** 
      * Registers fluids
      */
@@ -256,20 +235,6 @@ public class CommonProxy
         // testFluid.setLuminosity(0).setDensity(1000).setViscosity(1000).setGaseous(false) ;
      }
     
-    /**
-     * Registers items
-     */
-//    private void registerItems()
-//    {
-//        // DEBUG
-//        System.out.println("Registering items");
-//
-//        GameRegistry.register(BlockSmith.cowHide);
-//        GameRegistry.register(BlockSmith.sheepSkin);
-//        GameRegistry.register(BlockSmith.pigSkin);
-//        GameRegistry.register(BlockSmith.horseHide);
-//        GameRegistry.register(BlockSmith.swordExtended);
-//    }
     
     /**
      * Registers tile entities
@@ -353,11 +318,11 @@ public class CommonProxy
          // DEBUG
         System.out.println("Registering entities");
         // if you want it with a spawn egg use
-        // registerModEntityWithEgg(EntityManEatingTiger.class, "Tiger", 0xE18519, 0x000000);
+        // registerModEntityWithEgg(EntityManEatingTiger.class, "tiger", 0xE18519, 0x000000);
         // or without spawn egg use
 
         // example: registerModEntity(EntityGoldenGoose.class, "golden_goose");
-        registerModEntityWithEgg(EntityPigTest.class, "Test Pig", 0xE18519, 0x000000);
+        registerModEntityWithEgg(EntityPigTest.class, "test_pig", 0xE18519, 0x000000);
     }
  
     /**
