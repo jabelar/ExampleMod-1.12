@@ -24,7 +24,6 @@ import com.blogspot.jabelarminecraft.examplemod.recipes.CompactorRecipes;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
-import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.inventory.ItemStackHelper;
 import net.minecraft.item.ItemStack;
@@ -34,8 +33,6 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.NonNullList;
 import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.IItemHandler;
 
 /**
@@ -52,14 +49,18 @@ public class TileEntityCompactor extends TileEntityLockable implements ITickable
     protected static final int[] slotsTop = new int[] {slotEnum.INPUT_SLOT.ordinal()};
     protected static final int[] slotsBottom = new int[] {slotEnum.OUTPUT_SLOT.ordinal()};
     protected static final int[] slotsSides = new int[] {};
+    
     /** The ItemStacks that hold the items currently being used in the compactor */
     protected NonNullList<ItemStack> compactorItemStacks = NonNullList.<ItemStack>withSize(3, ItemStack.EMPTY);
+	
+    protected boolean hasBeenCompacting = false;
+
     /** The number of ticks that the compactor will keep compacting */
     protected int timeCanCompact;
-    /** The number of ticks that a fresh copy of the currently-compacting item would keep the compactor compacting for */
-    protected int currentItemCompactTime;
+    protected int currentItemCompactTime; // not used currently but holdover from fuel-based tile entity
     protected int ticksCompactingItemSoFar;
     protected int ticksPerItem;
+    
     protected String compactorCustomName;
 
     protected IItemHandler handlerTop = new net.minecraftforge.items.wrapper.SidedInvWrapper(this, net.minecraft.util.EnumFacing.UP);
@@ -140,10 +141,16 @@ public class TileEntityCompactor extends TileEntityLockable implements ITickable
         // if input slot, reset the compacting timers
         if (index == slotEnum.INPUT_SLOT.ordinal() && !isSameItemStackAlreadyInSlot)
         {
-            ticksPerItem = timeToCompactOneItem(stack);
-            ticksCompactingItemSoFar = 0;
-            markDirty();
+        	startCompacting();
         }
+        
+        markDirty();
+    }
+    
+    protected void startCompacting()
+    {
+        ticksCompactingItemSoFar = 0;
+        ticksPerItem = timeToCompactOneItem(compactorItemStacks.get(slotEnum.INPUT_SLOT.ordinal()));
     }
 
     /**
@@ -212,19 +219,11 @@ public class TileEntityCompactor extends TileEntityLockable implements ITickable
     {
         return 64;
     }
-
-    /**
-     * Furnace isBurning
-     */
-    public boolean compactingSomething()
+    
+    protected void compactingStateChanged(boolean parHasBeenCompacting)
     {
-        return timeCanCompact > 0;
-    }
-
-    @SideOnly(Side.CLIENT)
-    public static boolean compactingSomething(IInventory inventory)
-    {
-        return inventory.getField(0) > 0;
+    	hasBeenCompacting = true;
+		BlockCompactor.changeBlockBasedOnCompactingStatus(canCompact(), world, pos);
     }
 
     @Override
@@ -232,71 +231,61 @@ public class TileEntityCompactor extends TileEntityLockable implements ITickable
     {
 //    	// DEBUG
 //    	System.out.println("update() in TileEntityCompactor");
-    	
-        boolean hasBeenCompacting = compactingSomething();
-        boolean changedCompactingState = false;
-
-        if (compactingSomething())
-        {
-            --timeCanCompact;
-        }
 
         if (!world.isRemote)
         {
         	// if something in input slot
             if (compactorItemStacks.get(slotEnum.INPUT_SLOT.ordinal()) != ItemStack.EMPTY)
-            {            	
-             	// start compacting
-                if (!compactingSomething() && canCompact())
+            {      
+            	// check if input is compactable
+                if (canCompact())
                 {
-	            	// DEBUG
-	            	System.out.println("TileEntityCompactor update() started compacting");
-	            	
-	                timeCanCompact = 150;
-	
-	                 if (compactingSomething())
-	                 {
-	                     changedCompactingState = true;
-	                 }
-                }
+                	// check if just started compacting
+                	if (!hasBeenCompacting)
+                	{
+    	            	// DEBUG
+    	            	System.out.println("TileEntityCompactor update() started compacting");
 
-                // continue compacting
-                if (compactingSomething() && canCompact())
-                {
-	            	// DEBUG
-	            	System.out.println("TileEntityCompactor update() continuing compacting");
-	            	
-                    ++ticksCompactingItemSoFar;
-                    
-                    // check if completed compacting an item
-                    if (ticksCompactingItemSoFar == ticksPerItem)
-                    {
-                    	// DEBUG
-                    	System.out.println("Compacting completed another output cycle");
-                    	
-                        ticksCompactingItemSoFar = 0;
-                        ticksPerItem = timeToCompactOneItem(compactorItemStacks.get(0));
-                        compactItem();
-                        changedCompactingState = true;
-                    }
+    	            	compactingStateChanged(true);
+    	            	startCompacting();       	
+                	}
+                	else // already compacting
+                	{
+		            	// DEBUG
+		            	System.out.println("TileEntityCompactor update() continuing compacting");
+		            	
+	                    ++ticksCompactingItemSoFar;
+	                    
+	                    // check if completed compacting an item
+	                    if (ticksCompactingItemSoFar >= ticksPerItem)
+	                    {
+	                    	// DEBUG
+	                    	System.out.println("Compacting completed another output cycle");
+	                    	
+	                    	startCompacting();
+	                        compactItem();
+	                    }
+                	}
                 }
-                else
+                else // item in input slot is not compactable
                 {
+                	if (hasBeenCompacting)
+                	{
+                		compactingStateChanged(false);
+                	}
+                	
                     ticksCompactingItemSoFar = 0;
                 }
             }
-
-            // started or stopped compacting, update block to change to active or inactive model
-            if (hasBeenCompacting != compactingSomething()) // the isCompacting() value may have changed due to call to compactItem() earlier
+            else // nothing in input slot
             {
-                changedCompactingState = true;
-                BlockCompactor.changeBlockBasedOnCompactingStatus(compactingSomething(), world, pos);
+            	if (hasBeenCompacting)
+            	{
+            		compactingStateChanged(false);
+            	}
+            	
+                ticksCompactingItemSoFar = 0;
             }
-        }
-
-        if (changedCompactingState)
-        {
-            markDirty();
         }
     }
 
