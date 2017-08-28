@@ -8,9 +8,11 @@ import com.blogspot.jabelarminecraft.examplemod.blocks.BlockCompactor;
 import com.google.common.base.Preconditions;
 
 import net.minecraft.block.Block;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -63,6 +65,8 @@ public class BlockRegistry {
 				// DEBUG
 				System.out.println("Registering block: "+block.getRegistryName());
 			}
+			
+			registerBlockModels();
 
 			initialize();
 		}
@@ -90,4 +94,23 @@ public class BlockRegistry {
 				System.out.println("Registering Item Block for "+registryName);			}
 		}		
 	}	
+	
+    public static void registerBlockModels()
+    {
+        // DEBUG
+        System.out.println("Registering block renderers");
+        
+        registerBlockModel(COMPACTOR);
+        
+    }
+    
+    public static void registerBlockModel(Block parBlock)
+    {
+    	registerBlockModel(parBlock, 0);
+    }
+    
+    public static void registerBlockModel(Block parBlock, int parMetaData)
+    {
+        ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(parBlock), parMetaData, new ModelResourceLocation(MainMod.MODID + ":" + parBlock.getUnlocalizedName().substring(5), "inventory"));
+    }
 }
