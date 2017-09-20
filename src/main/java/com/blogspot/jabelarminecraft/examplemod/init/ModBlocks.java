@@ -41,10 +41,12 @@ public class ModBlocks {
 	public final static BlockCompactor COMPACTOR = new BlockCompactor();
 	
 	public static final Set<Block> SET_BLOCKS = ImmutableSet.of(
-			COMPACTOR
+			COMPACTOR,
+			ModFluids.SLIME_BLOCK
 			);
 	public static final Set<ItemBlock> SET_ITEM_BLOCKS = ImmutableSet.of(
-			new ItemBlock(COMPACTOR)
+			new ItemBlock(COMPACTOR),
+			new ItemBlock(ModFluids.SLIME_BLOCK)
 			);
 
 	/**
