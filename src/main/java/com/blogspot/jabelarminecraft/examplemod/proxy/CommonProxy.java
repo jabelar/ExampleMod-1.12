@@ -87,7 +87,7 @@ public class CommonProxy
 
         // register stuff
         registerTileEntities();
-        registerModEntities();
+        registerEntities();
         registerEntitySpawns();
         registerFuelHandlers();
         registerSimpleNetworking();
@@ -370,7 +370,7 @@ public class CommonProxy
     /**
      * Registers entities as mod entities.
      */
-    protected void registerModEntities()
+    protected void registerEntities()
     {    
          // DEBUG
         System.out.println("Registering entities");

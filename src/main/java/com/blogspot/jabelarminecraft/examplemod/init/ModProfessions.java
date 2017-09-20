@@ -21,20 +21,20 @@ import com.blogspot.jabelarminecraft.examplemod.MainMod;
 import com.google.common.collect.ImmutableSet;
 
 import net.minecraft.block.Block;
-import net.minecraft.enchantment.Enchantment;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.registry.VillagerRegistry.VillagerProfession;
 import net.minecraftforge.registries.IForgeRegistry;
 
 // @ObjectHolder(MainMod.MODID)
-public class ModEntityEntries 
+public class ModProfessions 
 {
-    // instantiate Enchantments
-//	public final static EnchantmentCustom MY_COOL_ENCHANTMENT = new EnchantmentCustom();
+    // instantiate VillagerProfessions
+//	public final static VillagerProfessionCustom MY_COOL_VillagerProfession = new VillagerProfessionCustom();
 	
-	public static final Set<Enchantment> SET_INSTANCES = ImmutableSet.of(
-//            MY_COOL_ENCHANTMENT
+	public static final Set<VillagerProfession> SET_INSTANCES = ImmutableSet.of(
+//            MY_COOL_VillagerProfession
 			);
 
 	/**
@@ -48,19 +48,19 @@ public class ModEntityEntries
 	public static class RegistrationHandler 
 	{
 		/**
-		 * Register this mod's {@link Enchantment}s.
+		 * Register this mod's {@link VillagerProfession}s.
 		 *
 		 * @param event The event
 		 */
 		@SubscribeEvent
-		public static void onEvent(final RegistryEvent.Register<Enchantment> event) 
+		public static void onEvent(final RegistryEvent.Register<VillagerProfession> event) 
 		{
-			final IForgeRegistry<Enchantment> registry = event.getRegistry();
+			final IForgeRegistry<VillagerProfession> registry = event.getRegistry();
 
 	        System.out.println("Registering recipes");
 
-	        for (final Enchantment enchantment : SET_INSTANCES) {
-				registry.register(enchantment);
+	        for (final VillagerProfession profession : SET_INSTANCES) {
+				registry.register(profession);
 			}
 
 			initialize();
