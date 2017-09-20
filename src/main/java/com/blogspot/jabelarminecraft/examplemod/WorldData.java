@@ -1,9 +1,25 @@
+/**
+    Copyright (C) 2017 by jabelar
+
+    This file is part of jabelar's Minecraft Forge modding examples; as such,
+    you can redistribute it and/or modify it under the terms of the GNU
+    General Public License as published by the Free Software Foundation,
+    either version 3 of the License, or (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+    GNU General Public License for more details.
+
+    For a copy of the GNU General Public License see <http://www.gnu.org/licenses/>.
+*/
 package com.blogspot.jabelarminecraft.examplemod;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraft.world.storage.WorldSavedData;
 
+// TODO: Auto-generated Javadoc
 public class WorldData extends WorldSavedData 
 {
 
@@ -12,17 +28,28 @@ public class WorldData extends WorldSavedData
 //	private boolean hasCastleSpawned = false;
 //	private boolean familyCowHasGivenLead = false;
 	
-	public WorldData() 
+	/**
+ * Instantiates a new world data.
+ */
+public WorldData() 
 	{
 		this(IDENTIFIER);
 	}
 	
+	/**
+	 * Instantiates a new world data.
+	 *
+	 * @param parIdentifier the par identifier
+	 */
 	public WorldData(String parIdentifier) 
 	{
 		super(parIdentifier);
 		markDirty();
 	}
 
+	/* (non-Javadoc)
+	 * @see net.minecraft.world.storage.WorldSavedData#readFromNBT(net.minecraft.nbt.NBTTagCompound)
+	 */
 	@Override
 	public void readFromNBT(NBTTagCompound nbt) 
 	{
@@ -33,6 +60,9 @@ public class WorldData extends WorldSavedData
 //		familyCowHasGivenLead = nbt.getBoolean("familyCowHasGivenLead");
 	}
 
+	/* (non-Javadoc)
+	 * @see net.minecraft.world.storage.WorldSavedData#writeToNBT(net.minecraft.nbt.NBTTagCompound)
+	 */
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound nbt) 
 	{
@@ -78,7 +108,13 @@ public class WorldData extends WorldSavedData
 //		}
 //	}
 		
-	public static WorldData get(World world) 
+	/**
+ * Gets the.
+ *
+ * @param world the world
+ * @return the world data
+ */
+public static WorldData get(World world) 
 	{
 		WorldData data = (WorldData)world.loadData(WorldData.class, IDENTIFIER);
 		if (data == null) 

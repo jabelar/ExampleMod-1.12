@@ -1,5 +1,5 @@
 /**
-    Copyright (C) 2014 by jabelar
+    Copyright (C) 2017 by jabelar
 
     This file is part of jabelar's Minecraft Forge modding examples; as such,
     you can redistribute it and/or modify it under the terms of the GNU
@@ -14,7 +14,7 @@
     For a copy of the GNU General Public License see <http://www.gnu.org/licenses/>.
 */
 
-package com.blogspot.jabelarminecraft.examplemod.gui;
+package com.blogspot.jabelarminecraft.examplemod.client.gui;
 
 import java.util.Set;
 
@@ -22,30 +22,44 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraftforge.fml.client.IModGuiFactory;
 
+// TODO: Auto-generated Javadoc
 /**
  * @author jabelar
  *
  */
 public class GuiFactory implements IModGuiFactory 
 {
+    
+    /* (non-Javadoc)
+     * @see net.minecraftforge.fml.client.IModGuiFactory#initialize(net.minecraft.client.Minecraft)
+     */
     @Override
     public void initialize(Minecraft minecraftInstance) 
     {
  
     }
  
+    /* (non-Javadoc)
+     * @see net.minecraftforge.fml.client.IModGuiFactory#runtimeGuiCategories()
+     */
     @Override
     public Set<RuntimeOptionCategoryElement> runtimeGuiCategories() 
     {
         return null;
     }
  
+	/* (non-Javadoc)
+	 * @see net.minecraftforge.fml.client.IModGuiFactory#hasConfigGui()
+	 */
 	@Override
 	public boolean hasConfigGui() 
 	{
 		return true;
 	}
 
+	/* (non-Javadoc)
+	 * @see net.minecraftforge.fml.client.IModGuiFactory#createConfigGui(net.minecraft.client.gui.GuiScreen)
+	 */
 	@Override
 	public GuiScreen createConfigGui(GuiScreen parentScreen) 
 	{

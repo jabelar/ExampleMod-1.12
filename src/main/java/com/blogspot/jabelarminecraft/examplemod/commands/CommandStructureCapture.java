@@ -1,5 +1,5 @@
 /**
-    Copyright (C) 2014 by jabelar
+    Copyright (C) 2017 by jabelar
 
     This file is part of jabelar's Minecraft Forge modding examples; as such,
     you can redistribute it and/or modify it under the terms of the GNU
@@ -32,6 +32,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
 
+// TODO: Auto-generated Javadoc
 /**
  * @author jabelar
  *
@@ -57,6 +58,9 @@ public class CommandStructureCapture implements ICommand
     static int signY ;
     static int signZ ;
 
+	/**
+	 * Instantiates a new command structure capture.
+	 */
 	public CommandStructureCapture()
 	{
 		    aliases = new ArrayList<String>();
@@ -64,24 +68,36 @@ public class CommandStructureCapture implements ICommand
 		    aliases.add("capt");
 	}
 	
+	/* (non-Javadoc)
+	 * @see net.minecraft.command.ICommand#getName()
+	 */
 	@Override
 	public String getName() 
 	{
 		return "capture";
 	}
 
+	/* (non-Javadoc)
+	 * @see net.minecraft.command.ICommand#getUsage(net.minecraft.command.ICommandSender)
+	 */
 	@Override
 	public String getUsage(ICommandSender var1) 
 	{
 		return "capture <int> <int> <int> <int> <int> <int> <text>"; // use "structure <text>"; later when passing name of structure
 	}
 
+	/* (non-Javadoc)
+	 * @see net.minecraft.command.ICommand#getAliases()
+	 */
 	@Override
 	public List getAliases() 
 	{
 		return this.aliases;
 	}
 
+	/* (non-Javadoc)
+	 * @see net.minecraft.command.ICommand#execute(net.minecraft.server.MinecraftServer, net.minecraft.command.ICommandSender, java.lang.String[])
+	 */
 	@Override
 	public void execute(MinecraftServer server, ICommandSender sender, String[] argString) 
 	{
@@ -158,6 +174,9 @@ public class CommandStructureCapture implements ICommand
 		}
 	}
 
+	/**
+	 * Prints the name array.
+	 */
 	protected void printNameArray()
 	{
 		System.out.println("// Block Name Array");
@@ -200,6 +219,9 @@ public class CommandStructureCapture implements ICommand
 		System.out.println("};");
 	}
 
+	/**
+	 * Prints the meta array.
+	 */
 	protected void printMetaArray()
 	{
 		System.out.println("// Metadata Array");
@@ -242,6 +264,11 @@ public class CommandStructureCapture implements ICommand
 		System.out.println("};");
 	}
 	
+	/**
+	 * Write file name array.
+	 *
+	 * @param fileName the file name
+	 */
 	protected void writeFileNameArray(String fileName)
 	{
 		File file = new File(fileName+".txt");
@@ -274,12 +301,18 @@ public class CommandStructureCapture implements ICommand
 	    printOut.close();
 	}
 
+	/* (non-Javadoc)
+	 * @see net.minecraft.command.ICommand#checkPermission(net.minecraft.server.MinecraftServer, net.minecraft.command.ICommandSender)
+	 */
 	@Override
 	public boolean checkPermission(MinecraftServer server, ICommandSender var1) 
 	{
 		return true;
 	}
 
+	/* (non-Javadoc)
+	 * @see net.minecraft.command.ICommand#isUsernameIndex(java.lang.String[], int)
+	 */
 	@Override
 	public boolean isUsernameIndex(String[] var1, int var2) 
 	{
@@ -297,6 +330,9 @@ public class CommandStructureCapture implements ICommand
         return 0;
     }
 	
+	/* (non-Javadoc)
+	 * @see net.minecraft.command.ICommand#getTabCompletions(net.minecraft.server.MinecraftServer, net.minecraft.command.ICommandSender, java.lang.String[], net.minecraft.util.math.BlockPos)
+	 */
 	@Override
 	public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args,
 			BlockPos targetPos) {

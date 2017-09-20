@@ -1,5 +1,5 @@
 /**
-    Copyright (C) 2015 by jabelar
+    Copyright (C) 2017 by jabelar
 
     This file is part of jabelar's Minecraft Forge modding examples; as such,
     you can redistribute it and/or modify it under the terms of the GNU
@@ -35,6 +35,7 @@ import net.minecraft.util.NonNullList;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.items.IItemHandler;
 
+// TODO: Auto-generated Javadoc
 /**
  * @author jabelar
  *
@@ -70,6 +71,8 @@ public class TileEntityCompactor extends TileEntityLockable implements ITickable
 
     /**
      * Returns the number of slots in the inventory.
+     *
+     * @return the size inventory
      */
     @Override
 	public int getSizeInventory()
@@ -77,6 +80,9 @@ public class TileEntityCompactor extends TileEntityLockable implements ITickable
         return compactorItemStacks.size();
     }
 
+	/* (non-Javadoc)
+	 * @see net.minecraft.inventory.IInventory#isEmpty()
+	 */
 	@Override
 	public boolean isEmpty() 
 	{
@@ -94,7 +100,10 @@ public class TileEntityCompactor extends TileEntityLockable implements ITickable
 	}
 
     /**
-     * Returns the stack in slot i
+     * Returns the stack in slot i.
+     *
+     * @param index the index
+     * @return the stack in slot
      */
     @Override
 	public ItemStack getStackInSlot(int index)
@@ -105,6 +114,10 @@ public class TileEntityCompactor extends TileEntityLockable implements ITickable
     /**
      * Removes from an inventory slot (first arg) up to a specified number (second arg) of items and returns them in a
      * new stack.
+     *
+     * @param index the index
+     * @param count the count
+     * @return the item stack
      */
     @Override
 	public ItemStack decrStackSize(int index, int count)
@@ -114,6 +127,9 @@ public class TileEntityCompactor extends TileEntityLockable implements ITickable
 
     /**
      * Removes a stack from the given slot and returns it.
+     *
+     * @param index the index
+     * @return the item stack
      */
     @Override
 	public ItemStack removeStackFromSlot(int index)
@@ -123,6 +139,9 @@ public class TileEntityCompactor extends TileEntityLockable implements ITickable
 
     /**
      * Sets the given item stack to the specified slot in the inventory (can be crafting or armor sections).
+     *
+     * @param index the index
+     * @param stack the stack
      */
     @Override
 	public void setInventorySlotContents(int index, ItemStack stack)
@@ -147,6 +166,9 @@ public class TileEntityCompactor extends TileEntityLockable implements ITickable
         markDirty();
     }
     
+    /**
+     * Start compacting.
+     */
     protected void startCompacting()
     {
         ticksCompactingItemSoFar = 0;
@@ -154,7 +176,9 @@ public class TileEntityCompactor extends TileEntityLockable implements ITickable
     }
 
     /**
-     * Gets the name of this command sender (usually username, but possibly "Rcon")
+     * Gets the name of this command sender (usually username, but possibly "Rcon").
+     *
+     * @return the name
      */
     @Override
 	public String getName()
@@ -163,7 +187,9 @@ public class TileEntityCompactor extends TileEntityLockable implements ITickable
     }
 
     /**
-     * Returns true if this thing is named
+     * Returns true if this thing is named.
+     *
+     * @return true, if successful
      */
     @Override
 	public boolean hasCustomName()
@@ -171,11 +197,19 @@ public class TileEntityCompactor extends TileEntityLockable implements ITickable
         return compactorCustomName != null && compactorCustomName.length() > 0;
     }
 
+    /**
+     * Sets the custom inventory name.
+     *
+     * @param parCustomName the new custom inventory name
+     */
     public void setCustomInventoryName(String parCustomName)
     {
         compactorCustomName = parCustomName;
     }
 
+    /* (non-Javadoc)
+     * @see net.minecraft.tileentity.TileEntityLockable#readFromNBT(net.minecraft.nbt.NBTTagCompound)
+     */
     @Override
 	public void readFromNBT(NBTTagCompound compound)
     {
@@ -193,6 +227,9 @@ public class TileEntityCompactor extends TileEntityLockable implements ITickable
         }
     }
 
+    /* (non-Javadoc)
+     * @see net.minecraft.tileentity.TileEntityLockable#writeToNBT(net.minecraft.nbt.NBTTagCompound)
+     */
     @Override
 	public NBTTagCompound writeToNBT(NBTTagCompound compound)
     {
@@ -213,6 +250,8 @@ public class TileEntityCompactor extends TileEntityLockable implements ITickable
     /**
      * Returns the maximum stack size for a inventory slot. Seems to always be 64, possibly will be extended. *Isn't
      * this more of a set than a get?*
+     *
+     * @return the inventory stack limit
      */
     @Override
 	public int getInventoryStackLimit()
@@ -220,12 +259,20 @@ public class TileEntityCompactor extends TileEntityLockable implements ITickable
         return 64;
     }
     
+    /**
+     * Compacting state changed.
+     *
+     * @param parHasBeenCompacting the par has been compacting
+     */
     protected void compactingStateChanged(boolean parHasBeenCompacting)
     {
     	hasBeenCompacting = true;
 		BlockCompactor.changeBlockBasedOnCompactingStatus(canCompact(), world, pos);
     }
 
+    /* (non-Javadoc)
+     * @see net.minecraft.util.ITickable#update()
+     */
     @Override
 	public void update()
     {
@@ -289,6 +336,12 @@ public class TileEntityCompactor extends TileEntityLockable implements ITickable
         }
     }
 
+    /**
+     * Time to compact one item.
+     *
+     * @param parItemStack the par item stack
+     * @return the int
+     */
     public int timeToCompactOneItem(ItemStack parItemStack)
     {
         return 200;
@@ -364,7 +417,7 @@ public class TileEntityCompactor extends TileEntityLockable implements ITickable
     }
 
     /**
-     * Turn one item from the compactor source stack into the appropriate compacted item in the compactor result stack
+     * Turn one item from the compactor source stack into the appropriate compacted item in the compactor result stack.
      */
     public void compactItem()
     {
@@ -395,18 +448,30 @@ public class TileEntityCompactor extends TileEntityLockable implements ITickable
         }
     }
 
+    /* (non-Javadoc)
+     * @see net.minecraft.inventory.IInventory#openInventory(net.minecraft.entity.player.EntityPlayer)
+     */
     @Override
 	public void openInventory(EntityPlayer playerIn) {}
 
+    /* (non-Javadoc)
+     * @see net.minecraft.inventory.IInventory#closeInventory(net.minecraft.entity.player.EntityPlayer)
+     */
     @Override
 	public void closeInventory(EntityPlayer playerIn) {}
 
+    /* (non-Javadoc)
+     * @see net.minecraft.inventory.IInventory#isItemValidForSlot(int, net.minecraft.item.ItemStack)
+     */
     @Override
 	public boolean isItemValidForSlot(int index, ItemStack stack)
     {
         return index == slotEnum.INPUT_SLOT.ordinal() ? true : false; // can always put things in input (may not compact though) and can't put anything in output
     }
 
+    /* (non-Javadoc)
+     * @see net.minecraft.inventory.ISidedInventory#getSlotsForFace(net.minecraft.util.EnumFacing)
+     */
     @Override
 	public int[] getSlotsForFace(EnumFacing side)
     {
@@ -416,6 +481,11 @@ public class TileEntityCompactor extends TileEntityLockable implements ITickable
     /**
      * Returns true if automation can insert the given item in the given slot from the given side. Args: slot, item,
      * side
+     *
+     * @param index the index
+     * @param itemStackIn the item stack in
+     * @param direction the direction
+     * @return true, if successful
      */
     @Override
 	public boolean canInsertItem(int index, ItemStack itemStackIn, EnumFacing direction)
@@ -426,6 +496,11 @@ public class TileEntityCompactor extends TileEntityLockable implements ITickable
     /**
      * Returns true if automation can extract the given item in the given slot from the given side. Args: slot, item,
      * side
+     *
+     * @param parSlotIndex the par slot index
+     * @param parStack the par stack
+     * @param parFacing the par facing
+     * @return true, if successful
      */
     @Override
 	public boolean canExtractItem(int parSlotIndex, ItemStack parStack, EnumFacing parFacing)
@@ -433,12 +508,18 @@ public class TileEntityCompactor extends TileEntityLockable implements ITickable
         return true;
     }
 
+    /* (non-Javadoc)
+     * @see net.minecraft.world.IInteractionObject#getGuiID()
+     */
     @Override
 	public String getGuiID()
     {
         return MainMod.MODID+":compactor";
     }
 
+    /* (non-Javadoc)
+     * @see net.minecraft.world.IInteractionObject#createContainer(net.minecraft.entity.player.InventoryPlayer, net.minecraft.entity.player.EntityPlayer)
+     */
     @Override
 	public Container createContainer(InventoryPlayer playerInventory, EntityPlayer playerIn)
     {
@@ -447,6 +528,9 @@ public class TileEntityCompactor extends TileEntityLockable implements ITickable
         return new ContainerCompactor(playerInventory, this);
     }
 
+    /* (non-Javadoc)
+     * @see net.minecraft.inventory.IInventory#getField(int)
+     */
     @Override
 	public int getField(int id)
     {
@@ -465,6 +549,9 @@ public class TileEntityCompactor extends TileEntityLockable implements ITickable
         }
     }
 
+    /* (non-Javadoc)
+     * @see net.minecraft.inventory.IInventory#setField(int, int)
+     */
     @Override
 	public void setField(int id, int value)
     {
@@ -487,18 +574,27 @@ public class TileEntityCompactor extends TileEntityLockable implements ITickable
         }
     }
 
+    /* (non-Javadoc)
+     * @see net.minecraft.inventory.IInventory#getFieldCount()
+     */
     @Override
 	public int getFieldCount()
     {
         return 4;
     }
 
+    /* (non-Javadoc)
+     * @see net.minecraft.inventory.IInventory#clear()
+     */
     @Override
 	public void clear()
     {
         compactorItemStacks.clear();
     }
     
+    /* (non-Javadoc)
+     * @see net.minecraft.tileentity.TileEntityLockable#getCapability(net.minecraftforge.common.capabilities.Capability, net.minecraft.util.EnumFacing)
+     */
     @Override
     public <T> T getCapability(Capability<T> capability, EnumFacing facing)
     {
@@ -512,6 +608,9 @@ public class TileEntityCompactor extends TileEntityLockable implements ITickable
         return super.getCapability(capability, facing);
     }
 
+	/* (non-Javadoc)
+	 * @see net.minecraft.inventory.IInventory#isUsableByPlayer(net.minecraft.entity.player.EntityPlayer)
+	 */
 	@Override
 	public boolean isUsableByPlayer(EntityPlayer player) 
 	{

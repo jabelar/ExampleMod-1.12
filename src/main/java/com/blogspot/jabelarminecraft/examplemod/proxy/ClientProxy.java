@@ -1,5 +1,5 @@
 /**
-    Copyright (C) 2014 by jabelar
+    Copyright (C) 2017 by jabelar
 
     This file is part of jabelar's Minecraft Forge modding examples; as such,
     you can redistribute it and/or modify it under the terms of the GNU
@@ -12,9 +12,6 @@
     GNU General Public License for more details.
 
     For a copy of the GNU General Public License see <http://www.gnu.org/licenses/>.
-
-    If you're interested in licensing the code under different terms you can
-    contact the author at julian_abelar@hotmail.com 
 */
 
 package com.blogspot.jabelarminecraft.examplemod.proxy;
@@ -46,6 +43,7 @@ import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
+// TODO: Auto-generated Javadoc
 public class ClientProxy extends CommonProxy 
 {
     /*
@@ -59,6 +57,9 @@ public class ClientProxy extends CommonProxy
     public static int sphereIdOutside;
     public static int sphereIdInside;
     
+    /* (non-Javadoc)
+     * @see com.blogspot.jabelarminecraft.examplemod.proxy.CommonProxy#fmlLifeCycleEvent(net.minecraftforge.fml.common.event.FMLPreInitializationEvent)
+     */
     @Override
     public void fmlLifeCycleEvent(FMLPreInitializationEvent event)
     {
@@ -70,6 +71,9 @@ public class ClientProxy extends CommonProxy
 
     }
     
+    /* (non-Javadoc)
+     * @see com.blogspot.jabelarminecraft.examplemod.proxy.CommonProxy#fmlLifeCycleEvent(net.minecraftforge.fml.common.event.FMLInitializationEvent)
+     */
     @Override
     public void fmlLifeCycleEvent(FMLInitializationEvent event)
     {
@@ -99,6 +103,9 @@ public class ClientProxy extends CommonProxy
         registerBlockRenderers();
     }
     
+    /* (non-Javadoc)
+     * @see com.blogspot.jabelarminecraft.examplemod.proxy.CommonProxy#fmlLifeCycleEvent(net.minecraftforge.fml.common.event.FMLPostInitializationEvent)
+     */
     @Override
     public void fmlLifeCycleEvent(FMLPostInitializationEvent event)
     {
@@ -115,6 +122,9 @@ public class ClientProxy extends CommonProxy
 
 }
 
+    /**
+     * Register key bindings.
+     */
     /*
      * Registers key bindings
      */
@@ -135,7 +145,7 @@ public class ClientProxy extends CommonProxy
     }
 
     /**
-     * Registers the entity renderers
+     * Registers the entity renderers.
      */
     public void registerEntityRenderers() 
     {
@@ -146,6 +156,9 @@ public class ClientProxy extends CommonProxy
     	RenderingRegistry.registerEntityRenderingHandler(EntityPigTest.class, new RenderPig(renderManager));
     }
     
+    /**
+     * Register item renderers.
+     */
     public void registerItemRenderers()
     {
         // DEBUG
@@ -159,6 +172,11 @@ public class ClientProxy extends CommonProxy
         // registerItemRenderer(JnaeMod.magicBeans);
     }
     
+    /**
+     * Register item renderer.
+     *
+     * @param parItem the par item
+     */
     public void registerItemRenderer(Item parItem)
     {
         RenderItem renderItem = Minecraft.getMinecraft().getRenderItem();
@@ -166,6 +184,9 @@ public class ClientProxy extends CommonProxy
         renderItem.getItemModelMesher().register(parItem, 0, new ModelResourceLocation(MainMod.MODID + ":" + parItem.getUnlocalizedName().substring(5), "inventory"));
     }
     
+    /**
+     * Register block renderers.
+     */
     public void registerBlockRenderers()
     {
         // DEBUG
@@ -180,7 +201,10 @@ public class ClientProxy extends CommonProxy
      * Thanks to CoolAlias for this tip!
      */
     /**
-     * Returns a side-appropriate EntityPlayer for use during message handling
+     * Returns a side-appropriate EntityPlayer for use during message handling.
+     *
+     * @param ctx the ctx
+     * @return the player entity from context
      */
     @Override
     public EntityPlayer getPlayerEntityFromContext(MessageContext ctx) 
@@ -193,6 +217,9 @@ public class ClientProxy extends CommonProxy
         return (ctx.side.isClient() ? Minecraft.getMinecraft().player : super.getPlayerEntityFromContext(ctx));
     }
     
+    /**
+     * Creates the sphere call list.
+     */
     /*
      * For rendering a sphere, need to make the call list
      * Must be called after pre-init, otherwise Minecraft.getMinecraft() will fail will null pointer exception

@@ -1,5 +1,5 @@
 /**
-    Copyright (C) 2016 by jabelar
+    Copyright (C) 2017 by jabelar
 
     This file is part of jabelar's Minecraft Forge modding examples; as such,
     you can redistribute it and/or modify it under the terms of the GNU
@@ -30,12 +30,19 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
 
+// TODO: Auto-generated Javadoc
 /**
  * @author jabelar
  *
  */
 public class ItemHideBase extends Item
 {
+    
+    /**
+     * Instantiates a new item hide base.
+     *
+     * @param parName the par name
+     */
     public ItemHideBase(String parName) 
     {
         super();
@@ -43,6 +50,9 @@ public class ItemHideBase extends Item
         setCreativeTab(CreativeTabs.MATERIALS);
     }
     
+    /* (non-Javadoc)
+     * @see net.minecraft.item.Item#getItemStackDisplayName(net.minecraft.item.ItemStack)
+     */
     @Override
     public String getItemStackDisplayName(ItemStack parItemStack) 
     {
@@ -51,6 +61,11 @@ public class ItemHideBase extends Item
     
     /**
      * Called whenever this item is equipped and the right mouse button is pressed. Args: itemStack, world, entityPlayer
+     *
+     * @param parWorld the par world
+     * @param parPlayer the par player
+     * @param parHand the par hand
+     * @return the action result
      */
     @Override
     public ActionResult<ItemStack> onItemRightClick(World parWorld, EntityPlayer parPlayer, EnumHand parHand)

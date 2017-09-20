@@ -1,5 +1,5 @@
 /**
-    Copyright (C) 2015 by jabelar
+    Copyright (C) 2017 by jabelar
 
     This file is part of jabelar's Minecraft Forge modding examples; as such,
     you can redistribute it and/or modify it under the terms of the GNU
@@ -14,7 +14,7 @@
     For a copy of the GNU General Public License see <http://www.gnu.org/licenses/>.
 */
 
-package com.blogspot.jabelarminecraft.examplemod.gui;
+package com.blogspot.jabelarminecraft.examplemod.client.gui;
 
 import com.blogspot.jabelarminecraft.examplemod.MainMod;
 import com.blogspot.jabelarminecraft.examplemod.containers.ContainerCompactor;
@@ -27,6 +27,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;;
 
+// TODO: Auto-generated Javadoc
 /**
  * @author jabelar
  *
@@ -38,6 +39,12 @@ public class GuiCompactor extends GuiContainer
     private final InventoryPlayer inventoryPlayer;
     private final IInventory tileCompactor;
 
+    /**
+     * Instantiates a new gui compactor.
+     *
+     * @param parInventoryPlayer the par inventory player
+     * @param parInventoryCompactor the par inventory compactor
+     */
     public GuiCompactor(InventoryPlayer parInventoryPlayer, IInventory parInventoryCompactor)
     {
         super(new ContainerCompactor(parInventoryPlayer, parInventoryCompactor));
@@ -49,6 +56,9 @@ public class GuiCompactor extends GuiContainer
 
     /**
      * Draw the foreground layer for the GuiContainer (everything in front of the items). Args : mouseX, mouseY
+     *
+     * @param mouseX the mouse X
+     * @param mouseY the mouse Y
      */
     @Override
 	protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY)
@@ -59,7 +69,11 @@ public class GuiCompactor extends GuiContainer
     }
 
     /**
-     * Args : renderPartialTicks, mouseX, mouseY
+     * Args : renderPartialTicks, mouseX, mouseY.
+     *
+     * @param partialTicks the partial ticks
+     * @param mouseX the mouse X
+     * @param mouseY the mouse Y
      */
     @Override
 	protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY)

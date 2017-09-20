@@ -1,5 +1,5 @@
 /**
-    Copyright (C) 2015 by jabelar
+    Copyright (C) 2017 by jabelar
 
     This file is part of jabelar's Minecraft Forge modding examples; as such,
     you can redistribute it and/or modify it under the terms of the GNU
@@ -24,6 +24,10 @@ import net.minecraft.creativetab.CreativeTabs;
  */
 public class ItemPigSkin extends ItemHideBase
 {
+	
+	/**
+	 * Instantiates a new item pig skin.
+	 */
 	public ItemPigSkin() 
     {
 		super("pigskin");

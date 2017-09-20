@@ -1,5 +1,5 @@
 /**
-    Copyright (C) 2014 by jabelar
+    Copyright (C) 2017 by jabelar
 
     This file is part of jabelar's Minecraft Forge modding examples; as such,
     you can redistribute it and/or modify it under the terms of the GNU
@@ -24,12 +24,17 @@ import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
+// TODO: Auto-generated Javadoc
 /**
  * @author jabelar
  *
  */
 public class MessageSendItemStackRegistryToServer implements IMessage 
 {   
+    
+    /**
+     * Instantiates a new message send item stack registry to server.
+     */
     public MessageSendItemStackRegistryToServer() 
     {
         // need this constructor
@@ -38,6 +43,9 @@ public class MessageSendItemStackRegistryToServer implements IMessage
         System.out.println("Constructor");
     }
 
+    /* (non-Javadoc)
+     * @see net.minecraftforge.fml.common.network.simpleimpl.IMessage#toBytes(io.netty.buffer.ByteBuf)
+     */
     @Override
     public void toBytes(ByteBuf parBuffer) 
     {
@@ -46,6 +54,9 @@ public class MessageSendItemStackRegistryToServer implements IMessage
         MainMod.proxy.convertItemStackListToPayload(parBuffer); // appends directly to the buffer passed in
     }
 
+    /* (non-Javadoc)
+     * @see net.minecraftforge.fml.common.network.simpleimpl.IMessage#fromBytes(io.netty.buffer.ByteBuf)
+     */
     @Override
     public void fromBytes(ByteBuf parBuffer) 
     {
@@ -56,6 +67,10 @@ public class MessageSendItemStackRegistryToServer implements IMessage
 
     public static class Handler implements IMessageHandler<MessageSendItemStackRegistryToServer, IMessage> 
     {
+        
+        /* (non-Javadoc)
+         * @see net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler#onMessage(net.minecraftforge.fml.common.network.simpleimpl.IMessage, net.minecraftforge.fml.common.network.simpleimpl.MessageContext)
+         */
         @Override
         public IMessage onMessage(final MessageSendItemStackRegistryToServer message, MessageContext ctx) 
         {

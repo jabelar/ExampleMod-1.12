@@ -1,5 +1,5 @@
 /**
-    Copyright (C) 2014 by jabelar
+    Copyright (C) 2017 by jabelar
 
     This file is part of jabelar's Minecraft Forge modding examples; as such,
     you can redistribute it and/or modify it under the terms of the GNU
@@ -27,6 +27,7 @@ import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
+// TODO: Auto-generated Javadoc
 /**
  * @author jabelar
  *
@@ -36,11 +37,20 @@ public class MessageSyncEntityToClient implements IMessage
     private int entityId ;
     private NBTTagCompound entitySyncDataCompound;
 
+    /**
+     * Instantiates a new message sync entity to client.
+     */
     public MessageSyncEntityToClient() 
     { 
     	// need this constructor
     }
 
+    /**
+     * Instantiates a new message sync entity to client.
+     *
+     * @param parEntityId the par entity id
+     * @param parTagCompound the par tag compound
+     */
     public MessageSyncEntityToClient(int parEntityId, NBTTagCompound parTagCompound) 
     {
     	entityId = parEntityId;
@@ -49,6 +59,9 @@ public class MessageSyncEntityToClient implements IMessage
         System.out.println("SyncEntityToClient constructor");
     }
 
+    /* (non-Javadoc)
+     * @see net.minecraftforge.fml.common.network.simpleimpl.IMessage#fromBytes(io.netty.buffer.ByteBuf)
+     */
     @Override
     public void fromBytes(ByteBuf buf) 
     {
@@ -58,6 +71,9 @@ public class MessageSyncEntityToClient implements IMessage
     	System.out.println("fromBytes");
     }
 
+    /* (non-Javadoc)
+     * @see net.minecraftforge.fml.common.network.simpleimpl.IMessage#toBytes(io.netty.buffer.ByteBuf)
+     */
     @Override
     public void toBytes(ByteBuf buf) 
     {
@@ -69,6 +85,10 @@ public class MessageSyncEntityToClient implements IMessage
 
     public static class Handler implements IMessageHandler<MessageSyncEntityToClient, IMessage> 
     {
+        
+        /* (non-Javadoc)
+         * @see net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler#onMessage(net.minecraftforge.fml.common.network.simpleimpl.IMessage, net.minecraftforge.fml.common.network.simpleimpl.MessageContext)
+         */
         @Override
         public IMessage onMessage(MessageSyncEntityToClient message, MessageContext ctx) 
         {

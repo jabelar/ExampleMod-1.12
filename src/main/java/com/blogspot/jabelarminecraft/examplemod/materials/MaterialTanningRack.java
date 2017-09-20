@@ -1,5 +1,5 @@
 /**
-    Copyright (C) 2014 by jabelar
+    Copyright (C) 2017 by jabelar
 
     This file is part of jabelar's Minecraft Forge modding examples; as such,
     you can redistribute it and/or modify it under the terms of the GNU
@@ -20,12 +20,17 @@ import net.minecraft.block.material.EnumPushReaction;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
 
+// TODO: Auto-generated Javadoc
 /**
  * @author jabelar
  *
  */
 public class MaterialTanningRack extends Material
 {
+	
+	/**
+	 * Instantiates a new material tanning rack.
+	 */
 	public MaterialTanningRack() 
 	{
 		super(MapColor.SNOW);
@@ -33,6 +38,8 @@ public class MaterialTanningRack extends Material
 
     /**
      * Returns if blocks of these materials are liquids.
+     *
+     * @return true, if is liquid
      */
     @Override
 	public boolean isLiquid()
@@ -40,6 +47,9 @@ public class MaterialTanningRack extends Material
         return false;
     }
 
+    /* (non-Javadoc)
+     * @see net.minecraft.block.material.Material#isSolid()
+     */
     @Override
 	public boolean isSolid()
     {
@@ -47,7 +57,9 @@ public class MaterialTanningRack extends Material
     }
     
     /**
-     * Returns if this material is considered solid or not
+     * Returns if this material is considered solid or not.
+     *
+     * @return true, if successful
      */
     @Override
 	public boolean blocksMovement()
@@ -57,6 +69,8 @@ public class MaterialTanningRack extends Material
 
     /**
      * Returns if the block can burn or not.
+     *
+     * @return the can burn
      */
     @Override
 	public boolean getCanBurn()
@@ -66,6 +80,8 @@ public class MaterialTanningRack extends Material
 
     /**
      * Returns whether the material can be replaced by other blocks when placed - eg snow, vines and tall grass.
+     *
+     * @return true, if is replaceable
      */
     @Override
 	public boolean isReplaceable()
@@ -74,7 +90,9 @@ public class MaterialTanningRack extends Material
     }
 
     /**
-     * Indicate if the material is opaque
+     * Indicate if the material is opaque.
+     *
+     * @return true, if is opaque
      */
     @Override
 	public boolean isOpaque()
@@ -83,7 +101,9 @@ public class MaterialTanningRack extends Material
     }
 
     /**
-     * Returns true if the material can be harvested without a tool (or with the wrong tool)
+     * Returns true if the material can be harvested without a tool (or with the wrong tool).
+     *
+     * @return true, if is tool not required
      */
     @Override
 	public boolean isToolNotRequired()
@@ -94,6 +114,8 @@ public class MaterialTanningRack extends Material
     /**
      * Returns the mobility information of the material, 0 = free, 1 = can't push but can move over, 2 = total
      * immobility and stop pistons.
+     *
+     * @return the mobility flag
      */
     @Override
 	public EnumPushReaction getMobilityFlag()

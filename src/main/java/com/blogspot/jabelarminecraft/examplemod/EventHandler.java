@@ -1,5 +1,5 @@
 /**
-    Copyright (C) 2014 by jabelar
+    Copyright (C) 2017 by jabelar
 
     This file is part of jabelar's Minecraft Forge modding examples; as such,
     you can redistribute it and/or modify it under the terms of the GNU
@@ -12,9 +12,6 @@
     GNU General Public License for more details.
 
     For a copy of the GNU General Public License see <http://www.gnu.org/licenses/>.
-
-	If you're interested in licensing the code under different terms you can
-	contact the author at julian_abelar@hotmail.com 
 */
 
 package com.blogspot.jabelarminecraft.examplemod;
@@ -53,13 +50,19 @@ import net.minecraftforge.fml.common.gameevent.TickEvent.PlayerTickEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+// TODO: Auto-generated Javadoc
 public class EventHandler 
 {
 	/*
 	 * Registry events
 	 */
 	
-  @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
+  /**
+	 * On event.
+	 *
+	 * @param event the event
+	 */
+	@SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
   public void onEvent(RegistryEvent.NewRegistry event)
   {
 	  // can create registries here if needed
@@ -193,6 +196,11 @@ public class EventHandler
 //        
 //    }
 
+    /**
+     * On event.
+     *
+     * @param event the event
+     */
     @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
     public void onEvent(LivingDropsEvent event)
     {
@@ -303,7 +311,12 @@ public class EventHandler
 //        
 //    }
     
-    @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
+    /**
+ * On event.
+ *
+ * @param event the event
+ */
+@SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
     public void onEvent(NameFormat event)
     {
     	// DEBUG
@@ -610,7 +623,12 @@ public class EventHandler
 //        
 //    }
 
-    @SideOnly(Side.CLIENT)
+    /**
+ * On event.
+ *
+ * @param event the event
+ */
+@SideOnly(Side.CLIENT)
     @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
     public void onEvent(GuiOpenEvent event)
     { 
@@ -647,7 +665,12 @@ public class EventHandler
 //        
 //    }
 
-    @SideOnly(Side.CLIENT)
+    /**
+ * On event.
+ *
+ * @param event the event
+ */
+@SideOnly(Side.CLIENT)
     @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
     public void onEvent(MouseEvent event)
     { 
@@ -962,7 +985,12 @@ public class EventHandler
 //        
 //    }
 
-    @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
+    /**
+ * On event.
+ *
+ * @param event the event
+ */
+@SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
     public void onEvent(PlayerLoggedOutEvent event)
     {
         // DEBUG
@@ -995,7 +1023,12 @@ public class EventHandler
 //    boolean haveRequestedItemStackRegistry = false;
 //    boolean haveGivenGift = false;
             
-    @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
+    /**
+ * On event.
+ *
+ * @param event the event
+ */
+@SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
     public void onEvent(PlayerTickEvent event)
     {        
         if (event.phase == TickEvent.Phase.START && event.player.world.isRemote) // only proceed if START phase otherwise, will execute twice per tick
@@ -1062,7 +1095,12 @@ public class EventHandler
 //      }          
 //  }
 
-    @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
+    /**
+ * On event.
+ *
+ * @param eventArgs the event args
+ */
+@SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
     public void onEvent(OnConfigChangedEvent eventArgs) 
     {
         // DEBUG

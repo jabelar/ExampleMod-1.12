@@ -1,5 +1,5 @@
 /**
-    Copyright (C) 2014 by jabelar
+    Copyright (C) 2017 by jabelar
 
     This file is part of jabelar's Minecraft Forge modding examples; as such,
     you can redistribute it and/or modify it under the terms of the GNU
@@ -12,9 +12,6 @@
     GNU General Public License for more details.
 
     For a copy of the GNU General Public License see <http://www.gnu.org/licenses/>.
-
-    If you're interested in licensing the code under different terms you can
-    contact the author at julian_abelar@hotmail.com 
 */
 
 package com.blogspot.jabelarminecraft.examplemod.proxy;
@@ -63,6 +60,7 @@ import net.minecraftforge.fml.common.registry.EntityRegistry;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 
+// TODO: Auto-generated Javadoc
 public class CommonProxy 
 {
     
@@ -73,6 +71,11 @@ public class CommonProxy
      */
     protected List itemStackRegistry = new ArrayList();
      
+    /**
+     * Fml life cycle event.
+     *
+     * @param event the event
+     */
     public void fmlLifeCycleEvent(FMLPreInitializationEvent event)
     { 
         // load configuration before doing anything else
@@ -90,6 +93,11 @@ public class CommonProxy
 //      VillagerRegistry.getRegisteredVillagers();
     }
 
+    /**
+     * Fml life cycle event.
+     *
+     * @param event the event
+     */
     public void fmlLifeCycleEvent(FMLInitializationEvent event)
     {
         // register custom event listeners
@@ -107,41 +115,74 @@ public class CommonProxy
 //        registerDeconstructingInit(event);
     }
     
+    /**
+     * Register gui handlers.
+     */
     public void registerGuiHandlers() 
     {
         NetworkRegistry.INSTANCE.registerGuiHandler(MainMod.instance, new GuiHandler());     
     }
 
+    /**
+     * Fml life cycle event.
+     *
+     * @param event the event
+     */
     public void fmlLifeCycleEvent(FMLPostInitializationEvent event)
     {
         // can do some inter-mod stuff here
         initItemStackRegistry();    
     }
 
+    /**
+     * Fml life cycle event.
+     *
+     * @param event the event
+     */
     public void fmlLifeCycleEvent(FMLServerAboutToStartEvent event) 
     {
         // TODO Auto-generated method stub
         
     }
 
+    /**
+     * Fml life cycle event.
+     *
+     * @param event the event
+     */
     public void fmlLifeCycleEvent(FMLServerStartedEvent event) 
     {
         // TODO Auto-generated method stub
 
     }
 
+    /**
+     * Fml life cycle event.
+     *
+     * @param event the event
+     */
     public void fmlLifeCycleEvent(FMLServerStoppingEvent event) 
     {
         // TODO Auto-generated method stub
         
     }
 
+    /**
+     * Fml life cycle event.
+     *
+     * @param event the event
+     */
     public void fmlLifeCycleEvent(FMLServerStoppedEvent event) 
     {
         // TODO Auto-generated method stub
         
     }
 
+    /**
+     * Fml life cycle event.
+     *
+     * @param event the event
+     */
     public void fmlLifeCycleEvent(FMLServerStartingEvent event) 
     {
         // // register server commands
@@ -152,7 +193,7 @@ public class CommonProxy
      * Thanks to diesieben07 tutorial for this code
      */
     /**
-     * Registers the simple networking channel and messages for both sides
+     * Registers the simple networking channel and messages for both sides.
      */
     protected void registerSimpleNetworking() 
     {
@@ -175,7 +216,10 @@ public class CommonProxy
      * Thanks to CoolAlias for this tip!
      */
     /**
-     * Returns a side-appropriate EntityPlayer for use during message handling
+     * Returns a side-appropriate EntityPlayer for use during message handling.
+     *
+     * @param ctx the ctx
+     * @return the player entity from context
      */
     public EntityPlayer getPlayerEntityFromContext(MessageContext ctx) 
     {
@@ -183,8 +227,9 @@ public class CommonProxy
     }
     
     /**
-     * Process the configuration
-     * @param event
+     * Process the configuration.
+     *
+     * @param event the event
      */
     protected void initConfig(FMLPreInitializationEvent event)
     {
@@ -199,6 +244,9 @@ public class CommonProxy
         syncConfig();
     }
     
+    /**
+     * Sync config.
+     */
     /*
      * sync the configuration
      * want it public so you can handle case of changes made in-game
@@ -224,8 +272,9 @@ public class CommonProxy
         MainMod.config.save();
     }
 
-    /** 
-     * Registers fluids
+    /**
+     *  
+     * Registers fluids.
      */
     public void registerFluids()
     {
@@ -237,7 +286,7 @@ public class CommonProxy
     
     
     /**
-     * Registers tile entities
+     * Registers tile entities.
      */
     public void registerTileEntities()
     {
@@ -247,7 +296,7 @@ public class CommonProxy
    }
 
     /**
-     * Registers recipes
+     * Registers recipes.
      */
     public void registerRecipes()
     {
@@ -311,7 +360,7 @@ public class CommonProxy
     }
 
     /**
-     * Registers entities as mod entities
+     * Registers entities as mod entities.
      */
     protected void registerModEntities()
     {    
@@ -326,9 +375,10 @@ public class CommonProxy
     }
  
     /**
-     * Registers an entity as a mod entity with no tracking
-     * @param parEntityClass
-     * @param parEntityName
+     * Registers an entity as a mod entity with no tracking.
+     *
+     * @param parEntityClass the par entity class
+     * @param parEntityName the par entity name
      */
      protected void registerModEntity(Class parEntityClass, String parEntityName)
      {
@@ -338,8 +388,9 @@ public class CommonProxy
 
      /**
       * Registers an entity as a mod entity with fast tracking.  Good for fast moving objects like throwables
-      * @param parEntityClass
-      * @param parEntityName
+      *
+      * @param parEntityClass the par entity class
+      * @param parEntityName the par entity name
       */
      protected void registerModEntityFastTracking(Class parEntityClass, String parEntityName)
      {
@@ -347,6 +398,14 @@ public class CommonProxy
         EntityRegistry.registerModEntity(resourceLocation, parEntityClass, parEntityName, ++modEntityID, MainMod.instance, 80, 10, true);
      }
 
+     /**
+      * Register mod entity with egg.
+      *
+      * @param parEntityClass the par entity class
+      * @param parEntityName the par entity name
+      * @param parEggColor the par egg color
+      * @param parEggSpotsColor the par egg spots color
+      */
      public void registerModEntityWithEgg(Class parEntityClass, String parEntityName, 
               int parEggColor, int parEggSpotsColor)
      {
@@ -355,7 +414,7 @@ public class CommonProxy
      }
 
      /**
-      * Registers entity natural spawns
+      * Registers entity natural spawns.
       */
      protected void registerEntitySpawns()
      {
@@ -379,6 +438,14 @@ public class CommonProxy
         // EntityRegistry.addSpawn(EntityElephant.class, 10, 1, 5, EnumCreatureType.creature, Biome.savanna); //change the values to vary the spawn rarity, biome, etc.              
      }
  
+     /**
+      * Adds the spawn all biomes.
+      *
+      * @param parEntity the par entity
+      * @param parChance the par chance
+      * @param parMinGroup the par min group
+      * @param parMaxGroup the par max group
+      */
      protected void addSpawnAllBiomes(EntityLiving parEntity, int parChance, int parMinGroup, int parMaxGroup)
      {
          Iterator<ResourceLocation> allBiomesIterator = Biome.REGISTRY.getKeys().iterator();
@@ -392,8 +459,8 @@ public class CommonProxy
      
      
      /**
-     * Register fuel handlers
-     */
+      * Register fuel handlers.
+      */
      protected void registerFuelHandlers()
      {
          // DEBUG
@@ -403,7 +470,7 @@ public class CommonProxy
      }
  
     /**
-     * Register event listeners
+     * Register event listeners.
      */
     protected void registerEventListeners() 
     {
@@ -416,7 +483,7 @@ public class CommonProxy
     }
     
     /**
-     * Register Advancements
+     * Register Advancements.
      */
     protected void registerAdvancements()
     {
@@ -440,21 +507,39 @@ public class CommonProxy
 //        
     }
     
+    /**
+     * Inits the item stack registry.
+     */
     protected void initItemStackRegistry()
     {
         return;
     }
 
+    /**
+     * Sets the item stack registry.
+     *
+     * @param parRegistry the new item stack registry
+     */
     public void setItemStackRegistry(List parRegistry)
     {
         itemStackRegistry = parRegistry;
     }
     
+    /**
+     * Gets the item stack registry.
+     *
+     * @return the item stack registry
+     */
     public List getItemStackRegistry()
     {
         return itemStackRegistry;
     }
         
+    /**
+     * Convert item stack list to payload.
+     *
+     * @param parBuffer the par buffer
+     */
     /*
      * Works directly on passed in ByteBuf to put ItemStack registry into packet payload to be sent to the server
      */
@@ -487,6 +572,12 @@ public class CommonProxy
     }
 
 
+    /**
+     * Convert payload to item stack list.
+     *
+     * @param theBuffer the the buffer
+     * @return the list
+     */
     /*
      * Provides a list of item stacks giving every registered item along with its metadata variants
      * based on a message payload from the client that gives the valid metadata values for those

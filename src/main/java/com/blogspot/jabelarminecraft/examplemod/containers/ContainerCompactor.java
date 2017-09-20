@@ -1,5 +1,5 @@
 /**
-    Copyright (C) 2015 by jabelar
+    Copyright (C) 2017 by jabelar
 
     This file is part of jabelar's Minecraft Forge modding examples; as such,
     you can redistribute it and/or modify it under the terms of the GNU
@@ -30,6 +30,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+// TODO: Auto-generated Javadoc
 /**
  * @author jabelar
  *
@@ -42,6 +43,12 @@ public class ContainerCompactor extends Container
     private int ticksPerItem;
     private int timeCanCompact;
 
+    /**
+     * Instantiates a new container compactor.
+     *
+     * @param parInventoryPlayer the par inventory player
+     * @param parIInventory the par I inventory
+     */
     public ContainerCompactor(InventoryPlayer parInventoryPlayer, IInventory parIInventory)
     {
     	// DEBUG
@@ -78,6 +85,8 @@ public class ContainerCompactor extends Container
 
     /**
      * Add the given Listener to the list of Listeners. Method name is for legacy.
+     *
+     * @param listener the listener
      */
     @Override
     public void addListener(IContainerListener listener)
@@ -125,6 +134,9 @@ public class ContainerCompactor extends Container
         ticksPerItem = tileCompactor.getField(3); // ticks per item
     }
 
+    /* (non-Javadoc)
+     * @see net.minecraft.inventory.Container#updateProgressBar(int, int)
+     */
     @Override
 	@SideOnly(Side.CLIENT)
     public void updateProgressBar(int id, int data)
@@ -132,6 +144,9 @@ public class ContainerCompactor extends Container
         tileCompactor.setField(id, data);
     }
 
+    /* (non-Javadoc)
+     * @see net.minecraft.inventory.Container#canInteractWith(net.minecraft.entity.player.EntityPlayer)
+     */
     @Override
 	public boolean canInteractWith(EntityPlayer playerIn)
     {
@@ -140,6 +155,10 @@ public class ContainerCompactor extends Container
 
     /**
      * Take a stack from the specified inventory slot.
+     *
+     * @param playerIn the player in
+     * @param slotIndex the slot index
+     * @return the item stack
      */
     @Override
 	public ItemStack transferStackInSlot(EntityPlayer playerIn, int slotIndex)

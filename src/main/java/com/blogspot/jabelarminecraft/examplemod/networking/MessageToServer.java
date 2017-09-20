@@ -1,5 +1,5 @@
 /**
-    Copyright (C) 2014 by jabelar
+    Copyright (C) 2017 by jabelar
 
     This file is part of jabelar's Minecraft Forge modding examples; as such,
     you can redistribute it and/or modify it under the terms of the GNU
@@ -25,6 +25,7 @@ import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
+// TODO: Auto-generated Javadoc
 /**
  * @author jabelar
  *
@@ -34,11 +35,19 @@ public class MessageToServer implements IMessage
     
     private String text;
 
+    /**
+     * Instantiates a new message to server.
+     */
     public MessageToServer() 
     { 
     	// need this constructor
     }
 
+    /**
+     * Instantiates a new message to server.
+     *
+     * @param parText the par text
+     */
     public MessageToServer(String parText) 
     {
         text = parText;
@@ -46,6 +55,9 @@ public class MessageToServer implements IMessage
         System.out.println("MyMessage constructor");
     }
 
+    /* (non-Javadoc)
+     * @see net.minecraftforge.fml.common.network.simpleimpl.IMessage#fromBytes(io.netty.buffer.ByteBuf)
+     */
     @Override
     public void fromBytes(ByteBuf buf) 
     {
@@ -54,6 +66,9 @@ public class MessageToServer implements IMessage
     	System.out.println("fromBytes = "+text);
     }
 
+    /* (non-Javadoc)
+     * @see net.minecraftforge.fml.common.network.simpleimpl.IMessage#toBytes(io.netty.buffer.ByteBuf)
+     */
     @Override
     public void toBytes(ByteBuf buf) 
     {
@@ -65,6 +80,9 @@ public class MessageToServer implements IMessage
     public static class Handler implements IMessageHandler<MessageToServer, IMessage> 
     {
         
+        /* (non-Javadoc)
+         * @see net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler#onMessage(net.minecraftforge.fml.common.network.simpleimpl.IMessage, net.minecraftforge.fml.common.network.simpleimpl.MessageContext)
+         */
         @Override
         public IMessage onMessage(final MessageToServer message, MessageContext ctx) 
         {

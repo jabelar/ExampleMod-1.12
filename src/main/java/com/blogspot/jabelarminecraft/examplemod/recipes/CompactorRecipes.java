@@ -1,5 +1,5 @@
 /**
-    Copyright (C) 2015 by jabelar
+    Copyright (C) 2017 by jabelar
 
     This file is part of jabelar's Minecraft Forge modding examples; as such,
     you can redistribute it and/or modify it under the terms of the GNU
@@ -27,6 +27,7 @@ import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
+// TODO: Auto-generated Javadoc
 /**
  * @author jabelar
  *
@@ -38,6 +39,11 @@ public class CompactorRecipes
     private final Map<ItemStack, ItemStack> compactingList = Maps.newHashMap();
     private final Map<ItemStack, Float> experienceList = Maps.newHashMap();
 
+    /**
+     * Instance.
+     *
+     * @return the compactor recipes
+     */
     public static CompactorRecipes instance()
     {
         return compactingBase;
@@ -50,6 +56,13 @@ public class CompactorRecipes
         addCompactingRecipe(new ItemStack(Items.BLAZE_POWDER, 2, 0), new ItemStack(Items.BLAZE_ROD), 0.7F);
     }
 
+    /**
+     * Adds the compacting recipe.
+     *
+     * @param parItemStackIn the par item stack in
+     * @param parItemStackOut the par item stack out
+     * @param parExperience the par experience
+     */
     public void addCompactingRecipe(ItemStack parItemStackIn, ItemStack parItemStackOut, float parExperience)
     {
         compactingList.put(parItemStackIn, parItemStackOut);
@@ -58,6 +71,9 @@ public class CompactorRecipes
 
     /**
      * Returns the compacting result of an item.
+     *
+     * @param parItemStack the par item stack
+     * @return the compacting result
      */
     public ItemStack getCompactingResult(ItemStack parItemStack)
     {
@@ -78,6 +94,12 @@ public class CompactorRecipes
         return (ItemStack)entry.getValue();
     }
     
+    /**
+     * Gets the input amount.
+     *
+     * @param parItemStack the par item stack
+     * @return the input amount
+     */
     // allows recipe to consume multiple items from input stack
     public int getInputAmount(ItemStack parItemStack)
     {
@@ -103,11 +125,22 @@ public class CompactorRecipes
         return parItemStack2.getItem() == parItemStack1.getItem() && (parItemStack2.getMetadata() == parItemStack1.getMetadata());
     }
 
+    /**
+     * Gets the compacting list.
+     *
+     * @return the compacting list
+     */
     public Map<ItemStack, ItemStack> getCompactingList()
     {
         return compactingList;
     }
 
+    /**
+     * Gets the compacting experience.
+     *
+     * @param parItemStack the par item stack
+     * @return the compacting experience
+     */
     public float getCompactingExperience(ItemStack parItemStack)
     {
         Iterator iterator = experienceList.entrySet().iterator();

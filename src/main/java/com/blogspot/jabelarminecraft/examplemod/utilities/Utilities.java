@@ -1,5 +1,5 @@
 /**
-    Copyright (C) 2014 by jabelar
+    Copyright (C) 2017 by jabelar
 
     This file is part of jabelar's Minecraft Forge modding examples; as such,
     you can redistribute it and/or modify it under the terms of the GNU
@@ -35,6 +35,7 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.client.FMLClientHandler;
 
+// TODO: Auto-generated Javadoc
 /**
  * @author jabelar
  *
@@ -42,6 +43,13 @@ import net.minecraftforge.fml.client.FMLClientHandler;
 public class Utilities 
 { 
     // Need to call this on item instance prior to registering the item
+    /**
+     * Sets the item name.
+     *
+     * @param parItem the par item
+     * @param parItemName the par item name
+     * @return the item
+     */
     // chainable
     public static Item setItemName(Item parItem, String parItemName) {
         parItem.setRegistryName(parItemName);
@@ -50,6 +58,13 @@ public class Utilities
        } 
     
     // Need to call this on block instance prior to registering the block
+    /**
+     * Sets the block name.
+     *
+     * @param parBlock the par block
+     * @param parBlockName the par block name
+     * @return the block
+     */
     // chainable
     public static Block setBlockName(Block parBlock, String parBlockName) {
         parBlock.setRegistryName(parBlockName);
@@ -61,6 +76,13 @@ public class Utilities
 	 * Text Utilities
 	 */
 	
+	/**
+	 * String to rainbow.
+	 *
+	 * @param parString the par string
+	 * @param parReturnToBlack the par return to black
+	 * @return the string
+	 */
 	public static String stringToRainbow(String parString, boolean parReturnToBlack)
 	{
 		int stringLength = parString.length();
@@ -92,12 +114,26 @@ public class Utilities
 		return outputString+TextFormatting.WHITE;
 	}
 
+	/**
+	 * String to rainbow.
+	 *
+	 * @param parString the par string
+	 * @return the string
+	 */
 	// by default return to white (for chat formatting).
 	public static String stringToRainbow(String parString)
 	{
 		return stringToRainbow(parString, false);
 	}
 	
+	/**
+	 * String to golden.
+	 *
+	 * @param parString the par string
+	 * @param parShineLocation the par shine location
+	 * @param parReturnToBlack the par return to black
+	 * @return the string
+	 */
 	public static String stringToGolden(String parString, int parShineLocation, boolean parReturnToBlack)
 	{
 		int stringLength = parString.length();
@@ -133,6 +169,13 @@ public class Utilities
 		return outputString+TextFormatting.WHITE;
 	}
 
+	/**
+	 * String to golden.
+	 *
+	 * @param parString the par string
+	 * @param parShineLocation the par shine location
+	 * @return the string
+	 */
 	// by default return to white (for chat formatting).
 	public static String stringToGolden(String parString, int parShineLocation)
 	{
@@ -220,7 +263,12 @@ public class Utilities
 	 * Networking packet utilities
 	 */
 	
-    public static void sendEntitySyncPacketToClient(IEntity parEntity) 
+    /**
+	 * Send entity sync packet to client.
+	 *
+	 * @param parEntity the par entity
+	 */
+	public static void sendEntitySyncPacketToClient(IEntity parEntity) 
     {
     	Entity theEntity = (Entity)parEntity;
         if (!theEntity.getEntityWorld().isRemote)
@@ -231,6 +279,11 @@ public class Utilities
         }
     }
 
+    /**
+     * Send entity sync packet to server.
+     *
+     * @param parEntity the par entity
+     */
     public static void sendEntitySyncPacketToServer(IEntity parEntity) 
     {
     	Entity theEntity = (Entity)parEntity;
@@ -247,11 +300,12 @@ public class Utilities
      */
     
     /**
-     * Finds the topmost block position at an X, Z position in the world
-     * @param parWorld
-     * @param parX
-     * @param parZ
-     * @return
+     * Finds the topmost block position at an X, Z position in the world.
+     *
+     * @param parWorld the par world
+     * @param parX the par X
+     * @param parZ the par Z
+     * @return the height value
      */
     public static double getHeightValue(World parWorld, double parX, double parZ)
     {
@@ -266,6 +320,12 @@ public class Utilities
     	return height;
     }
     
+    /**
+     * Gets the mouse over extended.
+     *
+     * @param dist the dist
+     * @return the mouse over extended
+     */
     // This is mostly copied from the EntityRenderer#getMouseOver() method
     public static RayTraceResult getMouseOverExtended(float dist)
     {

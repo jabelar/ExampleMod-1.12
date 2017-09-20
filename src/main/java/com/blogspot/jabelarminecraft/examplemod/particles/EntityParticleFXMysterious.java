@@ -1,5 +1,5 @@
 /**
-    Copyright (C) 2014 by jabelar
+    Copyright (C) 2017 by jabelar
 
     This file is part of jabelar's Minecraft Forge modding examples; as such,
     you can redistribute it and/or modify it under the terms of the GNU
@@ -27,13 +27,15 @@ public class EntityParticleFXMysterious extends Particle
 {
 
 	/**
-	 * @param parWorld
-	 * @param parX
-	 * @param parY
-	 * @param parZ
-	 * @param parMotionX
-	 * @param parMotionY
-	 * @param parMotionZ
+	 * Instantiates a new entity particle FX mysterious.
+	 *
+	 * @param parWorld the par world
+	 * @param parX the par X
+	 * @param parY the par Y
+	 * @param parZ the par Z
+	 * @param parMotionX the par motion X
+	 * @param parMotionY the par motion Y
+	 * @param parMotionZ the par motion Z
 	 */
 	public EntityParticleFXMysterious(World parWorld,
 			double parX, double parY, double parZ,

@@ -1,5 +1,5 @@
 /**
-    Copyright (C) 2015 by jabelar
+    Copyright (C) 2017 by jabelar
 
     This file is part of jabelar's Minecraft Forge modding examples; as such,
     you can redistribute it and/or modify it under the terms of the GNU
@@ -44,6 +44,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+// TODO: Auto-generated Javadoc
 /**
  * @author jabelar
  *
@@ -54,6 +55,9 @@ public class BlockCompactor extends BlockContainer
     private final boolean isCompacting;
     private boolean hasTileEntity;
 
+    /**
+     * Instantiates a new block compactor.
+     */
     public BlockCompactor()
     {
         super(Material.ROCK);
@@ -72,6 +76,9 @@ public class BlockCompactor extends BlockContainer
     }
 
  
+    /* (non-Javadoc)
+     * @see net.minecraft.block.Block#onBlockAdded(net.minecraft.world.World, net.minecraft.util.math.BlockPos, net.minecraft.block.state.IBlockState)
+     */
     @Override
 	public void onBlockAdded(World parWorld, BlockPos parBlockPos, IBlockState parIBlockState)
     {
@@ -105,6 +112,9 @@ public class BlockCompactor extends BlockContainer
         }
     }
 
+    /* (non-Javadoc)
+     * @see net.minecraft.block.Block#randomDisplayTick(net.minecraft.block.state.IBlockState, net.minecraft.world.World, net.minecraft.util.math.BlockPos, java.util.Random)
+     */
     @Override
 	@SideOnly(Side.CLIENT)
     public void randomDisplayTick(IBlockState state, World worldIn, BlockPos pos, Random rand)
@@ -142,6 +152,9 @@ public class BlockCompactor extends BlockContainer
         }
     }
 
+    /* (non-Javadoc)
+     * @see net.minecraft.block.Block#onBlockActivated(net.minecraft.world.World, net.minecraft.util.math.BlockPos, net.minecraft.block.state.IBlockState, net.minecraft.entity.player.EntityPlayer, net.minecraft.util.EnumHand, net.minecraft.util.EnumFacing, float, float, float)
+     */
     @Override
 	public boolean onBlockActivated(World parWorld, BlockPos parBlockPos, IBlockState parIBlockState, EntityPlayer parPlayer, EnumHand parHand, EnumFacing parSide, float hitX, float hitY, float hitZ)
     {
@@ -155,6 +168,13 @@ public class BlockCompactor extends BlockContainer
         return true;
     }
 
+    /**
+     * Change block based on compacting status.
+     *
+     * @param parIsCompacting the par is compacting
+     * @param parWorld the par world
+     * @param parBlockPos the par block pos
+     */
     public static void changeBlockBasedOnCompactingStatus(boolean parIsCompacting, World parWorld, BlockPos parBlockPos)
     {
 //        IBlockState iBlockState = parWorld.getBlockState(parBlockPos);
@@ -183,6 +203,10 @@ public class BlockCompactor extends BlockContainer
 
     /**
      * Returns a new instance of a block's tile entity class. Called on placing the block.
+     *
+     * @param worldIn the world in
+     * @param meta the meta
+     * @return the tile entity
      */
     @Override
 	public TileEntity createNewTileEntity(World worldIn, int meta)
@@ -192,12 +216,18 @@ public class BlockCompactor extends BlockContainer
         return new TileEntityCompactor();
     }
 
+    /* (non-Javadoc)
+     * @see net.minecraft.block.Block#getStateForPlacement(net.minecraft.world.World, net.minecraft.util.math.BlockPos, net.minecraft.util.EnumFacing, float, float, float, int, net.minecraft.entity.EntityLivingBase, net.minecraft.util.EnumHand)
+     */
     @Override
 	public IBlockState getStateForPlacement(World world, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer, EnumHand hand)
     {
         return getDefaultState().withProperty(FACING, placer.getHorizontalFacing().getOpposite());
     }
 
+    /* (non-Javadoc)
+     * @see net.minecraft.block.Block#onBlockPlacedBy(net.minecraft.world.World, net.minecraft.util.math.BlockPos, net.minecraft.block.state.IBlockState, net.minecraft.entity.EntityLivingBase, net.minecraft.item.ItemStack)
+     */
     @Override
 	public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack)
     {
@@ -214,6 +244,9 @@ public class BlockCompactor extends BlockContainer
         }
     }
 
+    /* (non-Javadoc)
+     * @see net.minecraft.block.BlockContainer#breakBlock(net.minecraft.world.World, net.minecraft.util.math.BlockPos, net.minecraft.block.state.IBlockState)
+     */
     @Override
 	public void breakBlock(World worldIn, BlockPos pos, IBlockState state)
     {
@@ -231,12 +264,18 @@ public class BlockCompactor extends BlockContainer
         super.breakBlock(worldIn, pos, state);
     }
 
+    /* (non-Javadoc)
+     * @see net.minecraft.block.Block#hasComparatorInputOverride(net.minecraft.block.state.IBlockState)
+     */
     @Override
     public boolean hasComparatorInputOverride(IBlockState state)
     {
         return true;
     }
 
+    /* (non-Javadoc)
+     * @see net.minecraft.block.Block#getComparatorInputOverride(net.minecraft.block.state.IBlockState, net.minecraft.world.World, net.minecraft.util.math.BlockPos)
+     */
     @Override
     public int getComparatorInputOverride(IBlockState blockState, World worldIn, BlockPos pos)
     {
@@ -244,7 +283,10 @@ public class BlockCompactor extends BlockContainer
     }
 
     /**
-     * The type of render function that is called for this block
+     * The type of render function that is called for this block.
+     *
+     * @param parBlockState the par block state
+     * @return the render type
      */
     @Override
 	public EnumBlockRenderType getRenderType(IBlockState parBlockState)
@@ -263,8 +305,11 @@ public class BlockCompactor extends BlockContainer
 //    }
 
     /**
-     * Convert the given metadata into a BlockState for this Block
-     */
+ * Convert the given metadata into a BlockState for this Block.
+ *
+ * @param meta the meta
+ * @return the state from meta
+ */
     @Override
 	public IBlockState getStateFromMeta(int meta)
     {
@@ -279,7 +324,10 @@ public class BlockCompactor extends BlockContainer
     }
 
     /**
-     * Convert the BlockState into the correct metadata value
+     * Convert the BlockState into the correct metadata value.
+     *
+     * @param state the state
+     * @return the meta from state
      */
     @Override
 	public int getMetaFromState(IBlockState state)
@@ -287,6 +335,9 @@ public class BlockCompactor extends BlockContainer
         return state.getValue(FACING).getIndex();
     }
 
+    /* (non-Javadoc)
+     * @see net.minecraft.block.Block#createBlockState()
+     */
     @Override
 	protected BlockStateContainer createBlockState()
     {

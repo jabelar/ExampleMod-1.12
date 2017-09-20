@@ -1,5 +1,5 @@
 /**
-    Copyright (C) 2015 by jabelar
+    Copyright (C) 2017 by jabelar
 
     This file is part of jabelar's Minecraft Forge modding examples; as such,
     you can redistribute it and/or modify it under the terms of the GNU
@@ -24,12 +24,23 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.MathHelper;
 
+// TODO: Auto-generated Javadoc
 /**
  * @author jabelar
  *
  */
 public class SlotCompactorOutput  extends SlotOutput
 {
+    
+    /**
+     * Instantiates a new slot compactor output.
+     *
+     * @param parPlayer the par player
+     * @param parIInventory the par I inventory
+     * @param parSlotIndex the par slot index
+     * @param parXDisplayPosition the par X display position
+     * @param parYDisplayPosition the par Y display position
+     */
     public SlotCompactorOutput(EntityPlayer parPlayer, IInventory parIInventory, int parSlotIndex, int parXDisplayPosition, int parYDisplayPosition)
     {
         super(parPlayer, parIInventory, parSlotIndex, parXDisplayPosition, parYDisplayPosition);
@@ -37,6 +48,8 @@ public class SlotCompactorOutput  extends SlotOutput
 
     /**
      * the itemStack passed in is the output - ie, iron ingots, and pickaxes, not ore and wood.
+     *
+     * @param parItemStack the par item stack
      */
     @Override
 	protected void onCrafting(ItemStack parItemStack)

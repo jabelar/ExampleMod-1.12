@@ -1,3 +1,18 @@
+/**
+    Copyright (C) 2017 by jabelar
+
+    This file is part of jabelar's Minecraft Forge modding examples; as such,
+    you can redistribute it and/or modify it under the terms of the GNU
+    General Public License as published by the Free Software Foundation,
+    either version 3 of the License, or (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+    GNU General Public License for more details.
+
+    For a copy of the GNU General Public License see <http://www.gnu.org/licenses/>.
+*/
 package com.blogspot.jabelarminecraft.examplemod.registries;
 
 import java.util.HashSet;
@@ -20,6 +35,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry.ObjectHolder;
 import net.minecraftforge.registries.IForgeRegistry;
 
+// TODO: Auto-generated Javadoc
 @ObjectHolder(MainMod.MODID)
 public class ItemRegistry {
 //	public static class ArmorMaterials {
@@ -83,6 +99,9 @@ public class ItemRegistry {
 		}
 	}
 	
+    /**
+     * Register item models.
+     */
     public static void registerItemModels()
     {
         // DEBUG
@@ -95,11 +114,22 @@ public class ItemRegistry {
         registerItemModel(SWORD_EXTENDED);
     }
     
+    /**
+     * Register item model.
+     *
+     * @param parItem the par item
+     */
     public static void registerItemModel(Item parItem)
     {
     	registerItemModel(parItem, 0);
     }
     
+    /**
+     * Register item model.
+     *
+     * @param parItem the par item
+     * @param parMetaData the par meta data
+     */
     public static void registerItemModel(Item parItem, int parMetaData)
     {
         ModelLoader.setCustomModelResourceLocation(parItem, parMetaData, new ModelResourceLocation(MainMod.MODID + ":" + parItem.getUnlocalizedName().substring(5), "inventory"));

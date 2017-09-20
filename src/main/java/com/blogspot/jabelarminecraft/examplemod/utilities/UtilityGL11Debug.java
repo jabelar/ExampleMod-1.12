@@ -1,3 +1,18 @@
+/**
+    Copyright (C) 2017 by jabelar
+
+    This file is part of jabelar's Minecraft Forge modding examples; as such,
+    you can redistribute it and/or modify it under the terms of the GNU
+    General Public License as published by the Free Software Foundation,
+    either version 3 of the License, or (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+    GNU General Public License for more details.
+
+    For a copy of the GNU General Public License see <http://www.gnu.org/licenses/>.
+*/
 package com.blogspot.jabelarminecraft.examplemod.utilities;
 
 import java.nio.ByteBuffer;
@@ -5,6 +20,7 @@ import java.nio.ByteBuffer;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
 
+// TODO: Auto-generated Javadoc
 /**
  * User: The Grey Ghost
  * Date: 9/02/14
@@ -13,6 +29,16 @@ public class UtilityGL11Debug
 {
   public class GLproperty
   {
+    
+    /**
+     * Instantiates a new g lproperty.
+     *
+     * @param init_gLconstant the init g lconstant
+     * @param init_name the init name
+     * @param init_description the init description
+     * @param init_category the init category
+     * @param init_fetchCommand the init fetch command
+     */
     public GLproperty(int init_gLconstant, String init_name, String init_description, String init_category, String init_fetchCommand) {
       gLconstant = init_gLconstant;
       name = init_name;
@@ -290,10 +316,16 @@ public class UtilityGL11Debug
 
 
 
+  /**
+   * Dump open G lstate.
+   */
   public static void dumpOpenGLstate()
   {
   }
 
+  /**
+   * Dump all is enabled.
+   */
   public static void dumpAllIsEnabled()
   {
     for (int i = 0; i < instance.propertyList.length; ++i) {
@@ -305,6 +337,11 @@ public class UtilityGL11Debug
     }
   }
 
+  /**
+   * Dump all type.
+   *
+   * @param type the type
+   */
   public static void dumpAllType(String type) {
     for (int i = 0; i < instance.propertyList.length; ++i) {
       if (instance.propertyList[i].category.equals(type)) {

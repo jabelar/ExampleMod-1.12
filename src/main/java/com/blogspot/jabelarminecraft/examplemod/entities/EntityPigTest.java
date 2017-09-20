@@ -1,5 +1,5 @@
 /**
-    Copyright (C) 2015 by jabelar
+    Copyright (C) 2017 by jabelar
 
     This file is part of jabelar's Minecraft Forge modding examples; as such,
     you can redistribute it and/or modify it under the terms of the GNU
@@ -26,18 +26,28 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
+// TODO: Auto-generated Javadoc
 /**
  * @author jabelar
  *
  */
 public class EntityPigTest extends EntityPig implements IEntity
 {
+	
+	/**
+	 * Instantiates a new entity pig test.
+	 *
+	 * @param worldIn the world in
+	 */
 	public EntityPigTest(World worldIn) 
 	{
 		super(worldIn);
 		setSize(1.0F, 10.0F);
 	}
 	
+	/* (non-Javadoc)
+	 * @see net.minecraft.entity.passive.EntityAnimal#attackEntityFrom(net.minecraft.util.DamageSource, float)
+	 */
 	@Override
 	public boolean attackEntityFrom(DamageSource parDamageSource, float parDamageAmount)
 	{
@@ -204,48 +214,72 @@ public class EntityPigTest extends EntityPig implements IEntity
         }
     }
 
+	/* (non-Javadoc)
+	 * @see com.blogspot.jabelarminecraft.examplemod.entities.IEntity#setupAI()
+	 */
 	@Override
 	public void setupAI() {
 		// TODO Auto-generated method stub
 		
 	}
 
+	/* (non-Javadoc)
+	 * @see com.blogspot.jabelarminecraft.examplemod.entities.IEntity#clearAITasks()
+	 */
 	@Override
 	public void clearAITasks() {
 		// TODO Auto-generated method stub
 		
 	}
 
+	/* (non-Javadoc)
+	 * @see com.blogspot.jabelarminecraft.examplemod.entities.IEntity#initSyncDataCompound()
+	 */
 	@Override
 	public void initSyncDataCompound() {
 		// TODO Auto-generated method stub
 		
 	}
 
+	/* (non-Javadoc)
+	 * @see com.blogspot.jabelarminecraft.examplemod.entities.IEntity#getSyncDataCompound()
+	 */
 	@Override
 	public NBTTagCompound getSyncDataCompound() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.blogspot.jabelarminecraft.examplemod.entities.IEntity#setSyncDataCompound(net.minecraft.nbt.NBTTagCompound)
+	 */
 	@Override
 	public void setSyncDataCompound(NBTTagCompound parCompound) {
 		// TODO Auto-generated method stub
 		
 	}
 
+	/* (non-Javadoc)
+	 * @see com.blogspot.jabelarminecraft.examplemod.entities.IEntity#sendEntitySyncPacket()
+	 */
 	@Override
 	public void sendEntitySyncPacket() {
 		// TODO Auto-generated method stub
 		
 	}
 
+	/* (non-Javadoc)
+	 * @see com.blogspot.jabelarminecraft.examplemod.entities.IEntity#setScaleFactor(float)
+	 */
 	@Override
 	public void setScaleFactor(float parScaleFactor) {
 		// TODO Auto-generated method stub
 		
 	}
 
+	/* (non-Javadoc)
+	 * @see com.blogspot.jabelarminecraft.examplemod.entities.IEntity#getScaleFactor()
+	 */
 	@Override
 	public float getScaleFactor() {
 		// TODO Auto-generated method stub

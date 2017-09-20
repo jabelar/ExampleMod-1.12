@@ -1,5 +1,5 @@
 /**
-    Copyright (C) 2014 by jabelar
+    Copyright (C) 2017 by jabelar
 
     This file is part of jabelar's Minecraft Forge modding examples; as such,
     you can redistribute it and/or modify it under the terms of the GNU
@@ -23,6 +23,7 @@ import java.net.URL;
 
 import org.apache.commons.io.IOUtils;
 
+// TODO: Auto-generated Javadoc
 /**
  * @author jabelar
  *
@@ -73,11 +74,21 @@ public class VersionChecker implements Runnable
         System.out.println("Are you running latest version = "+isLatestVersion);
     }
     
+    /**
+     * Checks if is latest version.
+     *
+     * @return true, if is latest version
+     */
     public boolean isLatestVersion()
     {
     	return isLatestVersion;
     }
     
+    /**
+     * Gets the latest version.
+     *
+     * @return the latest version
+     */
     public String getLatestVersion()
     {
     	return latestVersion;

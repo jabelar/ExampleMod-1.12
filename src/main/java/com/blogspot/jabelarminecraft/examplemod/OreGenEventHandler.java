@@ -1,5 +1,5 @@
 /**
-    Copyright (C) 2014 by jabelar
+    Copyright (C) 2017 by jabelar
 
     This file is part of jabelar's Minecraft Forge modding examples; as such,
     you can redistribute it and/or modify it under the terms of the GNU
@@ -12,9 +12,6 @@
     GNU General Public License for more details.
 
     For a copy of the GNU General Public License see <http://www.gnu.org/licenses/>.
-
-	If you're interested in licensing the code under different terms you can
-	contact the author at julian_abelar@hotmail.com 
 */
 
 package com.blogspot.jabelarminecraft.examplemod;
