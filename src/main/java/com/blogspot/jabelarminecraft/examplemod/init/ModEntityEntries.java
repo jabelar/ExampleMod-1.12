@@ -13,26 +13,29 @@
 
     For a copy of the GNU General Public License see <http://www.gnu.org/licenses/>.
 */
-package com.blogspot.jabelarminecraft.examplemod.registries;
+package com.blogspot.jabelarminecraft.examplemod.init;
 
-import java.util.HashSet;
 import java.util.Set;
 
 import com.blogspot.jabelarminecraft.examplemod.MainMod;
+import com.google.common.collect.ImmutableSet;
 
 import net.minecraft.block.Block;
-import net.minecraft.util.SoundEvent;
+import net.minecraft.enchantment.Enchantment;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.registry.GameRegistry.ObjectHolder;
 import net.minecraftforge.registries.IForgeRegistry;
 
-@ObjectHolder(MainMod.MODID)
-public class SoundEventRegistry1 
+// @ObjectHolder(MainMod.MODID)
+public class ModEntityEntries 
 {
-    // instantiate SoundEvents
-//	public final static SoundEventCustom MY_COOL_SoundEvent = new SoundEventCustom();
+    // instantiate Enchantments
+//	public final static EnchantmentCustom MY_COOL_ENCHANTMENT = new EnchantmentCustom();
+	
+	public static final Set<Enchantment> SET_INSTANCES = ImmutableSet.of(
+//            MY_COOL_ENCHANTMENT
+			);
 
 	/**
 	 * Initialize this mod's {@link Block}s with any post-registration data.
@@ -44,27 +47,20 @@ public class SoundEventRegistry1
 	@Mod.EventBusSubscriber(modid = MainMod.MODID)
 	public static class RegistrationHandler 
 	{
-		public static final Set<SoundEvent> SET_SOUND_EVENTS = new HashSet<>();
-
 		/**
-		 * Register this mod's {@link SoundEvent}s.
+		 * Register this mod's {@link Enchantment}s.
 		 *
 		 * @param event The event
 		 */
 		@SubscribeEvent
-		public static void onEvent(final RegistryEvent.Register<SoundEvent> event) 
+		public static void onEvent(final RegistryEvent.Register<Enchantment> event) 
 		{
-			final SoundEvent[] arraySoundEvents = {
-//					MY_COOL_SoundEvent
-			};
+			final IForgeRegistry<Enchantment> registry = event.getRegistry();
 
-			final IForgeRegistry<SoundEvent> registry = event.getRegistry();
+	        System.out.println("Registering recipes");
 
-	        System.out.println("Registering sound events");
-
-	        for (final SoundEvent SoundEvent : arraySoundEvents) {
-				registry.register(SoundEvent);
-				SET_SOUND_EVENTS.add(SoundEvent);
+	        for (final Enchantment enchantment : SET_INSTANCES) {
+				registry.register(enchantment);
 			}
 
 			initialize();

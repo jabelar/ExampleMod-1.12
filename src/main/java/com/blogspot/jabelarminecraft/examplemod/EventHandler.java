@@ -16,10 +16,10 @@
 
 package com.blogspot.jabelarminecraft.examplemod;
 
-import com.blogspot.jabelarminecraft.examplemod.gui.GuiCompactor;
+import com.blogspot.jabelarminecraft.examplemod.client.gui.GuiCompactor;
+import com.blogspot.jabelarminecraft.examplemod.init.ModItems;
 import com.blogspot.jabelarminecraft.examplemod.items.IExtendedReach;
 import com.blogspot.jabelarminecraft.examplemod.networking.MessageExtendedReachAttack;
-import com.blogspot.jabelarminecraft.examplemod.registries.ItemRegistry;
 import com.blogspot.jabelarminecraft.examplemod.utilities.Utilities;
 
 import net.minecraft.client.Minecraft;
@@ -212,15 +212,15 @@ public class EventHandler
 
 				if (event.getEntityLiving() instanceof EntityCow)
 				{
-					dropItem.setItem(new ItemStack(ItemRegistry.COW_HIDE, stackSize));
+					dropItem.setItem(new ItemStack(ModItems.COW_HIDE, stackSize));
 				}
 				if (event.getEntityLiving() instanceof EntityHorse)
 				{
-					dropItem.setItem(new ItemStack(ItemRegistry.HORSE_HIDE, stackSize));
+					dropItem.setItem(new ItemStack(ModItems.HORSE_HIDE, stackSize));
 				}
 				if (event.getEntityLiving() instanceof EntityMooshroom)
 				{
-					dropItem.setItem(new ItemStack(ItemRegistry.COW_HIDE, stackSize));
+					dropItem.setItem(new ItemStack(ModItems.COW_HIDE, stackSize));
 				}
 			}
     	}
@@ -230,14 +230,14 @@ public class EventHandler
 			event.getDrops().add(new EntityItem(
 			        event.getEntityLiving().world, 
 			        event.getEntityLiving().posX, event.getEntityLiving().posY, event.getEntityLiving().posZ, 
-					new ItemStack(ItemRegistry.PIG_SKIN)));
+					new ItemStack(ModItems.PIG_SKIN)));
 		}
 		else if (event.getEntityLiving() instanceof EntitySheep)
 		{
 			event.getDrops().add(new EntityItem(
 			        event.getEntityLiving().world, 
 			        event.getEntityLiving().posX, event.getEntityLiving().posY, event.getEntityLiving().posZ, 
-					new ItemStack(ItemRegistry.SHEEP_SKIN)));
+					new ItemStack(ModItems.SHEEP_SKIN)));
 		}
     }
     

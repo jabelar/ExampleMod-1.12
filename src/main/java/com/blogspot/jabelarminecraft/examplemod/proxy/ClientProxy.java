@@ -24,8 +24,8 @@ import org.lwjgl.util.glu.Sphere;
 import com.blogspot.jabelarminecraft.examplemod.MainMod;
 import com.blogspot.jabelarminecraft.examplemod.VersionChecker;
 import com.blogspot.jabelarminecraft.examplemod.entities.EntityPigTest;
-import com.blogspot.jabelarminecraft.examplemod.registries.BlockRegistry;
-import com.blogspot.jabelarminecraft.examplemod.registries.ItemRegistry;
+import com.blogspot.jabelarminecraft.examplemod.init.ModBlocks;
+import com.blogspot.jabelarminecraft.examplemod.init.ModItems;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderItem;
@@ -164,11 +164,11 @@ public class ClientProxy extends CommonProxy
         // DEBUG
         System.out.println("Registering item renderers");
         
-        registerItemRenderer(ItemRegistry.COW_HIDE);
-        registerItemRenderer(ItemRegistry.SHEEP_SKIN);
-        registerItemRenderer(ItemRegistry.PIG_SKIN);
-        registerItemRenderer(ItemRegistry.HORSE_HIDE);
-        registerItemRenderer(ItemRegistry.SWORD_EXTENDED);
+        registerItemRenderer(ModItems.COW_HIDE);
+        registerItemRenderer(ModItems.SHEEP_SKIN);
+        registerItemRenderer(ModItems.PIG_SKIN);
+        registerItemRenderer(ModItems.HORSE_HIDE);
+        registerItemRenderer(ModItems.SWORD_EXTENDED);
         // registerItemRenderer(JnaeMod.magicBeans);
     }
     
@@ -194,7 +194,7 @@ public class ClientProxy extends CommonProxy
         
         RenderItem renderItem = Minecraft.getMinecraft().getRenderItem();
         
-        renderItem.getItemModelMesher().register(Item.getItemFromBlock(BlockRegistry.COMPACTOR), 0, new ModelResourceLocation(MainMod.MODID + ":" + BlockRegistry.COMPACTOR.getUnlocalizedName().substring(5), "inventory"));
+        renderItem.getItemModelMesher().register(Item.getItemFromBlock(ModBlocks.COMPACTOR), 0, new ModelResourceLocation(MainMod.MODID + ":" + ModBlocks.COMPACTOR.getUnlocalizedName().substring(5), "inventory"));
     }
     
     /*     

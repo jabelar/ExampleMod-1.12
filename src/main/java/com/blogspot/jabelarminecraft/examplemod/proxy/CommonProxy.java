@@ -24,9 +24,9 @@ import com.blogspot.jabelarminecraft.examplemod.EventHandler;
 import com.blogspot.jabelarminecraft.examplemod.MainMod;
 import com.blogspot.jabelarminecraft.examplemod.OreGenEventHandler;
 import com.blogspot.jabelarminecraft.examplemod.TerrainGenEventHandler;
+import com.blogspot.jabelarminecraft.examplemod.client.gui.GuiHandler;
 import com.blogspot.jabelarminecraft.examplemod.commands.CommandStructureCapture;
 import com.blogspot.jabelarminecraft.examplemod.entities.EntityPigTest;
-import com.blogspot.jabelarminecraft.examplemod.gui.GuiHandler;
 import com.blogspot.jabelarminecraft.examplemod.networking.MessageExtendedReachAttack;
 import com.blogspot.jabelarminecraft.examplemod.networking.MessageRequestItemStackRegistryFromClient;
 import com.blogspot.jabelarminecraft.examplemod.networking.MessageSendItemStackRegistryToServer;
@@ -36,6 +36,7 @@ import com.blogspot.jabelarminecraft.examplemod.networking.MessageToServer;
 import com.blogspot.jabelarminecraft.examplemod.tileentities.TileEntityCompactor;
 
 import io.netty.buffer.ByteBuf;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.entity.player.EntityPlayer;
@@ -69,10 +70,12 @@ public class CommonProxy
     /*
      * Sometimes useful to have list of all item types, including subtypes
      */
-    protected List itemStackRegistry = new ArrayList();
+    protected List<ItemStack> itemStackRegistry = new ArrayList<ItemStack>();
      
     /**
-     * Fml life cycle event.
+     * Fml life cycle event for Pre-Initialization. Historically (before registry 
+     * events) this was where blocks, items, etc. were registered. There are still things
+     * like entities and networking which should still be registered here.
      *
      * @param event the event
      */
@@ -94,7 +97,9 @@ public class CommonProxy
     }
 
     /**
-     * Fml life cycle event.
+     * Fml life cycle event for Initialization. This phase is good for registering event listeners,
+     * for registering things that depend on things in pre-init from other mods (like recipes, advancements
+     * and such.)
      *
      * @param event the event
      */
@@ -124,7 +129,10 @@ public class CommonProxy
     }
 
     /**
-     * Fml life cycle event.
+     * Fml life cycle event Post Initialization. This phase is useful
+     * For doing inter-mod stuff like checking which mods are loaded
+     * or if you want a complete view of things across mods like having 
+     * a list of all registered items to aid random item generation.
      *
      * @param event the event
      */
@@ -135,7 +143,7 @@ public class CommonProxy
     }
 
     /**
-     * Fml life cycle event.
+     * Fml life cycle event for Server About To Start.
      *
      * @param event the event
      */
@@ -146,7 +154,7 @@ public class CommonProxy
     }
 
     /**
-     * Fml life cycle event.
+     * Fml life cycle event for Server Started.
      *
      * @param event the event
      */
@@ -157,7 +165,7 @@ public class CommonProxy
     }
 
     /**
-     * Fml life cycle event.
+     * Fml life cycle event for Server Stopping.
      *
      * @param event the event
      */
@@ -168,7 +176,7 @@ public class CommonProxy
     }
 
     /**
-     * Fml life cycle event.
+     * Fml life cycle event for Server Stopped.
      *
      * @param event the event
      */
@@ -380,7 +388,7 @@ public class CommonProxy
      * @param parEntityClass the par entity class
      * @param parEntityName the par entity name
      */
-     protected void registerModEntity(Class parEntityClass, String parEntityName)
+     protected void registerModEntity(Class<? extends Entity> parEntityClass, String parEntityName)
      {
  		final ResourceLocation resourceLocation = new ResourceLocation(MainMod.MODID, parEntityName);
         EntityRegistry.registerModEntity(resourceLocation, parEntityClass, parEntityName, ++modEntityID, MainMod.instance, 80, 3, false);
@@ -392,7 +400,7 @@ public class CommonProxy
       * @param parEntityClass the par entity class
       * @param parEntityName the par entity name
       */
-     protected void registerModEntityFastTracking(Class parEntityClass, String parEntityName)
+     protected void registerModEntityFastTracking(Class<? extends Entity> parEntityClass, String parEntityName)
      {
   		final ResourceLocation resourceLocation = new ResourceLocation(MainMod.MODID, parEntityName);
         EntityRegistry.registerModEntity(resourceLocation, parEntityClass, parEntityName, ++modEntityID, MainMod.instance, 80, 10, true);
@@ -406,7 +414,7 @@ public class CommonProxy
       * @param parEggColor the par egg color
       * @param parEggSpotsColor the par egg spots color
       */
-     public void registerModEntityWithEgg(Class parEntityClass, String parEntityName, 
+     public void registerModEntityWithEgg(Class<? extends Entity> parEntityClass, String parEntityName, 
               int parEggColor, int parEggSpotsColor)
      {
    		final ResourceLocation resourceLocation = new ResourceLocation(MainMod.MODID, parEntityName);
@@ -520,7 +528,7 @@ public class CommonProxy
      *
      * @param parRegistry the new item stack registry
      */
-    public void setItemStackRegistry(List parRegistry)
+    public void setItemStackRegistry(List<ItemStack> parRegistry)
     {
         itemStackRegistry = parRegistry;
     }
@@ -530,7 +538,7 @@ public class CommonProxy
      *
      * @return the item stack registry
      */
-    public List getItemStackRegistry()
+    public List<ItemStack> getItemStackRegistry()
     {
         return itemStackRegistry;
     }
@@ -545,11 +553,11 @@ public class CommonProxy
      */
     public void convertItemStackListToPayload(ByteBuf parBuffer)
     {
-        Iterator theIterator = itemStackRegistry.iterator();
+        Iterator<ItemStack> theIterator = itemStackRegistry.iterator();
        
         while (theIterator.hasNext())
         {          
-            ItemStack theStack = (ItemStack) theIterator.next();
+            ItemStack theStack = theIterator.next();
             
             // write item id and metadata
             parBuffer.writeInt(Item.getIdFromItem(theStack.getItem()));
@@ -586,7 +594,7 @@ public class CommonProxy
      */
     public List<ItemStack> convertPayloadToItemStackList(ByteBuf theBuffer)
     {
-        List<ItemStack> theList = new ArrayList();
+        List<ItemStack> theList = new ArrayList<ItemStack>();
         
         while (theBuffer.isReadable())
         {

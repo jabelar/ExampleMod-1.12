@@ -13,26 +13,30 @@
 
     For a copy of the GNU General Public License see <http://www.gnu.org/licenses/>.
 */
-package com.blogspot.jabelarminecraft.examplemod.registries;
+package com.blogspot.jabelarminecraft.examplemod.init;
 
-import java.util.HashSet;
 import java.util.Set;
 
 import com.blogspot.jabelarminecraft.examplemod.MainMod;
+import com.google.common.collect.ImmutableSet;
 
 import net.minecraft.block.Block;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.registry.GameRegistry.ObjectHolder;
 import net.minecraftforge.registries.IForgeRegistry;
 
-@ObjectHolder(MainMod.MODID)
-public class BiomeRegistry 
+// @ObjectHolder(MainMod.MODID)
+public class ModBiomes 
 {
     // instantiate Biomes
 //	public final static BiomeCustom MY_COOL_BIOME = new BiomeCustom();
+
+	public static final Set<Biome> SET_BIOMES = ImmutableSet.of(
+//            MY_COOL_BIOME
+			);
+
 
 	/**
 	 * Initialize this mod's {@link Block}s with any post-registration data.
@@ -44,8 +48,6 @@ public class BiomeRegistry
 	@Mod.EventBusSubscriber(modid = MainMod.MODID)
 	public static class RegistrationHandler 
 	{
-		public static final Set<Biome> SET_BIOMES = new HashSet<>();
-
 		/**
 		 * Register this mod's {@link Biome}s.
 		 *
@@ -54,17 +56,12 @@ public class BiomeRegistry
 		@SubscribeEvent
 		public static void onEvent(final RegistryEvent.Register<Biome> event) 
 		{
-			final Biome[] arrayBiomes = {
-//					MY_COOL_BIOME
-			};
-
 			final IForgeRegistry<Biome> registry = event.getRegistry();
 
 	        System.out.println("Registering biomes");
 
-			for (final Biome Biome : arrayBiomes) {
-				registry.register(Biome);
-				SET_BIOMES.add(Biome);
+			for (final Biome biome : SET_BIOMES) {
+				registry.register(biome);
 			}
 
 			initialize();

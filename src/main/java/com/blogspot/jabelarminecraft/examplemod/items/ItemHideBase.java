@@ -35,6 +35,7 @@ import net.minecraft.world.World;
  * @author jabelar
  *
  */
+@SuppressWarnings("deprecation")
 public class ItemHideBase extends Item
 {
     
@@ -74,7 +75,7 @@ public class ItemHideBase extends Item
 
         if (movingObjectPosition == null)
         {
-            return new ActionResult(EnumActionResult.FAIL, parPlayer.getActiveItemStack());
+            return new ActionResult<ItemStack>(EnumActionResult.FAIL, parPlayer.getActiveItemStack());
         }
         else
         {
@@ -84,7 +85,7 @@ public class ItemHideBase extends Item
 
                 if (!parPlayer.canPlayerEdit(blockPos.offset(movingObjectPosition.sideHit), movingObjectPosition.sideHit, parPlayer.getActiveItemStack()))
                 {
-                    return new ActionResult(EnumActionResult.FAIL, parPlayer.getActiveItemStack());
+                    return new ActionResult<ItemStack>(EnumActionResult.FAIL, parPlayer.getActiveItemStack());
                 }
 
                 // if you want to do special stuff with interaction of item with specific blocks
@@ -101,7 +102,7 @@ public class ItemHideBase extends Item
 //                }
             }
 
-            return new ActionResult(EnumActionResult.FAIL, parPlayer.getActiveItemStack());
+            return new ActionResult<ItemStack>(EnumActionResult.FAIL, parPlayer.getActiveItemStack());
         }
     }
 
