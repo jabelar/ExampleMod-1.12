@@ -19,6 +19,7 @@ import java.util.Set;
 
 import com.blogspot.jabelarminecraft.examplemod.MainMod;
 import com.blogspot.jabelarminecraft.examplemod.blocks.BlockCompactor;
+import com.blogspot.jabelarminecraft.examplemod.blocks.fluids.ModBlockFluidClassic;
 import com.blogspot.jabelarminecraft.examplemod.utilities.Utilities;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableSet;
@@ -33,7 +34,6 @@ import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fluids.BlockFluidBase;
-import net.minecraftforge.fluids.BlockFluidClassic;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.registries.IForgeRegistry;
@@ -48,7 +48,7 @@ public class ModBlocks {
 	 * fluid blocks
 	 * Make sure you set registry name here
 	 */
-	public static final BlockFluidBase SLIME_BLOCK = (BlockFluidBase) Utilities.setBlockName(new BlockFluidClassic(ModFluids.SLIME, ModMaterials.SLIME), "slime").setCreativeTab(CreativeTabs.DECORATIONS);
+	public static final BlockFluidBase SLIME_BLOCK = (BlockFluidBase) Utilities.setBlockName(new ModBlockFluidClassic(ModFluids.SLIME, ModMaterials.SLIME, true), "slime").setCreativeTab(CreativeTabs.DECORATIONS);
 	
 	public static final Set<Block> SET_BLOCKS = ImmutableSet.of(
 			COMPACTOR,

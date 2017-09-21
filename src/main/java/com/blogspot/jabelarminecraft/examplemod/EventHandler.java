@@ -16,13 +16,22 @@
 
 package com.blogspot.jabelarminecraft.examplemod;
 
+import java.util.Iterator;
+import java.util.List;
+
 import com.blogspot.jabelarminecraft.examplemod.client.gui.GuiCompactor;
+import com.blogspot.jabelarminecraft.examplemod.init.ModBlocks;
 import com.blogspot.jabelarminecraft.examplemod.init.ModItems;
 import com.blogspot.jabelarminecraft.examplemod.items.IExtendedReach;
 import com.blogspot.jabelarminecraft.examplemod.networking.MessageExtendedReachAttack;
 import com.blogspot.jabelarminecraft.examplemod.utilities.Utilities;
 
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockLiquid;
+import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.passive.EntityCow;
 import net.minecraft.entity.passive.EntityHorse;
@@ -32,10 +41,15 @@ import net.minecraft.entity.passive.EntitySheep;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.event.ClickEvent;
+import net.minecraft.world.World;
 import net.minecraftforge.client.event.GuiOpenEvent;
 import net.minecraftforge.client.event.MouseEvent;
 import net.minecraftforge.event.RegistryEvent;
@@ -47,6 +61,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedOutEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.PlayerTickEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent.WorldTickEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -1086,14 +1101,117 @@ public class EventHandler
 //        
 //    }
 
-//  @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-//  public void onEvent(WorldTickEvent event)
-//  {
-//      if (event.phase == TickEvent.Phase.END) // only proceed if START phase otherwise, will execute twice per tick
+  @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
+  public void onEvent(WorldTickEvent event)
+  {
+      if (event.phase == TickEvent.Phase.START) // only proceed if START phase otherwise, will execute twice per tick
+      {
+          return;
+      }   
+      
+      List<Entity> entityList = event.world.getLoadedEntityList();
+      Iterator<Entity> iterator = entityList.iterator();
+      
+      while(iterator.hasNext())
+      {
+    	  Entity theEntity = iterator.next();
+    	  
+	      if (handleMaterialAcceleration(event.world, theEntity.getEntityBoundingBox().grow(0.0D, -0.4000000059604645D, 0.0D).shrink(0.001D), ModBlocks.SLIME_BLOCK.getDefaultState().getMaterial(), theEntity));
+	      {
+	    	  theEntity.fallDistance = 0.0F;
+	          theEntity.extinguish();
+	      }
+      }
+
+  }
+  /**
+   * handles the acceleration of an object whilst in water. Not sure if it is used elsewhere.
+   */
+  public boolean handleMaterialAcceleration(World parWorld, AxisAlignedBB bb, Material materialIn, Entity entityIn)
+  {
+      int j2 = MathHelper.floor(bb.minX);
+      int k2 = MathHelper.ceil(bb.maxX);
+      int l2 = MathHelper.floor(bb.minY);
+      int i3 = MathHelper.ceil(bb.maxY);
+      int j3 = MathHelper.floor(bb.minZ);
+      int k3 = MathHelper.ceil(bb.maxZ);
+
+//      if (!parWorld.isAreaLoaded(j2, l2, j3, k2, i3, k3, true))
 //      {
-//          return;
-//      }          
-//  }
+//          return false;
+//      }
+//      else
+      {
+          boolean flag = false;
+          Vec3d vec3d = Vec3d.ZERO;
+          BlockPos.PooledMutableBlockPos blockpos$pooledmutableblockpos = BlockPos.PooledMutableBlockPos.retain();
+
+          for (int l3 = j2; l3 < k2; ++l3)
+          {
+              for (int i4 = l2; i4 < i3; ++i4)
+              {
+                  for (int j4 = j3; j4 < k3; ++j4)
+                  {
+                      blockpos$pooledmutableblockpos.setPos(l3, i4, j4);
+                      IBlockState iblockstate1 = parWorld.getBlockState(blockpos$pooledmutableblockpos);
+                      Block block = iblockstate1.getBlock();
+
+                      Boolean result = block.isEntityInsideMaterial(parWorld, blockpos$pooledmutableblockpos, iblockstate1, entityIn, i3, materialIn, false);
+                      if (result != null && result == true)
+                      {
+                          // Forge: When requested call blocks modifyAcceleration method, and more importantly cause this method to return true, which results in an entity being "inWater"
+                          flag = true;
+                          vec3d = block.modifyAcceleration(parWorld, blockpos$pooledmutableblockpos, entityIn, vec3d);
+                    	  
+                          // DEBUG
+                    	  System.out.println("Entity is inside material = "+materialIn+" and motion add vector = "+vec3d);
+                    	  
+                          continue;
+                      }
+                      else if (result != null && result == false) continue;
+
+                      if (iblockstate1.getMaterial() == materialIn)
+                      {
+                    	  // DEBUG
+                    	  System.out.println("blockstate material matches material in");
+                    	  
+                          double d0 = i4 + 1 - BlockLiquid.getLiquidHeightPercent(iblockstate1.getValue(BlockLiquid.LEVEL).intValue());
+
+                          if (i3 >= d0)
+                          {
+                        	  flag = true;
+                        	  vec3d = block.modifyAcceleration(parWorld, blockpos$pooledmutableblockpos, entityIn, vec3d);
+                        	  
+                              // DEBUG
+                        	  System.out.println("deep enough to push entity and motion add = "+vec3d);                 
+                           }
+                      }
+                  }
+              }
+          }
+
+          blockpos$pooledmutableblockpos.release();
+
+          if (vec3d.lengthVector() > 0.0D && entityIn.isPushedByWater())
+          {
+        	  // DEBUG
+        	  System.out.println("motion vector is non-zero");
+        	  
+              vec3d = vec3d.normalize();
+              double d1 = 0.014D;
+              entityIn.posX += vec3d.x * 0.014D;
+              entityIn.posY += vec3d.y * 0.014D;
+              entityIn.posZ += vec3d.z * 0.014D;
+          }
+          else
+          {
+//        	  // DEBUG
+//        	  System.out.println("motion vector is zero");
+          }
+
+          return flag;
+      }
+  }
 
     /**
  * On event.
