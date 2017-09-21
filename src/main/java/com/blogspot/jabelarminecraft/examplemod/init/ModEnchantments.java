@@ -28,7 +28,7 @@ import net.minecraftforge.fml.common.registry.EntityEntry;
 import net.minecraftforge.registries.IForgeRegistry;
 
 // @ObjectHolder(MainMod.MODID)
-public class ModEntityEntrys 
+public class ModEnchantments 
 {
     // instantiate EntityEntrys
 //	public final static EntityEntryCustom MY_COOL_EntityEntry = new EntityEntryCustom();

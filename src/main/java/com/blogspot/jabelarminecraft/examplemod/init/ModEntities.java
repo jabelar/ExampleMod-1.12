@@ -22,22 +22,30 @@ import com.blogspot.jabelarminecraft.examplemod.entities.EntityPigTest;
 import com.google.common.collect.ImmutableSet;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.material.MapColor;
+import net.minecraft.entity.EntityList.EntityEggInfo;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.EntityEntry;
-import net.minecraftforge.fml.common.registry.GameRegistry.ObjectHolder;
 import net.minecraftforge.registries.IForgeRegistry;
 
-@ObjectHolder(MainMod.MODID)
 public class ModEntities 
 {
-    // instantiate EntityEntrys
-	@ObjectHolder
-	public final static EntityEntry TEST_PIG = null;
+	// instantiate EntityEntry
+	public static final EntityEntry TEST_PIG = new EntityEntry(EntityPigTest.class, "test_pig");
 	
+	// add eggs for those entities that need one
+	static
+	{
+		TEST_PIG.setRegistryName(new ResourceLocation(MainMod.MODID, "test_pig"));
+		TEST_PIG.setEgg(new EntityEggInfo(new ResourceLocation(MainMod.MODID, "test_pig"), MapColor.BLUE.colorValue, MapColor.YELLOW.colorValue));
+	}
+	
+    // instantiate EntityEntry list
 	public static final Set<EntityEntry> SET_INSTANCES = ImmutableSet.of(
-            TEST_PIG = new EntityEntry(new EntityPigTest(), "test_pig").setEgg(new EntityEggInfo());
+            TEST_PIG
 			);
 
 	/**
@@ -59,11 +67,15 @@ public class ModEntities
 		public static void onEvent(final RegistryEvent.Register<EntityEntry> event) 
 		{
 			final IForgeRegistry<EntityEntry> registry = event.getRegistry();
-			e
 
+			// DEBUG
 	        System.out.println("Registering entities");
 
-	        for (final EntityEntry entityEntry : SET_INSTANCES) {
+	        for (final EntityEntry entityEntry : SET_INSTANCES) 
+	        {
+	        	// DEBUG
+	        	System.out.println("Registering entity = "+entityEntry.getEntityClass());
+	        	
 				registry.register(entityEntry);
 			}
 

@@ -19,17 +19,21 @@ import java.util.Set;
 
 import com.blogspot.jabelarminecraft.examplemod.MainMod;
 import com.blogspot.jabelarminecraft.examplemod.blocks.BlockCompactor;
+import com.blogspot.jabelarminecraft.examplemod.utilities.Utilities;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableSet;
 
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.fluids.BlockFluidBase;
+import net.minecraftforge.fluids.BlockFluidClassic;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.registries.IForgeRegistry;
@@ -40,13 +44,19 @@ public class ModBlocks {
     // instantiate blocks
 	public final static BlockCompactor COMPACTOR = new BlockCompactor();
 	
+	/*
+	 * fluid blocks
+	 * Make sure you set registry name here
+	 */
+	public static final BlockFluidBase SLIME_BLOCK = (BlockFluidBase) Utilities.setBlockName(new BlockFluidClassic(ModFluids.SLIME, ModMaterials.SLIME), "slime").setCreativeTab(CreativeTabs.BUILDING_BLOCKS);
+	
 	public static final Set<Block> SET_BLOCKS = ImmutableSet.of(
 			COMPACTOR,
-			ModFluids.SLIME_BLOCK
+			SLIME_BLOCK
 			);
 	public static final Set<ItemBlock> SET_ITEM_BLOCKS = ImmutableSet.of(
 			new ItemBlock(COMPACTOR),
-			new ItemBlock(ModFluids.SLIME_BLOCK)
+			new ItemBlock(SLIME_BLOCK)
 			);
 
 	/**

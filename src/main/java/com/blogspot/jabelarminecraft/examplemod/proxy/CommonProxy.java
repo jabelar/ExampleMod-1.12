@@ -27,6 +27,7 @@ import com.blogspot.jabelarminecraft.examplemod.TerrainGenEventHandler;
 import com.blogspot.jabelarminecraft.examplemod.client.gui.GuiHandler;
 import com.blogspot.jabelarminecraft.examplemod.commands.CommandStructureCapture;
 import com.blogspot.jabelarminecraft.examplemod.entities.EntityPigTest;
+import com.blogspot.jabelarminecraft.examplemod.init.ModFluids;
 import com.blogspot.jabelarminecraft.examplemod.networking.MessageExtendedReachAttack;
 import com.blogspot.jabelarminecraft.examplemod.networking.MessageRequestItemStackRegistryFromClient;
 import com.blogspot.jabelarminecraft.examplemod.networking.MessageSendItemStackRegistryToServer;
@@ -46,6 +47,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
+import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
@@ -87,7 +89,8 @@ public class CommonProxy
 
         // register stuff
         registerTileEntities();
-        registerEntities();
+        registerFluids();
+//        registerEntities();
         registerEntitySpawns();
         registerFuelHandlers();
         registerSimpleNetworking();
@@ -286,11 +289,8 @@ public class CommonProxy
      */
     public void registerFluids()
     {
-        // see tutorial at http://www.minecraftforge.net/wiki/Create_a_Fluid
-        // Fluid testFluid = new Fluid("testfluid");
-        // FluidRegistry.registerFluid(testFluid);
-        // testFluid.setLuminosity(0).setDensity(1000).setViscosity(1000).setGaseous(false) ;
-     }
+        FluidRegistry.registerFluid(ModFluids.SLIME);
+    }
     
     
     /**
