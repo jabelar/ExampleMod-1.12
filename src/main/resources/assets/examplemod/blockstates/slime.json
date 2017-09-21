@@ -2,10 +2,12 @@
     "forge_marker": 1,
     "defaults": {
         "textures": {
-            "particle": "blocks/planks_oak"
+            "particle": "blocks/slime",
+            "all": "examplemod:blocks/slime_flow"
         },
         "model": "forge:fluid",
-        "uvlock": false
+     	"custom": { "fluid": "slime" },
+     	"uvlock": false
     },
     "variants": {
         "normal": [{
