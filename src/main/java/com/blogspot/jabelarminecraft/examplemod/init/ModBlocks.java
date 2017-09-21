@@ -48,7 +48,7 @@ public class ModBlocks {
 	 * fluid blocks
 	 * Make sure you set registry name here
 	 */
-	public static final BlockFluidBase SLIME_BLOCK = (BlockFluidBase) Utilities.setBlockName(new BlockFluidClassic(ModFluids.SLIME, ModMaterials.SLIME), "slime").setCreativeTab(CreativeTabs.BUILDING_BLOCKS);
+	public static final BlockFluidBase SLIME_BLOCK = (BlockFluidBase) Utilities.setBlockName(new BlockFluidClassic(ModFluids.SLIME, ModMaterials.SLIME), "slime").setCreativeTab(CreativeTabs.DECORATIONS);
 	
 	public static final Set<Block> SET_BLOCKS = ImmutableSet.of(
 			COMPACTOR,

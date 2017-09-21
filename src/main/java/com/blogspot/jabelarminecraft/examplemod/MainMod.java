@@ -44,7 +44,7 @@ import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 @Mod( modid = MainMod.MODID, 
       name = MainMod.MODNAME, 
       version = MainMod.MODVERSION,
-      guiFactory = "com.blogspot.jabelarminecraft."+MainMod.MODID+".gui.GuiFactory",
+      guiFactory = "com.blogspot.jabelarminecraft."+MainMod.MODID+".client.gui.GuiFactory",
       acceptedMinecraftVersions = "[1.12]")
 public class MainMod
 {
