@@ -4,6 +4,7 @@
         "facing=north": { "model": "examplemod:compactor" },
         "facing=south": { "model": "examplemod:compactor", "y": 180 },
         "facing=west":  { "model": "examplemod:compactor", "y": 270 },
-        "facing=east":  { "model": "examplemod:compactor", "y": 90 }
+        "facing=east":  { "model": "examplemod:compactor", "y": 90 },
+        "inventory": { "model": "examplemod:compactor" }
     }
 }

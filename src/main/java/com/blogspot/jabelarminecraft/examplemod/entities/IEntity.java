@@ -18,6 +18,7 @@ package com.blogspot.jabelarminecraft.examplemod.entities;
 
 import net.minecraft.nbt.NBTTagCompound;
 
+// TODO: Auto-generated Javadoc
 /**
  * This interface is intended to help identify entities from this mob
  * and enforce consistent behavior where desired across them.

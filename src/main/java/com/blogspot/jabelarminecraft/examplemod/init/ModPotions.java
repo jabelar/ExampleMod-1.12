@@ -28,6 +28,7 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.registries.IForgeRegistry;
 
+// TODO: Auto-generated Javadoc
 // @ObjectHolder(MainMod.MODID)
 public class ModPotions 
 {
@@ -72,6 +73,11 @@ public class ModPotions
 			initialize();
 		}
 
+		/**
+		 * On type event.
+		 *
+		 * @param event the event
+		 */
 		@SubscribeEvent
 		public static void onTypeEvent(final RegistryEvent.Register<PotionType> event) 
 		{

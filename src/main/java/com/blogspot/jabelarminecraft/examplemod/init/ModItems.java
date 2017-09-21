@@ -94,6 +94,11 @@ public class ModItems {
 			initialize();
 		}
 		
+		/**
+		 * On model event.
+		 *
+		 * @param event the event
+		 */
 		@SubscribeEvent
 		public static void onModelEvent(final ModelRegistryEvent event) 
 		{

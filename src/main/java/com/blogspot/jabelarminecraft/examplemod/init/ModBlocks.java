@@ -107,6 +107,11 @@ public class ModBlocks {
 				System.out.println("Registering Item Block for "+registryName);			}
 		}		
 		
+		/**
+		 * On model event.
+		 *
+		 * @param event the event
+		 */
 		@SubscribeEvent
 		public static void onModelEvent(final ModelRegistryEvent event) 
 		{
@@ -114,6 +119,7 @@ public class ModBlocks {
 			System.out.println("Registering block models");
 			
 			registerBlockModels();
+			registerItemBlockModels();
 		}
 	}	
 	
@@ -149,5 +155,40 @@ public class ModBlocks {
     public static void registerBlockModel(Block parBlock, int parMetaData)
     {
         ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(parBlock), parMetaData, new ModelResourceLocation(MainMod.MODID + ":" + parBlock.getUnlocalizedName().substring(5), "inventory"));
+    }
+
+	
+    /**
+     * Register block models.
+     */
+    public static void registerItemBlockModels()
+    {
+		for (final ItemBlock block : SET_ITEM_BLOCKS) {
+			registerItemBlockModel(block);
+			// DEBUG
+			System.out.println("Registering item block model for"
+					+ ": "+block.getRegistryName());
+		}        
+    }
+    
+    /**
+     * Register block model.
+     *
+     * @param parBlock the par block
+     */
+    public static void registerItemBlockModel(ItemBlock parBlock)
+    {
+    	registerItemBlockModel(parBlock, 0);
+    }
+    
+    /**
+     * Register block model.
+     *
+     * @param parBlock the par block
+     * @param parMetaData the par meta data
+     */
+    public static void registerItemBlockModel(ItemBlock parBlock, int parMetaData)
+    {
+        ModelLoader.setCustomModelResourceLocation(parBlock, parMetaData, new ModelResourceLocation(MainMod.MODID + ":" + parBlock.getUnlocalizedName().substring(5), "inventory"));
     }
 }
