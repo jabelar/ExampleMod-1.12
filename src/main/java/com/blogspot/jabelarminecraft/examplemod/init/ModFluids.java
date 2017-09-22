@@ -18,7 +18,6 @@ package com.blogspot.jabelarminecraft.examplemod.init;
 import com.blogspot.jabelarminecraft.examplemod.MainMod;
 import com.blogspot.jabelarminecraft.examplemod.fluids.ModFluid;
 
-import net.minecraft.block.material.MapColor;
 import net.minecraft.util.ResourceLocation;
 
 public class ModFluids 
@@ -29,9 +28,7 @@ public class ModFluids
 	public static final ModFluid SLIME = (ModFluid) new ModFluid(
 			"slime", 
 			new ResourceLocation(MainMod.MODID,"slime_still"), 
-			new ResourceLocation(MainMod.MODID, "slime_flow"),
-			MapColor.GREEN.colorValue,
-			0.2F
+			new ResourceLocation(MainMod.MODID, "slime_flow")
 			)
 			.setDensity(1100)
 			.setGaseous(false)
