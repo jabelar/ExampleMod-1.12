@@ -1185,7 +1185,6 @@ public class EventHandler
 	          theEntity.extinguish();
 	      }
       }
-
   }
 
     /**
