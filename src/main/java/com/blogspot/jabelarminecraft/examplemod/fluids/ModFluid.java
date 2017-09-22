@@ -21,8 +21,8 @@ import net.minecraftforge.fluids.Fluid;
 // TODO: Auto-generated Javadoc
 public class ModFluid extends Fluid
 {
-	protected static int color = 0xFFFFFFFF;
-	
+	protected static int mapColor = 0xFFFFFFFF;
+	protected static float overlayAlpha = 0.2F;
 	/**
 	 * Instantiates a new mod fluid.
 	 *
@@ -30,17 +30,31 @@ public class ModFluid extends Fluid
 	 * @param still the still
 	 * @param flowing the flowing
 	 */
-	public ModFluid(String fluidName, ResourceLocation still, ResourceLocation flowing) {
+	public ModFluid(String fluidName, ResourceLocation still, ResourceLocation flowing) 
+	{
 		super(fluidName, still, flowing);
 	}
+	
+	public ModFluid(String fluidName, ResourceLocation still, ResourceLocation flowing, int mapColor) 
+	{
+		this(fluidName, still, flowing);
+		setColor(mapColor);
+	}
+	
+	public ModFluid(String fluidName, ResourceLocation still, ResourceLocation flowing, int mapColor, float overlayAlpha) 
+	{
+		this(fluidName, still, flowing, mapColor);
+		setAlpha(overlayAlpha);
+	}
 
+	
 	/* (non-Javadoc)
 	 * @see net.minecraftforge.fluids.Fluid#getColor()
 	 */
 	@Override
 	public int getColor()
 	{
-		return color;
+		return mapColor;
 	}
 	
 	/**
@@ -51,7 +65,18 @@ public class ModFluid extends Fluid
 	 */
 	public Fluid setColor(int parColor)
 	{
-		color = parColor;
+		mapColor = parColor;
+		return this;
+	}
+	
+	public float getAlpha()
+	{
+		return overlayAlpha;
+	}
+	
+	public Fluid setAlpha(float parOverlayAlpha)
+	{
+		overlayAlpha = parOverlayAlpha;
 		return this;
 	}
 }

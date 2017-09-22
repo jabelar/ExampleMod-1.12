@@ -16,17 +16,24 @@
 
 package com.blogspot.jabelarminecraft.examplemod;
 
+import java.awt.Color;
 import java.util.Iterator;
 import java.util.List;
 
 import com.blogspot.jabelarminecraft.examplemod.client.gui.GuiCompactor;
 import com.blogspot.jabelarminecraft.examplemod.init.ModBlocks;
+import com.blogspot.jabelarminecraft.examplemod.init.ModFluids;
 import com.blogspot.jabelarminecraft.examplemod.init.ModItems;
+import com.blogspot.jabelarminecraft.examplemod.init.ModMaterials;
 import com.blogspot.jabelarminecraft.examplemod.items.IExtendedReach;
 import com.blogspot.jabelarminecraft.examplemod.networking.MessageExtendedReachAttack;
 import com.blogspot.jabelarminecraft.examplemod.utilities.Utilities;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.BufferBuilder;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.passive.EntityCow;
@@ -43,6 +50,8 @@ import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.event.ClickEvent;
 import net.minecraftforge.client.event.GuiOpenEvent;
 import net.minecraftforge.client.event.MouseEvent;
+import net.minecraftforge.client.event.RenderGameOverlayEvent;
+import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent.NameFormat;
@@ -751,13 +760,74 @@ public class EventHandler
 //    	// Note that ElementType.All is fired first apparently, then individual elements
 //    }
 //    
-//    @SideOnly(Side.CLIENT)
-//    @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-//    public void onEvent(RenderGameOverlayEvent.Text event)
-//    {
-//    	// This event actually extends Pre
-//        
-//    }
+	@SideOnly(Side.CLIENT)
+	@SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
+	public void onEvent(RenderGameOverlayEvent.Pre event)
+	{
+		if (event.getType() == ElementType.ALL)
+		{
+//			// DEBUG
+//			System.out.println("render game overlay");
+			
+			EntityPlayer thePlayer = Minecraft.getMinecraft().player;
+			
+			if (thePlayer.isInsideOfMaterial(ModMaterials.SLIME))
+			{
+//				// DEBUG
+//				System.out.println("player is inside of material");
+				
+				drawFluidOverlay(ModFluids.SLIME.getColor(), 0.2F);
+			}			
+		}
+	}
+	
+//	@SideOnly(Side.CLIENT)
+//	@SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
+//	public void onEvent(RenderBlockOverlayEvent event)
+//	{
+//		if (event.getOverlayType() == OverlayType.WATER)
+//		{
+//			IBlockState theBlock = event.getBlockForOverlay();
+//			if (theBlock instanceof ModBlockFluidClassic)
+//			{
+//				// DEBUG
+//				System.out.println("rendering fluid overlay");
+//				renderFluidOverlay(event.getRenderPartialTicks());
+//			}
+//		}
+//	}
+  		
+    /**
+     * Draws a rectangle with the specified color
+     */
+	@SideOnly(Side.CLIENT)
+     public static void drawFluidOverlay(int parColor, float parAlpha)
+    {	
+		int left = 0;
+		int top = 0;
+		int right = Minecraft.getMinecraft().displayWidth;
+		int bottom = Minecraft.getMinecraft().displayHeight;
+
+		Color color = Color.GREEN;
+//        int red = color.getRed();
+//        int green = color.getGreen();
+//        int blue = color.getBlue();
+        Tessellator tessellator = Tessellator.getInstance();
+        BufferBuilder bufferbuilder = tessellator.getBuffer();
+        GlStateManager.enableBlend();
+        GlStateManager.disableTexture2D();
+        GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
+        GlStateManager.color(color.getRed(), color.getGreen(), color.getBlue(), parAlpha);
+        bufferbuilder.begin(7, DefaultVertexFormats.POSITION);
+        bufferbuilder.pos(left, bottom, 0.0D).endVertex();
+        bufferbuilder.pos(right, bottom, 0.0D).endVertex();
+        bufferbuilder.pos(right, top, 0.0D).endVertex();
+        bufferbuilder.pos(left, top, 0.0D).endVertex();
+        tessellator.draw();
+        GlStateManager.enableTexture2D();
+        GlStateManager.disableBlend();
+    }
+
 //
 //    @SideOnly(Side.CLIENT)
 //    @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
