@@ -37,6 +37,10 @@ import com.blogspot.jabelarminecraft.examplemod.networking.MessageToServer;
 import com.blogspot.jabelarminecraft.examplemod.tileentities.TileEntityCompactor;
 
 import io.netty.buffer.ByteBuf;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockLiquid;
+import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EnumCreatureType;
@@ -44,6 +48,11 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
@@ -618,5 +627,93 @@ public class CommonProxy
         System.out.println(theList.toString());
 
         return theList;      
+    }
+    
+    
+    /**
+     * handles the acceleration of an object whilst in a material. 
+     */
+    public boolean handleMaterialAcceleration(World parWorld, AxisAlignedBB bb, Material materialIn, Entity entityIn)
+    {
+        int j2 = MathHelper.floor(bb.minX);
+        int k2 = MathHelper.ceil(bb.maxX);
+        int l2 = MathHelper.floor(bb.minY);
+        int i3 = MathHelper.ceil(bb.maxY);
+        int j3 = MathHelper.floor(bb.minZ);
+        int k3 = MathHelper.ceil(bb.maxZ);
+
+        boolean flag = false;
+        Vec3d vec3d = Vec3d.ZERO;
+        BlockPos.PooledMutableBlockPos blockpos$pooledmutableblockpos = BlockPos.PooledMutableBlockPos.retain();
+
+        for (int l3 = j2; l3 < k2; ++l3)
+        {
+            for (int i4 = l2; i4 < i3; ++i4)
+            {
+                for (int j4 = j3; j4 < k3; ++j4)
+                {
+                    blockpos$pooledmutableblockpos.setPos(l3, i4, j4);
+                    IBlockState iblockstate1 = parWorld.getBlockState(blockpos$pooledmutableblockpos);
+                    Block block = iblockstate1.getBlock();
+
+                    Boolean result = block.isEntityInsideMaterial(parWorld, blockpos$pooledmutableblockpos, iblockstate1, entityIn, i3, materialIn, false);
+                    if (result != null && result == true)
+                    {
+                        // Forge: When requested call blocks modifyAcceleration method, and more importantly cause this method to return true, which results in an entity being "inWater"
+                        flag = true;
+                        vec3d = block.modifyAcceleration(parWorld, blockpos$pooledmutableblockpos, entityIn, vec3d);
+                  	  
+                        // DEBUG
+                  	  System.out.println("Entity is inside material = "+materialIn+" and motion add vector = "+vec3d);
+                  	  
+                        continue;
+                    }
+                    else if (result != null && result == false) continue;
+
+                    if (iblockstate1.getMaterial() == materialIn)
+                    {
+                  	  // DEBUG
+                  	  System.out.println("blockstate material matches material in");
+                  	  
+                        double d0 = i4 + 1 - BlockLiquid.getLiquidHeightPercent(iblockstate1.getValue(BlockLiquid.LEVEL).intValue());
+
+                        if (i3 >= d0)
+                        {
+                      	  flag = true;
+                      	  vec3d = block.modifyAcceleration(parWorld, blockpos$pooledmutableblockpos, entityIn, vec3d);
+                      	  
+                            // DEBUG
+                      	  System.out.println("deep enough to push entity and motion add = "+vec3d);                 
+                         }
+                    }
+                }
+            }
+        }
+
+        blockpos$pooledmutableblockpos.release();
+
+        if (vec3d.lengthVector() > 0.0D && entityIn.isPushedByWater())
+        {
+      	  // DEBUG
+      	  System.out.println("motion vector is non-zero");
+      	  
+      	  /*
+      	   * Although applied to all entities, EntityPlayer doesn't really take
+      	   * affect, so the fluid motion control is handled in the client-side
+      	   * PlayerTickEvent
+      	   */
+            vec3d = vec3d.normalize();
+            double d1 = 0.014D;
+            entityIn.motionX += vec3d.x * d1;
+            entityIn.motionY += vec3d.y * d1;
+            entityIn.motionZ += vec3d.z * d1;
+        }
+        else
+        {
+//          	  // DEBUG
+//          	  System.out.println("motion vector is zero");
+        }
+
+        return flag;
     }
 }
