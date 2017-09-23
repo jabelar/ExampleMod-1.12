@@ -1,7 +1,5 @@
 package com.blogspot.jabelarminecraft.examplemod.blocks.fluids;
 
-import java.awt.Color;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockStairs;
 import net.minecraft.block.material.Material;
@@ -15,8 +13,6 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.BlockFluidClassic;
 import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ModBlockFluidClassic extends BlockFluidClassic
 {
@@ -168,63 +164,5 @@ public class ModBlockFluidClassic extends BlockFluidClassic
             boolean flag = isExceptBlockForAttachWithPiston(block) || block instanceof BlockStairs;
             return !flag && iblockstate.getBlockFaceShape(worldIn, pos, side) == BlockFaceShape.SOLID;
         }
-    }
-    
-    /**
-     * Use this to change the fog color used when the entity is "inside" a material.
-     * Vec3d is used here as "r/g/b" 0 - 1 values.
-     *
-     * @param world         The world.
-     * @param pos           The position at the entity viewport.
-     * @param state         The state at the entity viewport.
-     * @param entity        the entity
-     * @param originalColor The current fog color, You are not expected to use this, Return as the default if applicable.
-     * @return The new fog color.
-     */
-    @Override
-	@SideOnly (Side.CLIENT)
-    public Vec3d getFogColor(World world, BlockPos pos, IBlockState state, Entity entity, Vec3d originalColor, float partialTicks)
-    {
-        Vec3d viewport = net.minecraft.client.renderer.ActiveRenderInfo.projectViewFromEntity(entity, partialTicks);
-
-        if (state.getMaterial().isLiquid())
-        {
-            float height = 0.0F;
-            if (state.getBlock() instanceof ModBlockFluidClassic)
-            {
-            	height = (state.getValue(LEVEL) + 1) / 9.0F - 0.111111F; 
-            }
-            float f1 = pos.getY() + 1 - height;
-            if (viewport.y > f1)
-            {
-                BlockPos upPos = pos.up();
-                IBlockState upState = world.getBlockState(upPos);
-                return upState.getBlock().getFogColor(world, upPos, upState, entity, originalColor, partialTicks);
-            }
-        }
-
-        if (state.getMaterial() == Material.WATER)
-        {
-            float f12 = 0.0F;
-
-            if (entity instanceof net.minecraft.entity.EntityLivingBase)
-            {
-                net.minecraft.entity.EntityLivingBase ent = (net.minecraft.entity.EntityLivingBase)entity;
-                f12 = net.minecraft.enchantment.EnchantmentHelper.getRespirationModifier(ent) * 0.2F;
-
-                if (ent.isPotionActive(net.minecraft.init.MobEffects.WATER_BREATHING))
-                {
-                    f12 = f12 * 0.3F + 0.6F;
-                }
-            }
-            return new Vec3d(0.02F + f12, 0.02F + f12, 0.2F + f12);
-        }
-        else if (state.getMaterial() == Material.LAVA)
-        {
-            return new Vec3d(0.6F, 0.1F, 0.0F);
-        }
-
-    	Color theColor = new Color(getFluid().getColor());
-        return new Vec3d(theColor.getRed(), theColor.getGreen(), theColor.getBlue());
     }
 }

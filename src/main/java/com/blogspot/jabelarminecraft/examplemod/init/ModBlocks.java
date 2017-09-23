@@ -26,7 +26,6 @@ import com.google.common.collect.ImmutableSet;
 
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.util.ResourceLocation;
@@ -48,7 +47,7 @@ public class ModBlocks {
 	 * fluid blocks
 	 * Make sure you set registry name here
 	 */
-	public static final BlockFluidBase SLIME_BLOCK = (BlockFluidBase) Utilities.setBlockName(new ModBlockFluidClassic(ModFluids.SLIME, ModMaterials.SLIME, true), "slime").setCreativeTab(CreativeTabs.DECORATIONS);
+	public static final BlockFluidBase SLIME_BLOCK = (BlockFluidBase) Utilities.setBlockName(new ModBlockFluidClassic(ModFluids.SLIME, ModMaterials.SLIME, true), "slime");
 	
 	public static final Set<Block> SET_BLOCKS = ImmutableSet.of(
 			COMPACTOR,

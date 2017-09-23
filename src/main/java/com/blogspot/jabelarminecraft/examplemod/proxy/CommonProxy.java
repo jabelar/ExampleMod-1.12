@@ -299,6 +299,7 @@ public class CommonProxy
     public void registerFluids()
     {
         FluidRegistry.registerFluid(ModFluids.SLIME);
+        FluidRegistry.addBucketForFluid(ModFluids.SLIME);
     }
     
     

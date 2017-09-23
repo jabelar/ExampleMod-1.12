@@ -1340,7 +1340,7 @@ public class EventHandler
 		}	
 		else
 		{
-			event.setDensity(0.01F);
+			event.setDensity(0.0001F);
 		}
 		
 		event.setCanceled(true); // must cancel event for event handler to take effect
@@ -1353,8 +1353,6 @@ public class EventHandler
     {
 		if (event.getEntity().isInsideOfMaterial(ModMaterials.SLIME))
 		{
-//			// DEBUG
-//			System.out.println("player is inside of material so rendering fog");
 			Color theColor = Color.GREEN;
 			event.setRed(theColor.getRed());
 	    	event.setGreen(theColor.getGreen());
@@ -1843,8 +1841,7 @@ public class EventHandler
         {
             EntityPlayer thePlayer = event.player;
             versionCheckWarning(thePlayer);
-            processFluidPush(thePlayer);
-            
+  	        MainMod.proxy.handleMaterialAcceleration(thePlayer, ModBlocks.SLIME_BLOCK.getDefaultState().getMaterial());           
         }
         else if (event.phase == TickEvent.Phase.START && !event.player.world.isRemote)
         {
@@ -1864,15 +1861,6 @@ public class EventHandler
             MainMod.haveWarnedVersionOutOfDate = true;
         }
         return MainMod.haveWarnedVersionOutOfDate;
-	}
-
-	protected static void processFluidPush(EntityPlayer parPlayer)
-	{
-	      if (MainMod.proxy.handleMaterialAcceleration(parPlayer, ModBlocks.SLIME_BLOCK.getDefaultState().getMaterial()));
-	      {
-	    	  parPlayer.fallDistance = 0.0F;
-	          parPlayer.extinguish();
-	      }
 	}
 	
 //    @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
@@ -1911,14 +1899,9 @@ public class EventHandler
     	  Entity theEntity = iterator.next();
     	  
     	  /* 
-    	   * Update all motion of all entities that may be inside your fluid
+    	   * Update all motion of all entities except players that may be inside your fluid
     	   */
 	      MainMod.proxy.handleMaterialAcceleration(theEntity, ModBlocks.SLIME_BLOCK.getDefaultState().getMaterial());
-	      
-	      /*
-	       * Update air supply for living entities that may be inside your fluid
-	       */
-//	      updateAirSupply(theEntity, ModBlocks.SLIME_BLOCK.getDefaultState().getMaterial());
       }
   }
   

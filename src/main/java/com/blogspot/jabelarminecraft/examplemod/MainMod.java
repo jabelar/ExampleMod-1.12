@@ -25,6 +25,7 @@ import net.minecraft.advancements.Advancement;
 import net.minecraft.stats.StatBasic;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.common.config.Configuration;
+import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.Mod.Instance;
@@ -97,6 +98,12 @@ public class MainMod
         COMPACTOR
     }
     
+
+    static 
+    {
+    	FluidRegistry.enableUniversalBucket();
+    }
+
     // instantiate the mod
     @Instance(MODID)
     public static MainMod instance;
