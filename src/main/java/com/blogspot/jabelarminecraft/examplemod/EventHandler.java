@@ -26,7 +26,6 @@ import java.util.Random;
 
 import com.blogspot.jabelarminecraft.examplemod.client.gui.GuiCompactor;
 import com.blogspot.jabelarminecraft.examplemod.init.ModBlocks;
-import com.blogspot.jabelarminecraft.examplemod.init.ModFluids;
 import com.blogspot.jabelarminecraft.examplemod.init.ModItems;
 import com.blogspot.jabelarminecraft.examplemod.init.ModMaterials;
 import com.blogspot.jabelarminecraft.examplemod.items.IExtendedReach;
@@ -73,10 +72,10 @@ import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.event.ClickEvent;
 import net.minecraft.world.WorldServer;
+import net.minecraftforge.client.event.EntityViewRenderEvent.FogColors;
+import net.minecraftforge.client.event.EntityViewRenderEvent.FogDensity;
 import net.minecraftforge.client.event.GuiOpenEvent;
 import net.minecraftforge.client.event.MouseEvent;
-import net.minecraftforge.client.event.RenderGameOverlayEvent;
-import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent;
@@ -241,11 +240,11 @@ public class EventHandler
     	Method updatePotionEffects = ReflectionHelper.findMethod(EntityLivingBase.class, "updatePotionEffects", "updatePotionEffects", new Class[] {});
     	Method onDeathUpdate = ReflectionHelper.findMethod(EntityLivingBase.class, "onDeathUpdate", "onDeathUpdate", new Class[] {});
     	
-    	// DEBUG
-    	if (theEntity instanceof EntityPlayer)
-    	{
-    		System.out.println("Air before living update = "+theEntity.getAir());
-    	}
+//    	// DEBUG
+//    	if (theEntity instanceof EntityPlayer)
+//    	{
+//    		System.out.println("Air before living update = "+theEntity.getAir());
+//    	}
     	
         // super.onUpdate() expanded
         if (!theEntity.world.isRemote)
@@ -441,11 +440,11 @@ public class EventHandler
             }
             else
             {
-            	// DEBUG
-            	System.out.println("Entity "+theEntity.getName()+" is drowning in fluid");
-            	
                 if (!theEntity.canBreatheUnderwater() && !theEntity.isPotionActive(MobEffects.WATER_BREATHING) && !flag1)
                 {
+                	// DEBUG
+                	System.out.println("Entity "+theEntity.getName()+" is drowning in fluid");
+                	
                 	// decreaseAirSupply() expanded
                     theEntity.setAir(EnchantmentHelper.getRespirationModifier(theEntity) > 0 && theEntity.getRNG().nextInt(EnchantmentHelper.getRespirationModifier(theEntity) + 1) > 0 ? theEntity.getAir() : theEntity.getAir() - 1);
 
@@ -1328,22 +1327,41 @@ public class EventHandler
 //    {
 //        
 //    }
-//    
-//    @SideOnly(Side.CLIENT)
-//    @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-//    public void onEvent(FogDensity event)
-//    {
-//
-//    }
-//
-//    
-//    @SideOnly(Side.CLIENT)
-//    @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-//    public void onEvent(FogColors event)
-//    {
-//
-//    }
-//
+    
+    @SideOnly(Side.CLIENT)
+    @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
+    public void onEvent(FogDensity event)
+    {
+		// EntityPlayer thePlayer = Minecraft.getMinecraft().player;
+		
+		if (event.getEntity().isInsideOfMaterial(ModMaterials.SLIME))
+		{
+			event.setDensity(0.5F);
+		}	
+		else
+		{
+			event.setDensity(0.01F);
+		}
+		
+		event.setCanceled(true); // must cancel event for event handler to take effect
+    }
+
+    
+    @SideOnly(Side.CLIENT)
+    @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
+    public void onEvent(FogColors event)
+    {
+		if (event.getEntity().isInsideOfMaterial(ModMaterials.SLIME))
+		{
+//			// DEBUG
+//			System.out.println("player is inside of material so rendering fog");
+			Color theColor = Color.GREEN;
+			event.setRed(theColor.getRed());
+	    	event.setGreen(theColor.getGreen());
+	    	event.setBlue(theColor.getBlue());
+		}			
+	}
+
 //    @SideOnly(Side.CLIENT)
 //    @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
 //    public void onEvent(FOVUpdateEvent event)
@@ -1473,26 +1491,26 @@ public class EventHandler
 //    	// Note that ElementType.All is fired first apparently, then individual elements
 //    }
 //    
-	@SideOnly(Side.CLIENT)
-	@SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-	public void onEvent(RenderGameOverlayEvent.Pre event)
-	{
-		if (event.getType() == ElementType.ALL)
-		{
-//			// DEBUG
-//			System.out.println("render game overlay");
-			
-			EntityPlayer thePlayer = Minecraft.getMinecraft().player;
-			
-			if (thePlayer.isInsideOfMaterial(ModMaterials.SLIME))
-			{
-//				// DEBUG
-//				System.out.println("player is inside of material");
-				
-				drawFluidOverlay(ModFluids.SLIME.getColor(), 0.2F);
-			}			
-		}
-	}
+//	@SideOnly(Side.CLIENT)
+//	@SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
+//	public void onEvent(RenderGameOverlayEvent.Pre event)
+//	{
+//		if (event.getType() == ElementType.ALL)
+//		{
+////			// DEBUG
+////			System.out.println("render game overlay");
+//			
+//			EntityPlayer thePlayer = Minecraft.getMinecraft().player;
+//			
+//			if (thePlayer.isInsideOfMaterial(ModMaterials.SLIME))
+//			{
+////				// DEBUG
+////				System.out.println("player is inside of material");
+//				
+//				drawFluidOverlay(ModFluids.SLIME.getColor(), 0.2F);
+//			}			
+//		}
+//	}
 	
 //	@SideOnly(Side.CLIENT)
 //	@SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
