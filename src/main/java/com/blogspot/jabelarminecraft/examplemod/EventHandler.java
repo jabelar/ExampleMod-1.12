@@ -212,6 +212,25 @@ public class EventHandler
 //
 //    }
 //
+	public static Field activeItemStackUseCount = ReflectionHelper.findField(EntityLivingBase.class, "activeItemStackUseCount", "field_184628_bn");
+	public static Field handInventory = ReflectionHelper.findField(EntityLivingBase.class, "handInventory", "field_184630_bs");
+	public static Field armorArray = ReflectionHelper.findField(EntityLivingBase.class, "armorArray", "field_184631_bt");
+	public static Field ticksElytraFlying = ReflectionHelper.findField(EntityLivingBase.class, "ticksElytraFlying", "field_184629_bo");
+	public static Field rideCooldown = ReflectionHelper.findField(Entity.class, "rideCooldown", "rideCooldown");
+	public static Field portalCounter = ReflectionHelper.findField(Entity.class, "portalCounter", "portalCounter");
+	public static Field inPortal = ReflectionHelper.findField(Entity.class, "inPortal", "inPortal");
+	public static Field fire = ReflectionHelper.findField(Entity.class, "fire", "fire");
+	public static Field prevBlockpos = ReflectionHelper.findField(EntityLivingBase.class, "prevBlockpos", "prevBlockpos");
+	public static Field firstUpdate = ReflectionHelper.findField(Entity.class, "firstUpdate", "firstUpdate");
+	public static Field attackingPlayer = ReflectionHelper.findField(EntityLivingBase.class, "attackingPlayer", "attackingPlayer");
+	public static Field recentlyHit = ReflectionHelper.findField(EntityLivingBase.class, "recentlyHit", "recentlyHit");
+	
+	public static Method setFlag = ReflectionHelper.findMethod(Entity.class, "setFlag", "setFlag", Integer.TYPE, Boolean.TYPE); // "func_70052_a"
+	public static Method getFlag = ReflectionHelper.findMethod(Entity.class, "getFlag", "getFlag", Integer.TYPE); // "func_70083_f"
+	public static Method decrementTimeUntilPortal = ReflectionHelper.findMethod(Entity.class, "decrementTimeUntilPortal", "decrementTimeUntilPortal", new Class[] {});
+	public static Method updatePotionEffects = ReflectionHelper.findMethod(EntityLivingBase.class, "updatePotionEffects", "updatePotionEffects", new Class[] {});
+	public static Method onDeathUpdate = ReflectionHelper.findMethod(EntityLivingBase.class, "onDeathUpdate", "onDeathUpdate", new Class[] {});
+	
 	
     @SuppressWarnings("unchecked")
 	@SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
@@ -221,25 +240,25 @@ public class EventHandler
     	
     	EntityLivingBase theEntity = event.getEntityLiving();
     	    	
-    	Field activeItemStackUseCount = ReflectionHelper.findField(EntityLivingBase.class, "activeItemStackUseCount", "field_184628_bn");
-    	Field handInventory = ReflectionHelper.findField(EntityLivingBase.class, "handInventory", "field_184630_bs");
-       	Field armorArray = ReflectionHelper.findField(EntityLivingBase.class, "armorArray", "field_184631_bt");
-    	Field ticksElytraFlying = ReflectionHelper.findField(EntityLivingBase.class, "ticksElytraFlying", "field_184629_bo");
-    	Field rideCooldown = ReflectionHelper.findField(Entity.class, "rideCooldown", "rideCooldown");
-    	Field portalCounter = ReflectionHelper.findField(Entity.class, "portalCounter", "portalCounter");
-    	Field inPortal = ReflectionHelper.findField(Entity.class, "inPortal", "inPortal");
-    	Field fire = ReflectionHelper.findField(Entity.class, "fire", "fire");
-    	Field prevBlockpos = ReflectionHelper.findField(EntityLivingBase.class, "prevBlockpos", "prevBlockpos");
-    	Field firstUpdate = ReflectionHelper.findField(Entity.class, "firstUpdate", "firstUpdate");
-    	Field attackingPlayer = ReflectionHelper.findField(EntityLivingBase.class, "attackingPlayer", "attackingPlayer");
-    	Field recentlyHit = ReflectionHelper.findField(EntityLivingBase.class, "recentlyHit", "recentlyHit");
-    	
-    	Method setFlag = ReflectionHelper.findMethod(Entity.class, "setFlag", "setFlag", Integer.TYPE, Boolean.TYPE); // "func_70052_a"
-    	Method getFlag = ReflectionHelper.findMethod(Entity.class, "getFlag", "getFlag", Integer.TYPE); // "func_70083_f"
-    	Method decrementTimeUntilPortal = ReflectionHelper.findMethod(Entity.class, "decrementTimeUntilPortal", "decrementTimeUntilPortal", new Class[] {});
-    	Method updatePotionEffects = ReflectionHelper.findMethod(EntityLivingBase.class, "updatePotionEffects", "updatePotionEffects", new Class[] {});
-    	Method onDeathUpdate = ReflectionHelper.findMethod(EntityLivingBase.class, "onDeathUpdate", "onDeathUpdate", new Class[] {});
-    	
+//    	Field activeItemStackUseCount = ReflectionHelper.findField(EntityLivingBase.class, "activeItemStackUseCount", "field_184628_bn");
+//    	Field handInventory = ReflectionHelper.findField(EntityLivingBase.class, "handInventory", "field_184630_bs");
+//       	Field armorArray = ReflectionHelper.findField(EntityLivingBase.class, "armorArray", "field_184631_bt");
+//    	Field ticksElytraFlying = ReflectionHelper.findField(EntityLivingBase.class, "ticksElytraFlying", "field_184629_bo");
+//    	Field rideCooldown = ReflectionHelper.findField(Entity.class, "rideCooldown", "rideCooldown");
+//    	Field portalCounter = ReflectionHelper.findField(Entity.class, "portalCounter", "portalCounter");
+//    	Field inPortal = ReflectionHelper.findField(Entity.class, "inPortal", "inPortal");
+//    	Field fire = ReflectionHelper.findField(Entity.class, "fire", "fire");
+//    	Field prevBlockpos = ReflectionHelper.findField(EntityLivingBase.class, "prevBlockpos", "prevBlockpos");
+//    	Field firstUpdate = ReflectionHelper.findField(Entity.class, "firstUpdate", "firstUpdate");
+//    	Field attackingPlayer = ReflectionHelper.findField(EntityLivingBase.class, "attackingPlayer", "attackingPlayer");
+//    	Field recentlyHit = ReflectionHelper.findField(EntityLivingBase.class, "recentlyHit", "recentlyHit");
+//    	
+//    	Method setFlag = ReflectionHelper.findMethod(Entity.class, "setFlag", "setFlag", Integer.TYPE, Boolean.TYPE); // "func_70052_a"
+//    	Method getFlag = ReflectionHelper.findMethod(Entity.class, "getFlag", "getFlag", Integer.TYPE); // "func_70083_f"
+//    	Method decrementTimeUntilPortal = ReflectionHelper.findMethod(Entity.class, "decrementTimeUntilPortal", "decrementTimeUntilPortal", new Class[] {});
+//    	Method updatePotionEffects = ReflectionHelper.findMethod(EntityLivingBase.class, "updatePotionEffects", "updatePotionEffects", new Class[] {});
+//    	Method onDeathUpdate = ReflectionHelper.findMethod(EntityLivingBase.class, "onDeathUpdate", "onDeathUpdate", new Class[] {});
+//    	
 //    	// DEBUG
 //    	if (theEntity instanceof EntityPlayer)
 //    	{
