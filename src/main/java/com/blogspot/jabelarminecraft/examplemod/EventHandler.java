@@ -1,12 +1,12 @@
 /**
     Copyright (C) 2017 by jabelar
 
-    This file is part of jabelar's Minecraft Forge modding examples; as such,
+    theEntity file is part of jabelar's Minecraft Forge modding examples; as such,
     you can redistribute it and/or modify it under the terms of the GNU
     General Public License as published by the Free Software Foundation,
     either version 3 of the License, or (at your option) any later version.
 
-    This program is distributed in the hope that it will be useful,
+    theEntity program is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
     GNU General Public License for more details.
@@ -32,6 +32,7 @@ import com.blogspot.jabelarminecraft.examplemod.init.ModMaterials;
 import com.blogspot.jabelarminecraft.examplemod.items.IExtendedReach;
 import com.blogspot.jabelarminecraft.examplemod.networking.MessageExtendedReachAttack;
 import com.blogspot.jabelarminecraft.examplemod.utilities.Utilities;
+import com.google.common.base.Objects;
 
 import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
@@ -39,6 +40,7 @@ import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.enchantment.EnchantmentFrostWalker;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -49,6 +51,8 @@ import net.minecraft.entity.passive.EntityMooshroom;
 import net.minecraft.entity.passive.EntityPig;
 import net.minecraft.entity.passive.EntitySheep;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.init.Enchantments;
 import net.minecraft.init.Items;
 import net.minecraft.init.MobEffects;
 import net.minecraft.init.SoundEvents;
@@ -57,9 +61,11 @@ import net.minecraft.item.EnumAction;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.play.server.SPacketEntityEquipment;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
@@ -220,10 +226,21 @@ public class EventHandler
     	Field handInventory = ReflectionHelper.findField(EntityLivingBase.class, "handInventory", "field_184630_bs");
        	Field armorArray = ReflectionHelper.findField(EntityLivingBase.class, "armorArray", "field_184631_bt");
     	Field ticksElytraFlying = ReflectionHelper.findField(EntityLivingBase.class, "ticksElytraFlying", "field_184629_bo");
+    	Field rideCooldown = ReflectionHelper.findField(Entity.class, "rideCooldown", "rideCooldown");
+    	Field portalCounter = ReflectionHelper.findField(Entity.class, "portalCounter", "portalCounter");
+    	Field inPortal = ReflectionHelper.findField(Entity.class, "inPortal", "inPortal");
+    	Field fire = ReflectionHelper.findField(Entity.class, "fire", "fire");
+    	Field prevBlockpos = ReflectionHelper.findField(EntityLivingBase.class, "prevBlockpos", "prevBlockpos");
+    	Field firstUpdate = ReflectionHelper.findField(Entity.class, "firstUpdate", "firstUpdate");
+    	Field attackingPlayer = ReflectionHelper.findField(EntityLivingBase.class, "attackingPlayer", "attackingPlayer");
+    	Field recentlyHit = ReflectionHelper.findField(EntityLivingBase.class, "recentlyHit", "recentlyHit");
     	
     	Method setFlag = ReflectionHelper.findMethod(Entity.class, "setFlag", "setFlag", Integer.TYPE, Boolean.TYPE); // "func_70052_a"
     	Method getFlag = ReflectionHelper.findMethod(Entity.class, "getFlag", "getFlag", Integer.TYPE); // "func_70083_f"
-
+    	Method decrementTimeUntilPortal = ReflectionHelper.findMethod(Entity.class, "decrementTimeUntilPortal", "decrementTimeUntilPortal", new Class[] {});
+    	Method updatePotionEffects = ReflectionHelper.findMethod(EntityLivingBase.class, "updatePotionEffects", "updatePotionEffects", new Class[] {});
+    	Method onDeathUpdate = ReflectionHelper.findMethod(EntityLivingBase.class, "onDeathUpdate", "onDeathUpdate", new Class[] {});
+    	
     	// DEBUG
     	if (theEntity instanceof EntityPlayer)
     	{
@@ -240,7 +257,302 @@ public class EventHandler
 			}
         }
 
-        theEntity.onEntityUpdate();
+        // theEntity.onEntityUpdate();
+        // onEntityUpdate() expanded
+        theEntity.prevSwingProgress = theEntity.swingProgress;
+        // super.onEntityUpdate();
+        // super onEntityUpdage() expanded
+        theEntity.world.profiler.startSection("entityBaseTick");
+
+        if (theEntity.isRiding() && theEntity.getRidingEntity().isDead)
+        {
+            theEntity.dismountRidingEntity();
+        }
+
+        if (rideCooldown.getInt(theEntity) > 0)
+        {
+        	rideCooldown.setInt(theEntity, rideCooldown.getInt(theEntity) - 1);
+        }
+
+        theEntity.prevDistanceWalkedModified = theEntity.distanceWalkedModified;
+        theEntity.prevPosX = theEntity.posX;
+        theEntity.prevPosY = theEntity.posY;
+        theEntity.prevPosZ = theEntity.posZ;
+        theEntity.prevRotationPitch = theEntity.rotationPitch;
+        theEntity.prevRotationYaw = theEntity.rotationYaw;
+
+        if (!theEntity.world.isRemote && theEntity.world instanceof WorldServer)
+        {
+            theEntity.world.profiler.startSection("portal");
+
+            if (inPortal.getBoolean(theEntity))
+            {
+                MinecraftServer minecraftserver = theEntity.world.getMinecraftServer();
+
+                if (minecraftserver.getAllowNether())
+                {
+                    if (!theEntity.isRiding())
+                    {
+                        int i = theEntity.getMaxInPortalTime();
+
+                        portalCounter.setInt(theEntity, portalCounter.getInt(theEntity) + 1);
+                        if (portalCounter.getInt(theEntity) >= i)
+                        {
+                            portalCounter.set(theEntity, i);
+                            theEntity.timeUntilPortal = theEntity.getPortalCooldown();
+                            int j;
+
+                            if (theEntity.world.provider.getDimensionType().getId() == -1)
+                            {
+                                j = 0;
+                            }
+                            else
+                            {
+                                j = -1;
+                            }
+
+                            theEntity.changeDimension(j);
+                        }
+                    }
+
+                    inPortal.set(theEntity, false);
+                }
+            }
+            else
+            {
+                if (portalCounter.getInt(theEntity) > 0)
+                {
+                    portalCounter.setInt(theEntity, portalCounter.getModifiers() - 4);
+                }
+
+                if (portalCounter.getInt(theEntity) < 0)
+                {
+                    portalCounter.setInt(theEntity, 0);
+                }
+            }
+
+            try {
+				decrementTimeUntilPortal.invoke(theEntity, new Object[] {});
+			} catch (InvocationTargetException e) {
+				e.printStackTrace();
+			}
+            theEntity.world.profiler.endSection();
+        }
+
+        theEntity.spawnRunningParticles();
+        theEntity.handleWaterMovement();
+
+        if (theEntity.world.isRemote)
+        {
+            theEntity.extinguish();
+        }
+        else if (fire.getInt(theEntity) > 0)
+        {
+            if (theEntity.isImmuneToFire())
+            {
+                fire.setInt(theEntity, fire.getInt(theEntity) - 4);
+
+                if (fire.getInt(theEntity) < 0)
+                {
+                    theEntity.extinguish();
+                }
+            }
+            else
+            {
+                if (fire.getInt(theEntity) % 20 == 0)
+                {
+                    theEntity.attackEntityFrom(DamageSource.ON_FIRE, 1.0F);
+                }
+
+                theEntity.setFire(fire.getInt(theEntity));
+            }
+        }
+
+        if (theEntity.isInLava())
+        {
+        	// setOnFireFromLava expanded
+            // theEntity.setOnFireFromLava();
+            if (!theEntity.isImmuneToFire())
+            {
+                theEntity.attackEntityFrom(DamageSource.LAVA, 4.0F);
+                theEntity.setFire(15);
+            }
+
+            theEntity.fallDistance *= 0.5F;
+        }
+
+        if (theEntity.posY < -64.0D)
+        {
+        	// onDeathUpdate expanded
+            theEntity.attackEntityFrom(DamageSource.OUT_OF_WORLD, 4.0F);
+        }
+
+        if (!theEntity.world.isRemote)
+        {
+            try {
+				setFlag.invoke(theEntity, 0, fire.getInt(theEntity) > 0);
+			} catch (InvocationTargetException e) {
+				e.printStackTrace();
+			}
+        }
+
+        firstUpdate.setBoolean(theEntity, false);
+        theEntity.world.profiler.endSection();
+        theEntity.world.profiler.startSection("livingEntityBaseTick");
+        boolean flag = theEntity instanceof EntityPlayer;
+
+        if (theEntity.isEntityAlive())
+        {
+            if (theEntity.isEntityInsideOpaqueBlock())
+            {
+                theEntity.attackEntityFrom(DamageSource.IN_WALL, 1.0F);
+            }
+            else if (flag && !theEntity.world.getWorldBorder().contains(theEntity.getEntityBoundingBox()))
+            {
+                double d0 = theEntity.world.getWorldBorder().getClosestDistance(theEntity) + theEntity.world.getWorldBorder().getDamageBuffer();
+
+                if (d0 < 0.0D)
+                {
+                    double d1 = theEntity.world.getWorldBorder().getDamageAmount();
+
+                    if (d1 > 0.0D)
+                    {
+                        theEntity.attackEntityFrom(DamageSource.IN_WALL, Math.max(1, MathHelper.floor(-d0 * d1)));
+                    }
+                }
+            }
+        }
+
+        if (theEntity.isImmuneToFire() || theEntity.world.isRemote)
+        {
+            theEntity.extinguish();
+        }
+
+        boolean flag1 = flag && ((EntityPlayer)theEntity).capabilities.disableDamage;
+
+        if (theEntity.isEntityAlive())
+        {
+        	/*
+        	 * Modified this so that custom fluids can suffocate
+        	 */
+            if (!theEntity.isInsideOfMaterial(Material.WATER) && !theEntity.isInsideOfMaterial(ModMaterials.SLIME))
+            {
+                theEntity.setAir(300);
+            }
+            else
+            {
+            	// DEBUG
+            	System.out.println("Entity "+theEntity.getName()+" is drowning in fluid");
+            	
+                if (!theEntity.canBreatheUnderwater() && !theEntity.isPotionActive(MobEffects.WATER_BREATHING) && !flag1)
+                {
+                	// decreaseAirSupply() expanded
+                    theEntity.setAir(EnchantmentHelper.getRespirationModifier(theEntity) > 0 && theEntity.getRNG().nextInt(EnchantmentHelper.getRespirationModifier(theEntity) + 1) > 0 ? theEntity.getAir() : theEntity.getAir() - 1);
+
+                    if (theEntity.getAir() == -20)
+                    {
+                        theEntity.setAir(0);
+
+                        for (int i = 0; i < 8; ++i)
+                        {
+                            float f2 = theEntity.getRNG().nextFloat() - theEntity.getRNG().nextFloat();
+                            float f = theEntity.getRNG().nextFloat() - theEntity.getRNG().nextFloat();
+                            float f1 = theEntity.getRNG().nextFloat() - theEntity.getRNG().nextFloat();
+                            theEntity.world.spawnParticle(EnumParticleTypes.WATER_BUBBLE, theEntity.posX + f2, theEntity.posY + f, theEntity.posZ + f1, theEntity.motionX, theEntity.motionY, theEntity.motionZ);
+                        }
+
+                        theEntity.attackEntityFrom(DamageSource.DROWN, 2.0F);
+                    }
+                }
+
+                if (!theEntity.world.isRemote && theEntity.isRiding() && theEntity.getRidingEntity() != null && theEntity.getRidingEntity().shouldDismountInWater(theEntity))
+                {
+                    theEntity.dismountRidingEntity();
+                }
+            }
+
+            if (!theEntity.world.isRemote)
+            {
+                BlockPos blockpos = new BlockPos(theEntity);
+
+                if (!Objects.equal(prevBlockpos.get(theEntity), blockpos))
+                {
+                    prevBlockpos.set(theEntity, blockpos);
+                    // theEntity.frostWalk(blockpos);
+                    // frostWalk() expanded
+                    int i = EnchantmentHelper.getMaxEnchantmentLevel(Enchantments.FROST_WALKER, theEntity);
+
+                    if (i > 0)
+                    {
+                        EnchantmentFrostWalker.freezeNearby(theEntity, theEntity.world, blockpos, i);
+                    }
+                }
+            }
+        }
+
+        if (theEntity.isEntityAlive() && theEntity.isWet())
+        {
+            theEntity.extinguish();
+        }
+
+        theEntity.prevCameraPitch = theEntity.cameraPitch;
+
+        if (theEntity.hurtTime > 0)
+        {
+            --theEntity.hurtTime;
+        }
+
+        if (theEntity.hurtResistantTime > 0 && !(theEntity instanceof EntityPlayerMP))
+        {
+            --theEntity.hurtResistantTime;
+        }
+
+        if (theEntity.getHealth() <= 0.0F)
+        {
+            try {
+				onDeathUpdate.invoke(theEntity, new Object[] {});
+			} catch (InvocationTargetException e) {
+				e.printStackTrace();
+			}
+        }
+
+        if (recentlyHit.getInt(theEntity) > 0)
+        {
+            recentlyHit.setInt(theEntity, recentlyHit.getInt(theEntity) - 1);;
+        }
+        else
+        {
+            attackingPlayer.set(theEntity, null);
+        }
+
+        if (theEntity.getLastAttackedEntity() != null && !theEntity.getLastAttackedEntity().isEntityAlive())
+        {
+            attackingPlayer.set(theEntity, null);
+        }
+
+        if (theEntity.getRevengeTarget() != null)
+        {
+            if (!theEntity.getRevengeTarget().isEntityAlive())
+            {
+                theEntity.setRevengeTarget((EntityLivingBase)null);
+            }
+            else if (theEntity.ticksExisted - theEntity.getRevengeTimer() > 100)
+            {
+                theEntity.setRevengeTarget((EntityLivingBase)null);
+            }
+        }
+
+        try {
+			updatePotionEffects.invoke(theEntity, new Object[] {});
+		} catch (InvocationTargetException e1) {
+			e1.printStackTrace();
+		}
+        // theEntity.prevMovedDistance = theEntity.movedDistance;
+        theEntity.prevRenderYawOffset = theEntity.renderYawOffset;
+        theEntity.prevRotationYawHead = theEntity.rotationYawHead;
+        theEntity.prevRotationYaw = theEntity.rotationYaw;
+        theEntity.prevRotationPitch = theEntity.rotationPitch;
+        theEntity.world.profiler.endSection();
 
         // updateActiveHand() method expanded
         if (theEntity.isHandActive())
@@ -454,12 +766,10 @@ public class EventHandler
 
             if (!theEntity.isGlowing())
             {
-                boolean flag = theEntity.isPotionActive(MobEffects.GLOWING);
-
                 try {
-					if (((boolean)getFlag.invoke(theEntity, 6)) != flag)
+					if (((boolean)getFlag.invoke(theEntity, 6)) != theEntity.isPotionActive(MobEffects.GLOWING))
 					{
-					    setFlag.invoke(theEntity, 6, flag);
+					    setFlag.invoke(theEntity, 6, theEntity.isPotionActive(MobEffects.GLOWING));
 					}
 				} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
 					e.printStackTrace();
@@ -506,7 +816,7 @@ public class EventHandler
         float p_110146_2_ = f5;
         theEntity.renderYawOffset += MathHelper.wrapDegrees(p_110146_1_ - theEntity.renderYawOffset) * 0.3F;
         float f1 = MathHelper.wrapDegrees(theEntity.rotationYaw - theEntity.renderYawOffset);
-        boolean flag = f1 < -90.0F || f1 >= 90.0F;
+        boolean flagx = f1 < -90.0F || f1 >= 90.0F;
 
         if (f1 < -75.0F)
         {
@@ -525,7 +835,7 @@ public class EventHandler
             theEntity.renderYawOffset += f1 * 0.2F;
         }
 
-        if (flag)
+        if (flagx)
         {
             p_110146_2_ *= -1.0F;
         }
@@ -1143,7 +1453,7 @@ public class EventHandler
 //    @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
 //    public void onEvent(RenderGameOverlayEvent.Chat event)
 //    {
-//    	// This event actually extends Pre
+//    	// this event actually extends Pre
 //
 //    }
 //    
@@ -1590,7 +1900,7 @@ public class EventHandler
 	      /*
 	       * Update air supply for living entities that may be inside your fluid
 	       */
-	      updateAirSupply(theEntity, ModBlocks.SLIME_BLOCK.getDefaultState().getMaterial());
+//	      updateAirSupply(theEntity, ModBlocks.SLIME_BLOCK.getDefaultState().getMaterial());
       }
   }
   
