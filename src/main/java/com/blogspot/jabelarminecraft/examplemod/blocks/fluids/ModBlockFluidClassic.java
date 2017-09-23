@@ -42,42 +42,22 @@ public class ModBlockFluidClassic extends BlockFluidClassic
     @Override
 	public Vec3d modifyAcceleration(World worldIn, BlockPos pos, Entity entityIn, Vec3d motion)
     {
-    	// DEBUG
-    	System.out.println("modifyAcceleration for "+entityIn+" with isPushedByWater() = "+entityIn.isPushedByWater());
+//    	// DEBUG
+//    	System.out.println("modifyAcceleration for "+entityIn+" with isPushedByWater() = "+entityIn.isPushedByWater());
     	
     	if (getPushesEntity())
     	{
     		Vec3d flowAdder = getFlow(worldIn, pos, worldIn.getBlockState(pos));
-//    		if (flowAdder.lengthSquared() != 0)
-//    		{
-//    			// DEBUG
-//    			System.out.println("flow vector is non zero so add motion");
-//    			
-//    		    Field field;
-//    		    field = ReflectionHelper.findField(Entity.class, "isWet", "");
-//    		    field.setAccessible(true);
-//    		    try {
-//					field.set(entityIn, true);
-//				} catch (IllegalArgumentException | IllegalAccessException e) {
-//					// TODO Auto-generated catch block
-//					e.printStackTrace();
-//				}    		
-//    		}
-//    		else
-//    		{
-//    			// DEBUG
-//    			System.out.println("flow vector is zero");
-//    			
-//    		}
-    		// DEBUG
-    		System.out.println("may push entity with motion adder = "+flowAdder);
+
+//    		// DEBUG
+//    		System.out.println("may push entity with motion adder = "+flowAdder);
     		
 			return motion.add(flowAdder);
     	}
     	else
     	{
-    		// DEBUG
-    		System.out.println("may not push entity");
+//    		// DEBUG
+//    		System.out.println("may not push entity");
     		
     		return motion;
     	}
@@ -124,16 +104,18 @@ public class ModBlockFluidClassic extends BlockFluidClassic
 
         if (state.getValue(LEVEL).intValue() >= 8)
         {
-        	// DEBUG
-        	System.out.println("fluid level greater than zero");
+//        	// DEBUG
+//        	System.out.println("fluid level greater than zero");
+        	
             for (EnumFacing enumfacing1 : EnumFacing.Plane.HORIZONTAL)
             {
                 blockpos$pooledmutableblockpos.setPos(pos).move(enumfacing1);
 
                 if (this.causesDownwardCurrent(worldIn, blockpos$pooledmutableblockpos, enumfacing1) || this.causesDownwardCurrent(worldIn, blockpos$pooledmutableblockpos.up(), enumfacing1))
                 {
-                	// DEBUG
-                	System.out.println("Causes downward current");
+//                	// DEBUG
+//                	System.out.println("Causes downward current");
+                	
                     vec3d = vec3d.normalize().addVector(0.0D, -6.0D, 0.0D);
                     break;
                 }

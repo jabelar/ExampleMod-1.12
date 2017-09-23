@@ -297,8 +297,11 @@ public class ClientProxy extends CommonProxy
      * handles the acceleration of an object whilst in a material. 
      */
     @Override
-	public boolean handleMaterialAcceleration(World parWorld, AxisAlignedBB bb, Material materialIn, Entity entityIn)
+	public boolean handleMaterialAcceleration(Entity entityIn, Material materialIn)
     {
+    	World parWorld = entityIn.world;
+    	AxisAlignedBB bb = entityIn.getEntityBoundingBox().grow(0.0D, -0.4000000059604645D, 0.0D).shrink(0.001D);
+    	
         int j2 = MathHelper.floor(bb.minX);
         int k2 = MathHelper.ceil(bb.maxX);
         int l2 = MathHelper.floor(bb.minY);
@@ -327,8 +330,8 @@ public class ClientProxy extends CommonProxy
                         flag = true;
                         vec3d = block.modifyAcceleration(parWorld, blockpos$pooledmutableblockpos, entityIn, vec3d);
                   	  
-                        // DEBUG
-                  	  System.out.println("Entity is inside material = "+materialIn+" and motion add vector = "+vec3d);
+//                        // DEBUG
+//                  	  System.out.println("Entity is inside material = "+materialIn+" and motion add vector = "+vec3d);
                   	  
                         continue;
                     }
@@ -336,8 +339,8 @@ public class ClientProxy extends CommonProxy
 
                     if (iblockstate1.getMaterial() == materialIn)
                     {
-                  	  // DEBUG
-                  	  System.out.println("blockstate material matches material in");
+//                  	  // DEBUG
+//                  	  System.out.println("blockstate material matches material in");
                   	  
                         double d0 = i4 + 1 - BlockLiquid.getLiquidHeightPercent(iblockstate1.getValue(BlockLiquid.LEVEL).intValue());
 
@@ -346,8 +349,8 @@ public class ClientProxy extends CommonProxy
                       	  flag = true;
                       	  vec3d = block.modifyAcceleration(parWorld, blockpos$pooledmutableblockpos, entityIn, vec3d);
                       	  
-                            // DEBUG
-                      	  System.out.println("deep enough to push entity and motion add = "+vec3d);                 
+//                            // DEBUG
+//                      	  System.out.println("deep enough to push entity and motion add = "+vec3d);                 
                          }
                     }
                 }
@@ -358,8 +361,8 @@ public class ClientProxy extends CommonProxy
 
         if (vec3d.lengthVector() > 0.0D && entityIn.isPushedByWater())
         {
-      	  // DEBUG
-      	  System.out.println("motion vector is non-zero");
+//      	  // DEBUG
+//      	  System.out.println("motion vector is non-zero");
       	  
       	  /*
       	   * Although applied to all entities, EntityPlayer doesn't really take
@@ -377,6 +380,8 @@ public class ClientProxy extends CommonProxy
 //          	  // DEBUG
 //          	  System.out.println("motion vector is zero");
         }
+    	
+        entityIn.fallDistance = 0.0F;
 
         return flag;
     }
