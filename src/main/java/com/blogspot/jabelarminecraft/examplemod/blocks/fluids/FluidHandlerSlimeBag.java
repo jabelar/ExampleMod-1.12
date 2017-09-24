@@ -16,8 +16,8 @@ public class FluidHandlerSlimeBag extends FluidHandlerItemStack
 		super(container, CAPACITY);
 		setFluid(new FluidStack(ModFluids.SLIME, CAPACITY));
 
-		// DEBUG
-		System.out.println("Constructing FluidHandlerSlimeBag with FluidStack = "+getFluid()+" capacity = "+capacity+" and container = "+container);
+//		// DEBUG
+//		System.out.println("Constructing FluidHandlerSlimeBag with FluidStack = "+getFluid()+" capacity = "+capacity+" and container = "+container);
 	}
 	
     @Override

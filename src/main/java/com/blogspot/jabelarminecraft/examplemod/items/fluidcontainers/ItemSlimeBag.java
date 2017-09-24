@@ -40,8 +40,8 @@ public class ItemSlimeBag extends ItemFluidContainer
     @Override
     public ICapabilityProvider initCapabilities(@Nonnull ItemStack stack, @Nullable NBTTagCompound nbt)
     {
-    	// DEBUG
-    	System.out.println("initCapabilities for ItemSlimeBag");
+//    	// DEBUG
+//    	System.out.println("initCapabilities for ItemSlimeBag");
     	
         return new FluidHandlerSlimeBag(stack);
     }
@@ -57,23 +57,9 @@ public class ItemSlimeBag extends ItemFluidContainer
     	System.out.println("onItemRightClick for ItemSlimeBag");
     
         ItemStack itemStack = parPlayer.getHeldItem(parHand);
-        
-        FluidStack fluidStack = getFluid(itemStack);
-        
-        // DEBUG
-        System.out.println("finding FluidStack from ItemStack "+fluidStack);
-        
-//        // empty bucket shouldn't exist, do nothing since it should be handled by the bucket event
-//        if (fluidStack == null)
-//        {
-//        	// DEBUG
-//        	System.out.println("Can't use item because fluid stack is null");
-//        	
-//            return ActionResult.newResult(EnumActionResult.PASS, itemStack);
-//        }
 
         // clicked on a block?
-        RayTraceResult mop = this.rayTrace(parWorld, parPlayer, false);
+        RayTraceResult mop = rayTrace(parWorld, parPlayer, false);
 
         if(mop == null || mop.typeOfHit != RayTraceResult.Type.BLOCK)
         {
@@ -84,6 +70,7 @@ public class ItemSlimeBag extends ItemFluidContainer
         System.out.println("Slime bag used");
         
         BlockPos clickPos = mop.getBlockPos();
+        FluidStack fluidStack = getFluidStack(itemStack);
     	
         // can we place liquid there?
         if (parWorld.isBlockModifiable(parPlayer, clickPos))
@@ -102,32 +89,11 @@ public class ItemSlimeBag extends ItemFluidContainer
                 	return tryFill(parWorld, parPlayer, mop, itemStack);
                 }
                 else
-                {
-	                // try placing liquid
-	                FluidActionResult result = FluidUtil.tryPlaceFluid(parPlayer, parWorld, targetPos, itemStack, fluidStack);
-	                
-	                // DEBUG
-	                System.out.println("Tried to place fluid with result = "+result);
-	                
-	                if (result.isSuccess() && !parPlayer.capabilities.isCreativeMode)
-	                {
-	                    // DEBUG
-	                    System.out.println("Not in creative so draining containier");
-	
-	                    // success!
-	                    parPlayer.addStat(StatList.getObjectUseStats(this));
-	
-	                    itemStack.shrink(1);
-	                    ItemStack drained = result.getResult();
-	                    ItemStack emptyStack = !drained.isEmpty() ? drained.copy() : new ItemStack(this);
-	
-	                    // DEBUG
-	                	System.out.println("Adding empty slime bag to player inventory = "+emptyStack);
-	                	
-	                    // add empty bucket to player inventory
-	                    ItemHandlerHelper.giveItemToPlayer(parPlayer, emptyStack);
-	                    return ActionResult.newResult(EnumActionResult.SUCCESS, itemStack);
-	                }
+                {     
+                    // DEBUG
+                    System.out.println("Fluid stack is not empty so try to place");
+
+                	return tryPlace(parWorld, parPlayer, targetPos, itemStack);               	
                 }
             }
          }
@@ -136,16 +102,16 @@ public class ItemSlimeBag extends ItemFluidContainer
         System.out.println("Failed to place fluid");
 
         // couldn't place liquid there
-        return ActionResult.newResult(EnumActionResult.FAIL, itemStack);
+        return ActionResult.newResult(EnumActionResult.PASS, itemStack);
     }
     
     public ActionResult<ItemStack> tryFill(World parWorld, EntityPlayer parPlayer, RayTraceResult parRayTraceTarget, ItemStack parStack)
     {
     	BlockPos pos = parRayTraceTarget.getBlockPos();
-        ItemStack singleBucket = parStack.copy();
-        singleBucket.setCount(1);
+        ItemStack resultStack = parStack.copy();
+        resultStack.setCount(1);
 
-        FluidActionResult filledResult = FluidUtil.tryPickUpFluid(singleBucket, parPlayer, parWorld, pos, parRayTraceTarget.sideHit);
+        FluidActionResult filledResult = FluidUtil.tryPickUpFluid(resultStack, parPlayer, parWorld, pos, parRayTraceTarget.sideHit);
         if (filledResult.isSuccess())
         {
         	// DEBUG
@@ -161,10 +127,58 @@ public class ItemSlimeBag extends ItemFluidContainer
             return ActionResult.newResult(EnumActionResult.FAIL, parStack);
         }
     }
-
     
+    public ActionResult<ItemStack> tryPlace(World parWorld, EntityPlayer parPlayer, BlockPos pos, ItemStack parStack)
+    {
+    	FluidStack fluidStack = getFluidStack(parStack);
+
+        // try placing liquid
+        FluidActionResult result = FluidUtil.tryPlaceFluid(parPlayer, parWorld, pos, parStack, fluidStack);
+
+        // DEBUG
+        System.out.println("Tried placing fluid with result success = "+result.isSuccess()+" and itemstack = "+result.getResult());
+        
+        if (result.isSuccess())
+        {
+	        if (!parPlayer.capabilities.isCreativeMode)
+	        {
+	            // DEBUG
+	            System.out.println("Not in creative so draining container");
+	
+	            // success!
+	            parPlayer.addStat(StatList.getObjectUseStats(this));
+	
+	            parStack.shrink(1);
+	            ItemStack drained = result.getResult();
+	            ItemStack emptyStack = !drained.isEmpty() ? drained.copy() : new ItemStack(this);
+	
+	            // DEBUG
+	        	System.out.println("Adding empty slime bag to player inventory = "+emptyStack);
+	        	
+	            // add empty bucket to player inventory
+	            ItemHandlerHelper.giveItemToPlayer(parPlayer, emptyStack);
+	            return ActionResult.newResult(EnumActionResult.SUCCESS, emptyStack);
+	        }
+	        else
+	        {
+	        	// DEBUG
+	        	System.out.println("Placing fluid was a success");
+	        	
+	            return ActionResult.newResult(EnumActionResult.SUCCESS, parStack);
+	        }
+        }
+        else
+        {
+        	// DEBUG
+        	System.out.println("Placing fluid was not a success");
+        	
+        	return ActionResult.newResult(EnumActionResult.FAIL, parStack);
+        }
+    }
+
     @Nullable
-	public FluidStack getFluid(final ItemStack container) {
+	public FluidStack getFluidStack(final ItemStack container) 
+    {
 		return FluidUtil.getFluidContained(container);
 	}
  }
