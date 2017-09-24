@@ -29,7 +29,6 @@ import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.IFluidBlock;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.ItemFluidContainer;
-import net.minecraftforge.items.ItemHandlerHelper;
 
 public class ItemSlimeBag extends ItemFluidContainer
 {
@@ -38,6 +37,7 @@ public class ItemSlimeBag extends ItemFluidContainer
 		super(Fluid.BUCKET_VOLUME);
 		Utilities.setItemName(this, "slime_bag");
 		setCreativeTab(CreativeTabs.MISC);
+		setMaxStackSize(1);
 		
 		// DEBUG
 		System.out.println("Constructing ItemSlimeBag");
@@ -123,14 +123,14 @@ public class ItemSlimeBag extends ItemFluidContainer
         	// DEBUG
         	System.out.println("Successful at picking up fluid item stack = "+filledResult.getResult());
         	
-            ItemHandlerHelper.giveItemToPlayer(parPlayer, filledResult.getResult());
+//            ItemHandlerHelper.giveItemToPlayer(parPlayer, filledResult.getResult());
             return ActionResult.newResult(EnumActionResult.SUCCESS, filledResult.getResult());
         }
         else
         {
             // DEBUG
         	System.out.println("Not successful at picking up fluid");
-            return ActionResult.newResult(EnumActionResult.FAIL, filledResult.getResult());
+            return ActionResult.newResult(EnumActionResult.FAIL, parStack);
         }
     }
     
@@ -162,7 +162,7 @@ public class ItemSlimeBag extends ItemFluidContainer
 	        	System.out.println("Adding empty slime bag to player inventory = "+emptyStack);
 	        	
 	            // add empty bucket to player inventory
-	            ItemHandlerHelper.giveItemToPlayer(parPlayer, emptyStack);
+//	            ItemHandlerHelper.giveItemToPlayer(parPlayer, emptyStack);
 	            return ActionResult.newResult(EnumActionResult.SUCCESS, emptyStack);
 	        }
 	        else

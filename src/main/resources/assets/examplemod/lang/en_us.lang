@@ -14,6 +14,7 @@ item.cowhide.name=Cow Hide
 item.sheepskin.name=Sheep Skin
 item.pigskin.name=Pig Skin
 item.horsehide.name=Horse Hide
+item.slime_bag.name=Slime Bag
 entity.test_pig.name=Test Pig
 achievement.tanningahide=Tanned A Hide
 deconstructing.result.ready=
