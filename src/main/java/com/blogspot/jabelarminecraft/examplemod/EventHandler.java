@@ -35,6 +35,8 @@ import com.google.common.base.Objects;
 
 import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiIngame;
+import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
@@ -76,6 +78,7 @@ import net.minecraftforge.client.event.EntityViewRenderEvent.FogColors;
 import net.minecraftforge.client.event.EntityViewRenderEvent.FogDensity;
 import net.minecraftforge.client.event.GuiOpenEvent;
 import net.minecraftforge.client.event.MouseEvent;
+import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent;
@@ -239,32 +242,7 @@ public class EventHandler
     	event.setCanceled(true);
     	
     	EntityLivingBase theEntity = event.getEntityLiving();
-    	    	
-//    	Field activeItemStackUseCount = ReflectionHelper.findField(EntityLivingBase.class, "activeItemStackUseCount", "field_184628_bn");
-//    	Field handInventory = ReflectionHelper.findField(EntityLivingBase.class, "handInventory", "field_184630_bs");
-//       	Field armorArray = ReflectionHelper.findField(EntityLivingBase.class, "armorArray", "field_184631_bt");
-//    	Field ticksElytraFlying = ReflectionHelper.findField(EntityLivingBase.class, "ticksElytraFlying", "field_184629_bo");
-//    	Field rideCooldown = ReflectionHelper.findField(Entity.class, "rideCooldown", "rideCooldown");
-//    	Field portalCounter = ReflectionHelper.findField(Entity.class, "portalCounter", "portalCounter");
-//    	Field inPortal = ReflectionHelper.findField(Entity.class, "inPortal", "inPortal");
-//    	Field fire = ReflectionHelper.findField(Entity.class, "fire", "fire");
-//    	Field prevBlockpos = ReflectionHelper.findField(EntityLivingBase.class, "prevBlockpos", "prevBlockpos");
-//    	Field firstUpdate = ReflectionHelper.findField(Entity.class, "firstUpdate", "firstUpdate");
-//    	Field attackingPlayer = ReflectionHelper.findField(EntityLivingBase.class, "attackingPlayer", "attackingPlayer");
-//    	Field recentlyHit = ReflectionHelper.findField(EntityLivingBase.class, "recentlyHit", "recentlyHit");
-//    	
-//    	Method setFlag = ReflectionHelper.findMethod(Entity.class, "setFlag", "setFlag", Integer.TYPE, Boolean.TYPE); // "func_70052_a"
-//    	Method getFlag = ReflectionHelper.findMethod(Entity.class, "getFlag", "getFlag", Integer.TYPE); // "func_70083_f"
-//    	Method decrementTimeUntilPortal = ReflectionHelper.findMethod(Entity.class, "decrementTimeUntilPortal", "decrementTimeUntilPortal", new Class[] {});
-//    	Method updatePotionEffects = ReflectionHelper.findMethod(EntityLivingBase.class, "updatePotionEffects", "updatePotionEffects", new Class[] {});
-//    	Method onDeathUpdate = ReflectionHelper.findMethod(EntityLivingBase.class, "onDeathUpdate", "onDeathUpdate", new Class[] {});
-//    	
-//    	// DEBUG
-//    	if (theEntity instanceof EntityPlayer)
-//    	{
-//    		System.out.println("Air before living update = "+theEntity.getAir());
-//    	}
-    	
+     	
         // super.onUpdate() expanded
         if (!theEntity.world.isRemote)
         {
@@ -1429,11 +1407,11 @@ public class EventHandler
 //    }
 
     /**
- * On event.
- *
- * @param event the event
- */
-@SideOnly(Side.CLIENT)
+	 * On event.
+	 *
+	 * @param event the event
+	 */
+	@SideOnly(Side.CLIENT)
     @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
     public void onEvent(MouseEvent event)
     { 
@@ -1475,14 +1453,44 @@ public class EventHandler
             }
         }
    }
+    
+    @SideOnly(Side.CLIENT)
+    @SubscribeEvent(priority=EventPriority.HIGHEST, receiveCanceled=true)
+    public void onEvent(RenderGameOverlayEvent event)
+    {
+    	Minecraft mc = Minecraft.getMinecraft();
+    	GuiIngame ingameGUI = mc.ingameGUI;
+        ScaledResolution scaledRes = event.getResolution();
+     	
+       if (mc.getRenderViewEntity() instanceof EntityPlayer)
+        {
+            EntityPlayer entityplayer = (EntityPlayer)mc.getRenderViewEntity();
 
-//    
-//    @SideOnly(Side.CLIENT)
-//    @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-//    public void onEvent(RenderGameOverlayEvent event)
-//    {
-//        
-//    }
+            int airIndicatorX = scaledRes.getScaledWidth() / 2 + 91;
+            int airIndicatorBottom = scaledRes.getScaledHeight() - 39;
+            int airIndicatorTop = airIndicatorBottom - 10;
+
+            if (entityplayer.isInsideOfMaterial(Material.WATER) || entityplayer.isInsideOfMaterial(ModMaterials.SLIME))
+            {
+                int airAmount = mc.player.getAir();
+                int airLostPercent = MathHelper.ceil((airAmount - 2) * 10.0D / 300.0D);
+                int airLeftPercent = MathHelper.ceil(airAmount * 10.0D / 300.0D) - airLostPercent;
+
+                for (int airUnitIndex = 0; airUnitIndex < airLostPercent + airLeftPercent; ++airUnitIndex)
+                {
+                    if (airUnitIndex < airLostPercent)
+                    {
+                        ingameGUI.drawTexturedModalRect(airIndicatorX - airUnitIndex * 8 - 9, airIndicatorTop, 16, 18, 9, 9);
+                    }
+                    else
+                    {
+                        ingameGUI.drawTexturedModalRect(airIndicatorX - airUnitIndex * 8 - 9, airIndicatorTop, 25, 18, 9, 9);
+                    }
+                }
+            }
+        }
+    }        
+
 //    
 //    @SideOnly(Side.CLIENT)
 //    @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)

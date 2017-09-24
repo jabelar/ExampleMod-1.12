@@ -32,7 +32,7 @@ public class ModFluids
 			)
 			.setDensity(1100)
 			.setGaseous(false)
-			.setLuminosity(3)
+			.setLuminosity(9)
 			.setViscosity(25000)
 			.setTemperature(300);
 } 
