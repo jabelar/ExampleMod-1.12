@@ -23,6 +23,7 @@ import com.blogspot.jabelarminecraft.examplemod.items.ItemHorseHide;
 import com.blogspot.jabelarminecraft.examplemod.items.ItemPigSkin;
 import com.blogspot.jabelarminecraft.examplemod.items.ItemSheepSkin;
 import com.blogspot.jabelarminecraft.examplemod.items.ItemSwordExtended;
+import com.blogspot.jabelarminecraft.examplemod.items.fluidcontainers.ItemSlimeBag;
 import com.google.common.collect.ImmutableSet;
 
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
@@ -51,14 +52,18 @@ public class ModItems {
 	public final static ItemSheepSkin SHEEP_SKIN = new ItemSheepSkin();
 	public final static ItemPigSkin PIG_SKIN = new ItemPigSkin();
 	public final static ItemHorseHide HORSE_HIDE = new ItemHorseHide();
+	//instantiate weapon items
 	public final static ItemSwordExtended SWORD_EXTENDED = new ItemSwordExtended(ToolMaterial.IRON);
-
+	// instantiate fluid container items
+	public final static ItemSlimeBag SLIME_BAG = new ItemSlimeBag();
+	
 	public static final Set<Item> SET_ITEMS = ImmutableSet.of(
 			COW_HIDE,
 			SHEEP_SKIN,
 			PIG_SKIN,
 			HORSE_HIDE,
-			SWORD_EXTENDED
+			SWORD_EXTENDED,
+			SLIME_BAG
 			);
 
 

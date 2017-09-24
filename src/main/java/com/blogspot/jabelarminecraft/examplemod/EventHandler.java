@@ -219,21 +219,20 @@ public class EventHandler
 	public static Field handInventory = ReflectionHelper.findField(EntityLivingBase.class, "handInventory", "field_184630_bs");
 	public static Field armorArray = ReflectionHelper.findField(EntityLivingBase.class, "armorArray", "field_184631_bt");
 	public static Field ticksElytraFlying = ReflectionHelper.findField(EntityLivingBase.class, "ticksElytraFlying", "field_184629_bo");
-	public static Field rideCooldown = ReflectionHelper.findField(Entity.class, "rideCooldown", "rideCooldown");
-	public static Field portalCounter = ReflectionHelper.findField(Entity.class, "portalCounter", "portalCounter");
-	public static Field inPortal = ReflectionHelper.findField(Entity.class, "inPortal", "inPortal");
-	public static Field fire = ReflectionHelper.findField(Entity.class, "fire", "fire");
-	public static Field prevBlockpos = ReflectionHelper.findField(EntityLivingBase.class, "prevBlockpos", "prevBlockpos");
-	public static Field firstUpdate = ReflectionHelper.findField(Entity.class, "firstUpdate", "firstUpdate");
-	public static Field attackingPlayer = ReflectionHelper.findField(EntityLivingBase.class, "attackingPlayer", "attackingPlayer");
-	public static Field recentlyHit = ReflectionHelper.findField(EntityLivingBase.class, "recentlyHit", "recentlyHit");
+	public static Field rideCooldown = ReflectionHelper.findField(Entity.class, "rideCooldown", "field_184245_j");
+	public static Field portalCounter = ReflectionHelper.findField(Entity.class, "portalCounter", "field_82153_h");
+	public static Field inPortal = ReflectionHelper.findField(Entity.class, "inPortal", "field_71087_bX");
+	public static Field fire = ReflectionHelper.findField(Entity.class, "fire", "field_190534_ay");
+	public static Field prevBlockpos = ReflectionHelper.findField(EntityLivingBase.class, "prevBlockpos", "field_184620_bC");
+	public static Field firstUpdate = ReflectionHelper.findField(Entity.class, "firstUpdate", "field_70148_d");
+	public static Field attackingPlayer = ReflectionHelper.findField(EntityLivingBase.class, "attackingPlayer", "field_70717_bb");
+	public static Field recentlyHit = ReflectionHelper.findField(EntityLivingBase.class, "recentlyHit", "field_70718_bc");
 	
-	public static Method setFlag = ReflectionHelper.findMethod(Entity.class, "setFlag", "setFlag", Integer.TYPE, Boolean.TYPE); // "func_70052_a"
-	public static Method getFlag = ReflectionHelper.findMethod(Entity.class, "getFlag", "getFlag", Integer.TYPE); // "func_70083_f"
-	public static Method decrementTimeUntilPortal = ReflectionHelper.findMethod(Entity.class, "decrementTimeUntilPortal", "decrementTimeUntilPortal", new Class[] {});
-	public static Method updatePotionEffects = ReflectionHelper.findMethod(EntityLivingBase.class, "updatePotionEffects", "updatePotionEffects", new Class[] {});
-	public static Method onDeathUpdate = ReflectionHelper.findMethod(EntityLivingBase.class, "onDeathUpdate", "onDeathUpdate", new Class[] {});
-	
+	public static Method setFlag = ReflectionHelper.findMethod(Entity.class, "setFlag", "func_70052_a", Integer.TYPE, Boolean.TYPE); 
+	public static Method getFlag = ReflectionHelper.findMethod(Entity.class, "getFlag", "func_70083_f", Integer.TYPE); 
+	public static Method decrementTimeUntilPortal = ReflectionHelper.findMethod(Entity.class, "decrementTimeUntilPortal", "func_184173_H", new Class[] {});
+	public static Method updatePotionEffects = ReflectionHelper.findMethod(EntityLivingBase.class, "updatePotionEffects", "func_70679_bo", new Class[] {});
+	public static Method onDeathUpdate = ReflectionHelper.findMethod(EntityLivingBase.class, "onDeathUpdate", "func_70609_aI", new Class[] {});
 	
     @SuppressWarnings("unchecked")
 	@SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
@@ -439,8 +438,8 @@ public class EventHandler
             {
                 if (!theEntity.canBreatheUnderwater() && !theEntity.isPotionActive(MobEffects.WATER_BREATHING) && !flag1)
                 {
-                	// DEBUG
-                	System.out.println("Entity "+theEntity.getName()+" is drowning in fluid");
+//                	// DEBUG
+//                	System.out.println("Entity "+theEntity.getName()+" is drowning in fluid");
                 	
                 	// decreaseAirSupply() expanded
                     theEntity.setAir(EnchantmentHelper.getRespirationModifier(theEntity) > 0 && theEntity.getRNG().nextInt(EnchantmentHelper.getRespirationModifier(theEntity) + 1) > 0 ? theEntity.getAir() : theEntity.getAir() - 1);
