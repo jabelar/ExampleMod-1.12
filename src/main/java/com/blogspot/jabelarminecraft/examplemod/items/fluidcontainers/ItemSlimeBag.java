@@ -6,6 +6,9 @@ import javax.annotation.Nullable;
 import com.blogspot.jabelarminecraft.examplemod.blocks.fluids.FluidHandlerSlimeBag;
 import com.blogspot.jabelarminecraft.examplemod.utilities.Utilities;
 
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockLiquid;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -13,6 +16,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.stats.StatList;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
@@ -22,6 +26,8 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidActionResult;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
+import net.minecraftforge.fluids.IFluidBlock;
+import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.ItemFluidContainer;
 import net.minecraftforge.items.ItemHandlerHelper;
 
@@ -59,7 +65,7 @@ public class ItemSlimeBag extends ItemFluidContainer
         ItemStack itemStack = parPlayer.getHeldItem(parHand);
 
         // clicked on a block?
-        RayTraceResult mop = rayTrace(parWorld, parPlayer, false);
+        RayTraceResult mop = rayTrace(parWorld, parPlayer, true);
 
         if(mop == null || mop.typeOfHit != RayTraceResult.Type.BLOCK)
         {
@@ -111,7 +117,7 @@ public class ItemSlimeBag extends ItemFluidContainer
         ItemStack resultStack = parStack.copy();
         resultStack.setCount(1);
 
-        FluidActionResult filledResult = FluidUtil.tryPickUpFluid(resultStack, parPlayer, parWorld, pos, parRayTraceTarget.sideHit);
+        FluidActionResult filledResult = tryPickUpFluid(resultStack, parPlayer, parWorld, pos, parRayTraceTarget.sideHit);
         if (filledResult.isSuccess())
         {
         	// DEBUG
@@ -124,7 +130,7 @@ public class ItemSlimeBag extends ItemFluidContainer
         {
             // DEBUG
         	System.out.println("Not successful at picking up fluid");
-            return ActionResult.newResult(EnumActionResult.FAIL, parStack);
+            return ActionResult.newResult(EnumActionResult.FAIL, filledResult.getResult());
         }
     }
     
@@ -175,6 +181,47 @@ public class ItemSlimeBag extends ItemFluidContainer
         	return ActionResult.newResult(EnumActionResult.FAIL, parStack);
         }
     }
+    
+    @Nonnull
+    public static FluidActionResult tryPickUpFluid(@Nonnull ItemStack emptyContainer, @Nullable EntityPlayer playerIn, World worldIn, BlockPos pos, EnumFacing side)
+    {
+        if (emptyContainer.isEmpty() || worldIn == null || pos == null)
+        {
+        	// DEBUG
+        	System.out.println("Container is empty or world or positions are null");
+            return FluidActionResult.FAILURE;
+        }
+
+        IBlockState state = worldIn.getBlockState(pos);
+        Block block = state.getBlock();
+
+        if (block instanceof IFluidBlock || block instanceof BlockLiquid)
+        {
+        	// DEBUG
+        	System.out.println("Block is an instance of IFluidBlock or BlockLiquid");
+        	
+            IFluidHandler targetFluidHandler = FluidUtil.getFluidHandler(worldIn, pos, side);
+            if (targetFluidHandler != null)
+            {
+            	// DEBUG
+            	System.out.println("target has fluid handler");
+            	
+                return FluidUtil.tryFillContainer(emptyContainer, targetFluidHandler, Integer.MAX_VALUE, playerIn, true);
+            }
+            else
+            {
+            	// DEBUG
+            	System.out.println("target doesn't have fluid handler");
+            }
+        }
+        else
+        {
+        	// DEBUG
+        	System.out.println("Not an IFluidBlock or BlockLiquid, instead = "+block);
+        }
+        return FluidActionResult.FAILURE;
+    }
+
 
     @Nullable
 	public FluidStack getFluidStack(final ItemStack container) 
