@@ -27,9 +27,11 @@ import com.blogspot.jabelarminecraft.examplemod.items.ItemSwordExtended;
 import com.blogspot.jabelarminecraft.examplemod.items.fluidcontainers.ItemSlimeBag;
 import com.google.common.collect.ImmutableSet;
 
+import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.Item;
 import net.minecraft.item.Item.ToolMaterial;
+import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.event.RegistryEvent;
@@ -134,6 +136,27 @@ public class ModItems {
 			// register custom model items
 	        ModelLoader.setCustomModelResourceLocation(SLIME_BAG, 0, ModelSlimeBag.LOCATION);
 		}
+		
+		/**
+		 * On model event.
+		 *
+		 * @param event the event
+		 */
+		@SubscribeEvent
+		public static void onModelEvent(final ModelBakeEvent event) 
+		{
+			//DEBUG
+			System.out.println("Baking item models");
+			
+			Object object =  event.getModelRegistry().getObject(ModelSlimeBag.LOCATION);
+		    if (object instanceof IBakedModel) 
+		    {
+		      event.getModelRegistry().putObject(ModelSlimeBag.LOCATION, ModelSlimeBag.MODEL.bake(null, null, null));
+		    }
+			
+			// register custom model items
+	        ModelLoader.setCustomModelResourceLocation(SLIME_BAG, 0, ModelSlimeBag.LOCATION);
+		}
 	}
     
     /**
@@ -156,5 +179,6 @@ public class ModItems {
     {
         ModelLoader.setCustomModelResourceLocation(parItem, parMetaData, new ModelResourceLocation(MainMod.MODID + ":" + parItem.getUnlocalizedName().substring(5), "inventory"));
     }
+    
 }
 

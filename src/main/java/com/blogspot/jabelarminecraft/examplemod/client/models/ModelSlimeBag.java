@@ -12,6 +12,7 @@ import javax.vecmath.Matrix4f;
 import org.apache.commons.lang3.tuple.Pair;
 
 import com.blogspot.jabelarminecraft.examplemod.MainMod;
+import com.blogspot.jabelarminecraft.examplemod.init.ModFluids;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
@@ -54,7 +55,7 @@ public final class ModelSlimeBag implements IModel
     private static final float NORTH_Z_FLUID = 7.498f / 16f;
     private static final float SOUTH_Z_FLUID = 8.502f / 16f;
 
-    public static final IModel MODEL = new ModelSlimeBag();
+    public static final ModelSlimeBag MODEL = new ModelSlimeBag();
 
     @Nullable
     private final ResourceLocation emptyLocation = new ResourceLocation(MainMod.MODID, "slime_bag_empty");
@@ -65,7 +66,7 @@ public final class ModelSlimeBag implements IModel
 
     public ModelSlimeBag()
     {
-    	this(null);
+    	this(ModFluids.SLIME);
     }
     
     public ModelSlimeBag(Fluid parFluid)
@@ -187,13 +188,19 @@ public final class ModelSlimeBag implements IModel
         public IBakedModel handleItemState(IBakedModel originalModel, ItemStack stack, @Nullable World world, @Nullable EntityLivingBase entity)
         {
             FluidStack fluidStack = FluidUtil.getFluidContained(stack);
-
+            
             // not a fluid item apparently
             if (fluidStack == null)
             {
+            	// DEBUG
+            	System.out.println("fluid stack is null, returning original model");
+            	
                 // empty bucket
                 return originalModel;
             }
+            
+            // DEBUG
+            System.out.print("Fluid stack was not null and fluid amount = "+fluidStack.amount);
 
             Baked model = (Baked)originalModel;
 
@@ -202,6 +209,9 @@ public final class ModelSlimeBag implements IModel
 
             if (!model.cache.containsKey(name))
             {
+            	// DEBUG
+            	System.out.println("The model cache does not have key for fluid name");
+            	
                 IModel parent = model.parent.process(ImmutableMap.of("fluid", name));
                 Function<ResourceLocation, TextureAtlasSprite> textureGetter;
                 textureGetter = location -> Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(location.toString());
@@ -210,6 +220,9 @@ public final class ModelSlimeBag implements IModel
                 model.cache.put(name, bakedModel);
                 return bakedModel;
             }
+            
+            // DEBUG
+            System.out.println("The model cache already has key so returning the model");
 
             return model.cache.get(name);
         }
