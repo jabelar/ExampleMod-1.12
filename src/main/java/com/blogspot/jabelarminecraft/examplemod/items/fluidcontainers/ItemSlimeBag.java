@@ -4,37 +4,39 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.blogspot.jabelarminecraft.examplemod.blocks.fluids.FluidHandlerSlimeBag;
+import com.blogspot.jabelarminecraft.examplemod.init.ModFluids;
 import com.blogspot.jabelarminecraft.examplemod.utilities.Utilities;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockLiquid;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.stats.StatList;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidActionResult;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
-import net.minecraftforge.fluids.IFluidBlock;
-import net.minecraftforge.fluids.capability.IFluidHandler;
-import net.minecraftforge.fluids.capability.ItemFluidContainer;
+import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
+import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 
-public class ItemSlimeBag extends ItemFluidContainer
+@SuppressWarnings("deprecation")
+public class ItemSlimeBag extends Item
 {
+	private final int CAPACITY = Fluid.BUCKET_VOLUME;
+	private final ItemStack emptyStack = new ItemStack(this);
+	
 	public ItemSlimeBag() 
 	{
-		super(Fluid.BUCKET_VOLUME);
 		Utilities.setItemName(this, "slime_bag");
 		setCreativeTab(CreativeTabs.MISC);
 		setMaxStackSize(1);
@@ -49,9 +51,65 @@ public class ItemSlimeBag extends ItemFluidContainer
 //    	// DEBUG
 //    	System.out.println("initCapabilities for ItemSlimeBag");
     	
-        return new FluidHandlerSlimeBag(stack);
+        return new FluidHandlerSlimeBag(stack, CAPACITY);
     }
-    
+
+	@Override
+	public void getSubItems(@Nullable final CreativeTabs tab, final NonNullList<ItemStack> subItems) 
+	{
+		if (!this.isInCreativeTab(tab)) return;
+
+		subItems.add(emptyStack);
+
+		final FluidStack fluidStack = new FluidStack(ModFluids.SLIME, CAPACITY);
+		final ItemStack stack = new ItemStack(this);
+		final IFluidHandlerItem fluidHandler = stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null);
+		if (fluidHandler != null)
+		{
+			final int fluidFillAmount = fluidHandler.fill(fluidStack, true);
+			if (fluidFillAmount == fluidStack.amount) 
+			{
+				final ItemStack filledStack = fluidHandler.getContainer();
+				subItems.add(filledStack);	
+				
+				// DEBUG
+				System.out.println("Filled bag and adding as sub-item = "+filledStack+" with amount = "+FluidUtil.getFluidContained(filledStack).amount);
+			}
+			else
+			{
+				// DEBUG
+				System.out.println("Failed to add filled sub-item because amounts didn't match, fillAmount = "+fluidFillAmount);
+			}
+		}
+		else
+		{
+			// DEBUG
+			System.out.println("Failed to add filled sub-item because fluid handler was null");
+		}
+	}
+
+	@Override
+	public String getItemStackDisplayName(final ItemStack stack) 
+	{
+		final FluidStack fluidStack = FluidStack.loadFluidStackFromNBT(stack.getTagCompound());
+		final String unlocalisedName = this.getUnlocalizedNameInefficiently(stack);
+
+		// If the bucket is empty, translate the unlocalised name directly
+		if (fluidStack == null) {
+			return I18n.translateToLocal(unlocalisedName + ".name").trim();
+		}
+
+		// If there's a fluid-specific translation, use it
+		final String fluidUnlocalisedName = unlocalisedName + ".filled." + fluidStack.getFluid().getName() + ".name";
+		if (I18n.canTranslate(fluidUnlocalisedName)) {
+			return I18n.translateToLocal(fluidUnlocalisedName);
+		}
+
+		// Else translate the filled name directly, formatting it with the fluid name
+		return I18n.translateToLocalFormatted(unlocalisedName + ".filled.name", fluidStack.getLocalizedName());
+	}
+
+
     /**
      * Called when the equipped item is right clicked.
      */
@@ -117,13 +175,12 @@ public class ItemSlimeBag extends ItemFluidContainer
         ItemStack resultStack = parStack.copy();
         resultStack.setCount(1);
 
-        FluidActionResult filledResult = tryPickUpFluid(resultStack, parPlayer, parWorld, pos, parRayTraceTarget.sideHit);
+        FluidActionResult filledResult = FluidUtil.tryPickUpFluid(resultStack, parPlayer, parWorld, pos, parRayTraceTarget.sideHit);
         if (filledResult.isSuccess())
         {
         	// DEBUG
         	System.out.println("Successful at picking up fluid item stack = "+filledResult.getResult());
         	
-//            ItemHandlerHelper.giveItemToPlayer(parPlayer, filledResult.getResult());
             return ActionResult.newResult(EnumActionResult.SUCCESS, filledResult.getResult());
         }
         else
@@ -162,7 +219,6 @@ public class ItemSlimeBag extends ItemFluidContainer
 	        	System.out.println("Adding empty slime bag to player inventory = "+emptyStack);
 	        	
 	            // add empty bucket to player inventory
-//	            ItemHandlerHelper.giveItemToPlayer(parPlayer, emptyStack);
 	            return ActionResult.newResult(EnumActionResult.SUCCESS, emptyStack);
 	        }
 	        else
@@ -181,47 +237,6 @@ public class ItemSlimeBag extends ItemFluidContainer
         	return ActionResult.newResult(EnumActionResult.FAIL, parStack);
         }
     }
-    
-    @Nonnull
-    public static FluidActionResult tryPickUpFluid(@Nonnull ItemStack emptyContainer, @Nullable EntityPlayer playerIn, World worldIn, BlockPos pos, EnumFacing side)
-    {
-        if (emptyContainer.isEmpty() || worldIn == null || pos == null)
-        {
-        	// DEBUG
-        	System.out.println("Container is empty or world or positions are null");
-            return FluidActionResult.FAILURE;
-        }
-
-        IBlockState state = worldIn.getBlockState(pos);
-        Block block = state.getBlock();
-
-        if (block instanceof IFluidBlock || block instanceof BlockLiquid)
-        {
-        	// DEBUG
-        	System.out.println("Block is an instance of IFluidBlock or BlockLiquid");
-        	
-            IFluidHandler targetFluidHandler = FluidUtil.getFluidHandler(worldIn, pos, side);
-            if (targetFluidHandler != null)
-            {
-            	// DEBUG
-            	System.out.println("target has fluid handler");
-            	
-                return FluidUtil.tryFillContainer(emptyContainer, targetFluidHandler, Integer.MAX_VALUE, playerIn, true);
-            }
-            else
-            {
-            	// DEBUG
-            	System.out.println("target doesn't have fluid handler");
-            }
-        }
-        else
-        {
-        	// DEBUG
-        	System.out.println("Not an IFluidBlock or BlockLiquid, instead = "+block);
-        }
-        return FluidActionResult.FAILURE;
-    }
-
 
     @Nullable
 	public FluidStack getFluidStack(final ItemStack container) 

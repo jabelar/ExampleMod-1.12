@@ -59,6 +59,10 @@ public class ModBiomes
 			final IForgeRegistry<Biome> registry = event.getRegistry();
 
 	        System.out.println("Registering biomes");
+	        
+	        // DEBUG
+	        System.out.println("Registry key set = "+registry.getKeys());
+	        System.out.println("Registry value list = "+registry.getValues());
 
 			for (final Biome biome : SET_BIOMES) {
 				registry.register(biome);
