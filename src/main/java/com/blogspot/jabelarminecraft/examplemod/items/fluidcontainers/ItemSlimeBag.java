@@ -91,22 +91,20 @@ public class ItemSlimeBag extends Item
 	@Override
 	public String getItemStackDisplayName(final ItemStack stack) 
 	{
-		final FluidStack fluidStack = FluidStack.loadFluidStackFromNBT(stack.getTagCompound());
-		final String unlocalisedName = this.getUnlocalizedNameInefficiently(stack);
+		final FluidStack fluidStack = FluidUtil.getFluidContained(stack);
+		String unlocalizedName = this.getUnlocalizedNameInefficiently(stack);
 
 		// If the bucket is empty, translate the unlocalised name directly
-		if (fluidStack == null) {
-			return I18n.translateToLocal(unlocalisedName + ".name").trim();
+		if (fluidStack == null) 
+		{
+			unlocalizedName += ".name";
+		}
+		else
+		{
+			unlocalizedName += ".filled.name";
 		}
 
-		// If there's a fluid-specific translation, use it
-		final String fluidUnlocalisedName = unlocalisedName + ".filled." + fluidStack.getFluid().getName() + ".name";
-		if (I18n.canTranslate(fluidUnlocalisedName)) {
-			return I18n.translateToLocal(fluidUnlocalisedName);
-		}
-
-		// Else translate the filled name directly, formatting it with the fluid name
-		return I18n.translateToLocalFormatted(unlocalisedName + ".filled.name", fluidStack.getLocalizedName());
+		return I18n.translateToLocal(unlocalizedName).trim();
 	}
 
 
