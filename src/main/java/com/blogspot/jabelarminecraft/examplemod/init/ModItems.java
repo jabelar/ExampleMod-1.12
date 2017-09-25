@@ -18,6 +18,7 @@ package com.blogspot.jabelarminecraft.examplemod.init;
 import java.util.Set;
 
 import com.blogspot.jabelarminecraft.examplemod.MainMod;
+import com.blogspot.jabelarminecraft.examplemod.client.models.ModelSlimeBag;
 import com.blogspot.jabelarminecraft.examplemod.items.ItemCowHide;
 import com.blogspot.jabelarminecraft.examplemod.items.ItemHorseHide;
 import com.blogspot.jabelarminecraft.examplemod.items.ItemPigSkin;
@@ -37,7 +38,6 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.registries.IForgeRegistry;
 
 // TODO: Auto-generated Javadoc
-// @ObjectHolder(MainMod.MODID)
 public class ModItems {
 //	public static class ArmorMaterials {
 //		public static final ItemArmor.ArmorMaterial ARMOUR_MATERIAL_REPLACEMENT = EnumHelper.addArmorMaterial(Constants.RESOURCE_PREFIX + "replacement", Constants.RESOURCE_PREFIX + "replacement", 15, new int[]{1, 4, 5, 2}, 12, SoundEvents.ITEM_ARMOR_EQUIP_CHAIN, (float) 0);
@@ -57,12 +57,17 @@ public class ModItems {
 	// instantiate fluid container items
 	public final static ItemSlimeBag SLIME_BAG = new ItemSlimeBag();
 	
-	public static final Set<Item> SET_ITEMS = ImmutableSet.of(
+	// only put items with standard models here
+	public static final Set<Item> SET_ITEMS_STANDARD = ImmutableSet.of(
 			COW_HIDE,
 			SHEEP_SKIN,
 			PIG_SKIN,
 			HORSE_HIDE,
-			SWORD_EXTENDED,
+			SWORD_EXTENDED
+			);
+	
+	// only put items with custom models here
+	public static final Set<Item> SET_ITEMS_CUSTOM = ImmutableSet.of(
 			SLIME_BAG
 			);
 
@@ -90,12 +95,20 @@ public class ModItems {
 
 	        System.out.println("Registering items");
 
-			for (final Item item : SET_ITEMS) {
+			for (final Item item : SET_ITEMS_STANDARD) 
+			{
 				registry.register(item);
 				// DEBUG
 				System.out.println("Registering item: "+item.getRegistryName());
 			}
-			
+
+			for (final Item item : SET_ITEMS_CUSTOM) 
+			{
+				registry.register(item);
+				// DEBUG
+				System.out.println("Registering item: "+item.getRegistryName());
+			}
+
 			initialize();
 		}
 		
@@ -110,21 +123,18 @@ public class ModItems {
 			//DEBUG
 			System.out.println("Registering item models");
 			
-			registerItemModels();
+			// register standard model items
+			for (final Item item : SET_ITEMS_STANDARD) 
+			{
+				registerItemModel(item);
+				// DEBUG
+				System.out.println("Registering item model for: "+item.getRegistryName());
+			}
+			
+			// register custom model items
+	        ModelLoader.setCustomModelResourceLocation(SLIME_BAG, 0, ModelSlimeBag.LOCATION);
 		}
 	}
-	
-    /**
-     * Register item models.
-     */
-    public static void registerItemModels()
-    {
-		for (final Item item : SET_ITEMS) {
-			registerItemModel(item);
-			// DEBUG
-			System.out.println("Registering item model for: "+item.getRegistryName());
-		}
-    }
     
     /**
      * Register item model.

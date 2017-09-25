@@ -27,7 +27,6 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.VillagerRegistry.VillagerProfession;
 import net.minecraftforge.registries.IForgeRegistry;
 
-// @ObjectHolder(MainMod.MODID)
 public class ModProfessions 
 {
     // instantiate VillagerProfessions

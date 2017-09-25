@@ -25,13 +25,11 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.registries.IForgeRegistry;
 
-// @ObjectHolder(MainMod.MODID)
 public class ModSounds 
 {
     // instantiate SoundEvents
 	
 	// big cats
-//	@ObjectHolder("mob.bigCat.growl")
 //    public static final SoundEvent soundAmbientGrowlBigCat = null;
        
 	/**

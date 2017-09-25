@@ -27,7 +27,6 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.registries.IForgeRegistry;
 
-// @ObjectHolder(MainMod.MODID)
 public class ModBiomes 
 {
     // instantiate Biomes

@@ -38,7 +38,6 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.registries.IForgeRegistry;
 
 // TODO: Auto-generated Javadoc
-// @ObjectHolder(MainMod.MODID)
 public class ModBlocks {
     // instantiate blocks
 	public final static BlockCompactor COMPACTOR = new BlockCompactor();

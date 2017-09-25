@@ -27,7 +27,6 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.EntityEntry;
 import net.minecraftforge.registries.IForgeRegistry;
 
-// @ObjectHolder(MainMod.MODID)
 public class ModEnchantments 
 {
     // instantiate EntityEntrys
