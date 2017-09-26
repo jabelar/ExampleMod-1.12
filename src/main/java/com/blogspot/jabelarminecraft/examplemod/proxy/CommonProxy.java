@@ -632,7 +632,11 @@ public class CommonProxy
     
     
     /**
-     * handles the acceleration of an object whilst in a material. 
+     * handles the acceleration of an object whilst in a material.
+     *
+     * @param entityIn the entity in
+     * @param materialIn the material in
+     * @return true, if successful
      */
 	public boolean handleMaterialAcceleration(Entity entityIn, Material materialIn)
     {

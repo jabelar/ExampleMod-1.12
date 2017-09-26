@@ -1,3 +1,18 @@
+/**
+    Copyright (C) 2017 by jabelar
+
+    This file is part of jabelar's Minecraft Forge modding examples; as such,
+    you can redistribute it and/or modify it under the terms of the GNU
+    General Public License as published by the Free Software Foundation,
+    either version 3 of the License, or (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+    GNU General Public License for more details.
+
+    For a copy of the GNU General Public License see <http://www.gnu.org/licenses/>.
+*/
 package com.blogspot.jabelarminecraft.examplemod.blocks.fluids;
 
 import net.minecraft.block.Block;
@@ -14,31 +29,58 @@ import net.minecraft.world.World;
 import net.minecraftforge.fluids.BlockFluidClassic;
 import net.minecraftforge.fluids.Fluid;
 
+// TODO: Auto-generated Javadoc
 public class ModBlockFluidClassic extends BlockFluidClassic
 {
 	protected static boolean pushesEntity = false;
 
+	/**
+	 * Instantiates a new mod block fluid classic.
+	 *
+	 * @param parFluid the par fluid
+	 * @param parMaterial the par material
+	 */
 	public ModBlockFluidClassic(Fluid parFluid, Material parMaterial) 
 	{
 		super(parFluid, parMaterial);
 	}
 
+	/**
+	 * Instantiates a new mod block fluid classic.
+	 *
+	 * @param parFluid the par fluid
+	 * @param parMaterial the par material
+	 * @param parPushesEntity the par pushes entity
+	 */
 	public ModBlockFluidClassic(Fluid parFluid, Material parMaterial, boolean parPushesEntity) 
 	{
 		this(parFluid, parMaterial);
 		setPushesEntity(parPushesEntity);
 	}
 	
+	/**
+	 * Gets the pushes entity.
+	 *
+	 * @return the pushes entity
+	 */
 	public static boolean getPushesEntity()
 	{
 		return pushesEntity;
 	}
 
+	/**
+	 * Sets the pushes entity.
+	 *
+	 * @param parPushesEntity the new pushes entity
+	 */
 	public static void setPushesEntity(boolean parPushesEntity)
 	{
 		pushesEntity = parPushesEntity;
 	}
 
+    /* (non-Javadoc)
+     * @see net.minecraftforge.fluids.BlockFluidBase#modifyAcceleration(net.minecraft.world.World, net.minecraft.util.math.BlockPos, net.minecraft.entity.Entity, net.minecraft.util.math.Vec3d)
+     */
     @Override
 	public Vec3d modifyAcceleration(World worldIn, BlockPos pos, Entity entityIn, Vec3d motion)
     {
@@ -63,6 +105,14 @@ public class ModBlockFluidClassic extends BlockFluidClassic
     	}
     }
 
+    /**
+     * Gets the flow.
+     *
+     * @param worldIn the world in
+     * @param pos the pos
+     * @param state the state
+     * @return the flow
+     */
     protected Vec3d getFlow(IBlockAccess worldIn, BlockPos pos, IBlockState state)
     {
         double d0 = 0.0D;
@@ -126,11 +176,23 @@ public class ModBlockFluidClassic extends BlockFluidClassic
         return vec3d.normalize();
     }
 
+    /**
+     * Gets the depth.
+     *
+     * @param state the state
+     * @return the depth
+     */
     protected int getDepth(IBlockState state)
     {
         return state.getMaterial() == this.blockMaterial ? state.getValue(LEVEL).intValue() : -1;
     }
 
+    /**
+     * Gets the rendered depth.
+     *
+     * @param state the state
+     * @return the rendered depth
+     */
     protected int getRenderedDepth(IBlockState state)
     {
         int i = this.getDepth(state);

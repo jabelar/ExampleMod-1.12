@@ -1,12 +1,12 @@
 /**
     Copyright (C) 2017 by jabelar
 
-    theEntity file is part of jabelar's Minecraft Forge modding examples; as such,
+    This file is part of jabelar's Minecraft Forge modding examples; as such,
     you can redistribute it and/or modify it under the terms of the GNU
     General Public License as published by the Free Software Foundation,
     either version 3 of the License, or (at your option) any later version.
 
-    theEntity program is distributed in the hope that it will be useful,
+    This program is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
     GNU General Public License for more details.
@@ -94,6 +94,7 @@ import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+// TODO: Auto-generated Javadoc
 public class EventHandler 
 {
 	/*
@@ -234,6 +235,13 @@ public class EventHandler
 	public static Method updatePotionEffects = ReflectionHelper.findMethod(EntityLivingBase.class, "updatePotionEffects", "func_70679_bo", new Class[] {});
 	public static Method onDeathUpdate = ReflectionHelper.findMethod(EntityLivingBase.class, "onDeathUpdate", "func_70609_aI", new Class[] {});
 	
+    /**
+     * On event.
+     *
+     * @param event the event
+     * @throws IllegalArgumentException the illegal argument exception
+     * @throws IllegalAccessException the illegal access exception
+     */
     @SuppressWarnings("unchecked")
 	@SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
     public void onEvent(LivingUpdateEvent event) throws IllegalArgumentException, IllegalAccessException
@@ -1324,7 +1332,12 @@ public class EventHandler
 //        
 //    }
     
-    @SideOnly(Side.CLIENT)
+    /**
+ * On event.
+ *
+ * @param event the event
+ */
+@SideOnly(Side.CLIENT)
     @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
     public void onEvent(FogDensity event)
     {
@@ -1343,6 +1356,11 @@ public class EventHandler
     }
 
     
+    /**
+     * On event.
+     *
+     * @param event the event
+     */
     @SideOnly(Side.CLIENT)
     @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
     public void onEvent(FogColors event)
@@ -1453,6 +1471,11 @@ public class EventHandler
         }
    }
     
+    /**
+     * On event.
+     *
+     * @param event the event
+     */
     @SideOnly(Side.CLIENT)
     @SubscribeEvent(priority=EventPriority.HIGHEST, receiveCanceled=true)
     public void onEvent(RenderGameOverlayEvent event)
@@ -1553,8 +1576,11 @@ public class EventHandler
 //	}
   		
     /**
-     * Draws a rectangle with the specified color
-     */
+ * Draws a rectangle with the specified color.
+ *
+ * @param parColor the par color
+ * @param parAlpha the par alpha
+ */
 	@SideOnly(Side.CLIENT)
      public static void drawFluidOverlay(int parColor, float parAlpha)
     {	
@@ -1875,6 +1901,12 @@ public class EventHandler
         }
     }
 
+	/**
+	 * Version check warning.
+	 *
+	 * @param parPlayer the par player
+	 * @return true, if successful
+	 */
 	protected static boolean versionCheckWarning(EntityPlayer parPlayer)
 	{
         if (!MainMod.haveWarnedVersionOutOfDate && !MainMod.versionChecker.isLatestVersion())
@@ -1909,7 +1941,12 @@ public class EventHandler
 //        
 //    }
 
-  @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
+  /**
+ * On event.
+ *
+ * @param event the event
+ */
+@SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
   public void onEvent(WorldTickEvent event)
   {
       if (event.phase == TickEvent.Phase.END) // only proceed if START phase otherwise, will execute twice per tick
@@ -1931,6 +1968,12 @@ public class EventHandler
       }
   }
   
+  /**
+   * Update air supply.
+   *
+   * @param parEntity the par entity
+   * @param parMaterial the par material
+   */
   public static void updateAirSupply(Entity parEntity, Material parMaterial)
   {
 	  if (!(parEntity instanceof EntityLivingBase))

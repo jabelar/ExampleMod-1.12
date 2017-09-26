@@ -1,3 +1,18 @@
+/**
+    Copyright (C) 2017 by jabelar
+
+    This file is part of jabelar's Minecraft Forge modding examples; as such,
+    you can redistribute it and/or modify it under the terms of the GNU
+    General Public License as published by the Free Software Foundation,
+    either version 3 of the License, or (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+    GNU General Public License for more details.
+
+    For a copy of the GNU General Public License see <http://www.gnu.org/licenses/>.
+*/
 package com.blogspot.jabelarminecraft.examplemod.client.models;
 
 import java.util.Collection;
@@ -46,7 +61,11 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
+// TODO: Auto-generated Javadoc
+@SideOnly(Side.CLIENT)
 public final class ModelSlimeBag implements IModel
 {
     public static final ModelResourceLocation LOCATION = new ModelResourceLocation(new ResourceLocation(MainMod.MODID, "slime_bag"), "inventory");
@@ -64,16 +83,27 @@ public final class ModelSlimeBag implements IModel
     @Nullable
     private final Fluid fluid;
 
+    /**
+     * Instantiates a new model slime bag.
+     */
     public ModelSlimeBag()
     {
     	this(ModFluids.SLIME);
     }
     
+    /**
+     * Instantiates a new model slime bag.
+     *
+     * @param parFluid the par fluid
+     */
     public ModelSlimeBag(Fluid parFluid)
     {
     	fluid = parFluid;
     }
 
+    /* (non-Javadoc)
+     * @see net.minecraftforge.client.model.IModel#getTextures()
+     */
     @Override
     public Collection<ResourceLocation> getTextures()
     {
@@ -86,35 +116,48 @@ public final class ModelSlimeBag implements IModel
         return builder.build();
     }
 
+    /* (non-Javadoc)
+     * @see net.minecraftforge.client.model.IModel#bake(net.minecraftforge.common.model.IModelState, net.minecraft.client.renderer.vertex.VertexFormat, java.util.function.Function)
+     */
     @Override
     public IBakedModel bake(IModelState state, VertexFormat format,
                                     Function<ResourceLocation, TextureAtlasSprite> bakedTextureGetter)
     {
-
+    	// DEBUG
+    	System.out.println("baking");
+    	
         ImmutableMap<TransformType, TRSRTransformation> transformMap = PerspectiveMapWrapper.getTransforms(state);
 
         TRSRTransformation transform = state.apply(Optional.empty()).orElse(TRSRTransformation.identity());
         TextureAtlasSprite fluidSprite = null;
         ImmutableList.Builder<BakedQuad> builder = ImmutableList.builder();
 
-        if(fluid != null) {
+        if(fluid != null) 
+        {
+        	// DEBUG
+        	System.out.println("Getting fluid sprite");
+        	
             fluidSprite = bakedTextureGetter.apply(fluid.getStill());
         }
 
         if (emptyLocation != null)
         {
-            // build base (insidest)
+        	// DEBUG
+        	System.out.println("Buiding empty model");
+        	
             IBakedModel model = (new ItemLayerModel(ImmutableList.of(emptyLocation))).bake(state, format, bakedTextureGetter);
             builder.addAll(model.getQuads(null, null, 0));
         }
         if (filledLocation != null && fluidSprite != null)
         {
-            TextureAtlasSprite liquid = bakedTextureGetter.apply(filledLocation);
+        	// DEBUG
+        	System.out.println("Building filled model");
+        	
+            TextureAtlasSprite filledTexture = bakedTextureGetter.apply(filledLocation);
             // build liquid layer (inside)
-            builder.addAll(ItemTextureQuadConverter.convertTexture(format, transform, liquid, fluidSprite, NORTH_Z_FLUID, EnumFacing.NORTH, fluid.getColor()));
-            builder.addAll(ItemTextureQuadConverter.convertTexture(format, transform, liquid, fluidSprite, SOUTH_Z_FLUID, EnumFacing.SOUTH, fluid.getColor()));
+            builder.addAll(ItemTextureQuadConverter.convertTexture(format, transform, filledTexture, fluidSprite, NORTH_Z_FLUID, EnumFacing.NORTH, fluid.getColor()));
+            builder.addAll(ItemTextureQuadConverter.convertTexture(format, transform, filledTexture, fluidSprite, SOUTH_Z_FLUID, EnumFacing.SOUTH, fluid.getColor()));
         }
-
 
         return new Baked(this, builder.build(), fluidSprite, format, Maps.immutableEnumMap(transformMap), Maps.newHashMap());
     }
@@ -123,10 +166,16 @@ public final class ModelSlimeBag implements IModel
      * Sets the liquid in the model.
      * fluid - Name of the fluid in the FluidRegistry
      * If the fluid can't be found, water is used
+     *
+     * @param customData the custom data
+     * @return the model slime bag
      */
     @Override
     public ModelSlimeBag process(ImmutableMap<String, String> customData)
     {
+    	// DEBUG
+    	System.out.println("process method with custom data = ");
+    	
         String fluidName = customData.get("fluid");
         Fluid fluid = FluidRegistry.getFluid(fluidName);
 
@@ -138,17 +187,16 @@ public final class ModelSlimeBag implements IModel
 
     /**
      * Allows to use different textures for the model.
-     * There are 3 layers:
-     * base - The empty bucket/container
-     * fluid - A texture representing the liquid portion. Non-transparent = liquid
-     * cover - An overlay that's put over the liquid (optional)
-     * <p/>
-     * If no liquid is given a hardcoded variant for the bucket is used.
+     *
+     * @param textures the textures
+     * @return the model slime bag
      */
     @Override
     public ModelSlimeBag retexture(ImmutableMap<String, String> textures)
     {
     	// don't allow retexturing
+    	// DEBUG
+    	System.out.println("Retexturing");
 
         return new ModelSlimeBag(fluid);
     }
@@ -157,18 +205,33 @@ public final class ModelSlimeBag implements IModel
     {
         INSTANCE;
 
+        /* (non-Javadoc)
+         * @see net.minecraftforge.client.model.ICustomModelLoader#accepts(net.minecraft.util.ResourceLocation)
+         */
         @Override
         public boolean accepts(ResourceLocation modelLocation)
         {
+        	// DEBUG
+        	System.out.print("Checking if accepts resource location = "+modelLocation);
+        	
             return modelLocation.getResourceDomain().equals(MainMod.MODID) && modelLocation.getResourcePath().contains("slime_bag");
         }
 
+        /* (non-Javadoc)
+         * @see net.minecraftforge.client.model.ICustomModelLoader#loadModel(net.minecraft.util.ResourceLocation)
+         */
         @Override
         public IModel loadModel(ResourceLocation modelLocation)
         {
+        	// DEBUG
+        	System.out.println("Loading model");
+        	
             return MODEL;
         }
 
+        /* (non-Javadoc)
+         * @see net.minecraft.client.resources.IResourceManagerReloadListener#onResourceManagerReload(net.minecraft.client.resources.IResourceManager)
+         */
         @Override
         public void onResourceManagerReload(IResourceManager resourceManager)
         {
@@ -179,17 +242,20 @@ public final class ModelSlimeBag implements IModel
     private static final class BakedOverrideHandler extends ItemOverrideList
     {
         public static final BakedOverrideHandler INSTANCE = new BakedOverrideHandler();
+        
         private BakedOverrideHandler()
         {
             super(ImmutableList.of());
+            
+            // DEBUG
+            System.out.print("Constructing BakedOverrideHandler");
         }
 
         @Override
         public IBakedModel handleItemState(IBakedModel originalModel, ItemStack stack, @Nullable World world, @Nullable EntityLivingBase entity)
         {
             FluidStack fluidStack = FluidUtil.getFluidContained(stack);
-            
-            // not a fluid item apparently
+ 
             if (fluidStack == null)
             {
             	// DEBUG
@@ -250,23 +316,35 @@ public final class ModelSlimeBag implements IModel
             this.parent = parent;
             this.transforms = transforms;
             this.cache = cache;
+            
+            // DEBUG
+            System.out.println("Constructing Baked");
         }
 
         @Override
         public ItemOverrideList getOverrides()
         {
+        	// DEBUG
+        	System.out.println("Getting overrides");
+        	
             return BakedOverrideHandler.INSTANCE;
         }
 
         @Override
         public Pair<? extends IBakedModel, Matrix4f> handlePerspective(TransformType cameraTransformType)
         {
+        	// DEBUG
+        	System.out.println("Handling perspective");
+        	
             return PerspectiveMapWrapper.handlePerspective(this, transforms, cameraTransformType);
         }
 
         @Override
         public List<BakedQuad> getQuads(@Nullable IBlockState state, @Nullable EnumFacing side, long rand)
         {
+        	// DEBUG
+        	System.out.println("Getting quads");
+        	
             if(side == null) return quads;
             return ImmutableList.of();
         }

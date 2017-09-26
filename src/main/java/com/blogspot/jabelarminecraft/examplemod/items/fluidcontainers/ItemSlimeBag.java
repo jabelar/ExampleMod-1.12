@@ -1,3 +1,18 @@
+/**
+    Copyright (C) 2017 by jabelar
+
+    This file is part of jabelar's Minecraft Forge modding examples; as such,
+    you can redistribute it and/or modify it under the terms of the GNU
+    General Public License as published by the Free Software Foundation,
+    either version 3 of the License, or (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+    GNU General Public License for more details.
+
+    For a copy of the GNU General Public License see <http://www.gnu.org/licenses/>.
+*/
 package com.blogspot.jabelarminecraft.examplemod.items.fluidcontainers;
 
 import javax.annotation.Nonnull;
@@ -29,12 +44,16 @@ import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 
+// TODO: Auto-generated Javadoc
 @SuppressWarnings("deprecation")
 public class ItemSlimeBag extends Item
 {
 	private final int CAPACITY = Fluid.BUCKET_VOLUME;
 	private final ItemStack emptyStack = new ItemStack(this);
 	
+	/**
+	 * Instantiates a new item slime bag.
+	 */
 	public ItemSlimeBag() 
 	{
 		Utilities.setItemName(this, "slime_bag");
@@ -45,6 +64,9 @@ public class ItemSlimeBag extends Item
 		System.out.println("Constructing ItemSlimeBag");
 	}
 	
+    /* (non-Javadoc)
+     * @see net.minecraft.item.Item#initCapabilities(net.minecraft.item.ItemStack, net.minecraft.nbt.NBTTagCompound)
+     */
     @Override
     public ICapabilityProvider initCapabilities(@Nonnull ItemStack stack, @Nullable NBTTagCompound nbt)
     {
@@ -54,6 +76,9 @@ public class ItemSlimeBag extends Item
         return new FluidHandlerSlimeBag(stack, CAPACITY);
     }
 
+	/* (non-Javadoc)
+	 * @see net.minecraft.item.Item#getSubItems(net.minecraft.creativetab.CreativeTabs, net.minecraft.util.NonNullList)
+	 */
 	@Override
 	public void getSubItems(@Nullable final CreativeTabs tab, final NonNullList<ItemStack> subItems) 
 	{
@@ -88,6 +113,9 @@ public class ItemSlimeBag extends Item
 		}
 	}
 
+	/* (non-Javadoc)
+	 * @see net.minecraft.item.Item#getItemStackDisplayName(net.minecraft.item.ItemStack)
+	 */
 	@Override
 	public String getItemStackDisplayName(final ItemStack stack) 
 	{
@@ -110,13 +138,18 @@ public class ItemSlimeBag extends Item
 
     /**
      * Called when the equipped item is right clicked.
+     *
+     * @param parWorld the par world
+     * @param parPlayer the par player
+     * @param parHand the par hand
+     * @return the action result
      */
     @Override
     @Nonnull
     public ActionResult<ItemStack> onItemRightClick(@Nonnull World parWorld, @Nonnull EntityPlayer parPlayer, @Nonnull EnumHand parHand)
     {
     	// DEBUG
-    	System.out.println("onItemRightClick for ItemSlimeBag");
+    	System.out.println("onItemRightClick for ItemSlimeBag for hand = "+parHand);
     
         ItemStack itemStack = parPlayer.getHeldItem(parHand);
 
@@ -167,6 +200,15 @@ public class ItemSlimeBag extends Item
         return ActionResult.newResult(EnumActionResult.PASS, itemStack);
     }
     
+    /**
+     * Try fill.
+     *
+     * @param parWorld the par world
+     * @param parPlayer the par player
+     * @param parRayTraceTarget the par ray trace target
+     * @param parStack the par stack
+     * @return the action result
+     */
     public ActionResult<ItemStack> tryFill(World parWorld, EntityPlayer parPlayer, RayTraceResult parRayTraceTarget, ItemStack parStack)
     {
     	BlockPos pos = parRayTraceTarget.getBlockPos();
@@ -189,6 +231,15 @@ public class ItemSlimeBag extends Item
         }
     }
     
+    /**
+     * Try place.
+     *
+     * @param parWorld the par world
+     * @param parPlayer the par player
+     * @param pos the pos
+     * @param parStack the par stack
+     * @return the action result
+     */
     public ActionResult<ItemStack> tryPlace(World parWorld, EntityPlayer parPlayer, BlockPos pos, ItemStack parStack)
     {
     	FluidStack fluidStack = getFluidStack(parStack);
@@ -236,6 +287,12 @@ public class ItemSlimeBag extends Item
         }
     }
 
+    /**
+     * Gets the fluid stack.
+     *
+     * @param container the container
+     * @return the fluid stack
+     */
     @Nullable
 	public FluidStack getFluidStack(final ItemStack container) 
     {

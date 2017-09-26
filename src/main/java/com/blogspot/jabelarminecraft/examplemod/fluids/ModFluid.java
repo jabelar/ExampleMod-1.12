@@ -35,12 +35,29 @@ public class ModFluid extends Fluid
 		super(fluidName, still, flowing);
 	}
 	
+	/**
+	 * Instantiates a new mod fluid.
+	 *
+	 * @param fluidName the fluid name
+	 * @param still the still
+	 * @param flowing the flowing
+	 * @param mapColor the map color
+	 */
 	public ModFluid(String fluidName, ResourceLocation still, ResourceLocation flowing, int mapColor) 
 	{
 		this(fluidName, still, flowing);
 		setColor(mapColor);
 	}
 	
+	/**
+	 * Instantiates a new mod fluid.
+	 *
+	 * @param fluidName the fluid name
+	 * @param still the still
+	 * @param flowing the flowing
+	 * @param mapColor the map color
+	 * @param overlayAlpha the overlay alpha
+	 */
 	public ModFluid(String fluidName, ResourceLocation still, ResourceLocation flowing, int mapColor, float overlayAlpha) 
 	{
 		this(fluidName, still, flowing, mapColor);
@@ -69,11 +86,22 @@ public class ModFluid extends Fluid
 		return this;
 	}
 	
+	/**
+	 * Gets the alpha.
+	 *
+	 * @return the alpha
+	 */
 	public float getAlpha()
 	{
 		return overlayAlpha;
 	}
 	
+	/**
+	 * Sets the alpha.
+	 *
+	 * @param parOverlayAlpha the par overlay alpha
+	 * @return the fluid
+	 */
 	public Fluid setAlpha(float parOverlayAlpha)
 	{
 		overlayAlpha = parOverlayAlpha;

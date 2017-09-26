@@ -35,6 +35,8 @@ import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fluids.BlockFluidBase;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.registries.IForgeRegistry;
 
 // TODO: Auto-generated Javadoc
@@ -111,6 +113,7 @@ public class ModBlocks {
 		 * @param event the event
 		 */
 		@SubscribeEvent
+		@SideOnly(Side.CLIENT)
 		public static void onModelEvent(final ModelRegistryEvent event) 
 		{
 			//DEBUG
@@ -124,6 +127,7 @@ public class ModBlocks {
     /**
      * Register block models.
      */
+	@SideOnly(Side.CLIENT)
     public static void registerBlockModels()
     {
 		for (final Block block : SET_BLOCKS) {
@@ -139,6 +143,7 @@ public class ModBlocks {
      *
      * @param parBlock the par block
      */
+	@SideOnly(Side.CLIENT)
     public static void registerBlockModel(Block parBlock)
     {
     	registerBlockModel(parBlock, 0);
@@ -150,6 +155,7 @@ public class ModBlocks {
      * @param parBlock the par block
      * @param parMetaData the par meta data
      */
+	@SideOnly(Side.CLIENT)
     public static void registerBlockModel(Block parBlock, int parMetaData)
     {
         ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(parBlock), parMetaData, new ModelResourceLocation(MainMod.MODID + ":" + parBlock.getUnlocalizedName().substring(5), "inventory"));
@@ -159,6 +165,7 @@ public class ModBlocks {
     /**
      * Register block models.
      */
+	@SideOnly(Side.CLIENT)
     public static void registerItemBlockModels()
     {
 		for (final ItemBlock block : SET_ITEM_BLOCKS) {
@@ -174,6 +181,7 @@ public class ModBlocks {
      *
      * @param parBlock the par block
      */
+	@SideOnly(Side.CLIENT)
     public static void registerItemBlockModel(ItemBlock parBlock)
     {
     	registerItemBlockModel(parBlock, 0);
@@ -185,6 +193,7 @@ public class ModBlocks {
      * @param parBlock the par block
      * @param parMetaData the par meta data
      */
+	@SideOnly(Side.CLIENT)
     public static void registerItemBlockModel(ItemBlock parBlock, int parMetaData)
     {
         ModelLoader.setCustomModelResourceLocation(parBlock, parMetaData, new ModelResourceLocation(MainMod.MODID + ":" + parBlock.getUnlocalizedName().substring(5), "inventory"));

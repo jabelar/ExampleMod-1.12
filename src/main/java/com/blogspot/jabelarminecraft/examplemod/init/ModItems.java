@@ -27,7 +27,7 @@ import com.blogspot.jabelarminecraft.examplemod.items.ItemSwordExtended;
 import com.blogspot.jabelarminecraft.examplemod.items.fluidcontainers.ItemSlimeBag;
 import com.google.common.collect.ImmutableSet;
 
-import net.minecraft.client.renderer.block.model.IBakedModel;
+import net.minecraft.client.renderer.block.model.ModelBakery;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.Item;
 import net.minecraft.item.Item.ToolMaterial;
@@ -37,6 +37,8 @@ import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.registries.IForgeRegistry;
 
 // TODO: Auto-generated Javadoc
@@ -115,11 +117,12 @@ public class ModItems {
 		}
 		
 		/**
-		 * On model event.
+		 * ModelRegistryEvent handler.
 		 *
 		 * @param event the event
 		 */
 		@SubscribeEvent
+		@SideOnly(Side.CLIENT)
 		public static void onModelEvent(final ModelRegistryEvent event) 
 		{
 			//DEBUG
@@ -129,33 +132,40 @@ public class ModItems {
 			for (final Item item : SET_ITEMS_STANDARD) 
 			{
 				registerItemModel(item);
+				
 				// DEBUG
 				System.out.println("Registering item model for: "+item.getRegistryName());
 			}
 			
 			// register custom model items
-	        ModelLoader.setCustomModelResourceLocation(SLIME_BAG, 0, ModelSlimeBag.LOCATION);
+//	        ModelLoader.setCustomModelResourceLocation(SLIME_BAG, 0, ModelSlimeBag.LOCATION);
+//			// DEBUG
+//			System.out.println("Registering item model for: "+SLIME_BAG.getRegistryName());
 		}
 		
 		/**
-		 * On model event.
+		 * ModelBakeEvent handler.
 		 *
 		 * @param event the event
 		 */
 		@SubscribeEvent
+		@SideOnly(Side.CLIENT)
 		public static void onModelEvent(final ModelBakeEvent event) 
 		{
 			//DEBUG
 			System.out.println("Baking item models");
-			
-			Object object =  event.getModelRegistry().getObject(ModelSlimeBag.LOCATION);
-		    if (object instanceof IBakedModel) 
-		    {
-		      event.getModelRegistry().putObject(ModelSlimeBag.LOCATION, ModelSlimeBag.MODEL.bake(null, null, null));
-		    }
-			
-			// register custom model items
-	        ModelLoader.setCustomModelResourceLocation(SLIME_BAG, 0, ModelSlimeBag.LOCATION);
+//			Object object =  event.getModelRegistry().getObject(ModelSlimeBag.LOCATION);
+//		    if (object instanceof IBakedModel) 
+//		    {
+//		      event.getModelRegistry().putObject(ModelSlimeBag.LOCATION, ModelSlimeBag.MODEL.bake(null, null, null));
+//		    }
+//			
+			ModelLoader.setCustomMeshDefinition(SLIME_BAG, stack -> ModelSlimeBag.LOCATION);
+	        ModelBakery.registerItemVariants(SLIME_BAG, ModelSlimeBag.LOCATION);
+
+//			ModelLoader.setCustomModelResourceLocation(SLIME_BAG, 0, ModelSlimeBag.LOCATION);
+			// DEBUG
+			System.out.println("Registering item model for: "+SLIME_BAG.getRegistryName());
 		}
 	}
     
@@ -164,6 +174,7 @@ public class ModItems {
      *
      * @param parItem the par item
      */
+	@SideOnly(Side.CLIENT)
     public static void registerItemModel(Item parItem)
     {
     	registerItemModel(parItem, 0);
@@ -175,6 +186,7 @@ public class ModItems {
      * @param parItem the par item
      * @param parMetaData the par meta data
      */
+	@SideOnly(Side.CLIENT)
     public static void registerItemModel(Item parItem, int parMetaData)
     {
         ModelLoader.setCustomModelResourceLocation(parItem, parMetaData, new ModelResourceLocation(MainMod.MODID + ":" + parItem.getUnlocalizedName().substring(5), "inventory"));

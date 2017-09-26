@@ -23,29 +23,26 @@ import org.lwjgl.util.glu.Sphere;
 
 import com.blogspot.jabelarminecraft.examplemod.MainMod;
 import com.blogspot.jabelarminecraft.examplemod.VersionChecker;
+import com.blogspot.jabelarminecraft.examplemod.client.models.ModelSlimeBag;
 import com.blogspot.jabelarminecraft.examplemod.entities.EntityPigTest;
-import com.blogspot.jabelarminecraft.examplemod.init.ModBlocks;
-import com.blogspot.jabelarminecraft.examplemod.init.ModItems;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.RenderItem;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.entity.RenderPig;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import net.minecraftforge.client.model.ModelLoaderRegistry;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
@@ -75,6 +72,8 @@ public class ClientProxy extends CommonProxy
     {
         // DEBUG
         System.out.println("on Client side");
+        
+		ModelLoaderRegistry.registerLoader(ModelSlimeBag.CustomModelLoader.INSTANCE);
         
         // do common stuff
         super.fmlLifeCycleEvent(event);
@@ -109,8 +108,6 @@ public class ClientProxy extends CommonProxy
 
         // register renderers
         registerEntityRenderers();
-        registerItemRenderers();
-        registerBlockRenderers();
     }
     
     /* (non-Javadoc)
@@ -164,47 +161,6 @@ public class ClientProxy extends CommonProxy
         RenderManager renderManager = Minecraft.getMinecraft().getRenderManager();
         // RenderingRegistry.registerEntityRenderingHandler(EntityGoldenGoose.class, new RenderGoldenGoose(renderManager, new ModelGoldenGoose(), 0.5F)); // 0.5F is shadow size 
     	RenderingRegistry.registerEntityRenderingHandler(EntityPigTest.class, new RenderPig(renderManager));
-    }
-    
-    /**
-     * Register item renderers.
-     */
-    public void registerItemRenderers()
-    {
-        // DEBUG
-        System.out.println("Registering item renderers");
-        
-        registerItemRenderer(ModItems.COW_HIDE);
-        registerItemRenderer(ModItems.SHEEP_SKIN);
-        registerItemRenderer(ModItems.PIG_SKIN);
-        registerItemRenderer(ModItems.HORSE_HIDE);
-        registerItemRenderer(ModItems.SWORD_EXTENDED);
-        // registerItemRenderer(JnaeMod.magicBeans);
-    }
-    
-    /**
-     * Register item renderer.
-     *
-     * @param parItem the par item
-     */
-    public void registerItemRenderer(Item parItem)
-    {
-        RenderItem renderItem = Minecraft.getMinecraft().getRenderItem();
-
-        renderItem.getItemModelMesher().register(parItem, 0, new ModelResourceLocation(MainMod.MODID + ":" + parItem.getUnlocalizedName().substring(5), "inventory"));
-    }
-    
-    /**
-     * Register block renderers.
-     */
-    public void registerBlockRenderers()
-    {
-        // DEBUG
-        System.out.println("Registering block renderers");
-        
-        RenderItem renderItem = Minecraft.getMinecraft().getRenderItem();
-        
-        renderItem.getItemModelMesher().register(Item.getItemFromBlock(ModBlocks.COMPACTOR), 0, new ModelResourceLocation(MainMod.MODID + ":" + ModBlocks.COMPACTOR.getUnlocalizedName().substring(5), "inventory"));
     }
     
     /*     
@@ -294,7 +250,11 @@ public class ClientProxy extends CommonProxy
     
     
     /**
-     * handles the acceleration of an object whilst in a material. 
+     * handles the acceleration of an object whilst in a material.
+     *
+     * @param entityIn the entity in
+     * @param materialIn the material in
+     * @return true, if successful
      */
     @Override
 	public boolean handleMaterialAcceleration(Entity entityIn, Material materialIn)
