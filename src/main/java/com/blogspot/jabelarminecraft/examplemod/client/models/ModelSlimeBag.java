@@ -27,7 +27,6 @@ import javax.vecmath.Matrix4f;
 import org.apache.commons.lang3.tuple.Pair;
 
 import com.blogspot.jabelarminecraft.examplemod.MainMod;
-import com.blogspot.jabelarminecraft.examplemod.init.ModFluids;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
@@ -39,6 +38,7 @@ import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms.TransformType;
+import net.minecraft.client.renderer.block.model.ItemOverride;
 import net.minecraft.client.renderer.block.model.ItemOverrideList;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
@@ -60,7 +60,7 @@ import net.minecraftforge.common.model.TRSRTransformation;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidUtil;
+import net.minecraftforge.fluids.capability.templates.FluidHandlerItemStack;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -77,9 +77,9 @@ public final class ModelSlimeBag implements IModel
     public static final ModelSlimeBag MODEL = new ModelSlimeBag();
 
     @Nullable
-    private final ResourceLocation emptyLocation = new ResourceLocation(MainMod.MODID, "slime_bag_empty");
+    private final ResourceLocation emptyLocation = new ResourceLocation(MainMod.MODID, "slime_bag");
     @Nullable
-    private final ResourceLocation filledLocation = new ResourceLocation(MainMod.MODID, "slime_bag");
+    private final ResourceLocation filledLocation = new ResourceLocation(MainMod.MODID, "slime_bag_filled");
     @Nullable
     private final Fluid fluid;
 
@@ -88,7 +88,7 @@ public final class ModelSlimeBag implements IModel
      */
     public ModelSlimeBag()
     {
-    	this(ModFluids.SLIME);
+    	this(null);
     }
     
     /**
@@ -116,7 +116,13 @@ public final class ModelSlimeBag implements IModel
         return builder.build();
     }
 
-    /* (non-Javadoc)
+
+	@Override
+	public Collection<ResourceLocation> getDependencies() {
+		return ImmutableList.of();
+	}
+
+	/* (non-Javadoc)
      * @see net.minecraftforge.client.model.IModel#bake(net.minecraftforge.common.model.IModelState, net.minecraft.client.renderer.vertex.VertexFormat, java.util.function.Function)
      */
     @Override
@@ -159,8 +165,13 @@ public final class ModelSlimeBag implements IModel
             builder.addAll(ItemTextureQuadConverter.convertTexture(format, transform, filledTexture, fluidSprite, SOUTH_Z_FLUID, EnumFacing.SOUTH, fluid.getColor()));
         }
 
-        return new Baked(this, builder.build(), fluidSprite, format, Maps.immutableEnumMap(transformMap), Maps.newHashMap());
+        return new Baked(this, builder.build(), fluidSprite, format, Maps.immutableEnumMap(transformMap), Maps.<String, IBakedModel>newHashMap());
     }
+
+	@Override
+	public IModelState getDefaultState() {
+		return TRSRTransformation.identity();
+	}
 
     /**
      * Sets the liquid in the model.
@@ -242,7 +253,7 @@ public final class ModelSlimeBag implements IModel
         
         private BakedOverrideHandler()
         {
-            super(ImmutableList.of());
+            super(ImmutableList.<ItemOverride>of());
             
             // DEBUG
             System.out.print("Constructing BakedOverrideHandler");
@@ -253,7 +264,11 @@ public final class ModelSlimeBag implements IModel
         {
 //        	// DEBUG
 //        	System.out.println("FluidHandler = "+FluidUtil.getFluidHandler(stack));
-            FluidStack fluidStack = FluidUtil.getFluidContained(stack);
+//            FluidStack fluidStack = FluidUtil.getFluidContained(stack);
+			FluidStack fluidStack = null;
+			if (stack.hasTagCompound() && stack.getTagCompound().hasKey(FluidHandlerItemStack.FLUID_NBT_KEY)) {
+				fluidStack = FluidStack.loadFluidStackFromNBT(stack.getTagCompound().getCompoundTag(FluidHandlerItemStack.FLUID_NBT_KEY));
+			}
  
             if (fluidStack == null)
             {
@@ -276,14 +291,26 @@ public final class ModelSlimeBag implements IModel
             {
             	// DEBUG
             	System.out.println("The model cache does not have key for fluid name");
+				IModel parent = model.parent.process(ImmutableMap.of("fluid", name));
+				Function<ResourceLocation, TextureAtlasSprite> textureGetter;
+				textureGetter = new Function<ResourceLocation, TextureAtlasSprite>() {
+					@Override
+					public TextureAtlasSprite apply(ResourceLocation location) {
+						return Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(location.toString());
+					}
+				};
+				IBakedModel bakedModel = parent.bake(new SimpleModelState(model.transforms), model.format,
+						textureGetter);
+				model.cache.put(name, bakedModel);
+				return bakedModel;
             	
-                IModel parent = model.parent.process(ImmutableMap.of("fluid", name));
-                Function<ResourceLocation, TextureAtlasSprite> textureGetter;
-                textureGetter = location -> Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(location.toString());
-
-                IBakedModel bakedModel = parent.bake(new SimpleModelState(model.transforms), model.format, textureGetter);
-                model.cache.put(name, bakedModel);
-                return bakedModel;
+//                IModel parent = model.parent.process(ImmutableMap.of("fluid", name));
+//                Function<ResourceLocation, TextureAtlasSprite> textureGetter;
+//                textureGetter = location -> Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(location.toString());
+//
+//                IBakedModel bakedModel = parent.bake(new SimpleModelState(model.transforms), model.format, textureGetter);
+//                model.cache.put(name, bakedModel);
+//                return bakedModel;
             }
             
 //            // DEBUG
