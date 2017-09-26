@@ -18,7 +18,7 @@ package com.blogspot.jabelarminecraft.examplemod.items.fluidcontainers;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import com.blogspot.jabelarminecraft.examplemod.blocks.fluids.FluidHandlerSlimeBag;
+import com.blogspot.jabelarminecraft.examplemod.fluids.FluidHandlerSlimeBag;
 import com.blogspot.jabelarminecraft.examplemod.init.ModFluids;
 import com.blogspot.jabelarminecraft.examplemod.utilities.Utilities;
 

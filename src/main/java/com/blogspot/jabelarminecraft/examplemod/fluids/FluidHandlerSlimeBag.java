@@ -13,7 +13,7 @@
 
     For a copy of the GNU General Public License see <http://www.gnu.org/licenses/>.
 */
-package com.blogspot.jabelarminecraft.examplemod.blocks.fluids;
+package com.blogspot.jabelarminecraft.examplemod.fluids;
 
 import com.blogspot.jabelarminecraft.examplemod.init.ModFluids;
 

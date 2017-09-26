@@ -211,9 +211,6 @@ public final class ModelSlimeBag implements IModel
         @Override
         public boolean accepts(ResourceLocation modelLocation)
         {
-        	// DEBUG
-        	System.out.print("Checking if accepts resource location = "+modelLocation);
-        	
             return modelLocation.getResourceDomain().equals(MainMod.MODID) && modelLocation.getResourcePath().contains("slime_bag");
         }
 
@@ -254,19 +251,21 @@ public final class ModelSlimeBag implements IModel
         @Override
         public IBakedModel handleItemState(IBakedModel originalModel, ItemStack stack, @Nullable World world, @Nullable EntityLivingBase entity)
         {
+//        	// DEBUG
+//        	System.out.println("FluidHandler = "+FluidUtil.getFluidHandler(stack));
             FluidStack fluidStack = FluidUtil.getFluidContained(stack);
  
             if (fluidStack == null)
             {
-            	// DEBUG
-            	System.out.println("fluid stack is null, returning original model");
+//            	// DEBUG
+//            	System.out.println("fluid stack is null, returning original model");
             	
                 // empty bucket
                 return originalModel;
             }
             
-            // DEBUG
-            System.out.print("Fluid stack was not null and fluid amount = "+fluidStack.amount);
+//            // DEBUG
+//            System.out.println("Fluid stack was not null and fluid amount = "+fluidStack.amount);
 
             Baked model = (Baked)originalModel;
 
@@ -287,8 +286,8 @@ public final class ModelSlimeBag implements IModel
                 return bakedModel;
             }
             
-            // DEBUG
-            System.out.println("The model cache already has key so returning the model");
+//            // DEBUG
+//            System.out.println("The model cache already has key so returning the model");
 
             return model.cache.get(name);
         }
@@ -324,27 +323,18 @@ public final class ModelSlimeBag implements IModel
         @Override
         public ItemOverrideList getOverrides()
         {
-        	// DEBUG
-        	System.out.println("Getting overrides");
-        	
             return BakedOverrideHandler.INSTANCE;
         }
 
         @Override
         public Pair<? extends IBakedModel, Matrix4f> handlePerspective(TransformType cameraTransformType)
         {
-        	// DEBUG
-        	System.out.println("Handling perspective");
-        	
             return PerspectiveMapWrapper.handlePerspective(this, transforms, cameraTransformType);
         }
 
         @Override
         public List<BakedQuad> getQuads(@Nullable IBlockState state, @Nullable EnumFacing side, long rand)
         {
-        	// DEBUG
-        	System.out.println("Getting quads");
-        	
             if(side == null) return quads;
             return ImmutableList.of();
         }
