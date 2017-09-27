@@ -23,7 +23,6 @@ import org.lwjgl.util.glu.Sphere;
 
 import com.blogspot.jabelarminecraft.examplemod.MainMod;
 import com.blogspot.jabelarminecraft.examplemod.VersionChecker;
-import com.blogspot.jabelarminecraft.examplemod.client.models.ModelSlimeBag;
 import com.blogspot.jabelarminecraft.examplemod.entities.EntityPigTest;
 
 import net.minecraft.block.Block;
@@ -42,7 +41,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
-import net.minecraftforge.client.model.ModelLoaderRegistry;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
@@ -73,7 +71,6 @@ public class ClientProxy extends CommonProxy
         // DEBUG
         System.out.println("on Client side");
         
-		ModelLoaderRegistry.registerLoader(ModelSlimeBag.CustomModelLoader.INSTANCE);
         
         // do common stuff
         super.fmlLifeCycleEvent(event);

@@ -34,6 +34,7 @@ import net.minecraft.item.Item.ToolMaterial;
 import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.client.model.ModelLoaderRegistry;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -138,9 +139,11 @@ public class ModItems {
 			}
 			
 			// register custom model items
-//	        ModelLoader.setCustomModelResourceLocation(SLIME_BAG, 0, ModelSlimeBag.LOCATION);
-//			// DEBUG
-//			System.out.println("Registering item model for: "+SLIME_BAG.getRegistryName());
+			ModelLoaderRegistry.registerLoader(ModelSlimeBag.CustomModelLoader.INSTANCE);
+			ModelLoader.setCustomMeshDefinition(SLIME_BAG, stack -> ModelSlimeBag.LOCATION);
+	        ModelBakery.registerItemVariants(SLIME_BAG, ModelSlimeBag.LOCATION);
+			// DEBUG
+			System.out.println("Registering item model for: "+SLIME_BAG.getRegistryName());
 		}
 		
 		/**
@@ -153,19 +156,7 @@ public class ModItems {
 		public static void onModelEvent(final ModelBakeEvent event) 
 		{
 			//DEBUG
-			System.out.println("Baking item models");
-//			Object object =  event.getModelRegistry().getObject(ModelSlimeBag.LOCATION);
-//		    if (object instanceof IBakedModel) 
-//		    {
-//		      event.getModelRegistry().putObject(ModelSlimeBag.LOCATION, ModelSlimeBag.MODEL.bake(null, null, null));
-//		    }
-//			
-			ModelLoader.setCustomMeshDefinition(SLIME_BAG, stack -> ModelSlimeBag.LOCATION);
-	        ModelBakery.registerItemVariants(SLIME_BAG, ModelSlimeBag.LOCATION);
-
-//			ModelLoader.setCustomModelResourceLocation(SLIME_BAG, 0, ModelSlimeBag.LOCATION);
-			// DEBUG
-			System.out.println("Registering item model for: "+SLIME_BAG.getRegistryName());
+			System.out.println("Models have been baked");
 		}
 	}
     
