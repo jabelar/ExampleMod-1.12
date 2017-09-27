@@ -22,6 +22,7 @@ import com.blogspot.jabelarminecraft.examplemod.fluids.FluidHandlerSlimeBag;
 import com.blogspot.jabelarminecraft.examplemod.init.ModFluids;
 import com.blogspot.jabelarminecraft.examplemod.utilities.Utilities;
 
+import net.minecraft.block.BlockDispenser;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -37,6 +38,7 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
+import net.minecraftforge.fluids.DispenseFluidContainer;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidActionResult;
 import net.minecraftforge.fluids.FluidStack;
@@ -59,7 +61,8 @@ public class ItemSlimeBag extends Item
 		Utilities.setItemName(this, "slime_bag");
 		setCreativeTab(CreativeTabs.MISC);
 		setMaxStackSize(1);
-		
+        BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(this, DispenseFluidContainer.getInstance());
+	
 		// DEBUG
 		System.out.println("Constructing ItemSlimeBag");
 	}
@@ -70,8 +73,8 @@ public class ItemSlimeBag extends Item
     @Override
     public ICapabilityProvider initCapabilities(@Nonnull ItemStack stack, @Nullable NBTTagCompound nbt)
     {
-//    	// DEBUG
-//    	System.out.println("initCapabilities for ItemSlimeBag");
+    	// DEBUG
+    	System.out.println("initCapabilities for ItemSlimeBag with NBIT = "+stack.getTagCompound()+" and Cap NBT = "+nbt);
     	
         return new FluidHandlerSlimeBag(stack, CAPACITY);
     }
@@ -279,10 +282,10 @@ public class ItemSlimeBag extends Item
 //	            ItemStack emptyStack = !drained.isEmpty() ? drained.copy() : new ItemStack(this);
 	
 	            // DEBUG
-	        	System.out.println("Adding empty slime bag to player inventory = "+empty(getDefaultInstance()));
+	        	System.out.println("Adding empty slime bag to player inventory = "+emptyStack);
 	        	
 	            // add empty bucket to player inventory
-	            return ActionResult.newResult(EnumActionResult.SUCCESS, empty(getDefaultInstance()));
+	            return ActionResult.newResult(EnumActionResult.SUCCESS, emptyStack);
 	        }
 	        else
 	        {
@@ -312,4 +315,14 @@ public class ItemSlimeBag extends Item
     {
 		return FluidUtil.getFluidContained(container);
 	}
+    
+//    @Override
+//	public NBTTagCompound getNBTShareTag(ItemStack stack)
+//    {
+//    	// DEBUG
+//    	System.out.println("tag compound = "+stack.getTagCompound());
+//    	
+//        return stack.getTagCompound();
+//    }
+
  }
