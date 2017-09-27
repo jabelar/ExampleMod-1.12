@@ -262,15 +262,13 @@ public final class ModelSlimeBag implements IModel
         @Override
         public IBakedModel handleItemState(IBakedModel originalModel, ItemStack stack, @Nullable World world, @Nullable EntityLivingBase entity)
         {
-//        	// DEBUG
-//        	System.out.println("FluidHandler = "+FluidUtil.getFluidHandler(stack));
-//            FluidStack fluidStack = FluidUtil.getFluidContained(stack);
 			FluidStack fluidStack = null;
-			if (stack.hasTagCompound() && stack.getTagCompound().hasKey(FluidHandlerItemStack.FLUID_NBT_KEY)) {
+			if (stack.hasTagCompound() && stack.getTagCompound().hasKey(FluidHandlerItemStack.FLUID_NBT_KEY)) 
+			{
 				fluidStack = FluidStack.loadFluidStackFromNBT(stack.getTagCompound().getCompoundTag(FluidHandlerItemStack.FLUID_NBT_KEY));
 			}
  
-            if (fluidStack == null)
+            if (fluidStack == null || fluidStack.amount <= 0)
             {
 //            	// DEBUG
 //            	System.out.println("fluid stack is null, returning original model");

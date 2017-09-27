@@ -134,6 +134,20 @@ public class ItemSlimeBag extends Item
 
 		return I18n.translateToLocal(unlocalizedName).trim();
 	}
+	
+	public static ItemStack empty(ItemStack stack)
+	{
+		if (stack.getItem() instanceof ItemSlimeBag)
+		{
+			FluidStack fluidStack = FluidUtil.getFluidContained(stack);
+			if (fluidStack != null)
+			{
+				fluidStack.amount = 0;
+			}
+		}
+		
+		return stack;	
+	}
 
 
     /**
@@ -176,7 +190,7 @@ public class ItemSlimeBag extends Item
             // can the player place there?
             if (parPlayer.canPlayerEdit(targetPos, mop.sideHit, itemStack))
             {
-                if (fluidStack == null)
+                if (fluidStack == null || fluidStack.amount <= 0)
                 {
                 	// DEBUG
                 	System.out.println("Fluid stack is empty so try to fill");
@@ -261,14 +275,14 @@ public class ItemSlimeBag extends Item
 	            parPlayer.addStat(StatList.getObjectUseStats(this));
 	
 	            parStack.shrink(1);
-	            ItemStack drained = result.getResult();
-	            ItemStack emptyStack = !drained.isEmpty() ? drained.copy() : new ItemStack(this);
+//	            ItemStack drained = result.getResult();
+//	            ItemStack emptyStack = !drained.isEmpty() ? drained.copy() : new ItemStack(this);
 	
 	            // DEBUG
-	        	System.out.println("Adding empty slime bag to player inventory = "+emptyStack);
+	        	System.out.println("Adding empty slime bag to player inventory = "+empty(getDefaultInstance()));
 	        	
 	            // add empty bucket to player inventory
-	            return ActionResult.newResult(EnumActionResult.SUCCESS, emptyStack);
+	            return ActionResult.newResult(EnumActionResult.SUCCESS, empty(getDefaultInstance()));
 	        }
 	        else
 	        {
