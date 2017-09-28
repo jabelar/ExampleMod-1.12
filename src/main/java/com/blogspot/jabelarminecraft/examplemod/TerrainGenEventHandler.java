@@ -17,11 +17,13 @@
 package com.blogspot.jabelarminecraft.examplemod;
 
 import net.minecraftforge.event.terraingen.SaplingGrowTreeEvent;
+import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.eventhandler.Event.Result;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 
+@EventBusSubscriber
 public class TerrainGenEventHandler 
 {
 	/*

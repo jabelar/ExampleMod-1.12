@@ -24,9 +24,10 @@ import net.minecraftforge.fluids.capability.templates.FluidHandlerItemStack;
 // TODO: Auto-generated Javadoc
 public class FluidHandlerSlimeBag extends FluidHandlerItemStack
 {
+	protected static final FluidStack EMPTY = new FluidStack(ModFluids.SLIME, 0); 
 	
 	/**
-	 * Instantiates a new fluid handler slime bag.
+	 * Instantiates a new, empty fluid handler slime bag.
 	 *
 	 * @param parContainerStack the container stack
 	 * @param parCapacity the capacity
@@ -34,7 +35,7 @@ public class FluidHandlerSlimeBag extends FluidHandlerItemStack
 	public FluidHandlerSlimeBag(ItemStack parContainerStack, int parCapacity) 
 	{
 		super(parContainerStack, parCapacity);
-		setFluid(new FluidStack(ModFluids.SLIME, 0)); // start empty
+		setFluid(EMPTY); // start empty
 
 //		// DEBUG
 //		System.out.println("Constructing FluidHandlerSlimeBag with FluidStack = "+getFluid()+" capacity = "+capacity+" and container = "+container);
@@ -46,6 +47,7 @@ public class FluidHandlerSlimeBag extends FluidHandlerItemStack
     @Override
 	protected void setContainerToEmpty()
     {
+    	setFluid(EMPTY);
         container.getTagCompound().removeTag(FLUID_NBT_KEY);
     }
 

@@ -37,10 +37,6 @@ import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiIngame;
 import net.minecraft.client.gui.ScaledResolution;
-import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.enchantment.EnchantmentFrostWalker;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
@@ -83,7 +79,11 @@ import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent.NameFormat;
+import net.minecraftforge.fluids.FluidEvent.FluidDrainingEvent;
+import net.minecraftforge.fluids.FluidEvent.FluidFillingEvent;
+import net.minecraftforge.fluids.FluidRegistry.FluidRegisterEvent;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent.OnConfigChangedEvent;
+import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedOutEvent;
@@ -95,6 +95,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 // TODO: Auto-generated Javadoc
+@EventBusSubscriber
 public class EventHandler 
 {
 	/*
@@ -236,7 +237,9 @@ public class EventHandler
 	public static Method onDeathUpdate = ReflectionHelper.findMethod(EntityLivingBase.class, "onDeathUpdate", "func_70609_aI", new Class[] {});
 	
     /**
-     * On event.
+     * In order to allow custom fluids to cause reduction of air supply
+     * and drowning damage, need to copy almost entirety of vanilla functions
+     * and modify the hard-coded WATER to accept other fluids.
      *
      * @param event the event
      * @throws IllegalArgumentException the illegal argument exception
@@ -447,7 +450,7 @@ public class EventHandler
                 if (!theEntity.canBreatheUnderwater() && !theEntity.isPotionActive(MobEffects.WATER_BREATHING) && !flag1)
                 {
 //                	// DEBUG
-//                	System.out.println("Entity "+theEntity.getName()+" is drowning in fluid");
+//                	Debug.print("Entity "+theEntity.getName()+" is drowning in fluid");
                 	
                 	// decreaseAirSupply() expanded
                     theEntity.setAir(EnchantmentHelper.getRespirationModifier(theEntity) > 0 && theEntity.getRNG().nextInt(EnchantmentHelper.getRespirationModifier(theEntity) + 1) > 0 ? theEntity.getAir() : theEntity.getAir() - 1);
@@ -1043,11 +1046,11 @@ public class EventHandler
 //    }
     
     /**
- * On event.
- *
- * @param event the event
- */
-@SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
+	 * On event.
+	 *
+	 * @param event the event
+	 */
+    @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
     public void onEvent(NameFormat event)
     {
     	// DEBUG
@@ -1333,11 +1336,12 @@ public class EventHandler
 //    }
     
     /**
- * On event.
- *
- * @param event the event
- */
-@SideOnly(Side.CLIENT)
+	 * Use fog density to create the effect of being under custom fluid, similar
+	 * to how being under water does it.
+	 *
+	 * @param event the event
+	 */
+    @SideOnly(Side.CLIENT)
     @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
     public void onEvent(FogDensity event)
     {
@@ -1357,7 +1361,7 @@ public class EventHandler
 
     
     /**
-     * On event.
+     * Use fog color to color the view when submerged in a custom fluid.
      *
      * @param event the event
      */
@@ -1397,7 +1401,7 @@ public class EventHandler
     	}
 //        if (event.getGui() instanceof GuiIngameMenu)
 //        {
-//            System.out.println("GuiOpenEvent for GuiIngameModOptions");
+//            Debug.print("GuiOpenEvent for GuiIngameModOptions");
 //            event.setGui(new GuiConfig(null));        
 //        }
     }
@@ -1424,7 +1428,7 @@ public class EventHandler
 //    }
 
     /**
-	 * On event.
+	 * Process an extended reach weapon.
 	 *
 	 * @param event the event
 	 */
@@ -1472,7 +1476,7 @@ public class EventHandler
    }
     
     /**
-     * On event.
+     * Render the air indicator when submerged in a liquid.
      *
      * @param event the event
      */
@@ -1545,14 +1549,14 @@ public class EventHandler
 //		if (event.getType() == ElementType.ALL)
 //		{
 ////			// DEBUG
-////			System.out.println("render game overlay");
+////			Debug.print("render game overlay");
 //			
 //			EntityPlayer thePlayer = Minecraft.getMinecraft().player;
 //			
 //			if (thePlayer.isInsideOfMaterial(ModMaterials.SLIME))
 //			{
 ////				// DEBUG
-////				System.out.println("player is inside of material");
+////				Debug.print("player is inside of material");
 //				
 //				drawFluidOverlay(ModFluids.SLIME.getColor(), 0.2F);
 //			}			
@@ -1569,46 +1573,11 @@ public class EventHandler
 //			if (theBlock instanceof ModBlockFluidClassic)
 //			{
 //				// DEBUG
-//				System.out.println("rendering fluid overlay");
+//				Debug.print("rendering fluid overlay");
 //				renderFluidOverlay(event.getRenderPartialTicks());
 //			}
 //		}
 //	}
-  		
-    /**
- * Draws a rectangle with the specified color.
- *
- * @param parColor the par color
- * @param parAlpha the par alpha
- */
-	@SideOnly(Side.CLIENT)
-     public static void drawFluidOverlay(int parColor, float parAlpha)
-    {	
-		int left = 0;
-		int top = 0;
-		int right = Minecraft.getMinecraft().displayWidth;
-		int bottom = Minecraft.getMinecraft().displayHeight;
-
-		Color color = Color.GREEN;
-//        int red = color.getRed();
-//        int green = color.getGreen();
-//        int blue = color.getBlue();
-        Tessellator tessellator = Tessellator.getInstance();
-        BufferBuilder bufferbuilder = tessellator.getBuffer();
-        GlStateManager.enableBlend();
-        GlStateManager.disableTexture2D();
-        GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
-        GlStateManager.color(color.getRed(), color.getGreen(), color.getBlue(), parAlpha);
-        bufferbuilder.begin(7, DefaultVertexFormats.POSITION);
-        bufferbuilder.pos(left, bottom, 0.0D).endVertex();
-        bufferbuilder.pos(right, bottom, 0.0D).endVertex();
-        bufferbuilder.pos(right, top, 0.0D).endVertex();
-        bufferbuilder.pos(left, top, 0.0D).endVertex();
-        tessellator.draw();
-        GlStateManager.enableTexture2D();
-        GlStateManager.disableBlend();
-    }
-
 //
 //    @SideOnly(Side.CLIENT)
 //    @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
@@ -1696,36 +1665,40 @@ public class EventHandler
 //    {
 //        
 //    }
-//
+
 //    @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-//    public void onEvent(FluidContainerRegisterEvent event)
-//    {
-//        
-//    }
-//
-//    @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-//    public void onEvent(FluidDrainingEvent event)
-//    {
-//        
-//    }
-//
-//    @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-//    public void onEvent(FluidFillingEvent event)
-//    {
-//        
-//    }
+//	public void onEvent(FluidContainerRegisterEvent event)
+//	{
+//    	// DEBUG
+//	    Debug.print("Registering fluid container");
+//	}
+
+    @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
+    public void onEvent(FluidDrainingEvent event)
+    {
+    	// DEBUG
+    	System.out.println("On client = "+event.getWorld().isRemote+" Draining fluid = "+event.getFluid().getFluid()+" with amount = "+event.getAmount());     
+    }
+
+    @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
+    public void onEvent(FluidFillingEvent event)
+    {
+    	// DEBUG
+    	System.out.println("On client = "+event.getWorld().isRemote+" Filling fluid = "+event.getFluid().getFluid()+" with amount = "+event.getAmount());     
+    }
 //
 //    @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
 //    public void onEvent(FluidMotionEvent event)
 //    {
 //        
 //    }
-//
-//    @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-//    public void onEvent(FluidRegisterEvent event)
-//    {
-//        
-//    }
+
+    @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
+    public void onEvent(FluidRegisterEvent event)
+    {
+    	// DEBUG
+    	System.out.println("Registering fluid");
+    }
 //
 //    @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
 //    public void onEvent(FluidSpilledEvent event)
@@ -1859,7 +1832,7 @@ public class EventHandler
 //    public void onEvent(PlayerRespawnEvent event)
 //    {
 //        // DEBUG
-//        System.out.println("The memories of past existences are but glints of light.");
+//        Debug.print("The memories of past existences are but glints of light.");
 //        
 //    }
 //

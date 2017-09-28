@@ -16,7 +16,9 @@
 
 package com.blogspot.jabelarminecraft.examplemod;
 
+import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 
+@EventBusSubscriber
 public class OreGenEventHandler 
 {
 //    @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)

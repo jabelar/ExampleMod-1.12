@@ -20,9 +20,13 @@ import javax.annotation.Nullable;
 
 import com.blogspot.jabelarminecraft.examplemod.fluids.FluidHandlerSlimeBag;
 import com.blogspot.jabelarminecraft.examplemod.init.ModFluids;
+import com.blogspot.jabelarminecraft.examplemod.utilities.ItemStackCopy;
 import com.blogspot.jabelarminecraft.examplemod.utilities.Utilities;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockDispenser;
+import net.minecraft.block.BlockLiquid;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -31,8 +35,10 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.stats.StatList;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.text.translation.I18n;
@@ -43,8 +49,12 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidActionResult;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
+import net.minecraftforge.fluids.IFluidBlock;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
+import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandlerItem;
+import net.minecraftforge.fluids.capability.templates.FluidHandlerItemStack;
+import net.minecraftforge.items.IItemHandler;
 
 // TODO: Auto-generated Javadoc
 @SuppressWarnings("deprecation")
@@ -62,8 +72,8 @@ public class ItemSlimeBag extends Item
 		setCreativeTab(CreativeTabs.MISC);
 		setMaxStackSize(1);
         BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(this, DispenseFluidContainer.getInstance());
-	
-		// DEBUG
+     
+        // DEBUG
 		System.out.println("Constructing ItemSlimeBag");
 	}
 	
@@ -74,7 +84,7 @@ public class ItemSlimeBag extends Item
     public ICapabilityProvider initCapabilities(@Nonnull ItemStack stack, @Nullable NBTTagCompound nbt)
     {
     	// DEBUG
-    	System.out.println("initCapabilities for ItemSlimeBag with NBIT = "+stack.getTagCompound()+" and Cap NBT = "+nbt);
+    	System.out.println("initCapabilities for ItemSlimeBag with NBT = "+stack.getTagCompound()+" and Cap NBT = "+nbt);
     	
         return new FluidHandlerSlimeBag(stack, CAPACITY);
     }
@@ -182,8 +192,9 @@ public class ItemSlimeBag extends Item
         System.out.println("Slime bag used");
         
         BlockPos clickPos = mop.getBlockPos();
+                
         FluidStack fluidStack = getFluidStack(itemStack);
-    	
+            	
         // can we place liquid there?
         if (parWorld.isBlockModifiable(parPlayer, clickPos))
         {
@@ -229,10 +240,8 @@ public class ItemSlimeBag extends Item
     public ActionResult<ItemStack> tryFill(World parWorld, EntityPlayer parPlayer, RayTraceResult parRayTraceTarget, ItemStack parStack)
     {
     	BlockPos pos = parRayTraceTarget.getBlockPos();
-        ItemStack resultStack = parStack.copy();
-        resultStack.setCount(1);
 
-        FluidActionResult filledResult = FluidUtil.tryPickUpFluid(resultStack, parPlayer, parWorld, pos, parRayTraceTarget.sideHit);
+        FluidActionResult filledResult = FluidUtil.tryPickUpFluid(parStack, parPlayer, parWorld, pos, parRayTraceTarget.sideHit);
         if (filledResult.isSuccess())
         {
         	// DEBUG
@@ -247,6 +256,84 @@ public class ItemSlimeBag extends Item
             return ActionResult.newResult(EnumActionResult.FAIL, parStack);
         }
     }
+    /**
+     * Attempts to pick up a fluid in the world and put it in an empty container item.
+     *
+     * @param emptyContainer The empty container to fill.
+     *                       Will not be modified directly, if modifications are necessary a modified copy is returned in the result.
+     * @param playerIn       The player filling the container. Optional.
+     * @param worldIn        The world the fluid is in.
+     * @param pos            The position of the fluid in the world.
+     * @param side           The side of the fluid that is being drained.
+     * @return a {@link FluidActionResult} holding the result and the resulting container.
+     */
+    @Nonnull
+    public static FluidActionResult tryPickUpFluid(@Nonnull ItemStack emptyContainer, @Nullable EntityPlayer playerIn, World worldIn, BlockPos pos, EnumFacing side)
+    {
+        if (emptyContainer.isEmpty() || worldIn == null || pos == null)
+        {
+            return FluidActionResult.FAILURE;
+        }
+
+        IBlockState state = worldIn.getBlockState(pos);
+        Block block = state.getBlock();
+
+        if (block instanceof IFluidBlock || block instanceof BlockLiquid)
+        {
+            IFluidHandler targetFluidHandler = FluidUtil.getFluidHandler(worldIn, pos, side);
+            if (targetFluidHandler != null)
+            {
+                return tryFillContainer(emptyContainer, targetFluidHandler, Integer.MAX_VALUE, playerIn, true);
+            }
+        }
+        return FluidActionResult.FAILURE;
+    } 
+    
+
+    /**
+     * Fill a container from the given fluidSource.
+     *
+     * @param parStack   The container to be filled. Will not be modified.
+     *                    Separate handling must be done to reduce the stack size, stow containers, etc, on success.
+     *                    See {@link  #tryFillContainerAndStow(ItemStack, IFluidHandler, IItemHandler, int, EntityPlayer)}.
+     * @param fluidSource The fluid handler to be drained.
+     * @param maxAmount   The largest amount of fluid that should be transferred.
+     * @param player      The player to make the filling noise. Pass null for no noise.
+     * @param doFill      true if the container should actually be filled, false if it should be simulated.
+     * @return a {@link FluidActionResult} holding the filled container if successful.
+     */
+    @Nonnull
+    public static FluidActionResult tryFillContainer(@Nonnull ItemStack parStack, IFluidHandler fluidSource, int maxAmount, @Nullable EntityPlayer player, boolean doFill)
+    {
+//        ItemStack containerCopy = ItemHandlerHelper.copyStackWithSize(container, 1); // do not modify the input
+    	ItemStackCopy.store(parStack);
+    	IFluidHandlerItem containerFluidHandler = FluidUtil.getFluidHandler(parStack);
+        if (containerFluidHandler != null)
+        {
+            FluidStack simulatedTransfer = FluidUtil.tryFluidTransfer(containerFluidHandler, fluidSource, maxAmount, false);
+            if (simulatedTransfer != null)
+            {
+                if (doFill)
+                {
+                    FluidUtil.tryFluidTransfer(containerFluidHandler, fluidSource, maxAmount, true);
+                    if (player != null)
+                    {
+                        SoundEvent soundevent = simulatedTransfer.getFluid().getFillSound(simulatedTransfer);
+                        player.playSound(soundevent, 1f, 1f);
+                    }
+                }
+                else
+                {
+                    containerFluidHandler.fill(simulatedTransfer, true);
+                }
+
+                ItemStack resultContainer = containerFluidHandler.getContainer();
+                return new FluidActionResult(resultContainer);
+            }
+        }
+        return FluidActionResult.FAILURE;
+    }
+
     
     /**
      * Try place.
@@ -278,8 +365,6 @@ public class ItemSlimeBag extends Item
 	            parPlayer.addStat(StatList.getObjectUseStats(this));
 	
 	            parStack.shrink(1);
-//	            ItemStack drained = result.getResult();
-//	            ItemStack emptyStack = !drained.isEmpty() ? drained.copy() : new ItemStack(this);
 	
 	            // DEBUG
 	        	System.out.println("Adding empty slime bag to player inventory = "+emptyStack);
@@ -313,16 +398,28 @@ public class ItemSlimeBag extends Item
     @Nullable
 	public FluidStack getFluidStack(final ItemStack container) 
     {
-		return FluidUtil.getFluidContained(container);
+		if (container.hasTagCompound() && container.getTagCompound().hasKey(FluidHandlerItemStack.FLUID_NBT_KEY)) {
+			return FluidStack.loadFluidStackFromNBT(container.getTagCompound().getCompoundTag(FluidHandlerItemStack.FLUID_NBT_KEY));
+		}
+		return null;
+//		return FluidUtil.getFluidContained(container);
 	}
     
-//    @Override
-//	public NBTTagCompound getNBTShareTag(ItemStack stack)
-//    {
-//    	// DEBUG
-//    	System.out.println("tag compound = "+stack.getTagCompound());
-//    	
-//        return stack.getTagCompound();
-//    }
+    /**
+     * If this function returns true (or the item is damageable), the ItemStack's NBT tag will be sent to the client.
+     */
+    @Override
+	public boolean getShareTag()
+    {
+        return true;
+    }
+    @Override
+	public NBTTagCompound getNBTShareTag(ItemStack stack)
+    {
+    	// DEBUG
+    	System.out.println("tag compound = "+stack.getTagCompound());
+    	
+        return stack.getTagCompound();
+    }
 
  }

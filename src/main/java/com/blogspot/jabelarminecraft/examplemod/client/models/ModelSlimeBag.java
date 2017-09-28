@@ -256,7 +256,7 @@ public final class ModelSlimeBag implements IModel
             super(ImmutableList.<ItemOverride>of());
             
             // DEBUG
-            System.out.print("Constructing BakedOverrideHandler");
+            System.out.println("Constructing BakedOverrideHandler");
         }
 
         @Override

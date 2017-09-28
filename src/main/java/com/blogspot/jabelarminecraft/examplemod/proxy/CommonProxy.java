@@ -20,10 +20,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import com.blogspot.jabelarminecraft.examplemod.EventHandler;
 import com.blogspot.jabelarminecraft.examplemod.MainMod;
-import com.blogspot.jabelarminecraft.examplemod.OreGenEventHandler;
-import com.blogspot.jabelarminecraft.examplemod.TerrainGenEventHandler;
 import com.blogspot.jabelarminecraft.examplemod.client.gui.GuiHandler;
 import com.blogspot.jabelarminecraft.examplemod.commands.CommandStructureCapture;
 import com.blogspot.jabelarminecraft.examplemod.entities.EntityPigTest;
@@ -54,7 +51,6 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
@@ -91,7 +87,7 @@ public class CommonProxy
      * @param event the event
      */
     public void fmlLifeCycleEvent(FMLPreInitializationEvent event)
-    { 
+    {     	
         // load configuration before doing anything else
         // got config tutorial from http://www.minecraftforge.net/wiki/How_to_make_an_advanced_configuration_file
         initConfig(event);
@@ -117,12 +113,6 @@ public class CommonProxy
      */
     public void fmlLifeCycleEvent(FMLInitializationEvent event)
     {
-        // register custom event listeners
-        registerEventListeners();
-         
-        // register recipes here to allow use of items from other mods
-        registerRecipes();
-        
         // register Advancements here to allow use of items from other mods
         registerAdvancements();
         
@@ -314,70 +304,6 @@ public class CommonProxy
    }
 
     /**
-     * Registers recipes.
-     */
-    public void registerRecipes()
-    {
-//        // DEBUG
-//        System.out.println("Registering recipes");
-//                       
-//        // examples:
-//        //        GameRegistry.addRecipe(recipe);
-//        //        GameRegistry.addShapedRecipe(output, params);
-//        //        GameRegistry.addShapelessRecipe(output, params);
-//        //        GameRegistry.addSmelting(input, output, xp);
-//        GameRegistry.addShapedRecipe(new ItemStack(Item.getItemFromBlock(BlockSmith.blockGrinder), 1), 
-//                new Object[]
-//                {
-//                    "ABA",
-//                    "A A",
-//                    "CCC",
-//                    'A', Items.STICK, 'B', Blocks.STONE, 'C', Blocks.COBBLESTONE
-//                });
-//        GameRegistry.addShapedRecipe(new ItemStack(BlockSmith.blockDeconstructor), 
-//                new Object[]
-//                {
-//                    "SSS", 
-//                    "SXS", 
-//                    "SSS", 
-//                    'X', Blocks.CRAFTING_TABLE, 'S', Blocks.COBBLESTONE
-//                });
-//        GameRegistry.addShapedRecipe(new ItemStack(Items.IRON_HORSE_ARMOR), 
-//                new Object[]
-//                {
-//                    "  S", 
-//                    "SXS", 
-//                    "SSS", 
-//                    'X', Blocks.WOOL, 'S', Items.IRON_INGOT
-//                });
-//        GameRegistry.addShapedRecipe(new ItemStack(Items.GOLDEN_HORSE_ARMOR), 
-//                new Object[]
-//                {
-//                    "  S", 
-//                    "SXS", 
-//                    "SSS", 
-//                    'X', Blocks.WOOL, 'S', Items.GOLD_INGOT
-//                });
-//        GameRegistry.addShapedRecipe(new ItemStack(Items.DIAMOND_HORSE_ARMOR), 
-//                new Object[]
-//                {
-//                    "  S", 
-//                    "SXS", 
-//                    "SSS", 
-//                    'X', Blocks.WOOL, 'S', Items.DIAMOND
-//                });
-//        GameRegistry.addShapedRecipe(new ItemStack(Items.SADDLE), 
-//                new Object[]
-//                {
-//                    "SSS", 
-//                    "SXS", 
-//                    "X X", 
-//                    'X', Items.IRON_INGOT, 'S', Items.LEATHER
-//                });
-//
-    }
-
-    /**
      * Registers entities as mod entities.
      */
     protected void registerEntities()
@@ -486,19 +412,20 @@ public class CommonProxy
         
         // example: GameRegistry.registerFuelHandler(handler);
      }
- 
-    /**
-     * Register event listeners.
-     */
-    protected void registerEventListeners() 
-    {
-        // DEBUG
-        System.out.println("Registering event listeners");
-
-        MinecraftForge.EVENT_BUS.register(new EventHandler());
-        MinecraftForge.TERRAIN_GEN_BUS.register(new TerrainGenEventHandler());
-        MinecraftForge.ORE_GEN_BUS.register(new OreGenEventHandler());        
-    }
+// 
+//     No longer needed now that there is @EventBusSubscriber annotation
+//    /**
+//     * Register event listeners.
+//     */
+//    protected void registerEventListeners() 
+//    {
+//        // DEBUG
+//        System.out.println("Registering event listeners");
+//
+//        MinecraftForge.EVENT_BUS.register(new EventHandler());
+//        MinecraftForge.TERRAIN_GEN_BUS.register(new TerrainGenEventHandler());
+//        MinecraftForge.ORE_GEN_BUS.register(new OreGenEventHandler());        
+//    }
     
     /**
      * Register Advancements.

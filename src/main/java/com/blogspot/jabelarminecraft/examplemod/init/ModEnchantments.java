@@ -18,6 +18,7 @@ package com.blogspot.jabelarminecraft.examplemod.init;
 import java.util.Set;
 
 import com.blogspot.jabelarminecraft.examplemod.MainMod;
+import com.blogspot.jabelarminecraft.examplemod.utilities.ModLogger;
 import com.google.common.collect.ImmutableSet;
 
 import net.minecraft.block.Block;
@@ -56,7 +57,7 @@ public class ModEnchantments
 		{
 			final IForgeRegistry<EntityEntry> registry = event.getRegistry();
 
-	        System.out.println("Registering recipes");
+	        ModLogger.print("Registering recipes");
 
 	        for (final EntityEntry entityEntry : SET_INSTANCES) {
 				registry.register(entityEntry);
