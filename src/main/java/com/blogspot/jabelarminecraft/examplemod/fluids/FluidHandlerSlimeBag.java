@@ -47,7 +47,7 @@ public class FluidHandlerSlimeBag extends FluidHandlerItemStack
     @Override
 	protected void setContainerToEmpty()
     {
-    	setFluid(EMPTY);
+    	setFluid(EMPTY); // some code looks at level, some looks at lack of handler (tag)
         container.getTagCompound().removeTag(FLUID_NBT_KEY);
     }
 
@@ -60,79 +60,9 @@ public class FluidHandlerSlimeBag extends FluidHandlerItemStack
         return (fluid.getFluid() == ModFluids.SLIME);
     }
     
+    // rename getFluid() method since it is confusing as it returns a fluid stack
     public FluidStack getFluidStack()
     {
     	return getFluid();
     }
-    
-    @Override
-    public FluidStack drain(FluidStack sourceFluidStack, boolean doDrain)
-    {
-    	// check if source is already empty
-        if (sourceFluidStack == null)
-        {
-            return null;
-        }
-        
-        // check that fluid types match
-        if (!sourceFluidStack.isFluidEqual(getFluidStack())) 
-        {
-        	return null;
-        }
-        
-        return drain(sourceFluidStack.amount, doDrain);
-    }
-
-    @Override
-    public FluidStack drain(int sourceMaxAmount, boolean doDrain)
-    { 
-    	// would be interesting to allow multiple count
-    	// but keep it simple for now.
-        if (container.getCount() != 1)
-        {
-            return null;
-        }
-        
-        // check that source isn't already empty
-        if (sourceMaxAmount <= 0)
-        {
-        	return null;
-        }
-
-        // get destination fluid stack
-        FluidStack sourceFluidStack = getFluidStack();
-        
-        // check if destination fluid stack is malformed
-        if (sourceFluidStack == null || sourceFluidStack.amount <= 0 )
-        {
-            return null;
-        }
-        
-        // check if fluid type is possible to drain
-        if (!canDrainFluidType(sourceFluidStack))
-		{
-        	return null;
-		}
-
-        final int drainAmount = Math.min(sourceFluidStack.amount, sourceMaxAmount);
-
-        FluidStack drained = sourceFluidStack.copy();
-        drained.amount = drainAmount;
-
-        if (doDrain)
-        {
-            sourceFluidStack.amount -= drainAmount;
-            if (sourceFluidStack.amount == 0)
-            {
-                setContainerToEmpty();
-            }
-            else
-            {
-                setFluid(sourceFluidStack);
-            }
-        }
-
-        return drained;
-    }
-
 }

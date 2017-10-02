@@ -389,29 +389,23 @@ public class ItemSlimeBag extends Item
 		                    	            // success!
 		                    	            parPlayer.addStat(StatList.getObjectUseStats(this));
 		                    	
-		                    	            // handle case where container is fully empty
+		                    	            // clamp value to non-negative
 		                    	            if (containerFluidStack.amount <= 0)
 		                    	            {
-		                    	            	// clamp value to non-negative
 		                    	            	containerFluidStack.amount = 0; 
 		                    	            	
 		                    	            	// DEBUG
 		                    	            	System.out.println("fully drained the container so returning empty container");
-		                    	            	
-				    							// update tag data
-		                    	            	updateFluidNBT(parStack, containerFluidStack);
-				    					        
-				    					        // send packet to update player
-				    							if (parPlayer instanceof EntityPlayerMP)
-				    							{
-				    								// DEBUG
-				    								System.out.println("Sending player inventory update");
-					    					        ((EntityPlayerMP)parPlayer).connection.sendPacket(new SPacketHeldItemChange(parPlayer.inventory.currentItem));
-				    							}
-				    							
-				    							// DEBUG
-				    							System.out.println("After transfer block fluid stack = "+blockFluidStack.getFluid()+" "+blockFluidStack.amount+" and container fluid stack now = "+containerFluidStack.getFluid()+" "+containerFluidStack.amount);
 		                    	            }
+	                    	            	
+			    							// update tag data
+	                    	            	updateFluidNBT(parStack, containerFluidStack);
+			    					        
+			    					        // send packet to update player
+	                    	            	sendUpdatePacketToClient(parPlayer);
+			    							
+			    							// DEBUG
+			    							System.out.println("After transfer block fluid stack = "+blockFluidStack.getFluid()+" "+blockFluidStack.amount+" and container fluid stack now = "+containerFluidStack.getFluid()+" "+containerFluidStack.amount);
 			            					                    	        	
 			                    	        parWorld.setBlockState(parPos, blockToPlace.getDefaultState());
 
@@ -442,7 +436,22 @@ public class ItemSlimeBag extends Item
         }
     }
    
-    private void updateFluidNBT(ItemStack parItemStack, FluidStack parFluidStack) 
+    private void sendUpdatePacketToClient(EntityPlayer parPlayer) 
+    {
+    	
+		if (parPlayer instanceof EntityPlayerMP)
+		{
+			// DEBUG
+			System.out.println("Sending player inventory update");
+	        ((EntityPlayerMP)parPlayer).connection.sendPacket(new SPacketHeldItemChange(parPlayer.inventory.currentItem));
+		}
+		else
+		{
+			// do nothing
+		}		
+	}
+
+	private void updateFluidNBT(ItemStack parItemStack, FluidStack parFluidStack) 
     {
         if (!parItemStack.hasTagCompound())
         {
@@ -593,24 +602,10 @@ public class ItemSlimeBag extends Item
 	    							parPlayer.playSound(soundevent, 1f, 1f);
 	    							
 	    							// update tag data
-	    					        if (!parContainerStack.hasTagCompound())
-	    					        {
-	    					            parContainerStack.setTagCompound(new NBTTagCompound());
-	    					        }
-	    					        NBTTagCompound fluidTag = new NBTTagCompound();
-	    					        containerFluidStack.writeToNBT(fluidTag);
-	    					        parContainerStack.getTagCompound().setTag(FluidHandlerItemStack.FLUID_NBT_KEY, fluidTag);
-
-	    					        // DEBUG
-	    					        System.out.println("Wrote fluid tag to container item stack = "+fluidTag);
+                	            	updateFluidNBT(parContainerStack, containerFluidStack);
 	    					        
 	    					        // send packet to update player
-	    							if (parPlayer instanceof EntityPlayerMP)
-	    							{
-	    								// DEBUG
-	    								System.out.println("Sending player inventory update");
-		    					        ((EntityPlayerMP)parPlayer).connection.sendPacket(new SPacketHeldItemChange(parPlayer.inventory.currentItem));
-	    							}
+                	            	sendUpdatePacketToClient(parPlayer);
 	    							
 	    							// DEBUG
 	    							System.out.println("After transfer source fluid stack = "+sourceFluidStack.getFluid()+" "+sourceFluidStack.amount+" and container fluid stack now = "+containerFluidStack.getFluid()+" "+containerFluidStack.amount);
