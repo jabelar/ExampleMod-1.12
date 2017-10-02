@@ -15,6 +15,8 @@
 */
 package com.blogspot.jabelarminecraft.examplemod.blocks.fluids;
 
+import javax.annotation.Nonnull;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockStairs;
 import net.minecraft.block.material.Material;
@@ -28,6 +30,8 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.BlockFluidClassic;
 import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidUtil;
 
 // TODO: Auto-generated Javadoc
 public class ModBlockFluidClassic extends BlockFluidClassic
@@ -227,4 +231,18 @@ public class ModBlockFluidClassic extends BlockFluidClassic
             return !flag && iblockstate.getBlockFaceShape(worldIn, pos, side) == BlockFaceShape.SOLID;
         }
     }
+    
+    /* IFluidBlock */
+    @Override
+    public int place(World world, BlockPos pos, @Nonnull FluidStack fluidStack, boolean doPlace)
+    {
+
+        if (doPlace)
+        {
+            FluidUtil.destroyBlockOnFluidPlacement(world, pos);
+            world.setBlockState(pos, this.getDefaultState(), 11);
+        }
+        return fluidStack.amount;
+    }
+
 }

@@ -47,7 +47,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.fluids.DispenseFluidContainer;
 import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidActionResult;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.IFluidBlock;
@@ -65,7 +64,7 @@ import net.minecraftforge.fluids.capability.wrappers.FluidBlockWrapper;
 public class ItemSlimeBag extends Item
 {
 	private final int CAPACITY = Fluid.BUCKET_VOLUME;
-	private final ItemStack emptyStack = new ItemStack(this);
+	private final ItemStack EMPTY_STACK = new ItemStack(this);
 	
 	/**
 	 * Instantiates a new item slime bag.
@@ -101,7 +100,7 @@ public class ItemSlimeBag extends Item
 	{
 		if (!this.isInCreativeTab(tab)) return;
 
-		subItems.add(emptyStack);
+		subItems.add(EMPTY_STACK);
 
 		final FluidStack fluidStack = new FluidStack(ModFluids.SLIME, CAPACITY);
 		final ItemStack stack = new ItemStack(this);
@@ -214,7 +213,6 @@ public class ItemSlimeBag extends Item
                 	System.out.println("Fluid stack in item is empty so try to fill");
                 	
                 	return tryFillAlt(parWorld, parPlayer, mop, itemStack);
-//                	return tryFill(parWorld, parPlayer, mop, itemStack);
                 }
                 else
                 {     
@@ -230,7 +228,7 @@ public class ItemSlimeBag extends Item
     	        System.out.println("Failed to place fluid because player cannot edit");
     	
     	        // couldn't place liquid there
-    	        return ActionResult.newResult(EnumActionResult.PASS, itemStack);
+    	        return ActionResult.newResult(EnumActionResult.FAIL, itemStack);
             }
          }
         else // cannot place blocks at that location
@@ -239,7 +237,7 @@ public class ItemSlimeBag extends Item
 	        System.out.println("Failed to place fluid because location not modifiable");
 	
 	        // couldn't place liquid there
-	        return ActionResult.newResult(EnumActionResult.PASS, itemStack);
+	        return ActionResult.newResult(EnumActionResult.FAIL, itemStack);
         }
     }
     
@@ -281,7 +279,7 @@ public class ItemSlimeBag extends Item
 		    		// DEBUG
 		    		System.out.println("No actual fluid in container");
 		    		
-		    		return resultPass;
+		    		return resultFail;
 		    	}
 		    	else // there is actual fluid stack in container
 		    	{
@@ -303,7 +301,7 @@ public class ItemSlimeBag extends Item
 		            		// DEBUG
 		            		System.out.println("Fluid type doesn't allow placement in world");
 		            		
-		            		return resultPass;
+		            		return resultFail;
 		            	}
 		            	else // fluid can be placed in world
 		            	{
@@ -317,7 +315,7 @@ public class ItemSlimeBag extends Item
 		                    	// DEBUG
 		                    	System.out.println("Location is not replaceable");
 		                    	
-		                        return resultPass; // Non-air, solid, unreplacable block. We can't put fluid here.
+		                        return resultFail; // Non-air, solid, unreplacable block. We can't put fluid here.
 		                    }
 		                    else // location is placeable
 		                    {
@@ -348,53 +346,93 @@ public class ItemSlimeBag extends Item
 		                            }
 		                            
 		                            // actually transfer fluid
-		                            FluidStack blockFluidStack = blockFluidHandler.getTankProperties()[0].getContents();
 		                            int blockCapacity = blockFluidHandler.getTankProperties()[0].getCapacity();
 		                            int amountInContainer = containerFluidStack.amount;
 		                            
-		                            // DEBUG
-		                            System.out.println("Before transferring fluids amount in container = "+amountInContainer+" and block capacity = "+blockCapacity);
-		                            
-		                            // transfer amounts and handle cases of differences between amounts and capacities
-		                            if (amountInContainer > blockCapacity) // more than enough fluid to fill block
+		                            FluidStack blockFluidStack = blockFluidHandler.getTankProperties()[0].getContents();
+		                            if (blockFluidStack == null)
 		                            {
-		                            	containerFluidStack.amount -= blockCapacity;
-		                            	blockFluidStack.amount = blockCapacity;
+		                            	// DEBUG
+		                            	System.out.println("Block fluid stack is null");
+		                            	
+		                            	return resultFail;
 		                            }
-		                            else // all fluid in container can fit within block
+		                            else // non-null fluid stack
 		                            {
-		                            	blockFluidStack.amount = amountInContainer;
-		                            	containerFluidStack.amount = 0;
-		                            }
-		                            
-		                            // DEBUG
-		                            System.out.println("After transferring amount in container = "+containerFluidStack.amount+" and amount in block = "+blockFluidStack.amount);
-		                            
-	                                SoundEvent soundevent = fluid.getEmptySound(containerFluidStack);
-	                                parWorld.playSound(parPlayer, parPos, soundevent, SoundCategory.BLOCKS, 1.0F, 1.0F);
+			                            // DEBUG
+			                            System.out.println("Before transferring fluids amount in container = "+amountInContainer+" and block capacity = "+blockCapacity);
+			                            
+			                            // transfer amounts and handle cases of differences between amounts and capacities
+			                            if (amountInContainer > blockCapacity) // more than enough fluid to fill block
+			                            {
+			                            	containerFluidStack.amount -= blockCapacity;
+			                            	blockFluidStack.amount = blockCapacity;
+			                            }
+			                            else // all fluid in container can fit within block
+			                            {
+			                            	blockFluidStack.amount = amountInContainer;
+			                            	containerFluidStack.amount = 0;
+			                            }
+			                            
+			                            // DEBUG
+			                            System.out.println("After transferring amount in container = "+containerFluidStack.amount+" and amount in block = "+blockFluidStack.amount);
+			                            
+		                                SoundEvent soundevent = fluid.getEmptySound(containerFluidStack);
+		                                parWorld.playSound(parPlayer, parPos, soundevent, SoundCategory.BLOCKS, 1.0F, 1.0F);
+	
+		                    	        if (!parPlayer.capabilities.isCreativeMode)
+		                    	        {
+		                    	            // DEBUG
+		                    	            System.out.println("Not in creative so draining container");
+		                    	
+		                    	            // success!
+		                    	            parPlayer.addStat(StatList.getObjectUseStats(this));
+		                    	
+		                    	            // handle case where container is fully empty
+		                    	            if (containerFluidStack.amount <= 0)
+		                    	            {
+		                    	            	// clamp value to non-negative
+		                    	            	containerFluidStack.amount = 0; 
+		                    	            	
+		                    	            	// DEBUG
+		                    	            	System.out.println("fully drained the container so returning empty container");
+		                    	            	
+				    							// update tag data
+		                    	            	updateFluidNBT(parStack, containerFluidStack);
+				    					        
+				    					        // send packet to update player
+				    							if (parPlayer instanceof EntityPlayerMP)
+				    							{
+				    								// DEBUG
+				    								System.out.println("Sending player inventory update");
+					    					        ((EntityPlayerMP)parPlayer).connection.sendPacket(new SPacketHeldItemChange(parPlayer.inventory.currentItem));
+				    							}
+				    							
+				    							// DEBUG
+				    							System.out.println("After transfer block fluid stack = "+blockFluidStack.getFluid()+" "+blockFluidStack.amount+" and container fluid stack now = "+containerFluidStack.getFluid()+" "+containerFluidStack.amount);
+		                    	            }
+			            					                    	        	
+			                    	        parWorld.setBlockState(parPos, blockToPlace.getDefaultState());
 
-	                    	        if (!parPlayer.capabilities.isCreativeMode)
-	                    	        {
-	                    	            // DEBUG
-	                    	            System.out.println("Not in creative so draining container");
-	                    	
-	                    	            // success!
-	                    	            parPlayer.addStat(StatList.getObjectUseStats(this));
-	                    	
-	                    	            parStack.shrink(1);
-	                    	        }
-	                    	        else // in creative mode so don't use up stack
-	                    	        {
-	                    	        	// restore amount
-	                    	        	containerFluidStack.amount = amountInContainer;
-	                    	        }
-	                    	        
-                    	        	// DEBUG
-                    	        	System.out.println("Placing fluid was a success");
-                    	        	
-	                    	        
-	                                return ActionResult.newResult(EnumActionResult.SUCCESS, parStack);
-	                            }
+		                    	        	// DEBUG
+		                    	        	System.out.println("Placing fluid was a success");
+		                    	        	
+			                                return ActionResult.newResult(EnumActionResult.SUCCESS, containerFluidHandler.getContainer());
+		                    	        }
+		                    	        else // in creative mode so don't use up stack
+		                    	        {
+		                    	        	// restore amount
+		                    	        	containerFluidStack.amount = amountInContainer;
+		                    	        	
+									        parWorld.setBlockState(parPos, blockToPlace.getDefaultState());
+									
+									    	// DEBUG
+									    	System.out.println("Placing fluid was a success");
+									    	
+		                    	        	return resultPass; // not really sure why fail, but consistent with universal bucket
+		                    	        }
+		                            }
+		                        }
 		                    }
 		            	}
 		            }
@@ -403,61 +441,21 @@ public class ItemSlimeBag extends Item
         }
     }
    
-    /**
-     * Try place.
-     *
-     * @param parWorld the par world
-     * @param parPlayer the par player
-     * @param pos the pos
-     * @param parStack the par stack
-     * @return the action result
-     */
-    public ActionResult<ItemStack> tryPlace(World parWorld, EntityPlayer parPlayer, BlockPos pos, ItemStack parStack)
+    private void updateFluidNBT(ItemStack parItemStack, FluidStack parFluidStack) 
     {
-    	FluidStack fluidStack = getFluidStack(parStack);
-
-        // try placing liquid
-        FluidActionResult result = FluidUtil.tryPlaceFluid(parPlayer, parWorld, pos, parStack, fluidStack);
-
-        // DEBUG
-        System.out.println("Tried placing fluid with result success = "+result.isSuccess()+" and itemstack = "+result.getResult());
-        
-        if (result.isSuccess())
+        if (!parItemStack.hasTagCompound())
         {
-	        if (!parPlayer.capabilities.isCreativeMode)
-	        {
-	            // DEBUG
-	            System.out.println("Not in creative so draining container");
-	
-	            // success!
-	            parPlayer.addStat(StatList.getObjectUseStats(this));
-	
-	            parStack.shrink(1);
-	
-	            // DEBUG
-	        	System.out.println("Adding empty slime bag to player inventory = "+emptyStack);
-	        	
-	            // add empty bucket to player inventory
-	            return ActionResult.newResult(EnumActionResult.SUCCESS, emptyStack);
-	        }
-	        else
-	        {
-	        	// DEBUG
-	        	System.out.println("Placing fluid was a success");
-	        	
-	            return ActionResult.newResult(EnumActionResult.SUCCESS, parStack);
-	        }
+            parItemStack.setTagCompound(new NBTTagCompound());
         }
-        else
-        {
-        	// DEBUG
-        	System.out.println("Placing fluid was not a success");
-        	
-        	return ActionResult.newResult(EnumActionResult.FAIL, parStack);
-        }
-    }
+        NBTTagCompound fluidTag = new NBTTagCompound();
+        parFluidStack.writeToNBT(fluidTag);
+        parItemStack.getTagCompound().setTag(FluidHandlerItemStack.FLUID_NBT_KEY, fluidTag);		
+		
+		// DEBUG
+		System.out.println("Wrote fluid tag to container item stack = "+fluidTag);
+	}
 
-    @Nullable
+	@Nullable
     public FluidStack getMatchingFluidStack(IFluidHandler sourceHandler, Fluid parFluid)
     {
     	// Theoretically a tank may contain mulitple fluid stacks
