@@ -135,11 +135,12 @@ public class ItemSlimeBag extends Item
 	@Override
 	public String getItemStackDisplayName(final ItemStack stack) 
 	{
-		final FluidStack fluidStack = FluidUtil.getFluidContained(stack);
 		String unlocalizedName = this.getUnlocalizedNameInefficiently(stack);
+        IFluidHandlerItem fluidHandler = FluidUtil.getFluidHandler(stack);
+		FluidStack fluidStack = fluidHandler.getTankProperties()[0].getContents();
 
 		// If the bucket is empty, translate the unlocalised name directly
-		if (fluidStack == null) 
+		if (fluidStack == null || fluidStack.amount <= 0) 
 		{
 			unlocalizedName += ".name";
 		}
