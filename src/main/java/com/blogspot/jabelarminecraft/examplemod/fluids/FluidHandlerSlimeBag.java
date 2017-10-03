@@ -24,6 +24,7 @@ import net.minecraftforge.fluids.capability.templates.FluidHandlerItemStack;
 // TODO: Auto-generated Javadoc
 public class FluidHandlerSlimeBag extends FluidHandlerItemStack
 {
+	// Always copy this to use it for an assignment
 	protected static final FluidStack EMPTY = new FluidStack(ModFluids.SLIME, 0); 
 	
 	/**
@@ -35,8 +36,42 @@ public class FluidHandlerSlimeBag extends FluidHandlerItemStack
 	public FluidHandlerSlimeBag(ItemStack parContainerStack, int parCapacity) 
 	{
 		super(parContainerStack, parCapacity);
-		setFluid(EMPTY); // start empty
-
+		
+		// if container was constructed by loading from NBT, should already
+		// have fluid information in tags
+		if (getFluidStack() == null)
+		{
+			setContainerToEmpty(); // start empty
+		}
+		
+//		NBTTagCompound compound = parContainerStack.getTagCompound();
+//		if (compound != null)
+//		{
+//			NBTTagCompound fluidNBT = compound.hasKey(FLUID_NBT_KEY) ? compound.getCompoundTag(FLUID_NBT_KEY) : null;
+//        
+//			// DEBUG
+//			System.out.println("The item stack NBT = "+compound);
+//			System.out.println("The fluid NBT = "+fluidNBT);
+//			if (fluidNBT.getString("FluidName").equals(ModFluids.SLIME.getName()))
+//			{
+//				// DEBUG
+//				System.out.println("Contains slime so proceeding to instantiate stack");
+//				setFluidStack(new FluidStack(ModFluids.SLIME, fluidNBT.getInteger("Amount"))); 
+//			}
+//			else
+//			{
+//				// DEBUG
+//				System.out.println("Contains fluid tag but not slime!");
+//				setContainerToEmpty();
+//			}
+//		}
+//		else
+//		{
+//			// DEBUG
+//			System.out.println("The item stack doesn't have any tag compound, setting fluid to empty");
+//			setContainerToEmpty(); // start empty
+//		}
+//
 //		// DEBUG
 //		System.out.println("Constructing FluidHandlerSlimeBag with FluidStack = "+getFluid()+" capacity = "+capacity+" and container = "+container);
 	}
@@ -47,7 +82,7 @@ public class FluidHandlerSlimeBag extends FluidHandlerItemStack
     @Override
 	protected void setContainerToEmpty()
     {
-    	setFluid(EMPTY); // some code looks at level, some looks at lack of handler (tag)
+    	setFluidStack(EMPTY.copy()); // some code looks at level, some looks at lack of handler (tag)
         container.getTagCompound().removeTag(FLUID_NBT_KEY);
     }
 
@@ -64,5 +99,11 @@ public class FluidHandlerSlimeBag extends FluidHandlerItemStack
     public FluidStack getFluidStack()
     {
     	return getFluid();
+    }
+    
+    // rename setFluid() method since it is confusing as it take a fluid stack
+    public void setFluidStack(FluidStack parFluidStack)
+    {
+    	setFluid(parFluidStack);
     }
 }
