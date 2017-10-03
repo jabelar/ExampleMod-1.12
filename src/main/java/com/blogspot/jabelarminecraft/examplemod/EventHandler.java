@@ -49,6 +49,7 @@ import net.minecraft.entity.passive.EntityPig;
 import net.minecraft.entity.passive.EntitySheep;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.init.Enchantments;
 import net.minecraft.init.Items;
 import net.minecraft.init.MobEffects;
@@ -78,12 +79,14 @@ import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent;
+import net.minecraftforge.event.entity.player.PlayerEvent.LoadFromFile;
 import net.minecraftforge.event.entity.player.PlayerEvent.NameFormat;
+import net.minecraftforge.event.entity.player.PlayerEvent.SaveToFile;
 import net.minecraftforge.fluids.FluidEvent.FluidDrainingEvent;
 import net.minecraftforge.fluids.FluidEvent.FluidFillingEvent;
 import net.minecraftforge.fluids.FluidRegistry.FluidRegisterEvent;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent.OnConfigChangedEvent;
-import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
+import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedOutEvent;
@@ -95,7 +98,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 // TODO: Auto-generated Javadoc
-@EventBusSubscriber
+@Mod.EventBusSubscriber(modid = MainMod.MODID)
 public class EventHandler 
 {
 	/*
@@ -108,7 +111,7 @@ public class EventHandler
 	 * @param event the event
 	 */
 	@SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-  public void onEvent(RegistryEvent.NewRegistry event)
+  public static void onEvent(RegistryEvent.NewRegistry event)
   {
 	  // can create registries here if needed
   }
@@ -118,31 +121,31 @@ public class EventHandler
      */    
 
 //    @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-//    public void onEvent(ForceChunkEvent event)
+//    public static void onEvent(ForceChunkEvent event)
 //    {
 //        
 //    }
 //
 //    @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-//    public void onEvent(UnforceChunkEvent event)
+//    public static void onEvent(UnforceChunkEvent event)
 //    {
 //        
 //    }
 //
 //    @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-//    public void onEvent(AnvilUpdateEvent event)
+//    public static void onEvent(AnvilUpdateEvent event)
 //    {
 //        
 //    }
 //
 //    @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-//    public void onEvent(CommandEvent event)
+//    public static void onEvent(CommandEvent event)
 //    {
 //        
 //    }
 //
 //    @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-//    public void onEvent(ServerChatEvent event)
+//    public static void onEvent(ServerChatEvent event)
 //    {
 //        
 //    }
@@ -152,7 +155,7 @@ public class EventHandler
 //     */
 //        
 //    @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-//    public void onEvent(PotionBrewedEvent event)
+//    public static void onEvent(PotionBrewedEvent event)
 //    {
 //        
 //    }
@@ -162,31 +165,31 @@ public class EventHandler
 //     */
 //    
 //    @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-//    public void onEvent(EnteringChunk event)
+//    public static void onEvent(EnteringChunk event)
 //    {
 //        
 //    }
 //
 //    @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-//    public void onEvent(EntityConstructing event)
+//    public static void onEvent(EntityConstructing event)
 //    {
 //        // Register extended entity properties
 //    }
 //    
 //    @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-//    public void onEvent(EntityJoinWorldEvent event)
+//    public static void onEvent(EntityJoinWorldEvent event)
 //    {
 //
 //    }
 //    
 //    @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-//    public void onEvent(EntityStruckByLightningEvent event)
+//    public static void onEvent(EntityStruckByLightningEvent event)
 //    {
 //        
 //    }
 //    
 //    @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-//    public void onEvent(PlaySoundAtEntityEvent event)
+//    public static void onEvent(PlaySoundAtEntityEvent event)
 //    {
 //        
 //    }
@@ -196,13 +199,13 @@ public class EventHandler
 //     */
 //    
 //    @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-//    public void onEvent(ItemExpireEvent event)
+//    public static void onEvent(ItemExpireEvent event)
 //    {
 //        
 //    }
 //
 //    @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-//    public void onEvent(ItemTossEvent event)
+//    public static void onEvent(ItemTossEvent event)
 //    {
 //        
 //    }
@@ -212,7 +215,7 @@ public class EventHandler
 //     */
 //
 //    @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-//    public void onEvent(LivingJumpEvent event)
+//    public static void onEvent(LivingJumpEvent event)
 //    {
 //
 //    }
@@ -247,7 +250,7 @@ public class EventHandler
      */
     @SuppressWarnings("unchecked")
 	@SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-    public void onEvent(LivingUpdateEvent event) throws IllegalArgumentException, IllegalAccessException
+    public static void onEvent(LivingUpdateEvent event) throws IllegalArgumentException, IllegalAccessException
     {
     	event.setCanceled(true);
     	
@@ -913,19 +916,19 @@ public class EventHandler
     }
 //
 //    @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-//    public void onEvent(EnderTeleportEvent event)
+//    public static void onEvent(EnderTeleportEvent event)
 //    {
 //        
 //    }
 //
 //    @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-//    public void onEvent(LivingAttackEvent event)
+//    public static void onEvent(LivingAttackEvent event)
 //    {
 //
 //    }
 //
 //    @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-//    public void onEvent(LivingDeathEvent event)
+//    public static void onEvent(LivingDeathEvent event)
 //    {
 //        
 //    }
@@ -936,7 +939,7 @@ public class EventHandler
      * @param event the event
      */
     @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-    public void onEvent(LivingDropsEvent event)
+    public static void onEvent(LivingDropsEvent event)
     {
 		for (EntityItem dropItem: event.getDrops())
 		{
@@ -976,49 +979,49 @@ public class EventHandler
     }
     
 //    @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-//    public void onEvent(LivingFallEvent event)
+//    public static void onEvent(LivingFallEvent event)
 //    {
 //
 //    }
 //
 //    @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-//    public void onEvent(LivingHurtEvent event)
+//    public static void onEvent(LivingHurtEvent event)
 //    {
 //
 //    }
 //
 //    @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-//    public void onEvent(LivingPackSizeEvent event)
-//    {
-//        
-//    }
-//
-//    @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-//    public void onEvent(LivingSetAttackTargetEvent event)
+//    public static void onEvent(LivingPackSizeEvent event)
 //    {
 //        
 //    }
 //
 //    @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-//    public void onEvent(ZombieEvent event)
+//    public static void onEvent(LivingSetAttackTargetEvent event)
+//    {
+//        
+//    }
+//
+//    @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
+//    public static void onEvent(ZombieEvent event)
 //    {
 //        
 //    }
 //    
 //    @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-//    public void onEvent(CheckSpawn event)
+//    public static void onEvent(CheckSpawn event)
 //    {  	
 //
 //    }
 //    
 //    @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-//    public void onEvent(SpecialSpawn event)
+//    public static void onEvent(SpecialSpawn event)
 //    {
 //        
 //    }
 //    
 //    @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-//    public void onEvent(AllowDespawn event)
+//    public static void onEvent(AllowDespawn event)
 //    {
 //        
 //    }
@@ -1028,19 +1031,19 @@ public class EventHandler
 //     */
 //    
 //    @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-//    public void onEvent(BreakSpeed event)
+//    public static void onEvent(BreakSpeed event)
 //    {
 //        
 //    }
 //    
 //    @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-//    public void onEvent(Clone event)
+//    public static void onEvent(Clone event)
 //    {
 //        
 //    }
 //    
 //    @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-//    public void onEvent(HarvestCheck event)
+//    public static void onEvent(HarvestCheck event)
 //    {
 //        
 //    }
@@ -1051,7 +1054,7 @@ public class EventHandler
 	 * @param event the event
 	 */
     @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-    public void onEvent(NameFormat event)
+    public static void onEvent(NameFormat event)
     {
     	// DEBUG
     	System.out.println("NameFormat event for username = "+event.getUsername());
@@ -1074,121 +1077,121 @@ public class EventHandler
     }
     
 //    @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-//    public void onEvent(ArrowLooseEvent event)
+//    public static void onEvent(ArrowLooseEvent event)
 //    {
 //        
 //    }
 //    
 //    @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-//    public void onEvent(ArrowNockEvent event)
+//    public static void onEvent(ArrowNockEvent event)
 //    {
 //        
 //    }
 //    
 //    @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-//    public void onEvent(AttackEntityEvent event)
+//    public static void onEvent(AttackEntityEvent event)
 //    {
 //
 //    }
 //    
 //    @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-//    public void onEvent(BonemealEvent event)
+//    public static void onEvent(BonemealEvent event)
 //    {
 //        
 //    }
 //    
 //    @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-//    public void onEvent(EntityInteractEvent event)
+//    public static void onEvent(EntityInteractEvent event)
 //    {
 //
 //    }
 //    
 //    @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-//    public void onEvent(EntityItemPickupEvent event)
+//    public static void onEvent(EntityItemPickupEvent event)
 //    {
 //
 //    }
 //    
 //    @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-//    public void onEvent(FillBucketEvent event)
+//    public static void onEvent(FillBucketEvent event)
 //    {
 //        
 //    }
 //    
 //    @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-//    public void onEvent(ItemTooltipEvent event)
+//    public static void onEvent(ItemTooltipEvent event)
 //    {
 //        
 //    }
 //    
 //    @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-//    public void onEvent(PlayerDestroyItemEvent event)
+//    public static void onEvent(PlayerDestroyItemEvent event)
 //    {
 //        
 //    }
 //    
 //    @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-//    public void onEvent(PlayerDropsEvent event)
+//    public static void onEvent(PlayerDropsEvent event)
 //    {
 //        
 //    }
 //    
 //    @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-//    public void onEvent(PlayerFlyableFallEvent event)
+//    public static void onEvent(PlayerFlyableFallEvent event)
 //    {
 //        
 //    }
 //    
 //    @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-//    public void onEvent(PlayerInteractEvent event)
+//    public static void onEvent(PlayerInteractEvent event)
 //    {
 //
 //    }
 //    
 //    @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-//    public void onEvent(PlayerOpenContainerEvent event)
+//    public static void onEvent(PlayerOpenContainerEvent event)
 //    {
 //        
 //    }
 //    
 //    @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-//    public void onEvent(PlayerPickupXpEvent event)
+//    public static void onEvent(PlayerPickupXpEvent event)
 //    {
 //        
 //    }
 //    
 //    @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-//    public void onEvent(PlayerSleepInBedEvent event)
+//    public static void onEvent(PlayerSleepInBedEvent event)
 //    {
 //        
 //    }
 //    
 //    @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-//    public void onEvent(PlayerUseItemEvent.Finish event)
+//    public static void onEvent(PlayerUseItemEvent.Finish event)
 //    {
 //        
 //    }
 //    
 //    @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-//    public void onEvent(PlayerUseItemEvent.Start event)
+//    public static void onEvent(PlayerUseItemEvent.Start event)
 //    {
 //
 //    }
 //    
 //    @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-//    public void onEvent(PlayerUseItemEvent.Stop event)
+//    public static void onEvent(PlayerUseItemEvent.Stop event)
 //    {
 //        
 //    }
 //    
 //    @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-//    public void onEvent(PlayerUseItemEvent.Tick event)
+//    public static void onEvent(PlayerUseItemEvent.Tick event)
 //    {
 //        
 //    }
 //    
 //    @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-//    public void onEvent(UseHoeEvent event)
+//    public static void onEvent(UseHoeEvent event)
 //    {
 //        
 //    }
@@ -1198,19 +1201,19 @@ public class EventHandler
 //     */
 //    
 //    @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-//    public void onEvent(MinecartCollisionEvent event)
+//    public static void onEvent(MinecartCollisionEvent event)
 //    {
 //        
 //    }
 //    
 //    @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-//    public void onEvent(MinecartInteractEvent event)
+//    public static void onEvent(MinecartInteractEvent event)
 //    {
 //        
 //    }
 //    
 //    @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-//    public void onEvent(MinecartUpdateEvent event)
+//    public static void onEvent(MinecartUpdateEvent event)
 //    {
 //        
 //    }
@@ -1220,91 +1223,91 @@ public class EventHandler
 //     */
 //
 //    @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-//    public void onEvent(WorldEvent.Load event)
+//    public static void onEvent(WorldEvent.Load event)
 //    {
 //        
 //    }
 //
 //    @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-//    public void onEvent(WorldEvent.PotentialSpawns event)
+//    public static void onEvent(WorldEvent.PotentialSpawns event)
 //    {
 //        
 //    }
 //
 //    @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-//    public void onEvent(WorldEvent.Unload event)
+//    public static void onEvent(WorldEvent.Unload event)
 //    {
 //        
 //    }
 //
 //    @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-//    public void onEvent(BlockEvent event)
+//    public static void onEvent(BlockEvent event)
 //    {
 //        
 //    }
 //
 //    @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-//    public void onEvent(BlockEvent.BreakEvent event)
+//    public static void onEvent(BlockEvent.BreakEvent event)
 //    {
 //        
 //    }
 //
 //    @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-//    public void onEvent(BlockEvent.HarvestDropsEvent event)
+//    public static void onEvent(BlockEvent.HarvestDropsEvent event)
 //    {
 //        
 //    }
 //    
 //    @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-//    public void onEvent(ChunkEvent event)
+//    public static void onEvent(ChunkEvent event)
 //    {
 //        
 //    }
 //    
 //    @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-//    public void onEvent(ChunkEvent.Save event)
+//    public static void onEvent(ChunkEvent.Save event)
 //    {
 //        
 //    }
 //    
 //    @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-//    public void onEvent(ChunkEvent.Unload event)
+//    public static void onEvent(ChunkEvent.Unload event)
 //    {
 //        
 //    }
 //    
 //    @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-//    public void onEvent(ChunkDataEvent event)
+//    public static void onEvent(ChunkDataEvent event)
 //    {
 //        
 //    }
 //    
 //    @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-//    public void onEvent(ChunkDataEvent.Load event)
+//    public static void onEvent(ChunkDataEvent.Load event)
 //    {
 //        
 //    }
 //    
 //    @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-//    public void onEvent(ChunkDataEvent.Save event)
+//    public static void onEvent(ChunkDataEvent.Save event)
 //    {
 //        
 //    }
 //    
 //    @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-//    public void onEvent(ChunkWatchEvent event)
+//    public static void onEvent(ChunkWatchEvent event)
 //    {
 //        
 //    }
 //    
 //    @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-//    public void onEvent(ChunkWatchEvent.Watch event)
+//    public static void onEvent(ChunkWatchEvent.Watch event)
 //    {
 //        
 //    }
 //    
 //    @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-//    public void onEvent(ChunkWatchEvent.UnWatch event)
+//    public static void onEvent(ChunkWatchEvent.UnWatch event)
 //    {
 //        
 //    }
@@ -1316,21 +1319,21 @@ public class EventHandler
 //
 //    @SideOnly(Side.CLIENT)
 //    @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-//    public void onEvent(ClientChatReceivedEvent event)
+//    public static void onEvent(ClientChatReceivedEvent event)
 //    {
 //        
 //    }
 //
 //    @SideOnly(Side.CLIENT)
 //    @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-//    public void onEvent(DrawBlockHighlightEvent event)
+//    public static void onEvent(DrawBlockHighlightEvent event)
 //    {
 //        
 //    }
 //
 //    @SideOnly(Side.CLIENT)
 //    @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-//    public void onEvent(RenderFogEvent event)
+//    public static void onEvent(RenderFogEvent event)
 //    {
 //        
 //    }
@@ -1343,7 +1346,7 @@ public class EventHandler
 	 */
     @SideOnly(Side.CLIENT)
     @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-    public void onEvent(FogDensity event)
+    public static void onEvent(FogDensity event)
     {
 		// EntityPlayer thePlayer = Minecraft.getMinecraft().player;
 		
@@ -1367,7 +1370,7 @@ public class EventHandler
      */
     @SideOnly(Side.CLIENT)
     @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-    public void onEvent(FogColors event)
+    public static void onEvent(FogColors event)
     {
 		if (event.getEntity().isInsideOfMaterial(ModMaterials.SLIME))
 		{
@@ -1380,7 +1383,7 @@ public class EventHandler
 
 //    @SideOnly(Side.CLIENT)
 //    @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-//    public void onEvent(FOVUpdateEvent event)
+//    public static void onEvent(FOVUpdateEvent event)
 //    {
 //        
 //    }
@@ -1392,7 +1395,7 @@ public class EventHandler
  */
 @SideOnly(Side.CLIENT)
     @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-    public void onEvent(GuiOpenEvent event)
+    public static void onEvent(GuiOpenEvent event)
     { 
     	if (event.getGui() instanceof GuiCompactor)
     	{
@@ -1408,21 +1411,21 @@ public class EventHandler
 
 //    @SideOnly(Side.CLIENT)
 //    @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-//    public void onEvent(GuiScreenEvent.ActionPerformedEvent event)
+//    public static void onEvent(GuiScreenEvent.ActionPerformedEvent event)
 //    {
 //        
 //    }
 //
 //    @SideOnly(Side.CLIENT)
 //    @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-//    public void onEvent(GuiScreenEvent.DrawScreenEvent event)
+//    public static void onEvent(GuiScreenEvent.DrawScreenEvent event)
 //    {
 //        
 //    }
 //
 //    @SideOnly(Side.CLIENT)
 //    @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-//    public void onEvent(GuiScreenEvent.InitGuiEvent event)
+//    public static void onEvent(GuiScreenEvent.InitGuiEvent event)
 //    {
 //        
 //    }
@@ -1434,7 +1437,7 @@ public class EventHandler
 	 */
 	@SideOnly(Side.CLIENT)
     @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-    public void onEvent(MouseEvent event)
+    public static void onEvent(MouseEvent event)
     { 
         if (event.getButton() == 0 && event.isButtonstate())
         {
@@ -1482,7 +1485,7 @@ public class EventHandler
      */
     @SideOnly(Side.CLIENT)
     @SubscribeEvent(priority=EventPriority.HIGHEST, receiveCanceled=true)
-    public void onEvent(RenderGameOverlayEvent event)
+    public static void onEvent(RenderGameOverlayEvent event)
     {
     	Minecraft mc = Minecraft.getMinecraft();
     	GuiIngame ingameGUI = mc.ingameGUI;
@@ -1520,7 +1523,7 @@ public class EventHandler
 //    
 //    @SideOnly(Side.CLIENT)
 //    @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-//    public void onEvent(RenderGameOverlayEvent.Chat event)
+//    public static void onEvent(RenderGameOverlayEvent.Chat event)
 //    {
 //    	// this event actually extends Pre
 //
@@ -1528,14 +1531,14 @@ public class EventHandler
 //    
 //    @SideOnly(Side.CLIENT)
 //    @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-//    public void onEvent(RenderGameOverlayEvent.Post event)
+//    public static void onEvent(RenderGameOverlayEvent.Post event)
 //    {
 //        
 //    }
 //    
 //    @SideOnly(Side.CLIENT)
 //    @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-//    public void onEvent(RenderGameOverlayEvent.Pre event)
+//    public static void onEvent(RenderGameOverlayEvent.Pre event)
 //    {
 //    	// you can check which elements of the GUI are being rendered
 //    	// by checking event.type against things like ElementType.CHAT, ElementType.CROSSHAIRS, etc.
@@ -1544,7 +1547,7 @@ public class EventHandler
 //    
 //	@SideOnly(Side.CLIENT)
 //	@SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-//	public void onEvent(RenderGameOverlayEvent.Pre event)
+//	public static void onEvent(RenderGameOverlayEvent.Pre event)
 //	{
 //		if (event.getType() == ElementType.ALL)
 //		{
@@ -1565,7 +1568,7 @@ public class EventHandler
 	
 //	@SideOnly(Side.CLIENT)
 //	@SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-//	public void onEvent(RenderBlockOverlayEvent event)
+//	public static void onEvent(RenderBlockOverlayEvent event)
 //	{
 //		if (event.getOverlayType() == OverlayType.WATER)
 //		{
@@ -1581,77 +1584,77 @@ public class EventHandler
 //
 //    @SideOnly(Side.CLIENT)
 //    @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-//    public void onEvent(RenderHandEvent event)
+//    public static void onEvent(RenderHandEvent event)
 //    {
 //        
 //    }
 //
 //    @SideOnly(Side.CLIENT)
 //    @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-//    public void onEvent(RenderLivingEvent.Post event)
+//    public static void onEvent(RenderLivingEvent.Post event)
 //    {
 //        
 //    }
 //
 //    @SideOnly(Side.CLIENT)
 //    @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-//    public void onEvent(RenderLivingEvent.Pre event)
+//    public static void onEvent(RenderLivingEvent.Pre event)
 //    {
 //        
 //    }
 //
 //    @SideOnly(Side.CLIENT)
 //    @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-//    public void onEvent(RenderPlayerEvent.Post event)
+//    public static void onEvent(RenderPlayerEvent.Post event)
 //    {
 //        
 //    }
 //
 //    @SideOnly(Side.CLIENT)
 //    @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-//    public void onEvent(RenderPlayerEvent.Pre event)
+//    public static void onEvent(RenderPlayerEvent.Pre event)
 //    {
 //
 //    }
 //
 //    @SideOnly(Side.CLIENT)
 //    @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-//    public void onEvent(RenderPlayerEvent.SetArmorModel event)
-//    {
-//        
-//    }
-//
-//    @SideOnly(Side.CLIENT)
-//    @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-//    public void onEvent(RenderWorldEvent.Post event)
+//    public static void onEvent(RenderPlayerEvent.SetArmorModel event)
 //    {
 //        
 //    }
 //
 //    @SideOnly(Side.CLIENT)
 //    @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-//    public void onEvent(RenderWorldEvent.Pre event)
+//    public static void onEvent(RenderWorldEvent.Post event)
+//    {
+//        
+//    }
+//
+//    @SideOnly(Side.CLIENT)
+//    @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
+//    public static void onEvent(RenderWorldEvent.Pre event)
 //    {
 //    	Minecraft.getMinecraft().gameSettings.thirdPersonView = 2;
 //    }
 //
 //    @SideOnly(Side.CLIENT)
 //    @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-//    public void onEvent(RenderWorldLastEvent event)
+//    public static void onEvent(RenderWorldLastEvent event)
 //    {
 //        
 //    }
 //
 //    @SideOnly(Side.CLIENT)
 //    @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-//    public void onEvent(TextureStitchEvent.Post event)
+//    public static void onEvent(TextureStitchEvent.Post event)
 //    {
 //        
 //    }
 //
 //    @SideOnly(Side.CLIENT)
 //    @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-//    public void onEvent(TextureStitchEvent.Pre event)
+//    public static void onEvent(TextureStitchEvent.Pre event)
 //    {
 //        
 //    }
@@ -1661,47 +1664,47 @@ public class EventHandler
 //     */
 //
 //    @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-//    public void onEvent(FluidEvent event)
+//    public static void onEvent(FluidEvent event)
 //    {
 //        
 //    }
 
 //    @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-//	public void onEvent(FluidContainerRegisterEvent event)
+//	public static void onEvent(FluidContainerRegisterEvent event)
 //	{
 //    	// DEBUG
 //	    Debug.print("Registering fluid container");
 //	}
 
     @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-    public void onEvent(FluidDrainingEvent event)
+    public static void onEvent(FluidDrainingEvent event)
     {
     	// DEBUG
     	System.out.println("On client = "+event.getWorld().isRemote+" Draining fluid = "+event.getFluid().getFluid()+" with amount = "+event.getAmount());     
     }
 
     @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-    public void onEvent(FluidFillingEvent event)
+    public static void onEvent(FluidFillingEvent event)
     {
     	// DEBUG
     	System.out.println("On client = "+event.getWorld().isRemote+" Filling fluid = "+event.getFluid().getFluid()+" with amount = "+event.getAmount());     
     }
 //
 //    @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-//    public void onEvent(FluidMotionEvent event)
+//    public static void onEvent(FluidMotionEvent event)
 //    {
 //        
 //    }
 
     @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-    public void onEvent(FluidRegisterEvent event)
+    public static void onEvent(FluidRegisterEvent event)
     {
     	// DEBUG
     	System.out.println("Registering fluid");
     }
 //
 //    @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-//    public void onEvent(FluidSpilledEvent event)
+//    public static void onEvent(FluidSpilledEvent event)
 //    {
 //        
 //    }
@@ -1711,13 +1714,13 @@ public class EventHandler
 //     */
 //
 //    @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-//    public void onEvent(OreRegisterEvent event)
+//    public static void onEvent(OreRegisterEvent event)
 //    {
 //        
 //    }
 //    
 //	@SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-//	public void onEvent(PopulateChunkEvent event)
+//	public static void onEvent(PopulateChunkEvent event)
 //	{
 //		
 //	}
@@ -1725,7 +1728,7 @@ public class EventHandler
 //	// for some reason the PopulateChunkEvents are fired on the main EVENT_BUT
 //	// even though they are in the terraingen package
 //	@SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-//	public void onEvent(PopulateChunkEvent.Populate event)
+//	public static void onEvent(PopulateChunkEvent.Populate event)
 //	{
 //		
 //	}
@@ -1733,7 +1736,7 @@ public class EventHandler
 //	// for some reason the PopulateChunkEvents are fired on the main EVENT_BUT
 //	// even though they are in the terraingen package
 //	@SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-//	public void onEvent(PopulateChunkEvent.Post event)
+//	public static void onEvent(PopulateChunkEvent.Post event)
 //	{ 
 //		
 //	}
@@ -1741,7 +1744,7 @@ public class EventHandler
 //	// for some reason the PopulateChunkEvents are fired on the main EVENT_BUT
 //	// even though they are in the terraingen package
 //	@SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-//	public void onEvent(PopulateChunkEvent.Pre event)
+//	public static void onEvent(PopulateChunkEvent.Pre event)
 //	{
 //		
 //	}
@@ -1757,20 +1760,20 @@ public class EventHandler
      */
 
 //    @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-//    public void onEvent(InputEvent event)
+//    public static void onEvent(InputEvent event)
 //    {
 //        
 //    }
 //
 //    @SideOnly(Side.CLIENT)
 //    @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-//    public void onEvent(KeyInputEvent event)
+//    public static void onEvent(KeyInputEvent event)
 //    {
 //
 //    }
 //
 //    @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-//    public void onEvent(MouseInputEvent event)
+//    public static void onEvent(MouseInputEvent event)
 //    {
 //
 //    }
@@ -1780,37 +1783,37 @@ public class EventHandler
 //     */
 //
 //    @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-//    public void onEvent(PlayerEvent event)
+//    public static void onEvent(PlayerEvent event)
 //    {
 //        
 //    }
 //
 //    @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-//    public void onEvent(ItemCraftedEvent event)
+//    public static void onEvent(ItemCraftedEvent event)
 //    {
 //        
 //    }
 //
 //    @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-//    public void onEvent(ItemPickupEvent event)
+//    public static void onEvent(ItemPickupEvent event)
 //    {
 //        
 //    }
 //
 //    @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-//    public void onEvent(ItemSmeltedEvent event)
+//    public static void onEvent(ItemSmeltedEvent event)
 //    {
 //        
 //    }
 //
 //    @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-//    public void onEvent(PlayerChangedDimensionEvent event)
+//    public static void onEvent(PlayerChangedDimensionEvent event)
 //    {
 //        
 //    }
 //
 //    @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-//    public void onEvent(PlayerLoggedInEvent event)
+//    public static void onEvent(PlayerLoggedInEvent event)
 //    {
 //        
 //    }
@@ -1821,7 +1824,7 @@ public class EventHandler
  * @param event the event
  */
 @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-    public void onEvent(PlayerLoggedOutEvent event)
+    public static void onEvent(PlayerLoggedOutEvent event)
     {
         // DEBUG
         System.out.println("Player logged out");
@@ -1829,7 +1832,7 @@ public class EventHandler
     }
 
 //    @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-//    public void onEvent(PlayerRespawnEvent event)
+//    public static void onEvent(PlayerRespawnEvent event)
 //    {
 //        // DEBUG
 //        Debug.print("The memories of past existences are but glints of light.");
@@ -1841,7 +1844,7 @@ public class EventHandler
 //     */
 //
 //    @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-//    public void onEvent(ClientTickEvent event) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException
+//    public static void onEvent(ClientTickEvent event) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException
 //    {
 //        if (event.phase == TickEvent.Phase.END) // only proceed if START phase otherwise, will execute twice per tick
 //        {
@@ -1859,7 +1862,7 @@ public class EventHandler
 	 * @param event the event
 	 */
 	@SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-    public void onEvent(PlayerTickEvent event)
+    public static void onEvent(PlayerTickEvent event)
     {       
 		// do client side stuff
         if (event.phase == TickEvent.Phase.START && event.player.world.isRemote) // only proceed if START phase otherwise, will execute twice per tick
@@ -1895,7 +1898,7 @@ public class EventHandler
 	}
 	
 //    @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-//    public void onEvent(RenderTickEvent event)
+//    public static void onEvent(RenderTickEvent event)
 //    {
 //        if (event.phase == TickEvent.Phase.END) // only proceed if START phase otherwise, will execute twice per tick
 //        {
@@ -1905,7 +1908,7 @@ public class EventHandler
 //    }
 //
 //    @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-//    public void onEvent(ServerTickEvent event)
+//    public static void onEvent(ServerTickEvent event)
 //    {
 //        if (event.phase == TickEvent.Phase.END) // only proceed if START phase otherwise, will execute twice per tick
 //        {
@@ -1920,7 +1923,7 @@ public class EventHandler
  * @param event the event
  */
 @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-  public void onEvent(WorldTickEvent event)
+  public static void onEvent(WorldTickEvent event)
   {
       if (event.phase == TickEvent.Phase.END) // only proceed if START phase otherwise, will execute twice per tick
       {
@@ -2022,7 +2025,7 @@ public class EventHandler
  * @param eventArgs the event args
  */
 @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-    public void onEvent(OnConfigChangedEvent eventArgs) 
+    public static void onEvent(OnConfigChangedEvent eventArgs) 
     {
         // DEBUG
         System.out.println("OnConfigChangedEvent");
@@ -2034,8 +2037,40 @@ public class EventHandler
         }
     }
 
+	@SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
+	public static void onEvent(SaveToFile event)
+	{
+		EntityPlayer thePlayer = event.getEntityPlayer();
+		InventoryPlayer theInventory = thePlayer.inventory;
+		// DEBUG
+		System.out.print("Saving Player To File With main inventory: ");
+		Iterator<ItemStack> iterator = theInventory.mainInventory.iterator();
+		while (iterator.hasNext())
+		{
+			ItemStack stack = iterator.next();
+			System.out.print(stack+" "+stack.getTagCompound()+" ");
+		}
+		System.out.println(" ");
+	}
+	
+	@SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
+	public static void onEvent(LoadFromFile event)
+	{
+		EntityPlayer thePlayer = event.getEntityPlayer();
+		InventoryPlayer theInventory = thePlayer.inventory;
+		// DEBUG
+		System.out.print("Loading Player from File With main inventory: ");
+		Iterator<ItemStack> iterator = theInventory.mainInventory.iterator();
+		while (iterator.hasNext())
+		{
+			ItemStack stack = iterator.next();
+			System.out.print(stack+" "+stack.getTagCompound()+" ");
+		}
+		System.out.println(" ");
+	}
+
 //    @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-//    public void onEvent(PostConfigChangedEvent eventArgs) 
+//    public static void onEvent(PostConfigChangedEvent eventArgs) 
 //    {
 //        // useful for doing something if another mod's config has changed
 //        // if(eventArgs.modID.equals(MagicBeans.MODID))

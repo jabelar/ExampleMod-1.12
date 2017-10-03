@@ -86,8 +86,8 @@ public class ItemSlimeBag extends Item
     @Override
     public ICapabilityProvider initCapabilities(@Nonnull ItemStack stack, @Nullable NBTTagCompound nbt)
     {
-    	// DEBUG
-    	System.out.println("initCapabilities for ItemSlimeBag with NBT = "+stack.getTagCompound()+" and Cap NBT = "+nbt);
+//    	// DEBUG
+//    	System.out.println("initCapabilities for ItemSlimeBag with NBT = "+stack.getTagCompound()+" and Cap NBT = "+nbt);
     	
         return new FluidHandlerSlimeBag(stack, CAPACITY);
     }
@@ -500,7 +500,6 @@ public class ItemSlimeBag extends Item
 			return FluidStack.loadFluidStackFromNBT(container.getTagCompound().getCompoundTag(FluidHandlerItemStack.FLUID_NBT_KEY));
 		}
 		return null;
-//		return FluidUtil.getFluidContained(container);
 	}
     
     /**
