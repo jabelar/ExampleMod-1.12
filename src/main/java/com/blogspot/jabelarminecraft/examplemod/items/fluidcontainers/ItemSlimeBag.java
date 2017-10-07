@@ -152,6 +152,12 @@ public class ItemSlimeBag extends Item
 		return I18n.translateToLocal(unlocalizedName).trim();
 	}
 	
+	/**
+	 * Empty.
+	 *
+	 * @param stack the stack
+	 * @return the item stack
+	 */
 	public static ItemStack empty(ItemStack stack)
 	{
 		if (stack.getItem() instanceof ItemSlimeBag)
@@ -242,6 +248,15 @@ public class ItemSlimeBag extends Item
         }
     }
     
+    /**
+     * Try place alt.
+     *
+     * @param parWorld the par world
+     * @param parPlayer the par player
+     * @param parPos the par pos
+     * @param parStack the par stack
+     * @return the action result
+     */
     public ActionResult<ItemStack> tryPlaceAlt(World parWorld, EntityPlayer parPlayer, BlockPos parPos, ItemStack parStack)
     {
     	ActionResult<ItemStack> resultPass = new ActionResult<ItemStack>(EnumActionResult.PASS, parStack);
@@ -465,6 +480,13 @@ public class ItemSlimeBag extends Item
 		System.out.println("Wrote fluid tag to container item stack = "+fluidTag);
 	}
 
+	/**
+	 * Gets the matching fluid stack.
+	 *
+	 * @param sourceHandler the source handler
+	 * @param parFluid the par fluid
+	 * @return the matching fluid stack
+	 */
 	@Nullable
     public FluidStack getMatchingFluidStack(IFluidHandler sourceHandler, Fluid parFluid)
     {
@@ -504,6 +526,8 @@ public class ItemSlimeBag extends Item
     
     /**
      * If this function returns true (or the item is damageable), the ItemStack's NBT tag will be sent to the client.
+     *
+     * @return the share tag
      */
     @Override
 	public boolean getShareTag()
@@ -511,6 +535,9 @@ public class ItemSlimeBag extends Item
         return true;
     }
     
+    /* (non-Javadoc)
+     * @see net.minecraft.item.Item#getNBTShareTag(net.minecraft.item.ItemStack)
+     */
     @Override
 	public NBTTagCompound getNBTShareTag(ItemStack stack)
     {
@@ -521,6 +548,15 @@ public class ItemSlimeBag extends Item
     }
 
     
+    /**
+     * Try fill alt.
+     *
+     * @param parWorld the par world
+     * @param parPlayer the par player
+     * @param mop the mop
+     * @param parContainerStack the par container stack
+     * @return the action result
+     */
     public ActionResult<ItemStack> tryFillAlt(World parWorld, EntityPlayer parPlayer, RayTraceResult mop, ItemStack parContainerStack)
     {
     	ActionResult<ItemStack> resultPass = new ActionResult<ItemStack>(EnumActionResult.PASS, parContainerStack);

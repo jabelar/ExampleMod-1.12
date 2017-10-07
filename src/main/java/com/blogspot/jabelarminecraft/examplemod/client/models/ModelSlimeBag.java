@@ -117,6 +117,9 @@ public final class ModelSlimeBag implements IModel
     }
 
 
+	/* (non-Javadoc)
+	 * @see net.minecraftforge.client.model.IModel#getDependencies()
+	 */
 	@Override
 	public Collection<ResourceLocation> getDependencies() {
 		return ImmutableList.of();
@@ -168,6 +171,9 @@ public final class ModelSlimeBag implements IModel
         return new Baked(this, builder.build(), fluidSprite, format, Maps.immutableEnumMap(transformMap), Maps.<String, IBakedModel>newHashMap());
     }
 
+	/* (non-Javadoc)
+	 * @see net.minecraftforge.client.model.IModel#getDefaultState()
+	 */
 	@Override
 	public IModelState getDefaultState() {
 		return TRSRTransformation.identity();
@@ -301,14 +307,6 @@ public final class ModelSlimeBag implements IModel
 						textureGetter);
 				model.cache.put(name, bakedModel);
 				return bakedModel;
-            	
-//                IModel parent = model.parent.process(ImmutableMap.of("fluid", name));
-//                Function<ResourceLocation, TextureAtlasSprite> textureGetter;
-//                textureGetter = location -> Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(location.toString());
-//
-//                IBakedModel bakedModel = parent.bake(new SimpleModelState(model.transforms), model.format, textureGetter);
-//                model.cache.put(name, bakedModel);
-//                return bakedModel;
             }
             
 //            // DEBUG

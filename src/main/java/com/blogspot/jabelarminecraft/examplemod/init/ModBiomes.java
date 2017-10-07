@@ -67,6 +67,11 @@ public class ModBiomes
 				registry.register(biome);
 			}
 
+//            BiomeManager.addBiome(BiomeType.DESERT, new BiomeEntry(ashDesert, 10));
+//            BiomeManager.addSpawnBiome(ashDesert);
+//            BiomeManager.addStrongholdBiome(ashDesert);
+//            BiomeDictionary.addTypes(ashDesert, BiomeDictionary.Type.HOT);
+
 			initialize();
 		}
 	}

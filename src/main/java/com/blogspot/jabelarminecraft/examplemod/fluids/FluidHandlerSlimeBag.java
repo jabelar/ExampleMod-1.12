@@ -44,34 +44,6 @@ public class FluidHandlerSlimeBag extends FluidHandlerItemStack
 			setContainerToEmpty(); // start empty
 		}
 		
-//		NBTTagCompound compound = parContainerStack.getTagCompound();
-//		if (compound != null)
-//		{
-//			NBTTagCompound fluidNBT = compound.hasKey(FLUID_NBT_KEY) ? compound.getCompoundTag(FLUID_NBT_KEY) : null;
-//        
-//			// DEBUG
-//			System.out.println("The item stack NBT = "+compound);
-//			System.out.println("The fluid NBT = "+fluidNBT);
-//			if (fluidNBT.getString("FluidName").equals(ModFluids.SLIME.getName()))
-//			{
-//				// DEBUG
-//				System.out.println("Contains slime so proceeding to instantiate stack");
-//				setFluidStack(new FluidStack(ModFluids.SLIME, fluidNBT.getInteger("Amount"))); 
-//			}
-//			else
-//			{
-//				// DEBUG
-//				System.out.println("Contains fluid tag but not slime!");
-//				setContainerToEmpty();
-//			}
-//		}
-//		else
-//		{
-//			// DEBUG
-//			System.out.println("The item stack doesn't have any tag compound, setting fluid to empty");
-//			setContainerToEmpty(); // start empty
-//		}
-//
 //		// DEBUG
 //		System.out.println("Constructing FluidHandlerSlimeBag with FluidStack = "+getFluid()+" capacity = "+capacity+" and container = "+container);
 	}
@@ -95,12 +67,22 @@ public class FluidHandlerSlimeBag extends FluidHandlerItemStack
         return (fluid.getFluid() == ModFluids.SLIME);
     }
     
+    /**
+     * Gets the fluid stack.
+     *
+     * @return the fluid stack
+     */
     // rename getFluid() method since it is confusing as it returns a fluid stack
     public FluidStack getFluidStack()
     {
     	return getFluid();
     }
     
+    /**
+     * Sets the fluid stack.
+     *
+     * @param parFluidStack the new fluid stack
+     */
     // rename setFluid() method since it is confusing as it take a fluid stack
     public void setFluidStack(FluidStack parFluidStack)
     {

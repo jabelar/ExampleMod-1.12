@@ -32,6 +32,7 @@ import com.blogspot.jabelarminecraft.examplemod.networking.MessageSyncEntityToCl
 import com.blogspot.jabelarminecraft.examplemod.networking.MessageToClient;
 import com.blogspot.jabelarminecraft.examplemod.networking.MessageToServer;
 import com.blogspot.jabelarminecraft.examplemod.tileentities.TileEntityCompactor;
+import com.blogspot.jabelarminecraft.examplemod.worldgen.WorldGenShrine;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.block.Block;
@@ -119,6 +120,9 @@ public class CommonProxy
         // register gui handlers
         registerGuiHandlers();
         
+        // register world generators
+        registerWorldGenerators();
+        
 //        registerDeconstructingInit(event);
     }
     
@@ -127,7 +131,19 @@ public class CommonProxy
      */
     public void registerGuiHandlers() 
     {
+    	// DEBUG
+    	System.out.println("Registering gui handlers");
         NetworkRegistry.INSTANCE.registerGuiHandler(MainMod.instance, new GuiHandler());     
+    }
+    
+    /**
+     * Register world generators.
+     */
+    public void registerWorldGenerators()
+    {
+    	// DEBUG
+    	System.out.println("Registering world generators");
+    	GameRegistry.registerWorldGenerator(new WorldGenShrine(), 10);
     }
 
     /**
@@ -208,7 +224,7 @@ public class CommonProxy
     protected void registerSimpleNetworking() 
     {
         // DEBUG
-        System.out.println("registering simple networking");
+        System.out.println("Registering simple networking");
         MainMod.network = NetworkRegistry.INSTANCE.newSimpleChannel(MainMod.NETWORK_CHANNEL_NAME);
 
         int packetId = 0;
@@ -288,6 +304,8 @@ public class CommonProxy
      */
     public void registerFluids()
     {
+    	// DEBUG
+    	System.out.println("Registering fluids");
         FluidRegistry.registerFluid(ModFluids.SLIME);
 //        FluidRegistry.addBucketForFluid(ModFluids.SLIME);
     }

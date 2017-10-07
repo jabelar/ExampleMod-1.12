@@ -232,6 +232,9 @@ public class ModBlockFluidClassic extends BlockFluidClassic
         }
     }
     
+    /* (non-Javadoc)
+     * @see net.minecraftforge.fluids.BlockFluidClassic#place(net.minecraft.world.World, net.minecraft.util.math.BlockPos, net.minecraftforge.fluids.FluidStack, boolean)
+     */
     /* IFluidBlock */
     @Override
     public int place(World world, BlockPos pos, @Nonnull FluidStack fluidStack, boolean doPlace)

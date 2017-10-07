@@ -15,14 +15,22 @@
 */
 package com.blogspot.jabelarminecraft.examplemod.fluids;
 
+import net.minecraft.block.material.Material;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundEvent;
 import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidStack;
 
 // TODO: Auto-generated Javadoc
 public class ModFluid extends Fluid
 {
 	protected static int mapColor = 0xFFFFFFFF;
 	protected static float overlayAlpha = 0.2F;
+	protected static SoundEvent emptySound = SoundEvents.ITEM_BUCKET_EMPTY;
+	protected static SoundEvent fillSound = SoundEvents.ITEM_BUCKET_FILL;
+	protected static Material material = Material.WATER;
+	
 	/**
 	 * Instantiates a new mod fluid.
 	 *
@@ -80,7 +88,7 @@ public class ModFluid extends Fluid
 	 * @param parColor the par color
 	 * @return the fluid
 	 */
-	public Fluid setColor(int parColor)
+	public ModFluid setColor(int parColor)
 	{
 		mapColor = parColor;
 		return this;
@@ -102,9 +110,80 @@ public class ModFluid extends Fluid
 	 * @param parOverlayAlpha the par overlay alpha
 	 * @return the fluid
 	 */
-	public Fluid setAlpha(float parOverlayAlpha)
+	public ModFluid setAlpha(float parOverlayAlpha)
 	{
 		overlayAlpha = parOverlayAlpha;
 		return this;
 	}
+	
+	/* (non-Javadoc)
+	 * @see net.minecraftforge.fluids.Fluid#setEmptySound(net.minecraft.util.SoundEvent)
+	 */
+	@Override
+	public ModFluid setEmptySound(SoundEvent parSound)
+	{
+		emptySound = parSound;
+		return this;
+	}
+	
+	/* (non-Javadoc)
+	 * @see net.minecraftforge.fluids.Fluid#getEmptySound()
+	 */
+	@Override
+	public SoundEvent getEmptySound()
+	{
+		return emptySound;
+	}
+	
+	/* (non-Javadoc)
+	 * @see net.minecraftforge.fluids.Fluid#setFillSound(net.minecraft.util.SoundEvent)
+	 */
+	@Override
+	public ModFluid setFillSound(SoundEvent parSound)
+	{
+		fillSound = parSound;
+		return this;
+	}
+	
+	/* (non-Javadoc)
+	 * @see net.minecraftforge.fluids.Fluid#getFillSound()
+	 */
+	@Override
+	public SoundEvent getFillSound()
+	{
+		return fillSound;
+	}
+	
+	/**
+	 * Sets the material.
+	 *
+	 * @param parMaterial the par material
+	 * @return the mod fluid
+	 */
+	public ModFluid setMaterial(Material parMaterial)
+	{
+		material = parMaterial;
+		return this;
+	}
+	
+	/**
+	 * Gets the material.
+	 *
+	 * @return the material
+	 */
+	public Material getMaterial()
+	{
+		return material;
+	}
+	
+    /* (non-Javadoc)
+     * @see net.minecraftforge.fluids.Fluid#doesVaporize(net.minecraftforge.fluids.FluidStack)
+     */
+    @Override
+	public boolean doesVaporize(FluidStack fluidStack)
+    {
+        if (block == null)
+            return false;
+        return block.getDefaultState().getMaterial() == getMaterial();
+    }
 }

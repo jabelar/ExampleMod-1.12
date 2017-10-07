@@ -30,6 +30,7 @@ public class ModFluids
 			new ResourceLocation(MainMod.MODID,"slime_still"), 
 			new ResourceLocation(MainMod.MODID, "slime_flow")
 			)
+			.setMaterial(ModMaterials.SLIME)
 			.setDensity(1100)
 			.setGaseous(false)
 			.setLuminosity(9)
