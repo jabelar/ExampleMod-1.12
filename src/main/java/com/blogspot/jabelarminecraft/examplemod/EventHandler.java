@@ -16,7 +16,6 @@
 
 package com.blogspot.jabelarminecraft.examplemod;
 
-import java.awt.Color;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -71,7 +70,6 @@ import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.event.ClickEvent;
 import net.minecraft.world.WorldServer;
-import net.minecraftforge.client.event.EntityViewRenderEvent.FogColors;
 import net.minecraftforge.client.event.EntityViewRenderEvent.FogDensity;
 import net.minecraftforge.client.event.GuiOpenEvent;
 import net.minecraftforge.client.event.MouseEvent;
@@ -1363,23 +1361,23 @@ public class EventHandler
     }
 
     
-    /**
-     * Use fog color to color the view when submerged in a custom fluid.
-     *
-     * @param event the event
-     */
-    @SideOnly(Side.CLIENT)
-    @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-    public static void onEvent(FogColors event)
-    {
-		if (event.getEntity().isInsideOfMaterial(ModMaterials.SLIME))
-		{
-			Color theColor = Color.GREEN;
-			event.setRed(theColor.getRed());
-	    	event.setGreen(theColor.getGreen());
-	    	event.setBlue(theColor.getBlue());
-		}			
-	}
+//    /**
+//     * Use fog color to color the view when submerged in a custom fluid.
+//     *
+//     * @param event the event
+//     */
+//    @SideOnly(Side.CLIENT)
+//    @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
+//    public static void onEvent(FogColors event)
+//    {
+//		if (event.getEntity().isInsideOfMaterial(ModMaterials.SLIME))
+//		{
+//			Color theColor = Color.GREEN;
+//			event.setRed(theColor.getRed());
+//	    	event.setGreen(theColor.getGreen());
+//	    	event.setBlue(theColor.getBlue());
+//		}			
+//	}
 
 //    @SideOnly(Side.CLIENT)
 //    @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)

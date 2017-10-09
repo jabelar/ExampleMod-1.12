@@ -15,21 +15,18 @@
 */
 package com.blogspot.jabelarminecraft.examplemod.fluids;
 
-import net.minecraft.block.material.Material;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidStack;
 
 // TODO: Auto-generated Javadoc
 public class ModFluid extends Fluid
 {
-	protected static int mapColor = 0xFFFFFFFF;
-	protected static float overlayAlpha = 0.2F;
-	protected static SoundEvent emptySound = SoundEvents.ITEM_BUCKET_EMPTY;
-	protected static SoundEvent fillSound = SoundEvents.ITEM_BUCKET_FILL;
-	protected static Material material = Material.WATER;
+	protected int mapColor = 0xFFFFFFFF;
+	protected float overlayAlpha = 0.2F;
+	protected SoundEvent emptySound = SoundEvents.ITEM_BUCKET_EMPTY;
+	protected SoundEvent fillSound = SoundEvents.ITEM_BUCKET_FILL;
 	
 	/**
 	 * Instantiates a new mod fluid.
@@ -152,38 +149,5 @@ public class ModFluid extends Fluid
 	public SoundEvent getFillSound()
 	{
 		return fillSound;
-	}
-	
-	/**
-	 * Sets the material.
-	 *
-	 * @param parMaterial the par material
-	 * @return the mod fluid
-	 */
-	public ModFluid setMaterial(Material parMaterial)
-	{
-		material = parMaterial;
-		return this;
-	}
-	
-	/**
-	 * Gets the material.
-	 *
-	 * @return the material
-	 */
-	public Material getMaterial()
-	{
-		return material;
-	}
-	
-    /* (non-Javadoc)
-     * @see net.minecraftforge.fluids.Fluid#doesVaporize(net.minecraftforge.fluids.FluidStack)
-     */
-    @Override
-	public boolean doesVaporize(FluidStack fluidStack)
-    {
-        if (block == null)
-            return false;
-        return block.getDefaultState().getMaterial() == getMaterial();
-    }
+	}	
 }

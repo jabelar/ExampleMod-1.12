@@ -15,11 +15,14 @@
 */
 package com.blogspot.jabelarminecraft.examplemod.blocks.fluids;
 
+import java.awt.Color;
+
 import javax.annotation.Nonnull;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockStairs;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.material.MaterialLiquid;
 import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
@@ -32,12 +35,12 @@ import net.minecraftforge.fluids.BlockFluidClassic;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 // TODO: Auto-generated Javadoc
 public class ModBlockFluidClassic extends BlockFluidClassic
 {
-	protected static boolean pushesEntity = false;
-
 	/**
 	 * Instantiates a new mod block fluid classic.
 	 *
@@ -49,39 +52,6 @@ public class ModBlockFluidClassic extends BlockFluidClassic
 		super(parFluid, parMaterial);
 	}
 
-	/**
-	 * Instantiates a new mod block fluid classic.
-	 *
-	 * @param parFluid the par fluid
-	 * @param parMaterial the par material
-	 * @param parPushesEntity the par pushes entity
-	 */
-	public ModBlockFluidClassic(Fluid parFluid, Material parMaterial, boolean parPushesEntity) 
-	{
-		this(parFluid, parMaterial);
-		setPushesEntity(parPushesEntity);
-	}
-	
-	/**
-	 * Gets the pushes entity.
-	 *
-	 * @return the pushes entity
-	 */
-	public static boolean getPushesEntity()
-	{
-		return pushesEntity;
-	}
-
-	/**
-	 * Sets the pushes entity.
-	 *
-	 * @param parPushesEntity the new pushes entity
-	 */
-	public static void setPushesEntity(boolean parPushesEntity)
-	{
-		pushesEntity = parPushesEntity;
-	}
-
     /* (non-Javadoc)
      * @see net.minecraftforge.fluids.BlockFluidBase#modifyAcceleration(net.minecraft.world.World, net.minecraft.util.math.BlockPos, net.minecraft.entity.Entity, net.minecraft.util.math.Vec3d)
      */
@@ -91,7 +61,7 @@ public class ModBlockFluidClassic extends BlockFluidClassic
 //    	// DEBUG
 //    	System.out.println("modifyAcceleration for "+entityIn+" with isPushedByWater() = "+entityIn.isPushedByWater());
     	
-    	if (getPushesEntity())
+    	if (worldIn.getBlockState(pos).getMaterial() instanceof MaterialLiquid)
     	{
     		Vec3d flowAdder = getFlow(worldIn, pos, worldIn.getBlockState(pos));
 
@@ -248,4 +218,11 @@ public class ModBlockFluidClassic extends BlockFluidClassic
         return fluidStack.amount;
     }
 
+    @Override
+	@SideOnly (Side.CLIENT)
+    public Vec3d getFogColor(World world, BlockPos pos, IBlockState state, Entity entity, Vec3d originalColor, float partialTicks)
+    {
+    	return new Vec3d(Color.GREEN.getRed(), Color.GREEN.getGreen(), Color.GREEN.getBlue());
+    }
+    
 }

@@ -589,6 +589,11 @@ public class ItemSlimeBag extends Item
 	            		System.out.println("With valid fluid item");
 	            		
 	            		FluidStack containerFluidStack = getFluidStack(parContainerStack);
+	            		// convert null fluid stack to empty amount = 0
+	            		if (containerFluidStack == null)
+	            		{
+	            			containerFluidStack = new FluidStack(ModFluids.SLIME, 0);
+	            		}
 	            		int amountRoomInContainer = CAPACITY - containerFluidStack.amount;
 	            		if (amountRoomInContainer <= 0)
 	            		{
