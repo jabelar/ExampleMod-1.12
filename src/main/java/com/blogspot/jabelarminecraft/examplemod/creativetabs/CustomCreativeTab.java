@@ -25,33 +25,38 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 // TODO: Auto-generated Javadoc
-public class CustomCreativeTab extends CreativeTabs {
+public class CustomCreativeTab extends CreativeTabs
+{
 
-	/**
-	 * Instantiates a new custom creative tab.
-	 */
-	public CustomCreativeTab() 
-	{
-		super(MainMod.MODID);
-	}
+    /**
+     * Instantiates a new custom creative tab.
+     */
+    public CustomCreativeTab()
+    {
+        super(MainMod.MODID);
+    }
 
-	/* (non-Javadoc)
-	 * @see net.minecraft.creativetab.CreativeTabs#getTabIconItem()
-	 */
-	@SideOnly(Side.CLIENT)
-	@Override
-	public ItemStack getTabIconItem() 
-	{
-		return new ItemStack(Items.BANNER);
-	}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see net.minecraft.creativetab.CreativeTabs#getTabIconItem()
+     */
+    @SideOnly(Side.CLIENT)
+    @Override
+    public ItemStack getTabIconItem()
+    {
+        return new ItemStack(Items.BANNER);
+    }
 
-	/* (non-Javadoc)
-	 * @see net.minecraft.creativetab.CreativeTabs#displayAllRelevantItems(net.minecraft.util.NonNullList)
-	 */
-	@SideOnly(Side.CLIENT)
-	@Override
-	public void displayAllRelevantItems(final NonNullList<ItemStack> items) 
-	{
-		super.displayAllRelevantItems(items);
-	}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see net.minecraft.creativetab.CreativeTabs#displayAllRelevantItems(net.minecraft.util.NonNullList)
+     */
+    @SideOnly(Side.CLIENT)
+    @Override
+    public void displayAllRelevantItems(final NonNullList<ItemStack> items)
+    {
+        super.displayAllRelevantItems(items);
+    }
 }

@@ -41,36 +41,41 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 // TODO: Auto-generated Javadoc
 @SideOnly(Side.CLIENT)
-public class GuiConfig extends net.minecraftforge.fml.client.config.GuiConfig 
+public class GuiConfig extends net.minecraftforge.fml.client.config.GuiConfig
 {
-    
+
     /**
      * Instantiates a new gui config.
      *
-     * @param parent the parent
+     * @param parent
+     *            the parent
      */
-    public GuiConfig(GuiScreen parent) 
+    public GuiConfig(GuiScreen parent)
     {
         super(parent,
                 new ConfigElement(MainMod.config.getCategory(Configuration.CATEGORY_GENERAL)).getChildElements(),
-                MainMod.MODID, 
-                false, 
-                false, 
+                MainMod.MODID,
+                false,
+                false,
                 Utilities.stringToGolden("Craft The Way You Want", 7));
-    	titleLine2 = MainMod.configFile.getAbsolutePath();
+        titleLine2 = MainMod.configFile.getAbsolutePath();
     }
-    
-    /* (non-Javadoc)
+
+    /*
+     * (non-Javadoc)
+     * 
      * @see net.minecraftforge.fml.client.config.GuiConfig#drawScreen(int, int, float)
      */
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks)
     {
-    	title = Utilities.stringToGolden("Craft The Way You Want", 7);
-    	super.drawScreen(mouseX, mouseY, partialTicks);
+        title = Utilities.stringToGolden("Craft The Way You Want", 7);
+        super.drawScreen(mouseX, mouseY, partialTicks);
     }
-      
-    /* (non-Javadoc)
+
+    /*
+     * (non-Javadoc)
+     * 
      * @see net.minecraftforge.fml.client.config.GuiConfig#actionPerformed(net.minecraft.client.gui.GuiButton)
      */
     @Override
@@ -78,16 +83,16 @@ public class GuiConfig extends net.minecraftforge.fml.client.config.GuiConfig
     {
         if (button.id == 2000)
         {
-        	// DEBUG
-        	System.out.println("Pressed DONE button");
+            // DEBUG
+            System.out.println("Pressed DONE button");
             boolean flag = true;
             try
             {
-                if ((configID != null || this.parentScreen == null || !(this.parentScreen instanceof GuiConfig)) 
+                if ((configID != null || this.parentScreen == null || !(this.parentScreen instanceof GuiConfig))
                         && (this.entryList.hasChangedEntry(true)))
                 {
-                	// DEBUG
-                	System.out.println("Saving config elements");
+                    // DEBUG
+                    System.out.println("Saving config elements");
                     boolean requiresMcRestart = this.entryList.saveConfigElements();
 
                     if (Loader.isModLoaded(modID))
@@ -96,14 +101,14 @@ public class GuiConfig extends net.minecraftforge.fml.client.config.GuiConfig
                         MinecraftForge.EVENT_BUS.post(event);
                         if (!event.getResult().equals(Result.DENY))
                             MinecraftForge.EVENT_BUS.post(new PostConfigChangedEvent(modID, configID, isWorldRunning, requiresMcRestart));
-                        
+
                         if (requiresMcRestart)
                         {
                             flag = false;
-                            mc.displayGuiScreen(new GuiMessageDialog(parentScreen, "fml.configgui.gameRestartTitle", 
+                            mc.displayGuiScreen(new GuiMessageDialog(parentScreen, "fml.configgui.gameRestartTitle",
                                     new TextComponentString(I18n.format("fml.configgui.gameRestartRequired")), "fml.configgui.confirmRestartMessage"));
                         }
-                        
+
                         if (this.parentScreen instanceof GuiConfig)
                             ((GuiConfig) this.parentScreen).needsRefresh = true;
                     }
@@ -113,7 +118,7 @@ public class GuiConfig extends net.minecraftforge.fml.client.config.GuiConfig
             {
                 e.printStackTrace();
             }
-            
+
             if (flag)
                 this.mc.displayGuiScreen(this.parentScreen);
         }

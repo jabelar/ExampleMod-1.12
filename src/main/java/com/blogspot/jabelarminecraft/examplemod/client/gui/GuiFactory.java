@@ -27,42 +27,50 @@ import net.minecraftforge.fml.client.IModGuiFactory;
  * @author jabelar
  *
  */
-public class GuiFactory implements IModGuiFactory 
+public class GuiFactory implements IModGuiFactory
 {
-    
-    /* (non-Javadoc)
+
+    /*
+     * (non-Javadoc)
+     * 
      * @see net.minecraftforge.fml.client.IModGuiFactory#initialize(net.minecraft.client.Minecraft)
      */
     @Override
-    public void initialize(Minecraft minecraftInstance) 
+    public void initialize(Minecraft minecraftInstance)
     {
- 
+
     }
- 
-    /* (non-Javadoc)
+
+    /*
+     * (non-Javadoc)
+     * 
      * @see net.minecraftforge.fml.client.IModGuiFactory#runtimeGuiCategories()
      */
     @Override
-    public Set<RuntimeOptionCategoryElement> runtimeGuiCategories() 
+    public Set<RuntimeOptionCategoryElement> runtimeGuiCategories()
     {
         return null;
     }
- 
-	/* (non-Javadoc)
-	 * @see net.minecraftforge.fml.client.IModGuiFactory#hasConfigGui()
-	 */
-	@Override
-	public boolean hasConfigGui() 
-	{
-		return true;
-	}
 
-	/* (non-Javadoc)
-	 * @see net.minecraftforge.fml.client.IModGuiFactory#createConfigGui(net.minecraft.client.gui.GuiScreen)
-	 */
-	@Override
-	public GuiScreen createConfigGui(GuiScreen parentScreen) 
-	{
-		return new GuiConfig(parentScreen);
-	}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see net.minecraftforge.fml.client.IModGuiFactory#hasConfigGui()
+     */
+    @Override
+    public boolean hasConfigGui()
+    {
+        return true;
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see net.minecraftforge.fml.client.IModGuiFactory#createConfigGui(net.minecraft.client.gui.GuiScreen)
+     */
+    @Override
+    public GuiScreen createConfigGui(GuiScreen parentScreen)
+    {
+        return new GuiConfig(parentScreen);
+    }
 }

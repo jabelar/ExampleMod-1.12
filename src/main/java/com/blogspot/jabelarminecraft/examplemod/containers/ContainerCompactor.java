@@ -46,21 +46,23 @@ public class ContainerCompactor extends Container
     /**
      * Instantiates a new container compactor.
      *
-     * @param parInventoryPlayer the par inventory player
-     * @param parIInventory the par I inventory
+     * @param parInventoryPlayer
+     *            the par inventory player
+     * @param parIInventory
+     *            the par I inventory
      */
     public ContainerCompactor(InventoryPlayer parInventoryPlayer, IInventory parIInventory)
     {
-    	// DEBUG
-    	System.out.println("ContainerCompactor constructor()");
-    	
+        // DEBUG
+        System.out.println("ContainerCompactor constructor()");
+
         tileCompactor = (TileEntityCompactor) parIInventory;
         sizeInventory = tileCompactor.getSizeInventory();
         // DEBUG
-        System.out.println("Compactor inventory size = "+sizeInventory);
+        System.out.println("Compactor inventory size = " + sizeInventory);
         addSlotToContainer(new Slot(tileCompactor, TileEntityCompactor.slotEnum.INPUT_SLOT.ordinal(), 56, 35));
         addSlotToContainer(new SlotCompactorOutput(parInventoryPlayer.player, tileCompactor, TileEntityCompactor.slotEnum.OUTPUT_SLOT.ordinal(), 116, 35));
-        
+
         // add player inventory slots
         // note that the slot numbers are within the player inventory so can be same as the tile entity inventory
         // DEBUG
@@ -86,26 +88,27 @@ public class ContainerCompactor extends Container
     /**
      * Add the given Listener to the list of Listeners. Method name is for legacy.
      *
-     * @param listener the listener
+     * @param listener
+     *            the listener
      */
     @Override
     public void addListener(IContainerListener listener)
     {
-    	// DEBUG
-    	System.out.println("Adding listener to Compactor container = "+listener);
+        // DEBUG
+        System.out.println("Adding listener to Compactor container = " + listener);
         super.addListener(listener);
-    	// DEBUG
-    	System.out.println("Sending all window properties listener");
+        // DEBUG
+        System.out.println("Sending all window properties listener");
         listener.sendAllWindowProperties(this, tileCompactor);
-    	// DEBUG
-    	System.out.println("Finished adding listener to Compactor container");
+        // DEBUG
+        System.out.println("Finished adding listener to Compactor container");
     }
 
     /**
      * Looks for changes made in the container, sends them to every listener.
      */
     @Override
-	public void detectAndSendChanges()
+    public void detectAndSendChanges()
     {
         super.detectAndSendChanges();
 
@@ -134,21 +137,25 @@ public class ContainerCompactor extends Container
         ticksPerItem = tileCompactor.getField(3); // ticks per item
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see net.minecraft.inventory.Container#updateProgressBar(int, int)
      */
     @Override
-	@SideOnly(Side.CLIENT)
+    @SideOnly(Side.CLIENT)
     public void updateProgressBar(int id, int data)
     {
         tileCompactor.setField(id, data);
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see net.minecraft.inventory.Container#canInteractWith(net.minecraft.entity.player.EntityPlayer)
      */
     @Override
-	public boolean canInteractWith(EntityPlayer playerIn)
+    public boolean canInteractWith(EntityPlayer playerIn)
     {
         return tileCompactor.isUsableByPlayer(playerIn);
     }
@@ -156,12 +163,14 @@ public class ContainerCompactor extends Container
     /**
      * Take a stack from the specified inventory slot.
      *
-     * @param playerIn the player in
-     * @param slotIndex the slot index
+     * @param playerIn
+     *            the player in
+     * @param slotIndex
+     *            the slot index
      * @return the item stack
      */
     @Override
-	public ItemStack transferStackInSlot(EntityPlayer playerIn, int slotIndex)
+    public ItemStack transferStackInSlot(EntityPlayer playerIn, int slotIndex)
     {
         ItemStack itemStack1 = ItemStack.EMPTY;
         Slot slot = inventorySlots.get(slotIndex);
@@ -173,7 +182,7 @@ public class ContainerCompactor extends Container
 
             if (slotIndex == TileEntityCompactor.slotEnum.OUTPUT_SLOT.ordinal())
             {
-                if (!mergeItemStack(itemStack2, sizeInventory, sizeInventory+36, true))
+                if (!mergeItemStack(itemStack2, sizeInventory, sizeInventory + 36, true))
                 {
                     return ItemStack.EMPTY;
                 }
@@ -182,7 +191,7 @@ public class ContainerCompactor extends Container
             }
             else if (slotIndex != TileEntityCompactor.slotEnum.INPUT_SLOT.ordinal())
             {
-            	// check if there is a compacting recipe for the stack
+                // check if there is a compacting recipe for the stack
                 if (CompactorRecipes.instance().getCompactingResult(itemStack2) != ItemStack.EMPTY)
                 {
                     if (!mergeItemStack(itemStack2, 0, 1, false))
@@ -190,19 +199,20 @@ public class ContainerCompactor extends Container
                         return ItemStack.EMPTY;
                     }
                 }
-                else if (slotIndex >= sizeInventory && slotIndex < sizeInventory+27) // player inventory slots
+                else if (slotIndex >= sizeInventory && slotIndex < sizeInventory + 27) // player inventory slots
                 {
-                    if (!mergeItemStack(itemStack2, sizeInventory+27, sizeInventory+36, false))
+                    if (!mergeItemStack(itemStack2, sizeInventory + 27, sizeInventory + 36, false))
                     {
                         return ItemStack.EMPTY;
                     }
                 }
-                else if (slotIndex >= sizeInventory+27 && slotIndex < sizeInventory+36 && !mergeItemStack(itemStack2, sizeInventory+1, sizeInventory+28, false)) // hotbar slots
+                else if (slotIndex >= sizeInventory + 27 && slotIndex < sizeInventory + 36
+                        && !mergeItemStack(itemStack2, sizeInventory + 1, sizeInventory + 28, false)) // hotbar slots
                 {
                     return ItemStack.EMPTY;
                 }
             }
-            else if (!mergeItemStack(itemStack2, sizeInventory, sizeInventory+36, false))
+            else if (!mergeItemStack(itemStack2, sizeInventory, sizeInventory + 36, false))
             {
                 return ItemStack.EMPTY;
             }

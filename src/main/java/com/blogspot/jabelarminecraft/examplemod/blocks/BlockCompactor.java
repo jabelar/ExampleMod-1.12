@@ -75,16 +75,17 @@ public class BlockCompactor extends BlockContainer
         useNeighborBrightness = false;
     }
 
- 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see net.minecraft.block.Block#onBlockAdded(net.minecraft.world.World, net.minecraft.util.math.BlockPos, net.minecraft.block.state.IBlockState)
      */
     @Override
-	public void onBlockAdded(World parWorld, BlockPos parBlockPos, IBlockState parIBlockState)
+    public void onBlockAdded(World parWorld, BlockPos parBlockPos, IBlockState parIBlockState)
     {
         if (!parWorld.isRemote)
         {
-        	// Rotate block if the front side is blocked
+            // Rotate block if the front side is blocked
             IBlockState blockToNorth = parWorld.getBlockState(parBlockPos.north());
             IBlockState blockToSouth = parWorld.getBlockState(parBlockPos.south());
             IBlockState blockToWest = parWorld.getBlockState(parBlockPos.west());
@@ -112,11 +113,13 @@ public class BlockCompactor extends BlockContainer
         }
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see net.minecraft.block.Block#randomDisplayTick(net.minecraft.block.state.IBlockState, net.minecraft.world.World, net.minecraft.util.math.BlockPos, java.util.Random)
      */
     @Override
-	@SideOnly(Side.CLIENT)
+    @SideOnly(Side.CLIENT)
     public void randomDisplayTick(IBlockState state, World worldIn, BlockPos pos, Random rand)
     {
         if (isCompacting)
@@ -130,106 +133,122 @@ public class BlockCompactor extends BlockContainer
 
             switch (BlockCompactor.SwitchEnumFacing.enumFacingArray[enumfacing.ordinal()])
             {
-                case 1:
-                    worldIn.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, d0 - d3, d1, d2 + d4, 0.0D, 0.0D, 0.0D, new int[0]);
-                    worldIn.spawnParticle(EnumParticleTypes.FLAME, d0 - d3, d1, d2 + d4, 0.0D, 0.0D, 0.0D, new int[0]);
-                    break;
-                case 2:
-                    worldIn.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, d0 + d3, d1, d2 + d4, 0.0D, 0.0D, 0.0D, new int[0]);
-                    worldIn.spawnParticle(EnumParticleTypes.FLAME, d0 + d3, d1, d2 + d4, 0.0D, 0.0D, 0.0D, new int[0]);
-                    break;
-                case 3:
-                    worldIn.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, d0 + d4, d1, d2 - d3, 0.0D, 0.0D, 0.0D, new int[0]);
-                    worldIn.spawnParticle(EnumParticleTypes.FLAME, d0 + d4, d1, d2 - d3, 0.0D, 0.0D, 0.0D, new int[0]);
-                    break;
-                case 4:
-                    worldIn.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, d0 + d4, d1, d2 + d3, 0.0D, 0.0D, 0.0D, new int[0]);
-                    worldIn.spawnParticle(EnumParticleTypes.FLAME, d0 + d4, d1, d2 + d3, 0.0D, 0.0D, 0.0D, new int[0]);
-                    break;
-			default:
-				break;
+            case 1:
+                worldIn.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, d0 - d3, d1, d2 + d4, 0.0D, 0.0D, 0.0D, new int[0]);
+                worldIn.spawnParticle(EnumParticleTypes.FLAME, d0 - d3, d1, d2 + d4, 0.0D, 0.0D, 0.0D, new int[0]);
+                break;
+            case 2:
+                worldIn.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, d0 + d3, d1, d2 + d4, 0.0D, 0.0D, 0.0D, new int[0]);
+                worldIn.spawnParticle(EnumParticleTypes.FLAME, d0 + d3, d1, d2 + d4, 0.0D, 0.0D, 0.0D, new int[0]);
+                break;
+            case 3:
+                worldIn.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, d0 + d4, d1, d2 - d3, 0.0D, 0.0D, 0.0D, new int[0]);
+                worldIn.spawnParticle(EnumParticleTypes.FLAME, d0 + d4, d1, d2 - d3, 0.0D, 0.0D, 0.0D, new int[0]);
+                break;
+            case 4:
+                worldIn.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, d0 + d4, d1, d2 + d3, 0.0D, 0.0D, 0.0D, new int[0]);
+                worldIn.spawnParticle(EnumParticleTypes.FLAME, d0 + d4, d1, d2 + d3, 0.0D, 0.0D, 0.0D, new int[0]);
+                break;
+            default:
+                break;
             }
         }
     }
 
-    /* (non-Javadoc)
-     * @see net.minecraft.block.Block#onBlockActivated(net.minecraft.world.World, net.minecraft.util.math.BlockPos, net.minecraft.block.state.IBlockState, net.minecraft.entity.player.EntityPlayer, net.minecraft.util.EnumHand, net.minecraft.util.EnumFacing, float, float, float)
+    /*
+     * (non-Javadoc)
+     * 
+     * @see net.minecraft.block.Block#onBlockActivated(net.minecraft.world.World, net.minecraft.util.math.BlockPos, net.minecraft.block.state.IBlockState,
+     * net.minecraft.entity.player.EntityPlayer, net.minecraft.util.EnumHand, net.minecraft.util.EnumFacing, float, float, float)
      */
     @Override
-	public boolean onBlockActivated(World parWorld, BlockPos parBlockPos, IBlockState parIBlockState, EntityPlayer parPlayer, EnumHand parHand, EnumFacing parSide, float hitX, float hitY, float hitZ)
+    public boolean onBlockActivated(World parWorld, BlockPos parBlockPos, IBlockState parIBlockState, EntityPlayer parPlayer, EnumHand parHand,
+            EnumFacing parSide, float hitX, float hitY, float hitZ)
     {
         if (!parWorld.isRemote)
         {
-        	// DEBUG
-        	System.out.println("BlockCompactor onBlockActivated() on server side");
-            parPlayer.openGui(MainMod.instance, MainMod.GUI_ENUM.COMPACTOR.ordinal(), parWorld, parBlockPos.getX(), parBlockPos.getY(), parBlockPos.getZ()); 
+            // DEBUG
+            System.out.println("BlockCompactor onBlockActivated() on server side");
+            parPlayer.openGui(MainMod.instance, MainMod.GUI_ENUM.COMPACTOR.ordinal(), parWorld, parBlockPos.getX(), parBlockPos.getY(), parBlockPos.getZ());
         }
-        
+
         return true;
     }
 
     /**
      * Change block based on compacting status.
      *
-     * @param parIsCompacting the par is compacting
-     * @param parWorld the par world
-     * @param parBlockPos the par block pos
+     * @param parIsCompacting
+     *            the par is compacting
+     * @param parWorld
+     *            the par world
+     * @param parBlockPos
+     *            the par block pos
      */
     public static void changeBlockBasedOnCompactingStatus(boolean parIsCompacting, World parWorld, BlockPos parBlockPos)
     {
-//        IBlockState iBlockState = parWorld.getBlockState(parBlockPos);
-//        TileEntity tileentity = parWorld.getTileEntity(parBlockPos);
-//        hasTileEntity = true;
-//
-//        if (parIsCompacting)
-//        {
-//            parWorld.setBlockState(parBlockPos, BlockSmith.blockActiveCompactor.getDefaultState().withProperty(FACING, iBlockState.getValue(FACING)), 3);
-//            parWorld.setBlockState(parBlockPos, BlockSmith.blockActiveCompactor.getDefaultState().withProperty(FACING, iBlockState.getValue(FACING)), 3);
-//        }
-//        else
-//        {
-//            parWorld.setBlockState(parBlockPos, BlockSmith.blockCompactor.getDefaultState().withProperty(FACING, iBlockState.getValue(FACING)), 3);
-//            parWorld.setBlockState(parBlockPos, BlockSmith.blockCompactor.getDefaultState().withProperty(FACING, iBlockState.getValue(FACING)), 3);
-//        }
-//
-//        hasTileEntity = false;
-//
-//        if (tileentity != null)
-//        {
-//            tileentity.validate();
-//            parWorld.setTileEntity(parBlockPos, tileentity);
-//        }
+        // IBlockState iBlockState = parWorld.getBlockState(parBlockPos);
+        // TileEntity tileentity = parWorld.getTileEntity(parBlockPos);
+        // hasTileEntity = true;
+        //
+        // if (parIsCompacting)
+        // {
+        // parWorld.setBlockState(parBlockPos, BlockSmith.blockActiveCompactor.getDefaultState().withProperty(FACING, iBlockState.getValue(FACING)), 3);
+        // parWorld.setBlockState(parBlockPos, BlockSmith.blockActiveCompactor.getDefaultState().withProperty(FACING, iBlockState.getValue(FACING)), 3);
+        // }
+        // else
+        // {
+        // parWorld.setBlockState(parBlockPos, BlockSmith.blockCompactor.getDefaultState().withProperty(FACING, iBlockState.getValue(FACING)), 3);
+        // parWorld.setBlockState(parBlockPos, BlockSmith.blockCompactor.getDefaultState().withProperty(FACING, iBlockState.getValue(FACING)), 3);
+        // }
+        //
+        // hasTileEntity = false;
+        //
+        // if (tileentity != null)
+        // {
+        // tileentity.validate();
+        // parWorld.setTileEntity(parBlockPos, tileentity);
+        // }
     }
 
     /**
      * Returns a new instance of a block's tile entity class. Called on placing the block.
      *
-     * @param worldIn the world in
-     * @param meta the meta
+     * @param worldIn
+     *            the world in
+     * @param meta
+     *            the meta
      * @return the tile entity
      */
     @Override
-	public TileEntity createNewTileEntity(World worldIn, int meta)
+    public TileEntity createNewTileEntity(World worldIn, int meta)
     {
-    	// DEBUG
-    	System.out.println("BlockCompactor createNewTileEntity()");
+        // DEBUG
+        System.out.println("BlockCompactor createNewTileEntity()");
         return new TileEntityCompactor();
     }
 
-    /* (non-Javadoc)
-     * @see net.minecraft.block.Block#getStateForPlacement(net.minecraft.world.World, net.minecraft.util.math.BlockPos, net.minecraft.util.EnumFacing, float, float, float, int, net.minecraft.entity.EntityLivingBase, net.minecraft.util.EnumHand)
+    /*
+     * (non-Javadoc)
+     * 
+     * @see net.minecraft.block.Block#getStateForPlacement(net.minecraft.world.World, net.minecraft.util.math.BlockPos, net.minecraft.util.EnumFacing, float, float, float, int,
+     * net.minecraft.entity.EntityLivingBase, net.minecraft.util.EnumHand)
      */
     @Override
-	public IBlockState getStateForPlacement(World world, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer, EnumHand hand)
+    public IBlockState getStateForPlacement(World world, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer,
+            EnumHand hand)
     {
         return getDefaultState().withProperty(FACING, placer.getHorizontalFacing().getOpposite());
     }
 
-    /* (non-Javadoc)
-     * @see net.minecraft.block.Block#onBlockPlacedBy(net.minecraft.world.World, net.minecraft.util.math.BlockPos, net.minecraft.block.state.IBlockState, net.minecraft.entity.EntityLivingBase, net.minecraft.item.ItemStack)
+    /*
+     * (non-Javadoc)
+     * 
+     * @see net.minecraft.block.Block#onBlockPlacedBy(net.minecraft.world.World, net.minecraft.util.math.BlockPos, net.minecraft.block.state.IBlockState,
+     * net.minecraft.entity.EntityLivingBase, net.minecraft.item.ItemStack)
      */
     @Override
-	public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack)
+    public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack)
     {
         worldIn.setBlockState(pos, state.withProperty(FACING, placer.getHorizontalFacing().getOpposite()), 2);
 
@@ -239,16 +258,18 @@ public class BlockCompactor extends BlockContainer
 
             if (tileentity instanceof TileEntityCompactor)
             {
-                ((TileEntityCompactor)tileentity).setCustomInventoryName(stack.getDisplayName());
+                ((TileEntityCompactor) tileentity).setCustomInventoryName(stack.getDisplayName());
             }
         }
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see net.minecraft.block.BlockContainer#breakBlock(net.minecraft.world.World, net.minecraft.util.math.BlockPos, net.minecraft.block.state.IBlockState)
      */
     @Override
-	public void breakBlock(World worldIn, BlockPos pos, IBlockState state)
+    public void breakBlock(World worldIn, BlockPos pos, IBlockState state)
     {
         if (!hasTileEntity)
         {
@@ -256,7 +277,7 @@ public class BlockCompactor extends BlockContainer
 
             if (tileentity instanceof TileEntityCompactor)
             {
-                InventoryHelper.dropInventoryItems(worldIn, pos, (TileEntityCompactor)tileentity);
+                InventoryHelper.dropInventoryItems(worldIn, pos, (TileEntityCompactor) tileentity);
                 worldIn.updateComparatorOutputLevel(pos, this);
             }
         }
@@ -264,7 +285,9 @@ public class BlockCompactor extends BlockContainer
         super.breakBlock(worldIn, pos, state);
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see net.minecraft.block.Block#hasComparatorInputOverride(net.minecraft.block.state.IBlockState)
      */
     @Override
@@ -273,7 +296,9 @@ public class BlockCompactor extends BlockContainer
         return true;
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see net.minecraft.block.Block#getComparatorInputOverride(net.minecraft.block.state.IBlockState, net.minecraft.world.World, net.minecraft.util.math.BlockPos)
      */
     @Override
@@ -285,33 +310,35 @@ public class BlockCompactor extends BlockContainer
     /**
      * The type of render function that is called for this block.
      *
-     * @param parBlockState the par block state
+     * @param parBlockState
+     *            the par block state
      * @return the render type
      */
     @Override
-	public EnumBlockRenderType getRenderType(IBlockState parBlockState)
+    public EnumBlockRenderType getRenderType(IBlockState parBlockState)
     {
         return EnumBlockRenderType.MODEL;
     }
 
-//    /**
-//     * Possibly modify the given BlockState before rendering it on an Entity (Minecarts, Endermen, ...)
-//     */
-//    @Override
-//	@SideOnly(Side.CLIENT)
-//    public IBlockState getStateForEntityRender(IBlockState state)
-//    {
-//        return getDefaultState().withProperty(FACING, EnumFacing.SOUTH);
-//    }
+    // /**
+    // * Possibly modify the given BlockState before rendering it on an Entity (Minecarts, Endermen, ...)
+    // */
+    // @Override
+    // @SideOnly(Side.CLIENT)
+    // public IBlockState getStateForEntityRender(IBlockState state)
+    // {
+    // return getDefaultState().withProperty(FACING, EnumFacing.SOUTH);
+    // }
 
     /**
- * Convert the given metadata into a BlockState for this Block.
- *
- * @param meta the meta
- * @return the state from meta
- */
+     * Convert the given metadata into a BlockState for this Block.
+     *
+     * @param meta
+     *            the meta
+     * @return the state from meta
+     */
     @Override
-	public IBlockState getStateFromMeta(int meta)
+    public IBlockState getStateFromMeta(int meta)
     {
         EnumFacing enumfacing = EnumFacing.getFront(meta);
 
@@ -326,22 +353,25 @@ public class BlockCompactor extends BlockContainer
     /**
      * Convert the BlockState into the correct metadata value.
      *
-     * @param state the state
+     * @param state
+     *            the state
      * @return the meta from state
      */
     @Override
-	public int getMetaFromState(IBlockState state)
+    public int getMetaFromState(IBlockState state)
     {
         return state.getValue(FACING).getIndex();
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see net.minecraft.block.Block#createBlockState()
      */
     @Override
-	protected BlockStateContainer createBlockState()
+    protected BlockStateContainer createBlockState()
     {
-        return new BlockStateContainer(this, new IProperty[] {FACING});
+        return new BlockStateContainer(this, new IProperty[] { FACING });
     }
 
     @SideOnly(Side.CLIENT)

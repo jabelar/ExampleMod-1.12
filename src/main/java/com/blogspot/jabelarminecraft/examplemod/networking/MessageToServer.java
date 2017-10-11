@@ -30,76 +30,82 @@ import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
  * @author jabelar
  *
  */
-public class MessageToServer implements IMessage 
+public class MessageToServer implements IMessage
 {
-    
+
     private String text;
 
     /**
      * Instantiates a new message to server.
      */
-    public MessageToServer() 
-    { 
-    	// need this constructor
+    public MessageToServer()
+    {
+        // need this constructor
     }
 
     /**
      * Instantiates a new message to server.
      *
-     * @param parText the par text
+     * @param parText
+     *            the par text
      */
-    public MessageToServer(String parText) 
+    public MessageToServer(String parText)
     {
         text = parText;
         // DEBUG
         System.out.println("MyMessage constructor");
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see net.minecraftforge.fml.common.network.simpleimpl.IMessage#fromBytes(io.netty.buffer.ByteBuf)
      */
     @Override
-    public void fromBytes(ByteBuf buf) 
+    public void fromBytes(ByteBuf buf)
     {
         text = ByteBufUtils.readUTF8String(buf); // this class is very useful in general for writing more complex objects
-    	// DEBUG
-    	System.out.println("fromBytes = "+text);
+        // DEBUG
+        System.out.println("fromBytes = " + text);
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see net.minecraftforge.fml.common.network.simpleimpl.IMessage#toBytes(io.netty.buffer.ByteBuf)
      */
     @Override
-    public void toBytes(ByteBuf buf) 
+    public void toBytes(ByteBuf buf)
     {
         ByteBufUtils.writeUTF8String(buf, text);
         // DEBUG
-        System.out.println("toBytes = "+text);
+        System.out.println("toBytes = " + text);
     }
 
-    public static class Handler implements IMessageHandler<MessageToServer, IMessage> 
+    public static class Handler implements IMessageHandler<MessageToServer, IMessage>
     {
-        
-        /* (non-Javadoc)
-         * @see net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler#onMessage(net.minecraftforge.fml.common.network.simpleimpl.IMessage, net.minecraftforge.fml.common.network.simpleimpl.MessageContext)
+
+        /*
+         * (non-Javadoc)
+         * 
+         * @see net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler#onMessage(net.minecraftforge.fml.common.network.simpleimpl.IMessage,
+         * net.minecraftforge.fml.common.network.simpleimpl.MessageContext)
          */
         @Override
-        public IMessage onMessage(final MessageToServer message, MessageContext ctx) 
+        public IMessage onMessage(final MessageToServer message, MessageContext ctx)
         {
             // DEBUG
             System.out.println(String.format("Received %s from %s", message.text, MainMod.proxy.getPlayerEntityFromContext(ctx).getDisplayName()));
             // Know it will be on the server so make it thread-safe
             final EntityPlayerMP thePlayer = (EntityPlayerMP) MainMod.proxy.getPlayerEntityFromContext(ctx);
             thePlayer.getServer().addScheduledTask(
-                    new Runnable()
-                    {
+                    new Runnable() {
                         @Override
-                        public void run() 
+                        public void run()
                         {
-                            return; 
+                            return;
                         }
-                }
-            );
+                    });
             return null; // no response in this case
         }
     }

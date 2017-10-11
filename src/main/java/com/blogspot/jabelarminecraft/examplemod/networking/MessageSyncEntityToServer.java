@@ -32,82 +32,89 @@ import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
  * @author jabelar
  *
  */
-public class MessageSyncEntityToServer implements IMessage 
+public class MessageSyncEntityToServer implements IMessage
 {
-    private int entityId ;
+    private int entityId;
     private NBTTagCompound entitySyncDataCompound;
 
     /**
      * Instantiates a new message sync entity to server.
      */
-    public MessageSyncEntityToServer() 
-    { 
-    	// need this constructor
+    public MessageSyncEntityToServer()
+    {
+        // need this constructor
     }
 
     /**
      * Instantiates a new message sync entity to server.
      *
-     * @param parEntityId the par entity id
-     * @param parTagCompound the par tag compound
+     * @param parEntityId
+     *            the par entity id
+     * @param parTagCompound
+     *            the par tag compound
      */
-    public MessageSyncEntityToServer(int parEntityId, NBTTagCompound parTagCompound) 
+    public MessageSyncEntityToServer(int parEntityId, NBTTagCompound parTagCompound)
     {
-    	entityId = parEntityId;
+        entityId = parEntityId;
         entitySyncDataCompound = parTagCompound;
         // DEBUG
         System.out.println("SyncEntityToClient constructor");
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see net.minecraftforge.fml.common.network.simpleimpl.IMessage#fromBytes(io.netty.buffer.ByteBuf)
      */
     @Override
-    public void fromBytes(ByteBuf buf) 
+    public void fromBytes(ByteBuf buf)
     {
-    	entityId = ByteBufUtils.readVarInt(buf, 4);
-    	entitySyncDataCompound = ByteBufUtils.readTag(buf); // this class is very useful in general for writing more complex objects
-    	// DEBUG
-    	System.out.println("fromBytes");
+        entityId = ByteBufUtils.readVarInt(buf, 4);
+        entitySyncDataCompound = ByteBufUtils.readTag(buf); // this class is very useful in general for writing more complex objects
+        // DEBUG
+        System.out.println("fromBytes");
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see net.minecraftforge.fml.common.network.simpleimpl.IMessage#toBytes(io.netty.buffer.ByteBuf)
      */
     @Override
-    public void toBytes(ByteBuf buf) 
+    public void toBytes(ByteBuf buf)
     {
-    	ByteBufUtils.writeVarInt(buf, entityId, 4);
-    	ByteBufUtils.writeTag(buf, entitySyncDataCompound);
+        ByteBufUtils.writeVarInt(buf, entityId, 4);
+        ByteBufUtils.writeTag(buf, entitySyncDataCompound);
         // DEBUG
         System.out.println("toBytes encoded");
     }
 
-    public static class Handler implements IMessageHandler<MessageSyncEntityToServer, IMessage> 
+    public static class Handler implements IMessageHandler<MessageSyncEntityToServer, IMessage>
     {
-        
-        /* (non-Javadoc)
-         * @see net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler#onMessage(net.minecraftforge.fml.common.network.simpleimpl.IMessage, net.minecraftforge.fml.common.network.simpleimpl.MessageContext)
+
+        /*
+         * (non-Javadoc)
+         * 
+         * @see net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler#onMessage(net.minecraftforge.fml.common.network.simpleimpl.IMessage,
+         * net.minecraftforge.fml.common.network.simpleimpl.MessageContext)
          */
         @Override
-        public IMessage onMessage(final MessageSyncEntityToServer message, MessageContext ctx) 
+        public IMessage onMessage(final MessageSyncEntityToServer message, MessageContext ctx)
         {
             // Know it will be on the server so make it thread-safe
             final EntityPlayerMP thePlayer = (EntityPlayerMP) MainMod.proxy.getPlayerEntityFromContext(ctx);
             thePlayer.getServer().addScheduledTask(
-                    new Runnable()
-                    {
+                    new Runnable() {
                         @Override
-                        public void run() 
+                        public void run()
                         {
-                            IEntity theEntity = (IEntity)thePlayer.world.getEntityByID(message.entityId);
+                            IEntity theEntity = (IEntity) thePlayer.world.getEntityByID(message.entityId);
                             theEntity.setSyncDataCompound(message.entitySyncDataCompound);
                             // DEBUG
-                            System.out.println("MessageSyncEnitityToClient onMessage(), entity ID = "+message.entityId);
-                            return; 
+                            System.out.println("MessageSyncEnitityToClient onMessage(), entity ID = " + message.entityId);
+                            return;
                         }
-                    }
-            );
+                    });
             return null; // no response in this case
         }
     }

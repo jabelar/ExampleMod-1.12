@@ -49,20 +49,22 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
 // TODO: Auto-generated Javadoc
-public class ClientProxy extends CommonProxy 
+public class ClientProxy extends CommonProxy
 {
     /*
      * Fields related to key binding
      */
     public static KeyBinding[] keyBindings;
-    
+
     /*
      * For rendering a sphere, need ids for call lists for outside and inside
      */
     public static int sphereIdOutside;
     public static int sphereIdInside;
-    
-    /* (non-Javadoc)
+
+    /*
+     * (non-Javadoc)
+     * 
      * @see com.blogspot.jabelarminecraft.examplemod.proxy.CommonProxy#fmlLifeCycleEvent(net.minecraftforge.fml.common.event.FMLPreInitializationEvent)
      */
     @Override
@@ -70,14 +72,15 @@ public class ClientProxy extends CommonProxy
     {
         // DEBUG
         System.out.println("on Client side");
-        
-        
+
         // do common stuff
         super.fmlLifeCycleEvent(event);
 
     }
-    
-    /* (non-Javadoc)
+
+    /*
+     * (non-Javadoc)
+     * 
      * @see com.blogspot.jabelarminecraft.examplemod.proxy.CommonProxy#fmlLifeCycleEvent(net.minecraftforge.fml.common.event.FMLInitializationEvent)
      */
     @Override
@@ -87,27 +90,29 @@ public class ClientProxy extends CommonProxy
         System.out.println("on Client side");
 
         /*
-         *  do common stuff
+         * do common stuff
          */
         super.fmlLifeCycleEvent(event);
 
         /*
-         *  do client-specific stuff
+         * do client-specific stuff
          */
         // register key bindings
         registerKeyBindings();
 
         // create sphere call list
         createSphereCallList();
-        
+
         // register model loader
-//        ModelLoaderRegistry.registerLoader(new MyModelLoader());
+        // ModelLoaderRegistry.registerLoader(new MyModelLoader());
 
         // register renderers
         registerEntityRenderers();
     }
-    
-    /* (non-Javadoc)
+
+    /*
+     * (non-Javadoc)
+     * 
      * @see com.blogspot.jabelarminecraft.examplemod.proxy.CommonProxy#fmlLifeCycleEvent(net.minecraftforge.fml.common.event.FMLPostInitializationEvent)
      */
     @Override
@@ -124,7 +129,7 @@ public class ClientProxy extends CommonProxy
         Thread versionCheckThread = new Thread(MainMod.versionChecker, "Version Check");
         versionCheckThread.start();
 
-}
+    }
 
     /**
      * Register key bindings.
@@ -132,17 +137,17 @@ public class ClientProxy extends CommonProxy
     /*
      * Registers key bindings
      */
-    public void registerKeyBindings() 
-    {        
+    public void registerKeyBindings()
+    {
         // declare an array of key bindings
-        keyBindings = new KeyBinding[2]; 
-        
+        keyBindings = new KeyBinding[2];
+
         // instantiate the key bindings
         keyBindings[0] = new KeyBinding("key.structure.desc", Keyboard.KEY_P, "key.magicbeans.category");
         keyBindings[1] = new KeyBinding("key.hud.desc", Keyboard.KEY_H, "key.magicbeans.category");
-        
+
         // register all the key bindings
-        for (int i = 0; i < keyBindings.length; ++i) 
+        for (int i = 0; i < keyBindings.length; ++i)
         {
             ClientRegistry.registerKeyBinding(keyBindings[i]);
         }
@@ -151,26 +156,27 @@ public class ClientProxy extends CommonProxy
     /**
      * Registers the entity renderers.
      */
-    public void registerEntityRenderers() 
+    public void registerEntityRenderers()
     {
         // the float parameter passed to the Render class is the shadow size for the entity
-      
+
         RenderManager renderManager = Minecraft.getMinecraft().getRenderManager();
-        // RenderingRegistry.registerEntityRenderingHandler(EntityGoldenGoose.class, new RenderGoldenGoose(renderManager, new ModelGoldenGoose(), 0.5F)); // 0.5F is shadow size 
-    	RenderingRegistry.registerEntityRenderingHandler(EntityPigTest.class, new RenderPig(renderManager));
+        // RenderingRegistry.registerEntityRenderingHandler(EntityGoldenGoose.class, new RenderGoldenGoose(renderManager, new ModelGoldenGoose(), 0.5F)); // 0.5F is shadow size
+        RenderingRegistry.registerEntityRenderingHandler(EntityPigTest.class, new RenderPig(renderManager));
     }
-    
-    /*     
+
+    /*
      * Thanks to CoolAlias for this tip!
      */
     /**
      * Returns a side-appropriate EntityPlayer for use during message handling.
      *
-     * @param ctx the ctx
+     * @param ctx
+     *            the ctx
      * @return the player entity from context
      */
     @Override
-    public EntityPlayer getPlayerEntityFromContext(MessageContext ctx) 
+    public EntityPlayer getPlayerEntityFromContext(MessageContext ctx)
     {
         // Note that if you simply return 'Minecraft.getMinecraft().thePlayer',
         // your packets will not work because you will be getting a client
@@ -179,86 +185,85 @@ public class ClientProxy extends CommonProxy
         // Solution is to double-check side before returning the player:
         return (ctx.side.isClient() ? Minecraft.getMinecraft().player : super.getPlayerEntityFromContext(ctx));
     }
-    
+
     /**
      * Creates the sphere call list.
      */
     /*
-     * For rendering a sphere, need to make the call list
-     * Must be called after pre-init, otherwise Minecraft.getMinecraft() will fail will null pointer exception
+     * For rendering a sphere, need to make the call list Must be called after pre-init, otherwise Minecraft.getMinecraft() will fail will null pointer exception
      */
     public void createSphereCallList()
     {
         Sphere sphere = new Sphere();
-       //GLU_POINT will render it as dots.
-       //GLU_LINE will render as wireframe
-       //GLU_SILHOUETTE will render as ?shadowed? wireframe
-       //GLU_FILL as a solid.
+        // GLU_POINT will render it as dots.
+        // GLU_LINE will render as wireframe
+        // GLU_SILHOUETTE will render as ?shadowed? wireframe
+        // GLU_FILL as a solid.
         sphere.setDrawStyle(GLU.GLU_FILL);
-       //GLU_SMOOTH will try to smoothly apply lighting
-       //GLU_FLAT will have a solid brightness per face, and will not shade.
-       //GLU_NONE will be completely solid, and probably will have no depth to it's appearance.
+        // GLU_SMOOTH will try to smoothly apply lighting
+        // GLU_FLAT will have a solid brightness per face, and will not shade.
+        // GLU_NONE will be completely solid, and probably will have no depth to it's appearance.
         sphere.setNormals(GLU.GLU_SMOOTH);
-       //GLU_INSIDE will render as if you are inside the sphere, making it appear inside out.(Similar to how ender portals are rendered)
+        // GLU_INSIDE will render as if you are inside the sphere, making it appear inside out.(Similar to how ender portals are rendered)
         sphere.setOrientation(GLU.GLU_OUTSIDE);
         sphereIdOutside = GL11.glGenLists(1);
-       //Create a new list to hold our sphere data.
+        // Create a new list to hold our sphere data.
         GL11.glNewList(sphereIdOutside, GL11.GL_COMPILE);
-       //binds the texture 
-       ResourceLocation rL = new ResourceLocation(MainMod.MODID+":textures/entities/sphere.png");
-       Minecraft.getMinecraft().getTextureManager().bindTexture(rL);
-       //The drawing the sphere is automatically doing is getting added to our list. Careful, the last 2 variables
-       //control the detail, but have a massive impact on performance. 32x32 is a good balance on my machine.s
-       sphere.draw(0.5F, 32, 32);
-       GL11.glEndList();
+        // binds the texture
+        ResourceLocation rL = new ResourceLocation(MainMod.MODID + ":textures/entities/sphere.png");
+        Minecraft.getMinecraft().getTextureManager().bindTexture(rL);
+        // The drawing the sphere is automatically doing is getting added to our list. Careful, the last 2 variables
+        // control the detail, but have a massive impact on performance. 32x32 is a good balance on my machine.s
+        sphere.draw(0.5F, 32, 32);
+        GL11.glEndList();
 
-       //GLU_INSIDE will render as if you are inside the sphere, making it appear inside out.(Similar to how ender portals are rendered)
-       sphere.setOrientation(GLU.GLU_INSIDE);
-       sphereIdInside = GL11.glGenLists(1);
-       //Create a new list to hold our sphere data.
-       GL11.glNewList(sphereIdInside, GL11.GL_COMPILE);
-       Minecraft.getMinecraft().getTextureManager().bindTexture(rL);
-       //The drawing the sphere is automatically doing is getting added to our list. Careful, the last 2 variables
-       //control the detail, but have a massive impact on performance. 32x32 is a good balance on my machine.s
-       sphere.draw(0.5F, 32, 32);
-       GL11.glEndList();
+        // GLU_INSIDE will render as if you are inside the sphere, making it appear inside out.(Similar to how ender portals are rendered)
+        sphere.setOrientation(GLU.GLU_INSIDE);
+        sphereIdInside = GL11.glGenLists(1);
+        // Create a new list to hold our sphere data.
+        GL11.glNewList(sphereIdInside, GL11.GL_COMPILE);
+        Minecraft.getMinecraft().getTextureManager().bindTexture(rL);
+        // The drawing the sphere is automatically doing is getting added to our list. Careful, the last 2 variables
+        // control the detail, but have a massive impact on performance. 32x32 is a good balance on my machine.s
+        sphere.draw(0.5F, 32, 32);
+        GL11.glEndList();
     }
-    
+
     /*
-     * This initializes the List in the public field itemListFromRegistry with all possilbe
-     * ItemStack types (all valid metadata values, as well as any NBT that is used to create variants
-     * in mods like Tinker's Construct).
+     * This initializes the List in the public field itemListFromRegistry with all possilbe ItemStack types (all valid metadata values, as well as any NBT that is used to create
+     * variants in mods like Tinker's Construct).
      */
-//    @Override
-//	protected void initItemStackRegistry()
-//    {
-//		itemStackRegistry.clear();
-//		
-//		for (Object theObj: Item.REGISTRY)
-//		{
-//			((Item)theObj).getSubItems((Item)theObj, null, itemStackRegistry); // this method directly appends to ItemStackRegistry
-//		}
-//		
-//		// DEBUG
-//		System.out.println("ItemStack registry = "+itemStackRegistry.toString());
-//
-//		return;
-//    }
-    
-    
+    // @Override
+    // protected void initItemStackRegistry()
+    // {
+    // itemStackRegistry.clear();
+    //
+    // for (Object theObj: Item.REGISTRY)
+    // {
+    // ((Item)theObj).getSubItems((Item)theObj, null, itemStackRegistry); // this method directly appends to ItemStackRegistry
+    // }
+    //
+    // // DEBUG
+    // System.out.println("ItemStack registry = "+itemStackRegistry.toString());
+    //
+    // return;
+    // }
+
     /**
      * handles the acceleration of an object whilst in a material.
      *
-     * @param entityIn the entity in
-     * @param materialIn the material in
+     * @param entityIn
+     *            the entity in
+     * @param materialIn
+     *            the material in
      * @return true, if successful
      */
     @Override
-	public boolean handleMaterialAcceleration(Entity entityIn, Material materialIn)
+    public boolean handleMaterialAcceleration(Entity entityIn, Material materialIn)
     {
-    	World parWorld = entityIn.world;
-    	AxisAlignedBB bb = entityIn.getEntityBoundingBox().grow(0.0D, -0.4000000059604645D, 0.0D).shrink(0.001D);
-    	
+        World parWorld = entityIn.world;
+        AxisAlignedBB bb = entityIn.getEntityBoundingBox().grow(0.0D, -0.4000000059604645D, 0.0D).shrink(0.001D);
+
         int j2 = MathHelper.floor(bb.minX);
         int k2 = MathHelper.ceil(bb.maxX);
         int l2 = MathHelper.floor(bb.minY);
@@ -283,32 +288,34 @@ public class ClientProxy extends CommonProxy
                     Boolean result = block.isEntityInsideMaterial(parWorld, blockpos$pooledmutableblockpos, iblockstate1, entityIn, i3, materialIn, false);
                     if (result != null && result == true)
                     {
-                        // Forge: When requested call blocks modifyAcceleration method, and more importantly cause this method to return true, which results in an entity being "inWater"
+                        // Forge: When requested call blocks modifyAcceleration method, and more importantly cause this method to return true, which results in an entity being
+                        // "inWater"
                         flag = true;
                         vec3d = block.modifyAcceleration(parWorld, blockpos$pooledmutableblockpos, entityIn, vec3d);
-                  	  
-//                        // DEBUG
-//                  	  System.out.println("Entity is inside material = "+materialIn+" and motion add vector = "+vec3d);
-                  	  
+
+                        // // DEBUG
+                        // System.out.println("Entity is inside material = "+materialIn+" and motion add vector = "+vec3d);
+
                         continue;
                     }
-                    else if (result != null && result == false) continue;
+                    else if (result != null && result == false)
+                        continue;
 
                     if (iblockstate1.getMaterial() == materialIn)
                     {
-//                  	  // DEBUG
-//                  	  System.out.println("blockstate material matches material in");
-                  	  
+                        // // DEBUG
+                        // System.out.println("blockstate material matches material in");
+
                         double d0 = i4 + 1 - BlockLiquid.getLiquidHeightPercent(iblockstate1.getValue(BlockLiquid.LEVEL).intValue());
 
                         if (i3 >= d0)
                         {
-                      	  flag = true;
-                      	  vec3d = block.modifyAcceleration(parWorld, blockpos$pooledmutableblockpos, entityIn, vec3d);
-                      	  
-//                            // DEBUG
-//                      	  System.out.println("deep enough to push entity and motion add = "+vec3d);                 
-                         }
+                            flag = true;
+                            vec3d = block.modifyAcceleration(parWorld, blockpos$pooledmutableblockpos, entityIn, vec3d);
+
+                            // // DEBUG
+                            // System.out.println("deep enough to push entity and motion add = "+vec3d);
+                        }
                     }
                 }
             }
@@ -318,14 +325,12 @@ public class ClientProxy extends CommonProxy
 
         if (vec3d.lengthVector() > 0.0D && entityIn.isPushedByWater())
         {
-//      	  // DEBUG
-//      	  System.out.println("motion vector is non-zero");
-      	  
-      	  /*
-      	   * Although applied to all entities, EntityPlayer doesn't really take
-      	   * affect, so the fluid motion control is handled in the client-side
-      	   * PlayerTickEvent
-      	   */
+            // // DEBUG
+            // System.out.println("motion vector is non-zero");
+
+            /*
+             * Although applied to all entities, EntityPlayer doesn't really take affect, so the fluid motion control is handled in the client-side PlayerTickEvent
+             */
             vec3d = vec3d.normalize();
             double d1 = 0.014D;
             entityIn.motionX += vec3d.x * d1;
@@ -334,10 +339,10 @@ public class ClientProxy extends CommonProxy
         }
         else
         {
-//          	  // DEBUG
-//          	  System.out.println("motion vector is zero");
+            // // DEBUG
+            // System.out.println("motion vector is zero");
         }
-    	
+
         entityIn.fallDistance = 0.0F;
 
         return flag;

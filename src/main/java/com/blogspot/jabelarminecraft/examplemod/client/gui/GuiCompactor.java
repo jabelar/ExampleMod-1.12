@@ -35,21 +35,23 @@ import net.minecraftforge.fml.relauncher.SideOnly;;
 @SideOnly(Side.CLIENT)
 public class GuiCompactor extends GuiContainer
 {
-	private static final ResourceLocation COMPACTOR_GUI_TEXTURES = new ResourceLocation(MainMod.MODID+":textures/gui/container/compactor.png");
+    private static final ResourceLocation COMPACTOR_GUI_TEXTURES = new ResourceLocation(MainMod.MODID + ":textures/gui/container/compactor.png");
     private final InventoryPlayer inventoryPlayer;
     private final IInventory tileCompactor;
 
     /**
      * Instantiates a new gui compactor.
      *
-     * @param parInventoryPlayer the par inventory player
-     * @param parInventoryCompactor the par inventory compactor
+     * @param parInventoryPlayer
+     *            the par inventory player
+     * @param parInventoryCompactor
+     *            the par inventory compactor
      */
     public GuiCompactor(InventoryPlayer parInventoryPlayer, IInventory parInventoryCompactor)
     {
         super(new ContainerCompactor(parInventoryPlayer, parInventoryCompactor));
-    	// DEBUG
-    	System.out.println("GUI Compactor constructor");
+        // DEBUG
+        System.out.println("GUI Compactor constructor");
         inventoryPlayer = parInventoryPlayer;
         tileCompactor = parInventoryCompactor;
     }
@@ -57,11 +59,13 @@ public class GuiCompactor extends GuiContainer
     /**
      * Draw the foreground layer for the GuiContainer (everything in front of the items). Args : mouseX, mouseY
      *
-     * @param mouseX the mouse X
-     * @param mouseY the mouse Y
+     * @param mouseX
+     *            the mouse X
+     * @param mouseY
+     *            the mouse Y
      */
     @Override
-	protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY)
+    protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY)
     {
         String s = tileCompactor.getDisplayName().getUnformattedText();
         fontRenderer.drawString(s, xSize / 2 - fontRenderer.getStringWidth(s) / 2, 6, 4210752);
@@ -71,12 +75,15 @@ public class GuiCompactor extends GuiContainer
     /**
      * Args : renderPartialTicks, mouseX, mouseY.
      *
-     * @param partialTicks the partial ticks
-     * @param mouseX the mouse X
-     * @param mouseY the mouse Y
+     * @param partialTicks
+     *            the partial ticks
+     * @param mouseX
+     *            the mouse X
+     * @param mouseY
+     *            the mouse Y
      */
     @Override
-	protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY)
+    protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY)
     {
         GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
         mc.getTextureManager().bindTexture(COMPACTOR_GUI_TEXTURES);
@@ -91,9 +98,9 @@ public class GuiCompactor extends GuiContainer
 
     private int getProgressLevel(int progressIndicatorPixelWidth)
     {
-        int ticksCompactingItemSoFar = tileCompactor.getField(2); 
+        int ticksCompactingItemSoFar = tileCompactor.getField(2);
         int ticksPerItem = tileCompactor.getField(3);
         return ticksPerItem != 0 && ticksCompactingItemSoFar != 0 ? ticksCompactingItemSoFar * progressIndicatorPixelWidth / ticksPerItem : 0;
     }
 
- }
+}

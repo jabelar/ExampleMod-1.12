@@ -27,42 +27,44 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.registries.IForgeRegistry;
 
-public class ModRecipes 
+public class ModRecipes
 {
     // instantiate IRecipes
-//	public final static IRecipeCustom MY_COOL_RECIPE = new IRecipeCustom();
-	
-	public static final Set<IRecipe> SET_INSTANCES = ImmutableSet.of(
-//            MY_COOL_RECIPE
-			);
+    // public final static IRecipeCustom MY_COOL_RECIPE = new IRecipeCustom();
 
-	/**
-	 * Initialize this mod's {@link Block}s with any post-registration data.
-	 */
-	private static void initialize() 
-	{
-	}
+    public static final Set<IRecipe> SET_INSTANCES = ImmutableSet.of(
+    // MY_COOL_RECIPE
+    );
 
-	@Mod.EventBusSubscriber(modid = MainMod.MODID)
-	public static class RegistrationHandler 
-	{
-		/**
-		 * Register this mod's {@link IRecipe}s.
-		 *
-		 * @param event The event
-		 */
-		@SubscribeEvent
-		public static void onEvent(final RegistryEvent.Register<IRecipe> event) 
-		{
-			final IForgeRegistry<IRecipe> registry = event.getRegistry();
+    /**
+     * Initialize this mod's {@link Block}s with any post-registration data.
+     */
+    private static void initialize()
+    {
+    }
 
-	        System.out.println("Registering recipes");
+    @Mod.EventBusSubscriber(modid = MainMod.MODID)
+    public static class RegistrationHandler
+    {
+        /**
+         * Register this mod's {@link IRecipe}s.
+         *
+         * @param event
+         *            The event
+         */
+        @SubscribeEvent
+        public static void onEvent(final RegistryEvent.Register<IRecipe> event)
+        {
+            final IForgeRegistry<IRecipe> registry = event.getRegistry();
 
-	        for (final IRecipe recipe : SET_INSTANCES) {
-				registry.register(recipe);
-			}
+            System.out.println("Registering recipes");
 
-			initialize();
-		}
-	}
+            for (final IRecipe recipe : SET_INSTANCES)
+            {
+                registry.register(recipe);
+            }
+
+            initialize();
+        }
+    }
 }

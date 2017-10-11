@@ -27,14 +27,14 @@ import net.minecraft.block.material.Material;
  */
 public class MaterialTanningRack extends Material
 {
-	
-	/**
-	 * Instantiates a new material tanning rack.
-	 */
-	public MaterialTanningRack() 
-	{
-		super(MapColor.SNOW);
-	}
+
+    /**
+     * Instantiates a new material tanning rack.
+     */
+    public MaterialTanningRack()
+    {
+        super(MapColor.SNOW);
+    }
 
     /**
      * Returns if blocks of these materials are liquids.
@@ -42,27 +42,29 @@ public class MaterialTanningRack extends Material
      * @return true, if is liquid
      */
     @Override
-	public boolean isLiquid()
+    public boolean isLiquid()
     {
         return false;
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see net.minecraft.block.material.Material#isSolid()
      */
     @Override
-	public boolean isSolid()
+    public boolean isSolid()
     {
         return false;
     }
-    
+
     /**
      * Returns if this material is considered solid or not.
      *
      * @return true, if successful
      */
     @Override
-	public boolean blocksMovement()
+    public boolean blocksMovement()
     {
         return true;
     }
@@ -73,7 +75,7 @@ public class MaterialTanningRack extends Material
      * @return the can burn
      */
     @Override
-	public boolean getCanBurn()
+    public boolean getCanBurn()
     {
         return false;
     }
@@ -84,7 +86,7 @@ public class MaterialTanningRack extends Material
      * @return true, if is replaceable
      */
     @Override
-	public boolean isReplaceable()
+    public boolean isReplaceable()
     {
         return false;
     }
@@ -95,7 +97,7 @@ public class MaterialTanningRack extends Material
      * @return true, if is opaque
      */
     @Override
-	public boolean isOpaque()
+    public boolean isOpaque()
     {
         return false;
     }
@@ -106,19 +108,18 @@ public class MaterialTanningRack extends Material
      * @return true, if is tool not required
      */
     @Override
-	public boolean isToolNotRequired()
+    public boolean isToolNotRequired()
     {
         return false;
     }
 
     /**
-     * Returns the mobility information of the material, 0 = free, 1 = can't push but can move over, 2 = total
-     * immobility and stop pistons.
+     * Returns the mobility information of the material, 0 = free, 1 = can't push but can move over, 2 = total immobility and stop pistons.
      *
      * @return the mobility flag
      */
     @Override
-	public EnumPushReaction getMobilityFlag()
+    public EnumPushReaction getMobilityFlag()
     {
         return EnumPushReaction.NORMAL;
     }

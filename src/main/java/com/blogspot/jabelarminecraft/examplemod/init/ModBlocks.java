@@ -40,162 +40,176 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.registries.IForgeRegistry;
 
 // TODO: Auto-generated Javadoc
-public class ModBlocks {
+public class ModBlocks
+{
     // instantiate blocks
-	public final static BlockCompactor COMPACTOR = new BlockCompactor();
-	
-	/*
-	 * fluid blocks
-	 * Make sure you set registry name here
-	 */
-	public static final BlockFluidBase SLIME_BLOCK = (BlockFluidBase) Utilities.setBlockName(new ModBlockFluidClassic(ModFluids.SLIME, ModMaterials.SLIME), "slime");
-	
-	public static final Set<Block> SET_BLOCKS = ImmutableSet.of(
-			COMPACTOR,
-			SLIME_BLOCK
-			);
-	public static final Set<ItemBlock> SET_ITEM_BLOCKS = ImmutableSet.of(
-			new ItemBlock(COMPACTOR),
-			new ItemBlock(SLIME_BLOCK)
-			);
+    public final static BlockCompactor COMPACTOR = new BlockCompactor();
 
-	/**
-	 * Initialize this mod's {@link Block}s with any post-registration data.
-	 */
-	private static void initialize() 
-	{
-	}
+    /*
+     * fluid blocks Make sure you set registry name here
+     */
+    public static final BlockFluidBase SLIME_BLOCK = (BlockFluidBase) Utilities.setBlockName(new ModBlockFluidClassic(ModFluids.SLIME, ModMaterials.SLIME),
+            "slime");
 
-	@Mod.EventBusSubscriber(modid = MainMod.MODID)
-	public static class RegistrationHandler 
-	{
+    public static final Set<Block> SET_BLOCKS = ImmutableSet.of(
+            COMPACTOR,
+            SLIME_BLOCK);
+    public static final Set<ItemBlock> SET_ITEM_BLOCKS = ImmutableSet.of(
+            new ItemBlock(COMPACTOR),
+            new ItemBlock(SLIME_BLOCK));
 
-		/**
-		 * Register this mod's {@link Block}s.
-		 *
-		 * @param event The event
-		 */
-		@SubscribeEvent
-		public static void onEvent(final RegistryEvent.Register<Block> event) 
-		{
-			final IForgeRegistry<Block> registry = event.getRegistry();
+    /**
+     * Initialize this mod's {@link Block}s with any post-registration data.
+     */
+    private static void initialize()
+    {
+    }
 
-			for (final Block block : SET_BLOCKS) {
-				registry.register(block);
-				// DEBUG
-				System.out.println("Registering block: "+block.getRegistryName());
-			}
-			
-			initialize();
-		}
+    @Mod.EventBusSubscriber(modid = MainMod.MODID)
+    public static class RegistrationHandler
+    {
 
-		/**
-		 * Register this mod's {@link ItemBlock}s.
-		 *
-		 * @param event The event
-		 */
-		@SubscribeEvent
-		public static void registerItemBlocks(final RegistryEvent.Register<Item> event) 
-		{
-			final IForgeRegistry<Item> registry = event.getRegistry();
+        /**
+         * Register this mod's {@link Block}s.
+         *
+         * @param event
+         *            The event
+         */
+        @SubscribeEvent
+        public static void onEvent(final RegistryEvent.Register<Block> event)
+        {
+            final IForgeRegistry<Block> registry = event.getRegistry();
 
-			for (final ItemBlock item : SET_ITEM_BLOCKS) {
-				final Block block = item.getBlock();
-				final ResourceLocation registryName = Preconditions.checkNotNull(block.getRegistryName(), "Block %s has null registry name", block);
-				registry.register(item.setRegistryName(registryName));
-				// DEBUG
-				System.out.println("Registering Item Block for "+registryName);			}
-		}		
-		
-		/**
-		 * On model event.
-		 *
-		 * @param event the event
-		 */
-		@SubscribeEvent
-		@SideOnly(Side.CLIENT)
-		public static void onModelEvent(final ModelRegistryEvent event) 
-		{
-			//DEBUG
-			System.out.println("Registering block models");
-			
-			registerBlockModels();
-			registerItemBlockModels();
-		}
-	}	
-	
+            for (final Block block : SET_BLOCKS)
+            {
+                registry.register(block);
+                // DEBUG
+                System.out.println("Registering block: " + block.getRegistryName());
+            }
+
+            initialize();
+        }
+
+        /**
+         * Register this mod's {@link ItemBlock}s.
+         *
+         * @param event
+         *            The event
+         */
+        @SubscribeEvent
+        public static void registerItemBlocks(final RegistryEvent.Register<Item> event)
+        {
+            final IForgeRegistry<Item> registry = event.getRegistry();
+
+            for (final ItemBlock item : SET_ITEM_BLOCKS)
+            {
+                final Block block = item.getBlock();
+                final ResourceLocation registryName = Preconditions.checkNotNull(block.getRegistryName(), "Block %s has null registry name", block);
+                registry.register(item.setRegistryName(registryName));
+                // DEBUG
+                System.out.println("Registering Item Block for " + registryName);
+            }
+        }
+
+        /**
+         * On model event.
+         *
+         * @param event
+         *            the event
+         */
+        @SubscribeEvent
+        @SideOnly(Side.CLIENT)
+        public static void onModelEvent(final ModelRegistryEvent event)
+        {
+            // DEBUG
+            System.out.println("Registering block models");
+
+            registerBlockModels();
+            registerItemBlockModels();
+        }
+    }
+
     /**
      * Register block models.
      */
-	@SideOnly(Side.CLIENT)
+    @SideOnly(Side.CLIENT)
     public static void registerBlockModels()
     {
-		for (final Block block : SET_BLOCKS) {
-			registerBlockModel(block);
-			// DEBUG
-			System.out.println("Registering block model for"
-					+ ": "+block.getRegistryName());
-		}        
-    }
-    
-    /**
-     * Register block model.
-     *
-     * @param parBlock the par block
-     */
-	@SideOnly(Side.CLIENT)
-    public static void registerBlockModel(Block parBlock)
-    {
-    	registerBlockModel(parBlock, 0);
-    }
-    
-    /**
-     * Register block model.
-     *
-     * @param parBlock the par block
-     * @param parMetaData the par meta data
-     */
-	@SideOnly(Side.CLIENT)
-    public static void registerBlockModel(Block parBlock, int parMetaData)
-    {
-        ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(parBlock), parMetaData, new ModelResourceLocation(MainMod.MODID + ":" + parBlock.getUnlocalizedName().substring(5), "inventory"));
+        for (final Block block : SET_BLOCKS)
+        {
+            registerBlockModel(block);
+            // DEBUG
+            System.out.println("Registering block model for"
+                    + ": " + block.getRegistryName());
+        }
     }
 
-	
+    /**
+     * Register block model.
+     *
+     * @param parBlock
+     *            the par block
+     */
+    @SideOnly(Side.CLIENT)
+    public static void registerBlockModel(Block parBlock)
+    {
+        registerBlockModel(parBlock, 0);
+    }
+
+    /**
+     * Register block model.
+     *
+     * @param parBlock
+     *            the par block
+     * @param parMetaData
+     *            the par meta data
+     */
+    @SideOnly(Side.CLIENT)
+    public static void registerBlockModel(Block parBlock, int parMetaData)
+    {
+        ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(parBlock), parMetaData,
+                new ModelResourceLocation(MainMod.MODID + ":" + parBlock.getUnlocalizedName().substring(5), "inventory"));
+    }
+
     /**
      * Register block models.
      */
-	@SideOnly(Side.CLIENT)
+    @SideOnly(Side.CLIENT)
     public static void registerItemBlockModels()
     {
-		for (final ItemBlock block : SET_ITEM_BLOCKS) {
-			registerItemBlockModel(block);
-			// DEBUG
-			System.out.println("Registering item block model for"
-					+ ": "+block.getRegistryName());
-		}        
+        for (final ItemBlock block : SET_ITEM_BLOCKS)
+        {
+            registerItemBlockModel(block);
+            // DEBUG
+            System.out.println("Registering item block model for"
+                    + ": " + block.getRegistryName());
+        }
     }
-    
+
     /**
      * Register block model.
      *
-     * @param parBlock the par block
+     * @param parBlock
+     *            the par block
      */
-	@SideOnly(Side.CLIENT)
+    @SideOnly(Side.CLIENT)
     public static void registerItemBlockModel(ItemBlock parBlock)
     {
-    	registerItemBlockModel(parBlock, 0);
+        registerItemBlockModel(parBlock, 0);
     }
-    
+
     /**
      * Register block model.
      *
-     * @param parBlock the par block
-     * @param parMetaData the par meta data
+     * @param parBlock
+     *            the par block
+     * @param parMetaData
+     *            the par meta data
      */
-	@SideOnly(Side.CLIENT)
+    @SideOnly(Side.CLIENT)
     public static void registerItemBlockModel(ItemBlock parBlock, int parMetaData)
     {
-        ModelLoader.setCustomModelResourceLocation(parBlock, parMetaData, new ModelResourceLocation(MainMod.MODID + ":" + parBlock.getUnlocalizedName().substring(5), "inventory"));
+        ModelLoader.setCustomModelResourceLocation(parBlock, parMetaData,
+                new ModelResourceLocation(MainMod.MODID + ":" + parBlock.getUnlocalizedName().substring(5), "inventory"));
     }
 }

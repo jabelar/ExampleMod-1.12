@@ -32,75 +32,82 @@ import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
  * @author jabelar
  *
  */
-public class MessageExtendedReachAttack implements IMessage 
+public class MessageExtendedReachAttack implements IMessage
 {
-    private int entityId ;
+    private int entityId;
 
     /**
      * Instantiates a new message extended reach attack.
      */
-    public MessageExtendedReachAttack() 
-    { 
-    	// need this constructor
+    public MessageExtendedReachAttack()
+    {
+        // need this constructor
     }
 
     /**
      * Instantiates a new message extended reach attack.
      *
-     * @param parEntityId the par entity id
+     * @param parEntityId
+     *            the par entity id
      */
-    public MessageExtendedReachAttack(int parEntityId) 
+    public MessageExtendedReachAttack(int parEntityId)
     {
-    	entityId = parEntityId;
+        entityId = parEntityId;
         // DEBUG
         System.out.println("Constructor");
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see net.minecraftforge.fml.common.network.simpleimpl.IMessage#fromBytes(io.netty.buffer.ByteBuf)
      */
     @Override
-    public void fromBytes(ByteBuf buf) 
+    public void fromBytes(ByteBuf buf)
     {
-    	entityId = ByteBufUtils.readVarInt(buf, 4);
-    	// DEBUG
-    	System.out.println("fromBytes");
+        entityId = ByteBufUtils.readVarInt(buf, 4);
+        // DEBUG
+        System.out.println("fromBytes");
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see net.minecraftforge.fml.common.network.simpleimpl.IMessage#toBytes(io.netty.buffer.ByteBuf)
      */
     @Override
-    public void toBytes(ByteBuf buf) 
+    public void toBytes(ByteBuf buf)
     {
-    	ByteBufUtils.writeVarInt(buf, entityId, 4);
+        ByteBufUtils.writeVarInt(buf, entityId, 4);
         // DEBUG
         System.out.println("toBytes encoded");
     }
 
-    public static class Handler implements IMessageHandler<MessageExtendedReachAttack, IMessage> 
+    public static class Handler implements IMessageHandler<MessageExtendedReachAttack, IMessage>
     {
-        
-        /* (non-Javadoc)
-         * @see net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler#onMessage(net.minecraftforge.fml.common.network.simpleimpl.IMessage, net.minecraftforge.fml.common.network.simpleimpl.MessageContext)
+
+        /*
+         * (non-Javadoc)
+         * 
+         * @see net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler#onMessage(net.minecraftforge.fml.common.network.simpleimpl.IMessage,
+         * net.minecraftforge.fml.common.network.simpleimpl.MessageContext)
          */
         @Override
-        public IMessage onMessage(final MessageExtendedReachAttack message, MessageContext ctx) 
+        public IMessage onMessage(final MessageExtendedReachAttack message, MessageContext ctx)
         {
-        	// DEBUG
-        	System.out.println("Message received");
-        	// Know it will be on the server so make it thread-safe
-        	final EntityPlayerMP thePlayer = (EntityPlayerMP) MainMod.proxy.getPlayerEntityFromContext(ctx);
-        	thePlayer.getServer().addScheduledTask(
-        	        new Runnable()
-                	{
+            // DEBUG
+            System.out.println("Message received");
+            // Know it will be on the server so make it thread-safe
+            final EntityPlayerMP thePlayer = (EntityPlayerMP) MainMod.proxy.getPlayerEntityFromContext(ctx);
+            thePlayer.getServer().addScheduledTask(
+                    new Runnable() {
                         @Override
-                        public void run() 
+                        public void run()
                         {
                             Entity theEntity = thePlayer.world.getEntityByID(message.entityId);
                             // DEBUG
-                            System.out.println("Entity = "+theEntity);
-                            
+                            System.out.println("Entity = " + theEntity);
+
                             // Need to ensure that hackers can't cause trick kills, so double check weapon type
                             // and reach
                             if (thePlayer.getActiveItemStack() == null)
@@ -109,9 +116,9 @@ public class MessageExtendedReachAttack implements IMessage
                             }
                             if (thePlayer.getActiveItemStack().getItem() instanceof IExtendedReach)
                             {
-                                IExtendedReach theExtendedReachWeapon = (IExtendedReach)thePlayer.getActiveItemStack().getItem();
+                                IExtendedReach theExtendedReachWeapon = (IExtendedReach) thePlayer.getActiveItemStack().getItem();
                                 double distanceSq = thePlayer.getDistanceSq(theEntity);
-                                double reachSq =theExtendedReachWeapon.getReach()*theExtendedReachWeapon.getReach();
+                                double reachSq = theExtendedReachWeapon.getReach() * theExtendedReachWeapon.getReach();
                                 if (reachSq >= distanceSq)
                                 {
                                     thePlayer.attackTargetEntityWithCurrentItem(theEntity);
@@ -119,9 +126,8 @@ public class MessageExtendedReachAttack implements IMessage
                             }
                             return; // no response in this case
                         }
-                }
-        	);
-        	return null; // no response message
-    	}
+                    });
+            return null; // no response message
+        }
     }
 }

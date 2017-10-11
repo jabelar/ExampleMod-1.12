@@ -24,13 +24,13 @@ import com.blogspot.jabelarminecraft.examplemod.MainMod;
  */
 public class ItemCowHide extends ItemHideBase
 {
-	
-	/**
-	 * Instantiates a new item cow hide.
-	 */
-	public ItemCowHide() 
+
+    /**
+     * Instantiates a new item cow hide.
+     */
+    public ItemCowHide()
     {
-		super("cowhide");
-		setCreativeTab(MainMod.CREATIVE_TAB);
+        super("cowhide");
+        setCreativeTab(MainMod.CREATIVE_TAB);
     }
 }

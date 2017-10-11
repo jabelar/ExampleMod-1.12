@@ -70,25 +70,25 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 
 // TODO: Auto-generated Javadoc
-public class CommonProxy 
+public class CommonProxy
 {
-    
+
     protected int modEntityID = 0;
-    
+
     /*
      * Sometimes useful to have list of all item types, including subtypes
      */
     protected List<ItemStack> itemStackRegistry = new ArrayList<ItemStack>();
-     
+
     /**
-     * Fml life cycle event for Pre-Initialization. Historically (before registry 
-     * events) this was where blocks, items, etc. were registered. There are still things
-     * like entities and networking which should still be registered here.
+     * Fml life cycle event for Pre-Initialization. Historically (before registry events) this was where blocks, items, etc. were registered. There are still things like entities
+     * and networking which should still be registered here.
      *
-     * @param event the event
+     * @param event
+     *            the event
      */
     public void fmlLifeCycleEvent(FMLPreInitializationEvent event)
-    {     	
+    {
         // load configuration before doing anything else
         // got config tutorial from http://www.minecraftforge.net/wiki/How_to_make_an_advanced_configuration_file
         initConfig(event);
@@ -96,87 +96,88 @@ public class CommonProxy
         // register stuff
         registerTileEntities();
         registerFluids();
-//        registerEntities();
+        // registerEntities();
         registerEntitySpawns();
         registerFuelHandlers();
         registerSimpleNetworking();
-//        VillagerRegistry.instance().registerVillagerId(10);
-//      VillagerRegistry.instance().registerVillageTradeHandler(10, new VillageTradeHandlerMagicBeans());
-//      VillagerRegistry.getRegisteredVillagers();
+        // VillagerRegistry.instance().registerVillagerId(10);
+        // VillagerRegistry.instance().registerVillageTradeHandler(10, new VillageTradeHandlerMagicBeans());
+        // VillagerRegistry.getRegisteredVillagers();
     }
 
     /**
-     * Fml life cycle event for Initialization. This phase is good for registering event listeners,
-     * for registering things that depend on things in pre-init from other mods (like recipes, advancements
-     * and such.)
+     * Fml life cycle event for Initialization. This phase is good for registering event listeners, for registering things that depend on things in pre-init from other mods (like
+     * recipes, advancements and such.)
      *
-     * @param event the event
+     * @param event
+     *            the event
      */
     public void fmlLifeCycleEvent(FMLInitializationEvent event)
     {
         // register Advancements here to allow use of items from other mods
         registerAdvancements();
-        
+
         // register gui handlers
         registerGuiHandlers();
-        
+
         // register world generators
         registerWorldGenerators();
-        
-//        registerDeconstructingInit(event);
+
+        // registerDeconstructingInit(event);
     }
-    
+
     /**
      * Register gui handlers.
      */
-    public void registerGuiHandlers() 
+    public void registerGuiHandlers()
     {
-    	// DEBUG
-    	System.out.println("Registering gui handlers");
-        NetworkRegistry.INSTANCE.registerGuiHandler(MainMod.instance, new GuiHandler());     
+        // DEBUG
+        System.out.println("Registering gui handlers");
+        NetworkRegistry.INSTANCE.registerGuiHandler(MainMod.instance, new GuiHandler());
     }
-    
+
     /**
      * Register world generators.
      */
     public void registerWorldGenerators()
     {
-    	// DEBUG
-    	System.out.println("Registering world generators");
-    	GameRegistry.registerWorldGenerator(new WorldGenShrine(), 10);
+        // DEBUG
+        System.out.println("Registering world generators");
+        GameRegistry.registerWorldGenerator(new WorldGenShrine(), 10);
     }
 
     /**
-     * Fml life cycle event Post Initialization. This phase is useful
-     * For doing inter-mod stuff like checking which mods are loaded
-     * or if you want a complete view of things across mods like having 
-     * a list of all registered items to aid random item generation.
+     * Fml life cycle event Post Initialization. This phase is useful For doing inter-mod stuff like checking which mods are loaded or if you want a complete view of things across
+     * mods like having a list of all registered items to aid random item generation.
      *
-     * @param event the event
+     * @param event
+     *            the event
      */
     public void fmlLifeCycleEvent(FMLPostInitializationEvent event)
     {
         // can do some inter-mod stuff here
-        initItemStackRegistry();    
+        initItemStackRegistry();
     }
 
     /**
      * Fml life cycle event for Server About To Start.
      *
-     * @param event the event
+     * @param event
+     *            the event
      */
-    public void fmlLifeCycleEvent(FMLServerAboutToStartEvent event) 
+    public void fmlLifeCycleEvent(FMLServerAboutToStartEvent event)
     {
         // TODO Auto-generated method stub
-        
+
     }
 
     /**
      * Fml life cycle event for Server Started.
      *
-     * @param event the event
+     * @param event
+     *            the event
      */
-    public void fmlLifeCycleEvent(FMLServerStartedEvent event) 
+    public void fmlLifeCycleEvent(FMLServerStartedEvent event)
     {
         // TODO Auto-generated method stub
 
@@ -185,43 +186,46 @@ public class CommonProxy
     /**
      * Fml life cycle event for Server Stopping.
      *
-     * @param event the event
+     * @param event
+     *            the event
      */
-    public void fmlLifeCycleEvent(FMLServerStoppingEvent event) 
+    public void fmlLifeCycleEvent(FMLServerStoppingEvent event)
     {
         // TODO Auto-generated method stub
-        
+
     }
 
     /**
      * Fml life cycle event for Server Stopped.
      *
-     * @param event the event
+     * @param event
+     *            the event
      */
-    public void fmlLifeCycleEvent(FMLServerStoppedEvent event) 
+    public void fmlLifeCycleEvent(FMLServerStoppedEvent event)
     {
         // TODO Auto-generated method stub
-        
+
     }
 
     /**
      * Fml life cycle event.
      *
-     * @param event the event
+     * @param event
+     *            the event
      */
-    public void fmlLifeCycleEvent(FMLServerStartingEvent event) 
+    public void fmlLifeCycleEvent(FMLServerStartingEvent event)
     {
         // // register server commands
         event.registerServerCommand(new CommandStructureCapture());
     }
-        
+
     /*
      * Thanks to diesieben07 tutorial for this code
      */
     /**
      * Registers the simple networking channel and messages for both sides.
      */
-    protected void registerSimpleNetworking() 
+    protected void registerSimpleNetworking()
     {
         // DEBUG
         System.out.println("Registering simple networking");
@@ -234,83 +238,90 @@ public class CommonProxy
         MainMod.network.registerMessage(MessageToClient.Handler.class, MessageToClient.class, packetId++, Side.CLIENT);
         MainMod.network.registerMessage(MessageSyncEntityToClient.Handler.class, MessageSyncEntityToClient.class, packetId++, Side.CLIENT);
         MainMod.network.registerMessage(MessageExtendedReachAttack.Handler.class, MessageExtendedReachAttack.class, packetId++, Side.SERVER);
-        MainMod.network.registerMessage(MessageSendItemStackRegistryToServer.Handler.class, MessageSendItemStackRegistryToServer.class, packetId++, Side.SERVER);
-        MainMod.network.registerMessage(MessageRequestItemStackRegistryFromClient.Handler.class, MessageRequestItemStackRegistryFromClient.class, packetId++, Side.CLIENT);
+        MainMod.network.registerMessage(MessageSendItemStackRegistryToServer.Handler.class, MessageSendItemStackRegistryToServer.class, packetId++,
+                Side.SERVER);
+        MainMod.network.registerMessage(MessageRequestItemStackRegistryFromClient.Handler.class, MessageRequestItemStackRegistryFromClient.class, packetId++,
+                Side.CLIENT);
     }
-    
-    /*   
+
+    /*
      * Thanks to CoolAlias for this tip!
      */
     /**
      * Returns a side-appropriate EntityPlayer for use during message handling.
      *
-     * @param ctx the ctx
+     * @param ctx
+     *            the ctx
      * @return the player entity from context
      */
-    public EntityPlayer getPlayerEntityFromContext(MessageContext ctx) 
+    public EntityPlayer getPlayerEntityFromContext(MessageContext ctx)
     {
         return ctx.getServerHandler().player;
     }
-    
+
     /**
      * Process the configuration.
      *
-     * @param event the event
+     * @param event
+     *            the event
      */
     protected void initConfig(FMLPreInitializationEvent event)
     {
         // might need to use suggestedConfigFile (event.getSuggestedConfigFile) location to publish
         MainMod.configFile = event.getSuggestedConfigurationFile();
         // DEBUG
-        System.out.println(MainMod.MODNAME+" config path = "+MainMod.configFile.getAbsolutePath());
-        System.out.println("Config file exists = "+MainMod.configFile.canRead());
-        
+        System.out.println(MainMod.MODNAME + " config path = " + MainMod.configFile.getAbsolutePath());
+        System.out.println("Config file exists = " + MainMod.configFile.canRead());
+
         MainMod.config = new Configuration(MainMod.configFile);
 
         syncConfig();
     }
-    
+
     /**
      * Sync config.
      */
     /*
-     * sync the configuration
-     * want it public so you can handle case of changes made in-game
+     * sync the configuration want it public so you can handle case of changes made in-game
      */
     public void syncConfig()
     {
         MainMod.config.load();
-        MainMod.allowDeconstructUnrealistic = MainMod.config.get(Configuration.CATEGORY_GENERAL, "All Craftables Can Deconstruct", false, "Allow unrealistic deconstruction like pumpkins back from pumpkin seeds").getBoolean(false);
+        MainMod.allowDeconstructUnrealistic = MainMod.config.get(Configuration.CATEGORY_GENERAL, "All Craftables Can Deconstruct", false,
+                "Allow unrealistic deconstruction like pumpkins back from pumpkin seeds").getBoolean(false);
         // DEBUG
-        System.out.println("Allow unrealistic deconstruction = "+MainMod.allowDeconstructUnrealistic);
-        MainMod.allowHorseArmorCrafting = MainMod.config.get(Configuration.CATEGORY_GENERAL, "Can Craft Horse Armor", true, "Allow crafting of horse armor and SADDLEs").getBoolean(true);
+        System.out.println("Allow unrealistic deconstruction = " + MainMod.allowDeconstructUnrealistic);
+        MainMod.allowHorseArmorCrafting = MainMod.config
+                .get(Configuration.CATEGORY_GENERAL, "Can Craft Horse Armor", true, "Allow crafting of horse armor and SADDLEs").getBoolean(true);
         // DEBUG
-        System.out.println("Allow horse armor crafting = "+MainMod.allowHorseArmorCrafting);
-        MainMod.allowDeconstructEnchantedBooks  = MainMod.config.get(Configuration.CATEGORY_GENERAL, "Can Deconstruct Enchanted Books", true, "Allow enchanted books to deconstruct like a regular book").getBoolean(true);
+        System.out.println("Allow horse armor crafting = " + MainMod.allowHorseArmorCrafting);
+        MainMod.allowDeconstructEnchantedBooks = MainMod.config
+                .get(Configuration.CATEGORY_GENERAL, "Can Deconstruct Enchanted Books", true, "Allow enchanted books to deconstruct like a regular book")
+                .getBoolean(true);
         // DEBUG
-        System.out.println("Allow enchanted book deconstruction = "+MainMod.allowDeconstructEnchantedBooks);
-        MainMod.allowPartialDeconstructing = MainMod.config.get(Configuration.CATEGORY_GENERAL, "Allow Partial Deconstruction", true, "Allow deconstruction of stacks that are less than crafting output").getBoolean(true);
+        System.out.println("Allow enchanted book deconstruction = " + MainMod.allowDeconstructEnchantedBooks);
+        MainMod.allowPartialDeconstructing = MainMod.config
+                .get(Configuration.CATEGORY_GENERAL, "Allow Partial Deconstruction", true, "Allow deconstruction of stacks that are less than crafting output")
+                .getBoolean(true);
         // DEBUG
-        System.out.println("Allow partial deconstruction = "+MainMod.allowPartialDeconstructing);
+        System.out.println("Allow partial deconstruction = " + MainMod.allowPartialDeconstructing);
 
-        
         // save is useful for the first run where config might not exist, and doesn't hurt
         MainMod.config.save();
     }
 
     /**
-     *  
+     * 
      * Registers fluids.
      */
     public void registerFluids()
     {
-    	// DEBUG
-    	System.out.println("Registering fluids");
+        // DEBUG
+        System.out.println("Registering fluids");
         FluidRegistry.registerFluid(ModFluids.SLIME);
-//        FluidRegistry.addBucketForFluid(ModFluids.SLIME);
+        // FluidRegistry.addBucketForFluid(ModFluids.SLIME);
     }
-    
-    
+
     /**
      * Registers tile entities.
      */
@@ -318,15 +329,15 @@ public class CommonProxy
     {
         // DEBUG
         System.out.println("Registering tile entities");
-        GameRegistry.registerTileEntity(TileEntityCompactor.class, "tileEntityCompactor");               
-   }
+        GameRegistry.registerTileEntity(TileEntityCompactor.class, "tileEntityCompactor");
+    }
 
     /**
      * Registers entities as mod entities.
      */
     protected void registerEntities()
-    {    
-         // DEBUG
+    {
+        // DEBUG
         System.out.println("Registering entities");
         // if you want it with a spawn egg use
         // registerModEntityWithEgg(EntityManEatingTiger.class, "tiger", 0xE18519, 0x000000);
@@ -335,141 +346,155 @@ public class CommonProxy
         // example: registerModEntity(EntityGoldenGoose.class, "golden_goose");
         registerModEntityWithEgg(EntityPigTest.class, "test_pig", 0xE18519, 0x000000);
     }
- 
+
     /**
      * Registers an entity as a mod entity with no tracking.
      *
-     * @param parEntityClass the par entity class
-     * @param parEntityName the par entity name
+     * @param parEntityClass
+     *            the par entity class
+     * @param parEntityName
+     *            the par entity name
      */
-     protected void registerModEntity(Class<? extends Entity> parEntityClass, String parEntityName)
-     {
- 		final ResourceLocation resourceLocation = new ResourceLocation(MainMod.MODID, parEntityName);
+    protected void registerModEntity(Class<? extends Entity> parEntityClass, String parEntityName)
+    {
+        final ResourceLocation resourceLocation = new ResourceLocation(MainMod.MODID, parEntityName);
         EntityRegistry.registerModEntity(resourceLocation, parEntityClass, parEntityName, ++modEntityID, MainMod.instance, 80, 3, false);
-     }
+    }
 
-     /**
-      * Registers an entity as a mod entity with fast tracking.  Good for fast moving objects like throwables
-      *
-      * @param parEntityClass the par entity class
-      * @param parEntityName the par entity name
-      */
-     protected void registerModEntityFastTracking(Class<? extends Entity> parEntityClass, String parEntityName)
-     {
-  		final ResourceLocation resourceLocation = new ResourceLocation(MainMod.MODID, parEntityName);
+    /**
+     * Registers an entity as a mod entity with fast tracking. Good for fast moving objects like throwables
+     *
+     * @param parEntityClass
+     *            the par entity class
+     * @param parEntityName
+     *            the par entity name
+     */
+    protected void registerModEntityFastTracking(Class<? extends Entity> parEntityClass, String parEntityName)
+    {
+        final ResourceLocation resourceLocation = new ResourceLocation(MainMod.MODID, parEntityName);
         EntityRegistry.registerModEntity(resourceLocation, parEntityClass, parEntityName, ++modEntityID, MainMod.instance, 80, 10, true);
-     }
+    }
 
-     /**
-      * Register mod entity with egg.
-      *
-      * @param parEntityClass the par entity class
-      * @param parEntityName the par entity name
-      * @param parEggColor the par egg color
-      * @param parEggSpotsColor the par egg spots color
-      */
-     public void registerModEntityWithEgg(Class<? extends Entity> parEntityClass, String parEntityName, 
-              int parEggColor, int parEggSpotsColor)
-     {
-   		final ResourceLocation resourceLocation = new ResourceLocation(MainMod.MODID, parEntityName);
-        EntityRegistry.registerModEntity(resourceLocation, parEntityClass, parEntityName, ++modEntityID, MainMod.instance, 80, 3, false, parEggColor, parEggSpotsColor);
-     }
+    /**
+     * Register mod entity with egg.
+     *
+     * @param parEntityClass
+     *            the par entity class
+     * @param parEntityName
+     *            the par entity name
+     * @param parEggColor
+     *            the par egg color
+     * @param parEggSpotsColor
+     *            the par egg spots color
+     */
+    public void registerModEntityWithEgg(Class<? extends Entity> parEntityClass, String parEntityName,
+            int parEggColor, int parEggSpotsColor)
+    {
+        final ResourceLocation resourceLocation = new ResourceLocation(MainMod.MODID, parEntityName);
+        EntityRegistry.registerModEntity(resourceLocation, parEntityClass, parEntityName, ++modEntityID, MainMod.instance, 80, 3, false, parEggColor,
+                parEggSpotsColor);
+    }
 
-     /**
-      * Registers entity natural spawns.
-      */
-     protected void registerEntitySpawns()
-     {
+    /**
+     * Registers entity natural spawns.
+     */
+    protected void registerEntitySpawns()
+    {
         /*
-         *  register natural spawns for entities
-         * EntityRegistry.addSpawn(MyEntity.class, spawnProbability, minSpawn, maxSpawn, enumCreatureType, [spawnBiome]);
-         * See the constructor in Biome.java to see the rarity of vanilla mobs; Sheep are probability 10 while Endermen are probability 1
-         * minSpawn and maxSpawn are about how groups of the entity spawn
-         * enumCreatureType represents the "rules" Minecraft uses to determine spawning, based on creature type. By default, you have three choices:
-         *    EnumCreatureType.creature uses rules for animals: spawn everywhere it is light out.
-         *    EnumCreatureType.monster uses rules for monsters: spawn everywhere it is dark out.
-         *    EnumCreatureType.waterCreature uses rules for water creatures: spawn only in water.
-         * [spawnBiome] is an optional parameter of type Biome that limits the creature spawn to a single biome type. Without this parameter, it will spawn everywhere. 
+         * register natural spawns for entities EntityRegistry.addSpawn(MyEntity.class, spawnProbability, minSpawn, maxSpawn, enumCreatureType, [spawnBiome]); See the constructor
+         * in Biome.java to see the rarity of vanilla mobs; Sheep are probability 10 while Endermen are probability 1 minSpawn and maxSpawn are about how groups of the entity spawn
+         * enumCreatureType represents the "rules" Minecraft uses to determine spawning, based on creature type. By default, you have three choices: EnumCreatureType.creature uses
+         * rules for animals: spawn everywhere it is light out. EnumCreatureType.monster uses rules for monsters: spawn everywhere it is dark out. EnumCreatureType.waterCreature
+         * uses rules for water creatures: spawn only in water. [spawnBiome] is an optional parameter of type Biome that limits the creature spawn to a single biome type. Without
+         * this parameter, it will spawn everywhere.
          */
 
-         // DEBUG
+        // DEBUG
         System.out.println("Registering natural spawns");
 
         // // savanna
-        // EntityRegistry.addSpawn(EntityLion.class, 6, 1, 5, EnumCreatureType.creature, Biome.savanna); //change the values to vary the spawn rarity, biome, etc.              
-        // EntityRegistry.addSpawn(EntityElephant.class, 10, 1, 5, EnumCreatureType.creature, Biome.savanna); //change the values to vary the spawn rarity, biome, etc.              
-     }
- 
-     /**
-      * Adds the spawn all biomes.
-      *
-      * @param parEntity the par entity
-      * @param parChance the par chance
-      * @param parMinGroup the par min group
-      * @param parMaxGroup the par max group
-      */
-     protected void addSpawnAllBiomes(EntityLiving parEntity, int parChance, int parMinGroup, int parMaxGroup)
-     {
-         Iterator<ResourceLocation> allBiomesIterator = Biome.REGISTRY.getKeys().iterator();
-         while (allBiomesIterator.hasNext())
-         {
-             Biome nextBiome = Biome.REGISTRY.getObject(allBiomesIterator.next());
-             EntityRegistry.addSpawn(parEntity.getClass(), parChance, parMinGroup, parMaxGroup, EnumCreatureType.CREATURE, 
-                  nextBiome); //change the values to vary the spawn rarity, biome, etc.              
-         }
-     }
-     
-     
-     /**
-      * Register fuel handlers.
-      */
-     protected void registerFuelHandlers()
-     {
-         // DEBUG
+        // EntityRegistry.addSpawn(EntityLion.class, 6, 1, 5, EnumCreatureType.creature, Biome.savanna); //change the values to vary the spawn rarity, biome, etc.
+        // EntityRegistry.addSpawn(EntityElephant.class, 10, 1, 5, EnumCreatureType.creature, Biome.savanna); //change the values to vary the spawn rarity, biome, etc.
+    }
+
+    /**
+     * Adds the spawn all biomes.
+     *
+     * @param parEntity
+     *            the par entity
+     * @param parChance
+     *            the par chance
+     * @param parMinGroup
+     *            the par min group
+     * @param parMaxGroup
+     *            the par max group
+     */
+    protected void addSpawnAllBiomes(EntityLiving parEntity, int parChance, int parMinGroup, int parMaxGroup)
+    {
+        Iterator<ResourceLocation> allBiomesIterator = Biome.REGISTRY.getKeys().iterator();
+        while (allBiomesIterator.hasNext())
+        {
+            Biome nextBiome = Biome.REGISTRY.getObject(allBiomesIterator.next());
+            EntityRegistry.addSpawn(parEntity.getClass(), parChance, parMinGroup, parMaxGroup, EnumCreatureType.CREATURE,
+                    nextBiome); // change the values to vary the spawn rarity, biome, etc.
+        }
+    }
+
+    /**
+     * Register fuel handlers.
+     */
+    protected void registerFuelHandlers()
+    {
+        // DEBUG
         System.out.println("Registering fuel handlers");
-        
+
         // example: GameRegistry.registerFuelHandler(handler);
-     }
-// 
-//     No longer needed now that there is @EventBusSubscriber annotation
-//    /**
-//     * Register event listeners.
-//     */
-//    protected void registerEventListeners() 
-//    {
-//        // DEBUG
-//        System.out.println("Registering event listeners");
-//
-//        MinecraftForge.EVENT_BUS.register(new EventHandler());
-//        MinecraftForge.TERRAIN_GEN_BUS.register(new TerrainGenEventHandler());
-//        MinecraftForge.ORE_GEN_BUS.register(new OreGenEventHandler());        
-//    }
-    
+    }
+    //
+    // No longer needed now that there is @EventBusSubscriber annotation
+    // /**
+    // * Register event listeners.
+    // */
+    // protected void registerEventListeners()
+    // {
+    // // DEBUG
+    // System.out.println("Registering event listeners");
+    //
+    // MinecraftForge.EVENT_BUS.register(new EventHandler());
+    // MinecraftForge.TERRAIN_GEN_BUS.register(new TerrainGenEventHandler());
+    // MinecraftForge.ORE_GEN_BUS.register(new OreGenEventHandler());
+    // }
+
     /**
      * Register Advancements.
      */
     protected void registerAdvancements()
     {
-//        BlockSmith.AdvancementTanningAHide = new Advancement("Advancement.tanningahide", "tanningahide", 0, 0, Items.LEATHER, (Advancement)null);
-//        BlockSmith.AdvancementTanningAHide.registerStat().initIndependentStat(); // Eclipse is having trouble chaining these in previous line
-////      BlockSmith.AdvancementGiantSlayer = new Advancement("Advancement.giantslayer", "giantslayer", 2, 1, (Item)null, BlockSmith.AdvancementTanningAHide).setSpecial();
-////      BlockSmith.AdvancementGiantSlayer.registerStat(); // Eclipse is having trouble chaining this in previous line
-//        BlockSmith.craftTable = new Advancement("createDecraftTable", "createDecraftTable", 1 - 2 - 2, -1 - 3, BlockSmith.blockDeconstructor, null).registerStat();
-//        BlockSmith.deconstructAny = new Advancement("deconstructAnything", "deconstructAnything", 2 - 2, -2 - 2, Items.DIAMOND_HOE, BlockSmith.craftTable).registerStat();
-//        BlockSmith.deconstructDiamondHoe = new Advancement("deconstructDiamondHoe", "deconstructDiamondHoe", 2 - 2, 0 - 2, Items.DIAMOND_HOE, BlockSmith.deconstructAny).registerStat();
-//        BlockSmith.deconstructJunk = new Advancement("deconstructJunk", "deconstructJunk", 1 - 2, -1 - 2, Items.LEATHER_BOOTS, BlockSmith.deconstructAny).registerStat();
-//        BlockSmith.deconstructDiamondShovel = new Advancement("deconstructDiamondShovel", "deconstructDiamondShovel", 3 - 2, -1 - 2, Items.DIAMOND_SHOVEL, BlockSmith.deconstructAny).registerStat();
-//        BlockSmith.theHatStandAdvancement = new Advancement("porteManteauAdvancement", "porteManteauAdvancement", 3 - 2, -4 - 2, Blocks.OAK_FENCE, BlockSmith.craftTable).registerStat();
-//        AdvancementPage.registerAdvancementPage(new AdvancementPage("BlockSmith",
-//                new Advancement[]
-//                {
-//                BlockSmith.craftTable, BlockSmith.deconstructAny, BlockSmith.deconstructDiamondHoe, BlockSmith.deconstructJunk, BlockSmith.deconstructDiamondShovel, BlockSmith.theHatStandAdvancement
-//                }));
-//
-//        BlockSmith.deconstructedItemsStat = (StatBasic) (new StatBasic("stat.deconstructeditems", new TextComponentTranslation("stat.deconstructeditems", new Object[0])).registerStat());
-//        
+        // BlockSmith.AdvancementTanningAHide = new Advancement("Advancement.tanningahide", "tanningahide", 0, 0, Items.LEATHER, (Advancement)null);
+        // BlockSmith.AdvancementTanningAHide.registerStat().initIndependentStat(); // Eclipse is having trouble chaining these in previous line
+        //// BlockSmith.AdvancementGiantSlayer = new Advancement("Advancement.giantslayer", "giantslayer", 2, 1, (Item)null, BlockSmith.AdvancementTanningAHide).setSpecial();
+        //// BlockSmith.AdvancementGiantSlayer.registerStat(); // Eclipse is having trouble chaining this in previous line
+        // BlockSmith.craftTable = new Advancement("createDecraftTable", "createDecraftTable", 1 - 2 - 2, -1 - 3, BlockSmith.blockDeconstructor, null).registerStat();
+        // BlockSmith.deconstructAny = new Advancement("deconstructAnything", "deconstructAnything", 2 - 2, -2 - 2, Items.DIAMOND_HOE, BlockSmith.craftTable).registerStat();
+        // BlockSmith.deconstructDiamondHoe = new Advancement("deconstructDiamondHoe", "deconstructDiamondHoe", 2 - 2, 0 - 2, Items.DIAMOND_HOE,
+        // BlockSmith.deconstructAny).registerStat();
+        // BlockSmith.deconstructJunk = new Advancement("deconstructJunk", "deconstructJunk", 1 - 2, -1 - 2, Items.LEATHER_BOOTS, BlockSmith.deconstructAny).registerStat();
+        // BlockSmith.deconstructDiamondShovel = new Advancement("deconstructDiamondShovel", "deconstructDiamondShovel", 3 - 2, -1 - 2, Items.DIAMOND_SHOVEL,
+        // BlockSmith.deconstructAny).registerStat();
+        // BlockSmith.theHatStandAdvancement = new Advancement("porteManteauAdvancement", "porteManteauAdvancement", 3 - 2, -4 - 2, Blocks.OAK_FENCE,
+        // BlockSmith.craftTable).registerStat();
+        // AdvancementPage.registerAdvancementPage(new AdvancementPage("BlockSmith",
+        // new Advancement[]
+        // {
+        // BlockSmith.craftTable, BlockSmith.deconstructAny, BlockSmith.deconstructDiamondHoe, BlockSmith.deconstructJunk, BlockSmith.deconstructDiamondShovel,
+        // BlockSmith.theHatStandAdvancement
+        // }));
+        //
+        // BlockSmith.deconstructedItemsStat = (StatBasic) (new StatBasic("stat.deconstructeditems", new TextComponentTranslation("stat.deconstructeditems", new
+        // Object[0])).registerStat());
+        //
     }
-    
+
     /**
      * Inits the item stack registry.
      */
@@ -481,13 +506,14 @@ public class CommonProxy
     /**
      * Sets the item stack registry.
      *
-     * @param parRegistry the new item stack registry
+     * @param parRegistry
+     *            the new item stack registry
      */
     public void setItemStackRegistry(List<ItemStack> parRegistry)
     {
         itemStackRegistry = parRegistry;
     }
-    
+
     /**
      * Gets the item stack registry.
      *
@@ -497,11 +523,12 @@ public class CommonProxy
     {
         return itemStackRegistry;
     }
-        
+
     /**
      * Convert item stack list to payload.
      *
-     * @param parBuffer the par buffer
+     * @param parBuffer
+     *            the par buffer
      */
     /*
      * Works directly on passed in ByteBuf to put ItemStack registry into packet payload to be sent to the server
@@ -509,85 +536,84 @@ public class CommonProxy
     public void convertItemStackListToPayload(ByteBuf parBuffer)
     {
         Iterator<ItemStack> theIterator = itemStackRegistry.iterator();
-       
+
         while (theIterator.hasNext())
-        {          
+        {
             ItemStack theStack = theIterator.next();
-            
+
             // write item id and metadata
             parBuffer.writeInt(Item.getIdFromItem(theStack.getItem()));
             parBuffer.writeInt(theStack.getMetadata());
-            
-//            // DEBUG
-//            System.out.println(Item.getIdFromItem(theStack.getItem())+" "+theStack.getMetadata());
+
+            // // DEBUG
+            // System.out.println(Item.getIdFromItem(theStack.getItem())+" "+theStack.getMetadata());
             boolean hasNBT = theStack.hasTagCompound();
             parBuffer.writeBoolean(hasNBT);
             if (hasNBT)
             {
                 // DEBUG
-                System.out.println("The stack "+theStack.toString()+" has NBT = "+theStack.getTagCompound().toString());
+                System.out.println("The stack " + theStack.toString() + " has NBT = " + theStack.getTagCompound().toString());
                 ByteBufUtils.writeTag(parBuffer, theStack.getTagCompound());
             }
             theIterator.remove(); // avoids a ConcurrentModificationException
         }
-        
-        return ;
-    }
 
+        return;
+    }
 
     /**
      * Convert payload to item stack list.
      *
-     * @param theBuffer the the buffer
+     * @param theBuffer
+     *            the the buffer
      * @return the list
      */
     /*
-     * Provides a list of item stacks giving every registered item along with its metadata variants
-     * based on a message payload from the client that gives the valid metadata values for those
-     * items with variants. Also will include NBT for mods like Tinker's Construct that use NBT on the
-     * ItemStacks to make variants instead of metadata.
+     * Provides a list of item stacks giving every registered item along with its metadata variants based on a message payload from the client that gives the valid metadata values
+     * for those items with variants. Also will include NBT for mods like Tinker's Construct that use NBT on the ItemStacks to make variants instead of metadata.
      */
     public List<ItemStack> convertPayloadToItemStackList(ByteBuf theBuffer)
     {
         List<ItemStack> theList = new ArrayList<ItemStack>();
-        
+
         while (theBuffer.isReadable())
         {
             int theID = theBuffer.readInt();
             int theMetadata = theBuffer.readInt();
             ItemStack theStack = new ItemStack(Item.getItemById(theID), 1, theMetadata);
-            
+
             // Handle the case of mods like Tinker's Construct that use NBT instead of metadata
             boolean hasNBT = theBuffer.readBoolean();
             if (hasNBT)
             {
                 theStack.setTagCompound(ByteBufUtils.readTag(theBuffer));
                 // DEBUG
-                System.out.println("The stack "+theStack.toString()+" has NBT = "+theStack.getTagCompound().toString());
+                System.out.println("The stack " + theStack.toString() + " has NBT = " + theStack.getTagCompound().toString());
             }
-            
-           theList.add(theStack);
+
+            theList.add(theStack);
         }
 
         // DEBUG
         System.out.println(theList.toString());
 
-        return theList;      
+        return theList;
     }
-    
-    
+
     /**
      * handles the acceleration of an object whilst in a material.
      *
-     * @param entityIn the entity in
-     * @param materialIn the material in
+     * @param entityIn
+     *            the entity in
+     * @param materialIn
+     *            the material in
      * @return true, if successful
      */
-	public boolean handleMaterialAcceleration(Entity entityIn, Material materialIn)
+    public boolean handleMaterialAcceleration(Entity entityIn, Material materialIn)
     {
-    	World parWorld = entityIn.world;
-    	AxisAlignedBB bb = entityIn.getEntityBoundingBox().grow(0.0D, -0.4000000059604645D, 0.0D).shrink(0.001D);
-    	
+        World parWorld = entityIn.world;
+        AxisAlignedBB bb = entityIn.getEntityBoundingBox().grow(0.0D, -0.4000000059604645D, 0.0D).shrink(0.001D);
+
         int j2 = MathHelper.floor(bb.minX);
         int k2 = MathHelper.ceil(bb.maxX);
         int l2 = MathHelper.floor(bb.minY);
@@ -612,32 +638,34 @@ public class CommonProxy
                     Boolean result = block.isEntityInsideMaterial(parWorld, blockpos$pooledmutableblockpos, iblockstate1, entityIn, i3, materialIn, false);
                     if (result != null && result == true)
                     {
-                        // Forge: When requested call blocks modifyAcceleration method, and more importantly cause this method to return true, which results in an entity being "inWater"
+                        // Forge: When requested call blocks modifyAcceleration method, and more importantly cause this method to return true, which results in an entity being
+                        // "inWater"
                         flag = true;
                         vec3d = block.modifyAcceleration(parWorld, blockpos$pooledmutableblockpos, entityIn, vec3d);
-                  	  
-//                        // DEBUG
-//                  	  System.out.println("Entity is inside material = "+materialIn+" and motion add vector = "+vec3d);
-                  	  
+
+                        // // DEBUG
+                        // System.out.println("Entity is inside material = "+materialIn+" and motion add vector = "+vec3d);
+
                         continue;
                     }
-                    else if (result != null && result == false) continue;
+                    else if (result != null && result == false)
+                        continue;
 
                     if (iblockstate1.getMaterial() == materialIn)
                     {
-//                  	  // DEBUG
-//                  	  System.out.println("blockstate material matches material in");
-                  	  
+                        // // DEBUG
+                        // System.out.println("blockstate material matches material in");
+
                         double d0 = i4 + 1 - BlockLiquid.getLiquidHeightPercent(iblockstate1.getValue(BlockLiquid.LEVEL).intValue());
 
                         if (i3 >= d0)
                         {
-                      	  flag = true;
-                      	  vec3d = block.modifyAcceleration(parWorld, blockpos$pooledmutableblockpos, entityIn, vec3d);
-                      	  
-//                            // DEBUG
-//                      	  System.out.println("deep enough to push entity and motion add = "+vec3d);                 
-                         }
+                            flag = true;
+                            vec3d = block.modifyAcceleration(parWorld, blockpos$pooledmutableblockpos, entityIn, vec3d);
+
+                            // // DEBUG
+                            // System.out.println("deep enough to push entity and motion add = "+vec3d);
+                        }
                     }
                 }
             }
@@ -647,14 +675,12 @@ public class CommonProxy
 
         if (vec3d.lengthVector() > 0.0D && entityIn.isPushedByWater())
         {
-//      	  // DEBUG
-//      	  System.out.println("motion vector is non-zero");
-      	  
-      	  /*
-      	   * Although applied to all entities, EntityPlayer doesn't really take
-      	   * affect, so the fluid motion control is handled in the client-side
-      	   * PlayerTickEvent
-      	   */
+            // // DEBUG
+            // System.out.println("motion vector is non-zero");
+
+            /*
+             * Although applied to all entities, EntityPlayer doesn't really take affect, so the fluid motion control is handled in the client-side PlayerTickEvent
+             */
             vec3d = vec3d.normalize();
             double d1 = 0.014D;
             entityIn.motionX += vec3d.x * d1;
@@ -663,10 +689,10 @@ public class CommonProxy
         }
         else
         {
-//          	  // DEBUG
-//          	  System.out.println("motion vector is zero");
+            // // DEBUG
+            // System.out.println("motion vector is zero");
         }
-    	
+
         entityIn.fallDistance = 0.0F;
 
         return flag;

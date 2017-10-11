@@ -88,20 +88,23 @@ public final class ModelSlimeBag implements IModel
      */
     public ModelSlimeBag()
     {
-    	this(null);
+        this(null);
     }
-    
+
     /**
      * Instantiates a new model slime bag.
      *
-     * @param parFluid the par fluid
+     * @param parFluid
+     *            the par fluid
      */
     public ModelSlimeBag(Fluid parFluid)
     {
-    	fluid = parFluid;
+        fluid = parFluid;
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see net.minecraftforge.client.model.IModel#getTextures()
      */
     @Override
@@ -116,87 +119,96 @@ public final class ModelSlimeBag implements IModel
         return builder.build();
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see net.minecraftforge.client.model.IModel#getDependencies()
+     */
+    @Override
+    public Collection<ResourceLocation> getDependencies()
+    {
+        return ImmutableList.of();
+    }
 
-	/* (non-Javadoc)
-	 * @see net.minecraftforge.client.model.IModel#getDependencies()
-	 */
-	@Override
-	public Collection<ResourceLocation> getDependencies() {
-		return ImmutableList.of();
-	}
-
-	/* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see net.minecraftforge.client.model.IModel#bake(net.minecraftforge.common.model.IModelState, net.minecraft.client.renderer.vertex.VertexFormat, java.util.function.Function)
      */
     @Override
     public IBakedModel bake(IModelState state, VertexFormat format,
-                                    Function<ResourceLocation, TextureAtlasSprite> bakedTextureGetter)
+            Function<ResourceLocation, TextureAtlasSprite> bakedTextureGetter)
     {
-    	// DEBUG
-    	System.out.println("baking");
-    	
+        // DEBUG
+        System.out.println("baking");
+
         ImmutableMap<TransformType, TRSRTransformation> transformMap = PerspectiveMapWrapper.getTransforms(state);
 
         TRSRTransformation transform = state.apply(Optional.empty()).orElse(TRSRTransformation.identity());
         TextureAtlasSprite fluidSprite = null;
         ImmutableList.Builder<BakedQuad> builder = ImmutableList.builder();
 
-        if(fluid != null) 
+        if (fluid != null)
         {
-        	// DEBUG
-        	System.out.println("Getting fluid sprite");
-        	
+            // DEBUG
+            System.out.println("Getting fluid sprite");
+
             fluidSprite = bakedTextureGetter.apply(fluid.getStill());
         }
 
         if (emptyLocation != null)
         {
-        	// DEBUG
-        	System.out.println("Buiding empty model");
-        	
+            // DEBUG
+            System.out.println("Buiding empty model");
+
             IBakedModel model = (new ItemLayerModel(ImmutableList.of(emptyLocation))).bake(state, format, bakedTextureGetter);
             builder.addAll(model.getQuads(null, null, 0));
         }
         if (filledLocation != null && fluidSprite != null)
         {
-        	// DEBUG
-        	System.out.println("Building filled model");
-        	
+            // DEBUG
+            System.out.println("Building filled model");
+
             TextureAtlasSprite filledTexture = bakedTextureGetter.apply(filledLocation);
             // build liquid layer (inside)
-            builder.addAll(ItemTextureQuadConverter.convertTexture(format, transform, filledTexture, fluidSprite, NORTH_Z_FLUID, EnumFacing.NORTH, fluid.getColor()));
-            builder.addAll(ItemTextureQuadConverter.convertTexture(format, transform, filledTexture, fluidSprite, SOUTH_Z_FLUID, EnumFacing.SOUTH, fluid.getColor()));
+            builder.addAll(
+                    ItemTextureQuadConverter.convertTexture(format, transform, filledTexture, fluidSprite, NORTH_Z_FLUID, EnumFacing.NORTH, fluid.getColor()));
+            builder.addAll(
+                    ItemTextureQuadConverter.convertTexture(format, transform, filledTexture, fluidSprite, SOUTH_Z_FLUID, EnumFacing.SOUTH, fluid.getColor()));
         }
 
-        return new Baked(this, builder.build(), fluidSprite, format, Maps.immutableEnumMap(transformMap), Maps.<String, IBakedModel>newHashMap());
+        return new Baked(this, builder.build(), fluidSprite, format, Maps.immutableEnumMap(transformMap), Maps.<String, IBakedModel> newHashMap());
     }
 
-	/* (non-Javadoc)
-	 * @see net.minecraftforge.client.model.IModel#getDefaultState()
-	 */
-	@Override
-	public IModelState getDefaultState() {
-		return TRSRTransformation.identity();
-	}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see net.minecraftforge.client.model.IModel#getDefaultState()
+     */
+    @Override
+    public IModelState getDefaultState()
+    {
+        return TRSRTransformation.identity();
+    }
 
     /**
-     * Sets the liquid in the model.
-     * fluid - Name of the fluid in the FluidRegistry
-     * If the fluid can't be found, water is used
+     * Sets the liquid in the model. fluid - Name of the fluid in the FluidRegistry If the fluid can't be found, water is used
      *
-     * @param customData the custom data
+     * @param customData
+     *            the custom data
      * @return the model slime bag
      */
     @Override
     public ModelSlimeBag process(ImmutableMap<String, String> customData)
     {
-    	// DEBUG
-    	System.out.println("process method with custom data = ");
-    	
+        // DEBUG
+        System.out.println("process method with custom data = ");
+
         String fluidName = customData.get("fluid");
         Fluid fluid = FluidRegistry.getFluid(fluidName);
 
-        if (fluid == null) fluid = this.fluid;
+        if (fluid == null)
+            fluid = this.fluid;
 
         // create new model with correct liquid
         return new ModelSlimeBag(fluid);
@@ -205,15 +217,16 @@ public final class ModelSlimeBag implements IModel
     /**
      * Allows to use different textures for the model.
      *
-     * @param textures the textures
+     * @param textures
+     *            the textures
      * @return the model slime bag
      */
     @Override
     public ModelSlimeBag retexture(ImmutableMap<String, String> textures)
     {
-    	// don't allow retexturing
-    	// DEBUG
-    	System.out.println("Retexturing");
+        // don't allow retexturing
+        // DEBUG
+        System.out.println("Retexturing");
 
         return new ModelSlimeBag(fluid);
     }
@@ -222,7 +235,9 @@ public final class ModelSlimeBag implements IModel
     {
         INSTANCE;
 
-        /* (non-Javadoc)
+        /*
+         * (non-Javadoc)
+         * 
          * @see net.minecraftforge.client.model.ICustomModelLoader#accepts(net.minecraft.util.ResourceLocation)
          */
         @Override
@@ -231,19 +246,23 @@ public final class ModelSlimeBag implements IModel
             return modelLocation.getResourceDomain().equals(MainMod.MODID) && modelLocation.getResourcePath().contains("slime_bag");
         }
 
-        /* (non-Javadoc)
+        /*
+         * (non-Javadoc)
+         * 
          * @see net.minecraftforge.client.model.ICustomModelLoader#loadModel(net.minecraft.util.ResourceLocation)
          */
         @Override
         public IModel loadModel(ResourceLocation modelLocation)
         {
-        	// DEBUG
-        	System.out.println("Loading model");
-        	
+            // DEBUG
+            System.out.println("Loading model");
+
             return MODEL;
         }
 
-        /* (non-Javadoc)
+        /*
+         * (non-Javadoc)
+         * 
          * @see net.minecraft.client.resources.IResourceManagerReloadListener#onResourceManagerReload(net.minecraft.client.resources.IResourceManager)
          */
         @Override
@@ -256,11 +275,11 @@ public final class ModelSlimeBag implements IModel
     private static final class BakedOverrideHandler extends ItemOverrideList
     {
         public static final BakedOverrideHandler INSTANCE = new BakedOverrideHandler();
-        
+
         private BakedOverrideHandler()
         {
-            super(ImmutableList.<ItemOverride>of());
-            
+            super(ImmutableList.<ItemOverride> of());
+
             // DEBUG
             System.out.println("Constructing BakedOverrideHandler");
         }
@@ -268,49 +287,50 @@ public final class ModelSlimeBag implements IModel
         @Override
         public IBakedModel handleItemState(IBakedModel originalModel, ItemStack stack, @Nullable World world, @Nullable EntityLivingBase entity)
         {
-			FluidStack fluidStack = null;
-			if (stack.hasTagCompound() && stack.getTagCompound().hasKey(FluidHandlerItemStack.FLUID_NBT_KEY)) 
-			{
-				fluidStack = FluidStack.loadFluidStackFromNBT(stack.getTagCompound().getCompoundTag(FluidHandlerItemStack.FLUID_NBT_KEY));
-			}
- 
+            FluidStack fluidStack = null;
+            if (stack.hasTagCompound() && stack.getTagCompound().hasKey(FluidHandlerItemStack.FLUID_NBT_KEY))
+            {
+                fluidStack = FluidStack.loadFluidStackFromNBT(stack.getTagCompound().getCompoundTag(FluidHandlerItemStack.FLUID_NBT_KEY));
+            }
+
             if (fluidStack == null || fluidStack.amount <= 0)
             {
-//            	// DEBUG
-//            	System.out.println("fluid stack is null, returning original model");
-            	
+                // // DEBUG
+                // System.out.println("fluid stack is null, returning original model");
+
                 // empty bucket
                 return originalModel;
             }
-            
-//            // DEBUG
-//            System.out.println("Fluid stack was not null and fluid amount = "+fluidStack.amount);
 
-            Baked model = (Baked)originalModel;
+            // // DEBUG
+            // System.out.println("Fluid stack was not null and fluid amount = "+fluidStack.amount);
+
+            Baked model = (Baked) originalModel;
 
             Fluid fluid = fluidStack.getFluid();
             String name = fluid.getName();
 
             if (!model.cache.containsKey(name))
             {
-            	// DEBUG
-            	System.out.println("The model cache does not have key for fluid name");
-				IModel parent = model.parent.process(ImmutableMap.of("fluid", name));
-				Function<ResourceLocation, TextureAtlasSprite> textureGetter;
-				textureGetter = new Function<ResourceLocation, TextureAtlasSprite>() {
-					@Override
-					public TextureAtlasSprite apply(ResourceLocation location) {
-						return Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(location.toString());
-					}
-				};
-				IBakedModel bakedModel = parent.bake(new SimpleModelState(model.transforms), model.format,
-						textureGetter);
-				model.cache.put(name, bakedModel);
-				return bakedModel;
+                // DEBUG
+                System.out.println("The model cache does not have key for fluid name");
+                IModel parent = model.parent.process(ImmutableMap.of("fluid", name));
+                Function<ResourceLocation, TextureAtlasSprite> textureGetter;
+                textureGetter = new Function<ResourceLocation, TextureAtlasSprite>() {
+                    @Override
+                    public TextureAtlasSprite apply(ResourceLocation location)
+                    {
+                        return Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(location.toString());
+                    }
+                };
+                IBakedModel bakedModel = parent.bake(new SimpleModelState(model.transforms), model.format,
+                        textureGetter);
+                model.cache.put(name, bakedModel);
+                return bakedModel;
             }
-            
-//            // DEBUG
-//            System.out.println("The model cache already has key so returning the model");
+
+            // // DEBUG
+            // System.out.println("The model cache already has key so returning the model");
 
             return model.cache.get(name);
         }
@@ -329,8 +349,9 @@ public final class ModelSlimeBag implements IModel
         private final VertexFormat format;
 
         public Baked(ModelSlimeBag parent,
-                              ImmutableList<BakedQuad> quads, TextureAtlasSprite particle, VertexFormat format, ImmutableMap<ItemCameraTransforms.TransformType, TRSRTransformation> transforms,
-                              Map<String, IBakedModel> cache)
+                ImmutableList<BakedQuad> quads, TextureAtlasSprite particle, VertexFormat format,
+                ImmutableMap<ItemCameraTransforms.TransformType, TRSRTransformation> transforms,
+                Map<String, IBakedModel> cache)
         {
             this.quads = quads;
             this.particle = particle;
@@ -338,7 +359,7 @@ public final class ModelSlimeBag implements IModel
             this.parent = parent;
             this.transforms = transforms;
             this.cache = cache;
-            
+
             // DEBUG
             System.out.println("Constructing Baked");
         }
@@ -358,17 +379,33 @@ public final class ModelSlimeBag implements IModel
         @Override
         public List<BakedQuad> getQuads(@Nullable IBlockState state, @Nullable EnumFacing side, long rand)
         {
-            if(side == null) return quads;
+            if (side == null)
+                return quads;
             return ImmutableList.of();
         }
 
         @Override
-		public boolean isAmbientOcclusion() { return true;  }
+        public boolean isAmbientOcclusion()
+        {
+            return true;
+        }
+
         @Override
-		public boolean isGui3d() { return false; }
+        public boolean isGui3d()
+        {
+            return false;
+        }
+
         @Override
-		public boolean isBuiltInRenderer() { return false; }
+        public boolean isBuiltInRenderer()
+        {
+            return false;
+        }
+
         @Override
-		public TextureAtlasSprite getParticleTexture() { return particle; }
+        public TextureAtlasSprite getParticleTexture()
+        {
+            return particle;
+        }
     }
 }

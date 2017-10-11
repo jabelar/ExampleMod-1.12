@@ -24,81 +24,90 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.math.BlockPos;
 
 // TODO: Auto-generated Javadoc
-public class ProtectedArea 
+public class ProtectedArea
 {
-	private String name;
-	private List<BlockPos> listBlocks = new ArrayList<BlockPos>();
+    private String name;
+    private List<BlockPos> listBlocks = new ArrayList<BlockPos>();
 
-	/**
-	 * Instantiates a new protected area.
-	 *
-	 * @param parName the par name
-	 */
-	public ProtectedArea(String parName)
-	{
-		name = parName;
-	}
-	
-	/**
-	 * Gets the name.
-	 *
-	 * @return the name
-	 */
-	public String getName() { return name; }
-	
-	/**
-	 * Adds the block position to the protected blocks list.
-	 *
-	 * @param parPos the par pos
-	 */
-	public void addBlock(BlockPos parPos)
-	{
-		listBlocks.add(parPos);
-	}
-	
-	/**
-	 * Removes the block position from the protected blocks list.
-	 *
-	 * @param parPos the par pos
-	 */
-	public void removeBlock(BlockPos parPos)
-	{
-		listBlocks.remove(parPos);
-	}
-	
-	/**
-	 * Clears the protected blocks.
-	 */
-	public void clearBlocks()
-	{
-		listBlocks.clear();
-	}
-	
-	/**
-	 * Gets the protected block list.
-	 *
-	 * @return the protected block list
-	 */
-	public List<BlockPos> getProtectedBlockList() { return listBlocks; }
-	
-	/**
-	 * Gets the block list tag.
-	 *
-	 * @return the block list tag
-	 */
-	public NBTTagList getBlockListTag()
-	{
-		NBTTagList tagList = new NBTTagList();
-		Iterator<BlockPos> iterator = listBlocks.iterator();
-		while (iterator.hasNext())
-		{
-			BlockPos pos = iterator.next();
-			NBTTagCompound posCompound = new NBTTagCompound();
-			posCompound.setInteger("x", pos.getX());
-			posCompound.setInteger("y", pos.getY());
-			posCompound.setInteger("z", pos.getZ());
-			tagList.appendTag(posCompound);
-		}
-		return tagList;
-	}
+    /**
+     * Instantiates a new protected area.
+     *
+     * @param parName
+     *            the par name
+     */
+    public ProtectedArea(String parName)
+    {
+        name = parName;
+    }
+
+    /**
+     * Gets the name.
+     *
+     * @return the name
+     */
+    public String getName()
+    {
+        return name;
+    }
+
+    /**
+     * Adds the block position to the protected blocks list.
+     *
+     * @param parPos
+     *            the par pos
+     */
+    public void addBlock(BlockPos parPos)
+    {
+        listBlocks.add(parPos);
+    }
+
+    /**
+     * Removes the block position from the protected blocks list.
+     *
+     * @param parPos
+     *            the par pos
+     */
+    public void removeBlock(BlockPos parPos)
+    {
+        listBlocks.remove(parPos);
+    }
+
+    /**
+     * Clears the protected blocks.
+     */
+    public void clearBlocks()
+    {
+        listBlocks.clear();
+    }
+
+    /**
+     * Gets the protected block list.
+     *
+     * @return the protected block list
+     */
+    public List<BlockPos> getProtectedBlockList()
+    {
+        return listBlocks;
+    }
+
+    /**
+     * Gets the block list tag.
+     *
+     * @return the block list tag
+     */
+    public NBTTagList getBlockListTag()
+    {
+        NBTTagList tagList = new NBTTagList();
+        Iterator<BlockPos> iterator = listBlocks.iterator();
+        while (iterator.hasNext())
+        {
+            BlockPos pos = iterator.next();
+            NBTTagCompound posCompound = new NBTTagCompound();
+            posCompound.setInteger("x", pos.getX());
+            posCompound.setInteger("y", pos.getY());
+            posCompound.setInteger("z", pos.getZ());
+            tagList.appendTag(posCompound);
+        }
+        return tagList;
+    }
 }

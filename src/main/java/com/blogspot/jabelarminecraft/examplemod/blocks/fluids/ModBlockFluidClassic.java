@@ -41,50 +41,58 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 // TODO: Auto-generated Javadoc
 public class ModBlockFluidClassic extends BlockFluidClassic
 {
-	/**
-	 * Instantiates a new mod block fluid classic.
-	 *
-	 * @param parFluid the par fluid
-	 * @param parMaterial the par material
-	 */
-	public ModBlockFluidClassic(Fluid parFluid, Material parMaterial) 
-	{
-		super(parFluid, parMaterial);
-	}
+    /**
+     * Instantiates a new mod block fluid classic.
+     *
+     * @param parFluid
+     *            the par fluid
+     * @param parMaterial
+     *            the par material
+     */
+    public ModBlockFluidClassic(Fluid parFluid, Material parMaterial)
+    {
+        super(parFluid, parMaterial);
+    }
 
-    /* (non-Javadoc)
-     * @see net.minecraftforge.fluids.BlockFluidBase#modifyAcceleration(net.minecraft.world.World, net.minecraft.util.math.BlockPos, net.minecraft.entity.Entity, net.minecraft.util.math.Vec3d)
+    /*
+     * (non-Javadoc)
+     * 
+     * @see net.minecraftforge.fluids.BlockFluidBase#modifyAcceleration(net.minecraft.world.World, net.minecraft.util.math.BlockPos, net.minecraft.entity.Entity,
+     * net.minecraft.util.math.Vec3d)
      */
     @Override
-	public Vec3d modifyAcceleration(World worldIn, BlockPos pos, Entity entityIn, Vec3d motion)
+    public Vec3d modifyAcceleration(World worldIn, BlockPos pos, Entity entityIn, Vec3d motion)
     {
-//    	// DEBUG
-//    	System.out.println("modifyAcceleration for "+entityIn+" with isPushedByWater() = "+entityIn.isPushedByWater());
-    	
-    	if (worldIn.getBlockState(pos).getMaterial() instanceof MaterialLiquid)
-    	{
-    		Vec3d flowAdder = getFlow(worldIn, pos, worldIn.getBlockState(pos));
+        // // DEBUG
+        // System.out.println("modifyAcceleration for "+entityIn+" with isPushedByWater() = "+entityIn.isPushedByWater());
 
-//    		// DEBUG
-//    		System.out.println("may push entity with motion adder = "+flowAdder);
-    		
-			return motion.add(flowAdder);
-    	}
-    	else
-    	{
-//    		// DEBUG
-//    		System.out.println("may not push entity");
-    		
-    		return motion;
-    	}
+        if (worldIn.getBlockState(pos).getMaterial() instanceof MaterialLiquid)
+        {
+            Vec3d flowAdder = getFlow(worldIn, pos, worldIn.getBlockState(pos));
+
+            // // DEBUG
+            // System.out.println("may push entity with motion adder = "+flowAdder);
+
+            return motion.add(flowAdder);
+        }
+        else
+        {
+            // // DEBUG
+            // System.out.println("may not push entity");
+
+            return motion;
+        }
     }
 
     /**
      * Gets the flow.
      *
-     * @param worldIn the world in
-     * @param pos the pos
-     * @param state the state
+     * @param worldIn
+     *            the world in
+     * @param pos
+     *            the pos
+     * @param state
+     *            the state
      * @return the flow
      */
     protected Vec3d getFlow(IBlockAccess worldIn, BlockPos pos, IBlockState state)
@@ -128,18 +136,19 @@ public class ModBlockFluidClassic extends BlockFluidClassic
 
         if (state.getValue(LEVEL).intValue() >= 8)
         {
-//        	// DEBUG
-//        	System.out.println("fluid level greater than zero");
-        	
+            // // DEBUG
+            // System.out.println("fluid level greater than zero");
+
             for (EnumFacing enumfacing1 : EnumFacing.Plane.HORIZONTAL)
             {
                 blockpos$pooledmutableblockpos.setPos(pos).move(enumfacing1);
 
-                if (this.causesDownwardCurrent(worldIn, blockpos$pooledmutableblockpos, enumfacing1) || this.causesDownwardCurrent(worldIn, blockpos$pooledmutableblockpos.up(), enumfacing1))
+                if (this.causesDownwardCurrent(worldIn, blockpos$pooledmutableblockpos, enumfacing1)
+                        || this.causesDownwardCurrent(worldIn, blockpos$pooledmutableblockpos.up(), enumfacing1))
                 {
-//                	// DEBUG
-//                	System.out.println("Causes downward current");
-                	
+                    // // DEBUG
+                    // System.out.println("Causes downward current");
+
                     vec3d = vec3d.normalize().addVector(0.0D, -6.0D, 0.0D);
                     break;
                 }
@@ -153,7 +162,8 @@ public class ModBlockFluidClassic extends BlockFluidClassic
     /**
      * Gets the depth.
      *
-     * @param state the state
+     * @param state
+     *            the state
      * @return the depth
      */
     protected int getDepth(IBlockState state)
@@ -164,7 +174,8 @@ public class ModBlockFluidClassic extends BlockFluidClassic
     /**
      * Gets the rendered depth.
      *
-     * @param state the state
+     * @param state
+     *            the state
      * @return the rendered depth
      */
     protected int getRenderedDepth(IBlockState state)
@@ -174,8 +185,7 @@ public class ModBlockFluidClassic extends BlockFluidClassic
     }
 
     /**
-     * Checks if an additional {@code -6} vertical drag should be applied to the entity. See {#link
-     * net.minecraft.block.BlockLiquid#getFlow()}
+     * Checks if an additional {@code -6} vertical drag should be applied to the entity. See {#link net.minecraft.block.BlockLiquid#getFlow()}
      */
     private boolean causesDownwardCurrent(IBlockAccess worldIn, BlockPos pos, EnumFacing side)
     {
@@ -201,8 +211,10 @@ public class ModBlockFluidClassic extends BlockFluidClassic
             return !flag && iblockstate.getBlockFaceShape(worldIn, pos, side) == BlockFaceShape.SOLID;
         }
     }
-    
-    /* (non-Javadoc)
+
+    /*
+     * (non-Javadoc)
+     * 
      * @see net.minecraftforge.fluids.BlockFluidClassic#place(net.minecraft.world.World, net.minecraft.util.math.BlockPos, net.minecraftforge.fluids.FluidStack, boolean)
      */
     /* IFluidBlock */
@@ -219,10 +231,10 @@ public class ModBlockFluidClassic extends BlockFluidClassic
     }
 
     @Override
-	@SideOnly (Side.CLIENT)
+    @SideOnly(Side.CLIENT)
     public Vec3d getFogColor(World world, BlockPos pos, IBlockState state, Entity entity, Vec3d originalColor, float partialTicks)
     {
-    	return new Vec3d(Color.GREEN.getRed(), Color.GREEN.getGreen(), Color.GREEN.getBlue());
+        return new Vec3d(Color.GREEN.getRed(), Color.GREEN.getGreen(), Color.GREEN.getBlue());
     }
-    
+
 }

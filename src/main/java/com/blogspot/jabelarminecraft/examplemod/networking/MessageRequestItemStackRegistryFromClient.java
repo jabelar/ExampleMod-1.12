@@ -26,51 +26,58 @@ import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
  * @author jabelar
  *
  */
-public class MessageRequestItemStackRegistryFromClient implements IMessage 
+public class MessageRequestItemStackRegistryFromClient implements IMessage
 {
-    
+
     /**
      * Instantiates a new message request item stack registry from client.
      */
-    public MessageRequestItemStackRegistryFromClient() 
-    { 
-    	// need this constructor
+    public MessageRequestItemStackRegistryFromClient()
+    {
+        // need this constructor
         // DEBUG
         System.out.println("constructor");
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see net.minecraftforge.fml.common.network.simpleimpl.IMessage#fromBytes(io.netty.buffer.ByteBuf)
      */
     @Override
-    public void fromBytes(ByteBuf buf) 
+    public void fromBytes(ByteBuf buf)
     {
-    	// DEBUG
-    	System.out.println("fromBytes");
+        // DEBUG
+        System.out.println("fromBytes");
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see net.minecraftforge.fml.common.network.simpleimpl.IMessage#toBytes(io.netty.buffer.ByteBuf)
      */
     @Override
-    public void toBytes(ByteBuf buf) 
+    public void toBytes(ByteBuf buf)
     {
         // DEBUG
         System.out.println("toBytes encoded");
     }
 
-    public static class Handler implements IMessageHandler<MessageRequestItemStackRegistryFromClient, IMessage> 
+    public static class Handler implements IMessageHandler<MessageRequestItemStackRegistryFromClient, IMessage>
     {
-        
-        /* (non-Javadoc)
-         * @see net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler#onMessage(net.minecraftforge.fml.common.network.simpleimpl.IMessage, net.minecraftforge.fml.common.network.simpleimpl.MessageContext)
+
+        /*
+         * (non-Javadoc)
+         * 
+         * @see net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler#onMessage(net.minecraftforge.fml.common.network.simpleimpl.IMessage,
+         * net.minecraftforge.fml.common.network.simpleimpl.MessageContext)
          */
         @Override
-        public IMessage onMessage(MessageRequestItemStackRegistryFromClient message, MessageContext ctx) 
+        public IMessage onMessage(MessageRequestItemStackRegistryFromClient message, MessageContext ctx)
         {
             // DEBUT
             System.out.println("message received");
-            
+
             return new MessageSendItemStackRegistryToServer(); // no response in this case
         }
     }

@@ -29,66 +29,71 @@ import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
  * @author jabelar
  *
  */
-public class MessageSendItemStackRegistryToServer implements IMessage 
-{   
-    
+public class MessageSendItemStackRegistryToServer implements IMessage
+{
+
     /**
      * Instantiates a new message send item stack registry to server.
      */
-    public MessageSendItemStackRegistryToServer() 
+    public MessageSendItemStackRegistryToServer()
     {
         // need this constructor
-        
+
         // DEBUG
         System.out.println("Constructor");
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see net.minecraftforge.fml.common.network.simpleimpl.IMessage#toBytes(io.netty.buffer.ByteBuf)
      */
     @Override
-    public void toBytes(ByteBuf parBuffer) 
+    public void toBytes(ByteBuf parBuffer)
     {
         // DEBUG
         System.out.println("toBytes encoded");
         MainMod.proxy.convertItemStackListToPayload(parBuffer); // appends directly to the buffer passed in
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see net.minecraftforge.fml.common.network.simpleimpl.IMessage#fromBytes(io.netty.buffer.ByteBuf)
      */
     @Override
-    public void fromBytes(ByteBuf parBuffer) 
+    public void fromBytes(ByteBuf parBuffer)
     {
         // DEBUG
         System.out.println("fromBytes");
-        MainMod.proxy.setItemStackRegistry(MainMod.proxy.convertPayloadToItemStackList(parBuffer)); 
+        MainMod.proxy.setItemStackRegistry(MainMod.proxy.convertPayloadToItemStackList(parBuffer));
     }
 
-    public static class Handler implements IMessageHandler<MessageSendItemStackRegistryToServer, IMessage> 
+    public static class Handler implements IMessageHandler<MessageSendItemStackRegistryToServer, IMessage>
     {
-        
-        /* (non-Javadoc)
-         * @see net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler#onMessage(net.minecraftforge.fml.common.network.simpleimpl.IMessage, net.minecraftforge.fml.common.network.simpleimpl.MessageContext)
+
+        /*
+         * (non-Javadoc)
+         * 
+         * @see net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler#onMessage(net.minecraftforge.fml.common.network.simpleimpl.IMessage,
+         * net.minecraftforge.fml.common.network.simpleimpl.MessageContext)
          */
         @Override
-        public IMessage onMessage(final MessageSendItemStackRegistryToServer message, MessageContext ctx) 
+        public IMessage onMessage(final MessageSendItemStackRegistryToServer message, MessageContext ctx)
         {
             // DEBUG
             System.out.println("Message received");
             // Know it will be on the server so make it thread-safe
             final EntityPlayerMP thePlayer = (EntityPlayerMP) MainMod.proxy.getPlayerEntityFromContext(ctx);
             thePlayer.getServer().addScheduledTask(
-                    new Runnable()
-                    {
+                    new Runnable() {
                         @Override
-                        public void run() 
+                        public void run()
                         {
-                            // don't need to do anything because the fromBytes operates directly 
+                            // don't need to do anything because the fromBytes operates directly
                             // on public field in main class
                         }
-                    }
-                    );
+                    });
             return null; // no response message
         }
     }

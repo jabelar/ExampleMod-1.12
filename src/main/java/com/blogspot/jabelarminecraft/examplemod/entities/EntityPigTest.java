@@ -26,6 +26,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
+
 // TODO: Auto-generated Javadoc
 /**
  * @author jabelar
@@ -33,41 +34,45 @@ import net.minecraft.world.World;
  */
 public class EntityPigTest extends EntityPig implements IEntity
 {
-	
-	/**
-	 * Instantiates a new entity pig test.
-	 *
-	 * @param worldIn the world in
-	 */
-	public EntityPigTest(World worldIn) 
-	{
-		super(worldIn);
-		setSize(1.0F, 10.0F);
-	}
-	
-	/* (non-Javadoc)
-	 * @see net.minecraft.entity.passive.EntityAnimal#attackEntityFrom(net.minecraft.util.DamageSource, float)
-	 */
-	@Override
-	public boolean attackEntityFrom(DamageSource parDamageSource, float parDamageAmount)
-	{
-		// DEBUG
-		System.out.println("Test pig has been attacked");
+
+    /**
+     * Instantiates a new entity pig test.
+     *
+     * @param worldIn
+     *            the world in
+     */
+    public EntityPigTest(World worldIn)
+    {
+        super(worldIn);
+        setSize(1.0F, 10.0F);
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see net.minecraft.entity.passive.EntityAnimal#attackEntityFrom(net.minecraft.util.DamageSource, float)
+     */
+    @Override
+    public boolean attackEntityFrom(DamageSource parDamageSource, float parDamageAmount)
+    {
+        // DEBUG
+        System.out.println("Test pig has been attacked");
         if (isEntityInvulnerable(parDamageSource))
         {
-        	// DEBUG
-        	System.out.println("Entity is invulnerable");
+            // DEBUG
+            System.out.println("Entity is invulnerable");
             return false;
         }
         else
         {
-            if (!net.minecraftforge.common.ForgeHooks.onLivingAttack(this, parDamageSource, parDamageAmount)) return false;
+            if (!net.minecraftforge.common.ForgeHooks.onLivingAttack(this, parDamageSource, parDamageAmount))
+                return false;
             // DEBUG
             System.out.println("ForgeHooks.onLivingAttack returned true");
             if (world.isRemote)
             {
-            	// DEBUG
-            	System.out.println("Don't process attack on client");
+                // DEBUG
+                System.out.println("Don't process attack on client");
                 return false;
             }
             else
@@ -76,23 +81,25 @@ public class EntityPigTest extends EntityPig implements IEntity
 
                 if (getHealth() <= 0.0F)
                 {
-                	// DEBUG
-                	System.out.println("Health is already below 0");
+                    // DEBUG
+                    System.out.println("Health is already below 0");
                     return false;
                 }
                 else if (parDamageSource.isFireDamage() && isPotionActive(MobEffects.FIRE_RESISTANCE))
                 {
-                	// DEBUG
-                	System.out.println("Attacked with fire but has resistance");
+                    // DEBUG
+                    System.out.println("Attacked with fire but has resistance");
                     return false;
                 }
                 else
                 {
-                    if ((parDamageSource == DamageSource.ANVIL || parDamageSource == DamageSource.FALLING_BLOCK) && getItemStackFromSlot(EntityEquipmentSlot.HEAD) != null)
+                    if ((parDamageSource == DamageSource.ANVIL || parDamageSource == DamageSource.FALLING_BLOCK)
+                            && getItemStackFromSlot(EntityEquipmentSlot.HEAD) != null)
                     {
-                    	// DEBUG
-                    	System.out.println("Attacked by falling block without a helmet");
-                        getItemStackFromSlot(EntityEquipmentSlot.HEAD).damageItem((int)(parDamageAmount * 4.0F + rand.nextFloat() * parDamageAmount * 2.0F), this);
+                        // DEBUG
+                        System.out.println("Attacked by falling block without a helmet");
+                        getItemStackFromSlot(EntityEquipmentSlot.HEAD).damageItem((int) (parDamageAmount * 4.0F + rand.nextFloat() * parDamageAmount * 2.0F),
+                                this);
                         parDamageAmount *= 0.75F;
                     }
 
@@ -101,8 +108,8 @@ public class EntityPigTest extends EntityPig implements IEntity
 
                     if (hurtResistantTime > maxHurtResistantTime / 2.0F)
                     {
-                    	// DEBUG
-                    	System.out.println("Attacked within hurt resistance time");
+                        // DEBUG
+                        System.out.println("Attacked within hurt resistance time");
                         if (parDamageAmount <= lastDamage)
                         {
                             return false;
@@ -114,8 +121,8 @@ public class EntityPigTest extends EntityPig implements IEntity
                     }
                     else
                     {
-                    	// DEBUG
-                    	System.out.println("Full attack");
+                        // DEBUG
+                        System.out.println("Full attack");
                         lastDamage = parDamageAmount;
                         hurtResistantTime = maxHurtResistantTime;
                         damageEntity(parDamageSource, parDamageAmount);
@@ -129,19 +136,19 @@ public class EntityPigTest extends EntityPig implements IEntity
                     {
                         if (entity instanceof EntityLivingBase)
                         {
-                            setRevengeTarget((EntityLivingBase)entity);
+                            setRevengeTarget((EntityLivingBase) entity);
                         }
 
                         if (entity instanceof EntityPlayer)
                         {
-                        	// DEBUG
-                        	System.out.println("Attacked by player");
+                            // DEBUG
+                            System.out.println("Attacked by player");
                             recentlyHit = 100;
-                            attackingPlayer = (EntityPlayer)entity;
+                            attackingPlayer = (EntityPlayer) entity;
                         }
                         else if (entity instanceof net.minecraft.entity.passive.EntityTameable)
                         {
-                            net.minecraft.entity.passive.EntityTameable entitywolf = (net.minecraft.entity.passive.EntityTameable)entity;
+                            net.minecraft.entity.passive.EntityTameable entitywolf = (net.minecraft.entity.passive.EntityTameable) entity;
 
                             if (entitywolf.isTamed())
                             {
@@ -153,19 +160,19 @@ public class EntityPigTest extends EntityPig implements IEntity
 
                     if (flag)
                     {
-                        world.setEntityState(this, (byte)2);
+                        world.setEntityState(this, (byte) 2);
 
                         if (parDamageSource != DamageSource.DROWN)
                         {
-                        	// DEBUG
-                        	System.out.println("Not drowning");
+                            // DEBUG
+                            System.out.println("Not drowning");
                             markVelocityChanged();
                         }
 
                         if (entity != null)
                         {
-                        	// DEBUG
-                        	System.out.println("Processing knockback");
+                            // DEBUG
+                            System.out.println("Processing knockback");
                             double d1 = entity.posX - posX;
                             double d0;
 
@@ -174,12 +181,12 @@ public class EntityPigTest extends EntityPig implements IEntity
                                 d1 = (Math.random() - Math.random()) * 0.01D;
                             }
 
-                            attackedAtYaw = (float)(Math.atan2(d0, d1) * 180.0D / Math.PI - rotationYaw);
+                            attackedAtYaw = (float) (Math.atan2(d0, d1) * 180.0D / Math.PI - rotationYaw);
                             knockBack(entity, parDamageAmount, d1, d0);
                         }
                         else
                         {
-                            attackedAtYaw = (int)(Math.random() * 2.0D) * 180;
+                            attackedAtYaw = (int) (Math.random() * 2.0D) * 180;
                         }
                     }
 
@@ -187,8 +194,8 @@ public class EntityPigTest extends EntityPig implements IEntity
 
                     if (getHealth() <= 0.0F)
                     {
-                    	// DEBUG
-                    	System.out.println("Health now below 0");
+                        // DEBUG
+                        System.out.println("Health now below 0");
                         s = getDeathSound();
 
                         if (flag && s != null)
@@ -214,75 +221,99 @@ public class EntityPigTest extends EntityPig implements IEntity
         }
     }
 
-	/* (non-Javadoc)
-	 * @see com.blogspot.jabelarminecraft.examplemod.entities.IEntity#setupAI()
-	 */
-	@Override
-	public void setupAI() {
-		// TODO Auto-generated method stub
-		
-	}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see com.blogspot.jabelarminecraft.examplemod.entities.IEntity#setupAI()
+     */
+    @Override
+    public void setupAI()
+    {
+        // TODO Auto-generated method stub
 
-	/* (non-Javadoc)
-	 * @see com.blogspot.jabelarminecraft.examplemod.entities.IEntity#clearAITasks()
-	 */
-	@Override
-	public void clearAITasks() {
-		// TODO Auto-generated method stub
-		
-	}
+    }
 
-	/* (non-Javadoc)
-	 * @see com.blogspot.jabelarminecraft.examplemod.entities.IEntity#initSyncDataCompound()
-	 */
-	@Override
-	public void initSyncDataCompound() {
-		// TODO Auto-generated method stub
-		
-	}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see com.blogspot.jabelarminecraft.examplemod.entities.IEntity#clearAITasks()
+     */
+    @Override
+    public void clearAITasks()
+    {
+        // TODO Auto-generated method stub
 
-	/* (non-Javadoc)
-	 * @see com.blogspot.jabelarminecraft.examplemod.entities.IEntity#getSyncDataCompound()
-	 */
-	@Override
-	public NBTTagCompound getSyncDataCompound() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    }
 
-	/* (non-Javadoc)
-	 * @see com.blogspot.jabelarminecraft.examplemod.entities.IEntity#setSyncDataCompound(net.minecraft.nbt.NBTTagCompound)
-	 */
-	@Override
-	public void setSyncDataCompound(NBTTagCompound parCompound) {
-		// TODO Auto-generated method stub
-		
-	}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see com.blogspot.jabelarminecraft.examplemod.entities.IEntity#initSyncDataCompound()
+     */
+    @Override
+    public void initSyncDataCompound()
+    {
+        // TODO Auto-generated method stub
 
-	/* (non-Javadoc)
-	 * @see com.blogspot.jabelarminecraft.examplemod.entities.IEntity#sendEntitySyncPacket()
-	 */
-	@Override
-	public void sendEntitySyncPacket() {
-		// TODO Auto-generated method stub
-		
-	}
+    }
 
-	/* (non-Javadoc)
-	 * @see com.blogspot.jabelarminecraft.examplemod.entities.IEntity#setScaleFactor(float)
-	 */
-	@Override
-	public void setScaleFactor(float parScaleFactor) {
-		// TODO Auto-generated method stub
-		
-	}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see com.blogspot.jabelarminecraft.examplemod.entities.IEntity#getSyncDataCompound()
+     */
+    @Override
+    public NBTTagCompound getSyncDataCompound()
+    {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
-	/* (non-Javadoc)
-	 * @see com.blogspot.jabelarminecraft.examplemod.entities.IEntity#getScaleFactor()
-	 */
-	@Override
-	public float getScaleFactor() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see com.blogspot.jabelarminecraft.examplemod.entities.IEntity#setSyncDataCompound(net.minecraft.nbt.NBTTagCompound)
+     */
+    @Override
+    public void setSyncDataCompound(NBTTagCompound parCompound)
+    {
+        // TODO Auto-generated method stub
+
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see com.blogspot.jabelarminecraft.examplemod.entities.IEntity#sendEntitySyncPacket()
+     */
+    @Override
+    public void sendEntitySyncPacket()
+    {
+        // TODO Auto-generated method stub
+
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see com.blogspot.jabelarminecraft.examplemod.entities.IEntity#setScaleFactor(float)
+     */
+    @Override
+    public void setScaleFactor(float parScaleFactor)
+    {
+        // TODO Auto-generated method stub
+
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see com.blogspot.jabelarminecraft.examplemod.entities.IEntity#getScaleFactor()
+     */
+    @Override
+    public float getScaleFactor()
+    {
+        // TODO Auto-generated method stub
+        return 0;
+    }
 }

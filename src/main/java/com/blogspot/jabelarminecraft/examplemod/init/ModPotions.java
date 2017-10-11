@@ -29,64 +29,66 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.registries.IForgeRegistry;
 
 // TODO: Auto-generated Javadoc
-public class ModPotions 
+public class ModPotions
 {
     // instantiate Potions
-//	public final static PotionCustom MY_COOL_POTION = new PotionCustom();
-	
-	public static final Set<Potion> SET_POTIONS = ImmutableSet.of(
-			);
+    // public final static PotionCustom MY_COOL_POTION = new PotionCustom();
 
-	// instantiate Potion Types
-//  public final static PotionTypeCustom MY_POTION_TYPE = new PotionTypeCustom();
-			
-	public static final Set<PotionType> SET_POTION_TYPES = ImmutableSet.of(
-			);
+    public static final Set<Potion> SET_POTIONS = ImmutableSet.of();
 
-	/**
-	 * Initialize this mod's {@link Block}s with any post-registration data.
-	 */
-	private static void initialize() 
-	{
-	}
+    // instantiate Potion Types
+    // public final static PotionTypeCustom MY_POTION_TYPE = new PotionTypeCustom();
 
-	@Mod.EventBusSubscriber(modid = MainMod.MODID)
-	public static class RegistrationHandler 
-	{
-		/**
-		 * Register this mod's {@link Potion}s.
-		 *
-		 * @param event The event
-		 */
-		@SubscribeEvent
-		public static void onEvent(final RegistryEvent.Register<Potion> event) 
-		{
-			final IForgeRegistry<Potion> registry = event.getRegistry();
+    public static final Set<PotionType> SET_POTION_TYPES = ImmutableSet.of();
 
-	        System.out.println("Registering potions");
+    /**
+     * Initialize this mod's {@link Block}s with any post-registration data.
+     */
+    private static void initialize()
+    {
+    }
 
-			for (final Potion Potion : SET_POTIONS) {
-				registry.register(Potion);
-			}
+    @Mod.EventBusSubscriber(modid = MainMod.MODID)
+    public static class RegistrationHandler
+    {
+        /**
+         * Register this mod's {@link Potion}s.
+         *
+         * @param event
+         *            The event
+         */
+        @SubscribeEvent
+        public static void onEvent(final RegistryEvent.Register<Potion> event)
+        {
+            final IForgeRegistry<Potion> registry = event.getRegistry();
 
-			initialize();
-		}
+            System.out.println("Registering potions");
 
-		/**
-		 * On type event.
-		 *
-		 * @param event the event
-		 */
-		@SubscribeEvent
-		public static void onTypeEvent(final RegistryEvent.Register<PotionType> event) 
-		{
-			final IForgeRegistry<PotionType> registry = event.getRegistry();
+            for (final Potion Potion : SET_POTIONS)
+            {
+                registry.register(Potion);
+            }
 
-	        System.out.println("Registering potion types");
+            initialize();
+        }
 
-			for (final PotionType potionType : SET_POTION_TYPES) {
-				registry.register(potionType);
-			}
-		}
-}
+        /**
+         * On type event.
+         *
+         * @param event
+         *            the event
+         */
+        @SubscribeEvent
+        public static void onTypeEvent(final RegistryEvent.Register<PotionType> event)
+        {
+            final IForgeRegistry<PotionType> registry = event.getRegistry();
+
+            System.out.println("Registering potion types");
+
+            for (final PotionType potionType : SET_POTION_TYPES)
+            {
+                registry.register(potionType);
+            }
+        }
+    }
 }

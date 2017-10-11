@@ -20,20 +20,19 @@ import com.blogspot.jabelarminecraft.examplemod.fluids.ModFluid;
 
 import net.minecraft.util.ResourceLocation;
 
-public class ModFluids 
+public class ModFluids
 {
-	/*
-	 * fluids
-	 */
-	public static final ModFluid SLIME = (ModFluid) new ModFluid(
-			"slime", 
-			new ResourceLocation(MainMod.MODID,"slime_still"), 
-			new ResourceLocation(MainMod.MODID, "slime_flow")
-			)
-			.setMaterial(ModMaterials.SLIME)
-			.setDensity(1100)
-			.setGaseous(false)
-			.setLuminosity(9)
-			.setViscosity(25000)
-			.setTemperature(300);
-} 
+    /*
+     * fluids
+     */
+    public static final ModFluid SLIME = (ModFluid) new ModFluid(
+            "slime",
+            new ResourceLocation(MainMod.MODID, "slime_still"),
+            new ResourceLocation(MainMod.MODID, "slime_flow"))
+                    .setMaterial(ModMaterials.SLIME)
+                    .setDensity(1100)
+                    .setGaseous(false)
+                    .setLuminosity(9)
+                    .setViscosity(25000)
+                    .setTemperature(300);
+}

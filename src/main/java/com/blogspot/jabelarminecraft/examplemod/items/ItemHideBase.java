@@ -38,34 +38,40 @@ import net.minecraft.world.World;
 @SuppressWarnings("deprecation")
 public class ItemHideBase extends Item
 {
-    
+
     /**
      * Instantiates a new item hide base.
      *
-     * @param parName the par name
+     * @param parName
+     *            the par name
      */
-    public ItemHideBase(String parName) 
+    public ItemHideBase(String parName)
     {
         super();
         Utilities.setItemName(this, parName);
         setCreativeTab(CreativeTabs.MATERIALS);
     }
-    
-    /* (non-Javadoc)
+
+    /*
+     * (non-Javadoc)
+     * 
      * @see net.minecraft.item.Item#getItemStackDisplayName(net.minecraft.item.ItemStack)
      */
     @Override
-    public String getItemStackDisplayName(ItemStack parItemStack) 
+    public String getItemStackDisplayName(ItemStack parItemStack)
     {
         return (Utilities.stringToRainbow(I18n.translateToLocal(getUnlocalizedNameInefficiently(parItemStack) + ".name")).trim());
     }
-    
+
     /**
      * Called whenever this item is equipped and the right mouse button is pressed. Args: itemStack, world, entityPlayer
      *
-     * @param parWorld the par world
-     * @param parPlayer the par player
-     * @param parHand the par hand
+     * @param parWorld
+     *            the par world
+     * @param parPlayer
+     *            the par player
+     * @param parHand
+     *            the par hand
      * @return the action result
      */
     @Override
@@ -90,47 +96,46 @@ public class ItemHideBase extends Item
 
                 // if you want to do special stuff with interaction of item with specific blocks
                 // you can do that here
-//                IBlockState theBlockState = parWorld.getBlockState(blockPos);
-//                Block theBlock = theBlockState.getBlock();
-//                if (theBlock == BlockRegistry.TANNING_RACK)
-//                {
-//                    // DEBUG
-//                    System.out.println("ItemHorseHide onRightClick() interacting with Tanning Rack");
-//                    parPlayer.addStat(BlockSmith.achievementTanningAHide);
-//                    parPlayer.addStat(StatList.getObjectUseStats(this));
-//                    return new ActionResult(EnumActionResult.SUCCESS, exchangeItemStack(parPlayer.getActiveItemStack(), parPlayer, Items.LEATHER));
-//                }
+                // IBlockState theBlockState = parWorld.getBlockState(blockPos);
+                // Block theBlock = theBlockState.getBlock();
+                // if (theBlock == BlockRegistry.TANNING_RACK)
+                // {
+                // // DEBUG
+                // System.out.println("ItemHorseHide onRightClick() interacting with Tanning Rack");
+                // parPlayer.addStat(BlockSmith.achievementTanningAHide);
+                // parPlayer.addStat(StatList.getObjectUseStats(this));
+                // return new ActionResult(EnumActionResult.SUCCESS, exchangeItemStack(parPlayer.getActiveItemStack(), parPlayer, Items.LEATHER));
+                // }
             }
 
             return new ActionResult<ItemStack>(EnumActionResult.FAIL, parPlayer.getActiveItemStack());
         }
     }
 
-    
     private ItemStack exchangeItemStack(ItemStack parHeldItemStack, EntityPlayer parPlayer, Item parNewItem)
     {
         if (parPlayer.capabilities.isCreativeMode)
         {
             return parHeldItemStack;
         }
-        else 
+        else
         {
-        	parHeldItemStack.setCount(parHeldItemStack.getCount()-1);
-        	if (parHeldItemStack.getCount() <= 0)
-	        {
-	            // DEBUG
-	            System.out.println("ItemHideBase exchangeItemStack() tanned a hide");
-	            return new ItemStack(parNewItem);
-	        }
-	        else
-	        {
-	            if (!parPlayer.inventory.addItemStackToInventory(new ItemStack(parNewItem)))
-	            {
-	                parPlayer.dropItem(new ItemStack(parNewItem, 1, 0), false);
-	            }
-	
-	            return parHeldItemStack;
-	        }
+            parHeldItemStack.setCount(parHeldItemStack.getCount() - 1);
+            if (parHeldItemStack.getCount() <= 0)
+            {
+                // DEBUG
+                System.out.println("ItemHideBase exchangeItemStack() tanned a hide");
+                return new ItemStack(parNewItem);
+            }
+            else
+            {
+                if (!parPlayer.inventory.addItemStackToInventory(new ItemStack(parNewItem)))
+                {
+                    parPlayer.dropItem(new ItemStack(parNewItem, 1, 0), false);
+                }
+
+                return parHeldItemStack;
+            }
         }
     }
 }

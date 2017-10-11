@@ -27,42 +27,44 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.EntityEntry;
 import net.minecraftforge.registries.IForgeRegistry;
 
-public class ModEnchantments 
+public class ModEnchantments
 {
     // instantiate EntityEntrys
-//	public final static EntityEntryCustom MY_COOL_EntityEntry = new EntityEntryCustom();
-	
-	public static final Set<EntityEntry> SET_INSTANCES = ImmutableSet.of(
-//            MY_COOL_EntityEntry
-			);
+    // public final static EntityEntryCustom MY_COOL_EntityEntry = new EntityEntryCustom();
 
-	/**
-	 * Initialize this mod's {@link Block}s with any post-registration data.
-	 */
-	private static void initialize() 
-	{
-	}
+    public static final Set<EntityEntry> SET_INSTANCES = ImmutableSet.of(
+    // MY_COOL_EntityEntry
+    );
 
-	@Mod.EventBusSubscriber(modid = MainMod.MODID)
-	public static class RegistrationHandler 
-	{
-		/**
-		 * Register this mod's {@link EntityEntry}s.
-		 *
-		 * @param event The event
-		 */
-		@SubscribeEvent
-		public static void onEvent(final RegistryEvent.Register<EntityEntry> event) 
-		{
-			final IForgeRegistry<EntityEntry> registry = event.getRegistry();
+    /**
+     * Initialize this mod's {@link Block}s with any post-registration data.
+     */
+    private static void initialize()
+    {
+    }
 
-	        System.out.println("Registering recipes");
+    @Mod.EventBusSubscriber(modid = MainMod.MODID)
+    public static class RegistrationHandler
+    {
+        /**
+         * Register this mod's {@link EntityEntry}s.
+         *
+         * @param event
+         *            The event
+         */
+        @SubscribeEvent
+        public static void onEvent(final RegistryEvent.Register<EntityEntry> event)
+        {
+            final IForgeRegistry<EntityEntry> registry = event.getRegistry();
 
-	        for (final EntityEntry entityEntry : SET_INSTANCES) {
-				registry.register(entityEntry);
-			}
+            System.out.println("Registering recipes");
 
-			initialize();
-		}
-	}
+            for (final EntityEntry entityEntry : SET_INSTANCES)
+            {
+                registry.register(entityEntry);
+            }
+
+            initialize();
+        }
+    }
 }

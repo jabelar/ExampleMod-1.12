@@ -26,26 +26,29 @@ import net.minecraft.item.ItemSword;
  */
 public class ItemSwordExtended extends ItemSword implements IExtendedReach
 {
-	
-	/**
-	 * Instantiates a new item sword extended.
-	 *
-	 * @param parMaterial the par material
-	 */
-	public ItemSwordExtended(ToolMaterial parMaterial) 
-	{
-		super(parMaterial);
-		Utilities.setItemName(this, "swordExtended");
-		setCreativeTab(null);
-	}
 
-	/* (non-Javadoc)
-	 * @see com.blogspot.jabelarminecraft.examplemod.items.IExtendedReach#getReach()
-	 */
-	@Override
-	public float getReach() 
-	{
-		return 30.0F;
-	}
+    /**
+     * Instantiates a new item sword extended.
+     *
+     * @param parMaterial
+     *            the par material
+     */
+    public ItemSwordExtended(ToolMaterial parMaterial)
+    {
+        super(parMaterial);
+        Utilities.setItemName(this, "swordExtended");
+        setCreativeTab(null);
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see com.blogspot.jabelarminecraft.examplemod.items.IExtendedReach#getReach()
+     */
+    @Override
+    public float getReach()
+    {
+        return 30.0F;
+    }
 
 }

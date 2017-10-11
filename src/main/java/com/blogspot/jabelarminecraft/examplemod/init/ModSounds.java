@@ -25,65 +25,66 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.registries.IForgeRegistry;
 
-public class ModSounds 
+public class ModSounds
 {
     // instantiate SoundEvents
-	
-	// big cats
-//    public static final SoundEvent soundAmbientGrowlBigCat = null;
-       
-	/**
-	 * Initialize this mod's {@link Block}s with any post-registration data.
-	 */
-	private static void initialize() 
-	{
-	}
 
-	@Mod.EventBusSubscriber(modid = MainMod.MODID)
-	public static class RegistrationHandler 
-	{
-		/**
-		 * Register this mod's {@link SoundEvent}s.
-		 *
-		 * @param event The event
-		 */
-		@SubscribeEvent
-		public static void onEvent(final RegistryEvent.Register<SoundEvent> event) 
-		{
-			final String[] arraySoundEvents = {
-//					// big cats
-//					"mob.bigCat.growl",
-//					"mob.bigCat.whine",
-//					"mob.bigCat.panting",
-//					"mob.bigCat.park",
-//					"mob.bigCat.hurt",
-//					"mob.bigCat.death",
-//					"mob.bigCat.shake",
-//				    
-//				    // elephant
-//					"mob.elephant.say",
-//					"mob.elephant.hurt",
-//
-//				    // birds of prey
-//					"mob.birdsofprey.hurt",
-//					"mob.birdsofprey.call",
-//					"mob.birdsofprey.flapping",
-//
-//				    // serpent
-//					"mob.serpent.death",
-//					"mob.serpent.hiss"
-			};
+    // big cats
+    // public static final SoundEvent soundAmbientGrowlBigCat = null;
 
-			final IForgeRegistry<SoundEvent> registry = event.getRegistry();
+    /**
+     * Initialize this mod's {@link Block}s with any post-registration data.
+     */
+    private static void initialize()
+    {
+    }
 
-	        System.out.println("Registering sound events");
+    @Mod.EventBusSubscriber(modid = MainMod.MODID)
+    public static class RegistrationHandler
+    {
+        /**
+         * Register this mod's {@link SoundEvent}s.
+         *
+         * @param event
+         *            The event
+         */
+        @SubscribeEvent
+        public static void onEvent(final RegistryEvent.Register<SoundEvent> event)
+        {
+            final String[] arraySoundEvents = {
+                    // // big cats
+                    // "mob.bigCat.growl",
+                    // "mob.bigCat.whine",
+                    // "mob.bigCat.panting",
+                    // "mob.bigCat.park",
+                    // "mob.bigCat.hurt",
+                    // "mob.bigCat.death",
+                    // "mob.bigCat.shake",
+                    //
+                    // // elephant
+                    // "mob.elephant.say",
+                    // "mob.elephant.hurt",
+                    //
+                    // // birds of prey
+                    // "mob.birdsofprey.hurt",
+                    // "mob.birdsofprey.call",
+                    // "mob.birdsofprey.flapping",
+                    //
+                    // // serpent
+                    // "mob.serpent.death",
+                    // "mob.serpent.hiss"
+            };
 
-	        for (final String soundName : arraySoundEvents) 
-	        {
-				registry.register(new SoundEvent(new ResourceLocation(MainMod.MODID, soundName)).setRegistryName(soundName));
-			}
+            final IForgeRegistry<SoundEvent> registry = event.getRegistry();
 
-			initialize();
-		}
-	}
+            System.out.println("Registering sound events");
+
+            for (final String soundName : arraySoundEvents)
+            {
+                registry.register(new SoundEvent(new ResourceLocation(MainMod.MODID, soundName)).setRegistryName(soundName));
+            }
+
+            initialize();
+        }
+    }
 }

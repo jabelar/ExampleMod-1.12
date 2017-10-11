@@ -27,52 +27,53 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.registries.IForgeRegistry;
 
-public class ModBiomes 
+public class ModBiomes
 {
     // instantiate Biomes
-//	public final static BiomeCustom MY_COOL_BIOME = new BiomeCustom();
+    // public final static BiomeCustom MY_COOL_BIOME = new BiomeCustom();
 
-	public static final Set<Biome> SET_BIOMES = ImmutableSet.of(
-//            MY_COOL_BIOME
-			);
+    public static final Set<Biome> SET_BIOMES = ImmutableSet.of(
+    // MY_COOL_BIOME
+    );
 
+    /**
+     * Initialize this mod's {@link Block}s with any post-registration data.
+     */
+    private static void initialize()
+    {
+    }
 
-	/**
-	 * Initialize this mod's {@link Block}s with any post-registration data.
-	 */
-	private static void initialize() 
-	{
-	}
+    @Mod.EventBusSubscriber(modid = MainMod.MODID)
+    public static class RegistrationHandler
+    {
+        /**
+         * Register this mod's {@link Biome}s.
+         *
+         * @param event
+         *            The event
+         */
+        @SubscribeEvent
+        public static void onEvent(final RegistryEvent.Register<Biome> event)
+        {
+            final IForgeRegistry<Biome> registry = event.getRegistry();
 
-	@Mod.EventBusSubscriber(modid = MainMod.MODID)
-	public static class RegistrationHandler 
-	{
-		/**
-		 * Register this mod's {@link Biome}s.
-		 *
-		 * @param event The event
-		 */
-		@SubscribeEvent
-		public static void onEvent(final RegistryEvent.Register<Biome> event) 
-		{
-			final IForgeRegistry<Biome> registry = event.getRegistry();
+            System.out.println("Registering biomes");
 
-	        System.out.println("Registering biomes");
-	        
-	        // DEBUG
-	        System.out.println("Registry key set = "+registry.getKeys());
-	        System.out.println("Registry value list = "+registry.getValues());
+            // DEBUG
+            System.out.println("Registry key set = " + registry.getKeys());
+            System.out.println("Registry value list = " + registry.getValues());
 
-			for (final Biome biome : SET_BIOMES) {
-				registry.register(biome);
-			}
+            for (final Biome biome : SET_BIOMES)
+            {
+                registry.register(biome);
+            }
 
-//            BiomeManager.addBiome(BiomeType.DESERT, new BiomeEntry(ashDesert, 10));
-//            BiomeManager.addSpawnBiome(ashDesert);
-//            BiomeManager.addStrongholdBiome(ashDesert);
-//            BiomeDictionary.addTypes(ashDesert, BiomeDictionary.Type.HOT);
+            // BiomeManager.addBiome(BiomeType.DESERT, new BiomeEntry(ashDesert, 10));
+            // BiomeManager.addSpawnBiome(ashDesert);
+            // BiomeManager.addStrongholdBiome(ashDesert);
+            // BiomeDictionary.addTypes(ashDesert, BiomeDictionary.Type.HOT);
 
-			initialize();
-		}
-	}
+            initialize();
+        }
+    }
 }

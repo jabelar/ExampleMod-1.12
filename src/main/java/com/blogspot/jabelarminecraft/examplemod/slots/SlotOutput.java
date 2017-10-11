@@ -34,11 +34,16 @@ public class SlotOutput extends Slot
     /**
      * Instantiates a new slot output.
      *
-     * @param parPlayer the par player
-     * @param parIInventory the par I inventory
-     * @param parSlotIndex the par slot index
-     * @param parXDisplayPosition the par X display position
-     * @param parYDisplayPosition the par Y display position
+     * @param parPlayer
+     *            the par player
+     * @param parIInventory
+     *            the par I inventory
+     * @param parSlotIndex
+     *            the par slot index
+     * @param parXDisplayPosition
+     *            the par X display position
+     * @param parYDisplayPosition
+     *            the par Y display position
      */
     public SlotOutput(EntityPlayer parPlayer, IInventory parIInventory, int parSlotIndex, int parXDisplayPosition, int parYDisplayPosition)
     {
@@ -49,24 +54,25 @@ public class SlotOutput extends Slot
     /**
      * Check if the stack is a valid item for this slot. Always true beside for the armor slots.
      *
-     * @param stack the stack
+     * @param stack
+     *            the stack
      * @return true, if is item valid
      */
     @Override
-	public boolean isItemValid(ItemStack stack)
+    public boolean isItemValid(ItemStack stack)
     {
         return false;
     }
 
     /**
-     * Decrease the size of the stack in slot by the amount of the int arg. Returns the new
-     * stack.
+     * Decrease the size of the stack in slot by the amount of the int arg. Returns the new stack.
      *
-     * @param parAmount the par amount
+     * @param parAmount
+     *            the par amount
      * @return the item stack
      */
     @Override
-	public ItemStack decrStackSize(int parAmount)
+    public ItemStack decrStackSize(int parAmount)
     {
         if (getHasStack())
         {
@@ -76,59 +82,64 @@ public class SlotOutput extends Slot
         return super.decrStackSize(parAmount);
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see net.minecraft.inventory.Slot#onTake(net.minecraft.entity.player.EntityPlayer, net.minecraft.item.ItemStack)
      */
     @Override
-	public ItemStack onTake(EntityPlayer playerIn, ItemStack stack)
+    public ItemStack onTake(EntityPlayer playerIn, ItemStack stack)
     {
         this.onCrafting(stack);
         return super.onTake(playerIn, stack);
     }
 
     /**
-     * the itemStack passed in is the output - ie, iron ingots, and pickaxes, not ore and wood. Typically increases an
-     * internal count then calls onCrafting(item).
+     * the itemStack passed in is the output - ie, iron ingots, and pickaxes, not ore and wood. Typically increases an internal count then calls onCrafting(item).
      *
-     * @param parItemStack the par item stack
-     * @param parCount the par count
+     * @param parItemStack
+     *            the par item stack
+     * @param parCount
+     *            the par count
      */
     @Override
-	protected void onCrafting(ItemStack parItemStack, int parCount)
+    protected void onCrafting(ItemStack parItemStack, int parCount)
     {
         setNumOutput(getNumOutput() + parCount);
         onCrafting(parItemStack);
     }
-    
+
     /**
      * the itemStack passed in is the output - ie, iron ingots, and pickaxes, not ore and wood.
      *
-     * @param parItemStack the par item stack
+     * @param parItemStack
+     *            the par item stack
      */
     @Override
-	protected void onCrafting(ItemStack parItemStack)
+    protected void onCrafting(ItemStack parItemStack)
     {
-    	// override this in your custom slot class
-    	// should do things like update achievements/advancements and create experience orbs
+        // override this in your custom slot class
+        // should do things like update achievements/advancements and create experience orbs
     }
 
-	/**
-	 * Gets the num output.
-	 *
-	 * @return the num output
-	 */
-	protected int getNumOutput() 
-	{
-		return numOutput;
-	}
+    /**
+     * Gets the num output.
+     *
+     * @return the num output
+     */
+    protected int getNumOutput()
+    {
+        return numOutput;
+    }
 
-	/**
-	 * Sets the num output.
-	 *
-	 * @param numOutput the new num output
-	 */
-	protected void setNumOutput(int numOutput) 
-	{
-		this.numOutput = numOutput;
-	}
+    /**
+     * Sets the num output.
+     *
+     * @param numOutput
+     *            the new num output
+     */
+    protected void setNumOutput(int numOutput)
+    {
+        this.numOutput = numOutput;
+    }
 }

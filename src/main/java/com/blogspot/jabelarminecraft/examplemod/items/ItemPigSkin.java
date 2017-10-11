@@ -24,13 +24,13 @@ import net.minecraft.creativetab.CreativeTabs;
  */
 public class ItemPigSkin extends ItemHideBase
 {
-	
-	/**
-	 * Instantiates a new item pig skin.
-	 */
-	public ItemPigSkin() 
+
+    /**
+     * Instantiates a new item pig skin.
+     */
+    public ItemPigSkin()
     {
-		super("pigskin");
+        super("pigskin");
         setCreativeTab(CreativeTabs.MATERIALS);
     }
 }

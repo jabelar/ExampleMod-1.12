@@ -19,7 +19,7 @@ import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.material.MaterialLiquid;
 
-public class ModMaterials 
+public class ModMaterials
 {
-	public static final Material SLIME = new MaterialLiquid(MapColor.LIME);
+    public static final Material SLIME = new MaterialLiquid(MapColor.LIME);
 }

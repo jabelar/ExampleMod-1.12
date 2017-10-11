@@ -24,13 +24,13 @@ import net.minecraft.creativetab.CreativeTabs;
  */
 public class ItemSheepSkin extends ItemHideBase
 {
-	
-	/**
-	 * Instantiates a new item sheep skin.
-	 */
-	public ItemSheepSkin() 
+
+    /**
+     * Instantiates a new item sheep skin.
+     */
+    public ItemSheepSkin()
     {
-		super("sheepskin");
+        super("sheepskin");
         setCreativeTab(CreativeTabs.MATERIALS);
     }
 }

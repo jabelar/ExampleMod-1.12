@@ -19,13 +19,13 @@ package com.blogspot.jabelarminecraft.examplemod.items;
  * @author jabelar
  *
  */
-public interface IExtendedReach 
+public interface IExtendedReach
 {
-	
-	/**
-	 * Gets the reach.
-	 *
-	 * @return the reach
-	 */
-	public float getReach(); // default is 1.0D
+
+    /**
+     * Gets the reach.
+     *
+     * @return the reach
+     */
+    public float getReach(); // default is 1.0D
 }

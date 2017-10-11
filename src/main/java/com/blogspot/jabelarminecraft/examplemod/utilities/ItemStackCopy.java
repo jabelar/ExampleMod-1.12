@@ -26,35 +26,37 @@ import net.minecraft.nbt.NBTTagCompound;
  *  are various methods like initCapabilities which can get called otherwise.
  */
 
-public class ItemStackCopy 
+public class ItemStackCopy
 {
-	private static int meta;
-	private static int count;
-	private static NBTTagCompound compound;
-	
-	/**
-	 * Store.
-	 *
-	 * @param parStack the par stack
-	 */
-	public static void store(ItemStack parStack)
-	{
-		meta = parStack.getItemDamage();
-		count = parStack.getCount();
-		compound = parStack.getTagCompound();
-	}
-	
-	/**
-	 * Restore.
-	 *
-	 * @param parStack the par stack
-	 * @return the item stack
-	 */
-	public static ItemStack restore(ItemStack parStack)
-	{
-		parStack.setCount(count);
-		parStack.setItemDamage(meta);
-		parStack.setTagCompound(compound);
-		return parStack;
-	}
+    private static int meta;
+    private static int count;
+    private static NBTTagCompound compound;
+
+    /**
+     * Store.
+     *
+     * @param parStack
+     *            the par stack
+     */
+    public static void store(ItemStack parStack)
+    {
+        meta = parStack.getItemDamage();
+        count = parStack.getCount();
+        compound = parStack.getTagCompound();
+    }
+
+    /**
+     * Restore.
+     *
+     * @param parStack
+     *            the par stack
+     * @return the item stack
+     */
+    public static ItemStack restore(ItemStack parStack)
+    {
+        parStack.setCount(count);
+        parStack.setItemDamage(meta);
+        parStack.setTagCompound(compound);
+        return parStack;
+    }
 }

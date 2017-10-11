@@ -29,17 +29,22 @@ import net.minecraft.util.math.MathHelper;
  * @author jabelar
  *
  */
-public class SlotCompactorOutput  extends SlotOutput
+public class SlotCompactorOutput extends SlotOutput
 {
-    
+
     /**
      * Instantiates a new slot compactor output.
      *
-     * @param parPlayer the par player
-     * @param parIInventory the par I inventory
-     * @param parSlotIndex the par slot index
-     * @param parXDisplayPosition the par X display position
-     * @param parYDisplayPosition the par Y display position
+     * @param parPlayer
+     *            the par player
+     * @param parIInventory
+     *            the par I inventory
+     * @param parSlotIndex
+     *            the par slot index
+     * @param parXDisplayPosition
+     *            the par X display position
+     * @param parYDisplayPosition
+     *            the par Y display position
      */
     public SlotCompactorOutput(EntityPlayer parPlayer, IInventory parIInventory, int parSlotIndex, int parXDisplayPosition, int parYDisplayPosition)
     {
@@ -49,13 +54,14 @@ public class SlotCompactorOutput  extends SlotOutput
     /**
      * the itemStack passed in is the output - ie, iron ingots, and pickaxes, not ore and wood.
      *
-     * @param parItemStack the par item stack
+     * @param parItemStack
+     *            the par item stack
      */
     @Override
-	protected void onCrafting(ItemStack parItemStack)
+    protected void onCrafting(ItemStack parItemStack)
     {
-//		  this adds a stat count    	
-//        parItemStack.onCrafting(thePlayer.worldObj, thePlayer, field_75228_b);
+        // this adds a stat count
+        // parItemStack.onCrafting(thePlayer.worldObj, thePlayer, field_75228_b);
 
         if (!thePlayer.world.isRemote)
         {
@@ -90,14 +96,14 @@ public class SlotCompactorOutput  extends SlotOutput
 
         setNumOutput(0);
 
-//        if (parItemStack.getItem() == Items.iron_ingot)
-//        {
-//            thePlayer.triggerAchievement(AchievementList.acquireIron);
-//        }
-//
-//        if (parItemStack.getItem() == Items.compacted_fish)
-//        {
-//            thePlayer.triggerAchievement(AchievementList.compactFish);
-//        }
+        // if (parItemStack.getItem() == Items.iron_ingot)
+        // {
+        // thePlayer.triggerAchievement(AchievementList.acquireIron);
+        // }
+        //
+        // if (parItemStack.getItem() == Items.compacted_fish)
+        // {
+        // thePlayer.triggerAchievement(AchievementList.compactFish);
+        // }
     }
 }

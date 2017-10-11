@@ -33,47 +33,50 @@ public class VersionChecker implements Runnable
     private static boolean isLatestVersion = false;
     private static String latestVersion = "";
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see java.lang.Runnable#run()
      */
     @Override
-    public void run() 
+    public void run()
     {
         InputStream in = null;
-        try 
+        try
         {
-            in = new URL("https://raw.githubusercontent.com/jabelar/MagicBeans-1.7.10/master/src/main/java/com/blogspot/jabelarminecraft/magicbeans/version_file").openStream();
-        } 
-        catch 
-        (MalformedURLException e) 
+            in = new URL(
+                    "https://raw.githubusercontent.com/jabelar/MagicBeans-1.7.10/master/src/main/java/com/blogspot/jabelarminecraft/magicbeans/version_file")
+                            .openStream();
+        }
+        catch (MalformedURLException e)
         {
             // TODO Auto-generated catch block
             e.printStackTrace();
-        } 
-        catch (IOException e) 
+        }
+        catch (IOException e)
         {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
 
-        try 
+        try
         {
             latestVersion = IOUtils.readLines(in).get(0); // toString(in);
-        } 
-        catch (IOException e) 
+        }
+        catch (IOException e)
         {
             // TODO Auto-generated catch block
             e.printStackTrace();
-        } 
-        finally 
+        }
+        finally
         {
             IOUtils.closeQuietly(in);
         }
-        System.out.println("Latest mod version = "+latestVersion);
+        System.out.println("Latest mod version = " + latestVersion);
         isLatestVersion = MainMod.MODVERSION.equals(latestVersion);
-        System.out.println("Are you running latest version = "+isLatestVersion);
+        System.out.println("Are you running latest version = " + isLatestVersion);
     }
-    
+
     /**
      * Checks if is latest version.
      *
@@ -81,9 +84,9 @@ public class VersionChecker implements Runnable
      */
     public boolean isLatestVersion()
     {
-    	return isLatestVersion;
+        return isLatestVersion;
     }
-    
+
     /**
      * Gets the latest version.
      *
@@ -91,6 +94,6 @@ public class VersionChecker implements Runnable
      */
     public String getLatestVersion()
     {
-    	return latestVersion;
+        return latestVersion;
     }
 }

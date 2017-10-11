@@ -27,42 +27,44 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.VillagerRegistry.VillagerProfession;
 import net.minecraftforge.registries.IForgeRegistry;
 
-public class ModProfessions 
+public class ModProfessions
 {
     // instantiate VillagerProfessions
-//	public final static VillagerProfessionCustom MY_COOL_VillagerProfession = new VillagerProfessionCustom();
-	
-	public static final Set<VillagerProfession> SET_INSTANCES = ImmutableSet.of(
-//            MY_COOL_VillagerProfession
-			);
+    // public final static VillagerProfessionCustom MY_COOL_VillagerProfession = new VillagerProfessionCustom();
 
-	/**
-	 * Initialize this mod's {@link Block}s with any post-registration data.
-	 */
-	private static void initialize() 
-	{
-	}
+    public static final Set<VillagerProfession> SET_INSTANCES = ImmutableSet.of(
+    // MY_COOL_VillagerProfession
+    );
 
-	@Mod.EventBusSubscriber(modid = MainMod.MODID)
-	public static class RegistrationHandler 
-	{
-		/**
-		 * Register this mod's {@link VillagerProfession}s.
-		 *
-		 * @param event The event
-		 */
-		@SubscribeEvent
-		public static void onEvent(final RegistryEvent.Register<VillagerProfession> event) 
-		{
-			final IForgeRegistry<VillagerProfession> registry = event.getRegistry();
+    /**
+     * Initialize this mod's {@link Block}s with any post-registration data.
+     */
+    private static void initialize()
+    {
+    }
 
-	        System.out.println("Registering recipes");
+    @Mod.EventBusSubscriber(modid = MainMod.MODID)
+    public static class RegistrationHandler
+    {
+        /**
+         * Register this mod's {@link VillagerProfession}s.
+         *
+         * @param event
+         *            The event
+         */
+        @SubscribeEvent
+        public static void onEvent(final RegistryEvent.Register<VillagerProfession> event)
+        {
+            final IForgeRegistry<VillagerProfession> registry = event.getRegistry();
 
-	        for (final VillagerProfession profession : SET_INSTANCES) {
-				registry.register(profession);
-			}
+            System.out.println("Registering recipes");
 
-			initialize();
-		}
-	}
+            for (final VillagerProfession profession : SET_INSTANCES)
+            {
+                registry.register(profession);
+            }
+
+            initialize();
+        }
+    }
 }

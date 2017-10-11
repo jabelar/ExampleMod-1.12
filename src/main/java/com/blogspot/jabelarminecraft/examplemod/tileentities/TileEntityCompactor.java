@@ -43,17 +43,18 @@ import net.minecraftforge.items.IItemHandler;
 public class TileEntityCompactor extends TileEntityLockable implements ITickable, ISidedInventory
 {
     // enumerate the slots
-    public enum slotEnum 
+    public enum slotEnum
     {
         INPUT_SLOT, OUTPUT_SLOT
     }
-    protected static final int[] slotsTop = new int[] {slotEnum.INPUT_SLOT.ordinal()};
-    protected static final int[] slotsBottom = new int[] {slotEnum.OUTPUT_SLOT.ordinal()};
+
+    protected static final int[] slotsTop = new int[] { slotEnum.INPUT_SLOT.ordinal() };
+    protected static final int[] slotsBottom = new int[] { slotEnum.OUTPUT_SLOT.ordinal() };
     protected static final int[] slotsSides = new int[] {};
-    
+
     /** The ItemStacks that hold the items currently being used in the compactor */
-    protected NonNullList<ItemStack> compactorItemStacks = NonNullList.<ItemStack>withSize(3, ItemStack.EMPTY);
-	
+    protected NonNullList<ItemStack> compactorItemStacks = NonNullList.<ItemStack> withSize(3, ItemStack.EMPTY);
+
     protected boolean hasBeenCompacting = false;
 
     /** The number of ticks that the compactor will keep compacting */
@@ -61,13 +62,12 @@ public class TileEntityCompactor extends TileEntityLockable implements ITickable
     protected int currentItemCompactTime; // not used currently but holdover from fuel-based tile entity
     protected int ticksCompactingItemSoFar;
     protected int ticksPerItem;
-    
+
     protected String compactorCustomName;
 
     protected IItemHandler handlerTop = new net.minecraftforge.items.wrapper.SidedInvWrapper(this, net.minecraft.util.EnumFacing.UP);
     protected IItemHandler handlerBottom = new net.minecraftforge.items.wrapper.SidedInvWrapper(this, net.minecraft.util.EnumFacing.DOWN);
     protected IItemHandler handlerSide = new net.minecraftforge.items.wrapper.SidedInvWrapper(this, net.minecraft.util.EnumFacing.WEST);
-
 
     /**
      * Returns the number of slots in the inventory.
@@ -75,52 +75,56 @@ public class TileEntityCompactor extends TileEntityLockable implements ITickable
      * @return the size inventory
      */
     @Override
-	public int getSizeInventory()
+    public int getSizeInventory()
     {
         return compactorItemStacks.size();
     }
 
-	/* (non-Javadoc)
-	 * @see net.minecraft.inventory.IInventory#isEmpty()
-	 */
-	@Override
-	public boolean isEmpty() 
-	{
-	    {
-	        for (ItemStack itemstack : compactorItemStacks)
-	        {
-	            if (!itemstack.isEmpty())
-	            {
-	                return false;
-	            }
-	        }
+    /*
+     * (non-Javadoc)
+     * 
+     * @see net.minecraft.inventory.IInventory#isEmpty()
+     */
+    @Override
+    public boolean isEmpty()
+    {
+        {
+            for (ItemStack itemstack : compactorItemStacks)
+            {
+                if (!itemstack.isEmpty())
+                {
+                    return false;
+                }
+            }
 
-	        return true;
-	    }
-	}
+            return true;
+        }
+    }
 
     /**
      * Returns the stack in slot i.
      *
-     * @param index the index
+     * @param index
+     *            the index
      * @return the stack in slot
      */
     @Override
-	public ItemStack getStackInSlot(int index)
+    public ItemStack getStackInSlot(int index)
     {
         return compactorItemStacks.get(index);
     }
 
     /**
-     * Removes from an inventory slot (first arg) up to a specified number (second arg) of items and returns them in a
-     * new stack.
+     * Removes from an inventory slot (first arg) up to a specified number (second arg) of items and returns them in a new stack.
      *
-     * @param index the index
-     * @param count the count
+     * @param index
+     *            the index
+     * @param count
+     *            the count
      * @return the item stack
      */
     @Override
-	public ItemStack decrStackSize(int index, int count)
+    public ItemStack decrStackSize(int index, int count)
     {
         return ItemStackHelper.getAndSplit(this.compactorItemStacks, index, count);
     }
@@ -128,11 +132,12 @@ public class TileEntityCompactor extends TileEntityLockable implements ITickable
     /**
      * Removes a stack from the given slot and returns it.
      *
-     * @param index the index
+     * @param index
+     *            the index
      * @return the item stack
      */
     @Override
-	public ItemStack removeStackFromSlot(int index)
+    public ItemStack removeStackFromSlot(int index)
     {
         return ItemStackHelper.getAndRemove(this.compactorItemStacks, index);
     }
@@ -140,16 +145,19 @@ public class TileEntityCompactor extends TileEntityLockable implements ITickable
     /**
      * Sets the given item stack to the specified slot in the inventory (can be crafting or armor sections).
      *
-     * @param index the index
-     * @param stack the stack
+     * @param index
+     *            the index
+     * @param stack
+     *            the stack
      */
     @Override
-	public void setInventorySlotContents(int index, ItemStack stack)
+    public void setInventorySlotContents(int index, ItemStack stack)
     {
-    	// DEBUG
-    	System.out.println("TileEntityCompactor setInventorySlotContents()");
-    	
-        boolean isSameItemStackAlreadyInSlot = stack != ItemStack.EMPTY && stack.isItemEqual(compactorItemStacks.get(index)) && ItemStack.areItemStackTagsEqual(stack, compactorItemStacks.get(index));
+        // DEBUG
+        System.out.println("TileEntityCompactor setInventorySlotContents()");
+
+        boolean isSameItemStackAlreadyInSlot = stack != ItemStack.EMPTY && stack.isItemEqual(compactorItemStacks.get(index))
+                && ItemStack.areItemStackTagsEqual(stack, compactorItemStacks.get(index));
         compactorItemStacks.set(index, stack);
 
         if (stack != ItemStack.EMPTY && stack.getCount() > getInventoryStackLimit())
@@ -160,12 +168,12 @@ public class TileEntityCompactor extends TileEntityLockable implements ITickable
         // if input slot, reset the compacting timers
         if (index == slotEnum.INPUT_SLOT.ordinal() && !isSameItemStackAlreadyInSlot)
         {
-        	startCompacting();
+            startCompacting();
         }
-        
+
         markDirty();
     }
-    
+
     /**
      * Start compacting.
      */
@@ -181,7 +189,7 @@ public class TileEntityCompactor extends TileEntityLockable implements ITickable
      * @return the name
      */
     @Override
-	public String getName()
+    public String getName()
     {
         return hasCustomName() ? compactorCustomName : "container.compactor";
     }
@@ -192,7 +200,7 @@ public class TileEntityCompactor extends TileEntityLockable implements ITickable
      * @return true, if successful
      */
     @Override
-	public boolean hasCustomName()
+    public boolean hasCustomName()
     {
         return compactorCustomName != null && compactorCustomName.length() > 0;
     }
@@ -200,21 +208,24 @@ public class TileEntityCompactor extends TileEntityLockable implements ITickable
     /**
      * Sets the custom inventory name.
      *
-     * @param parCustomName the new custom inventory name
+     * @param parCustomName
+     *            the new custom inventory name
      */
     public void setCustomInventoryName(String parCustomName)
     {
         compactorCustomName = parCustomName;
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see net.minecraft.tileentity.TileEntityLockable#readFromNBT(net.minecraft.nbt.NBTTagCompound)
      */
     @Override
-	public void readFromNBT(NBTTagCompound compound)
+    public void readFromNBT(NBTTagCompound compound)
     {
         super.readFromNBT(compound);
-        compactorItemStacks = NonNullList.<ItemStack>withSize(this.getSizeInventory(), ItemStack.EMPTY);
+        compactorItemStacks = NonNullList.<ItemStack> withSize(this.getSizeInventory(), ItemStack.EMPTY);
         ItemStackHelper.loadAllItems(compound, compactorItemStacks);
 
         timeCanCompact = compound.getShort("CompactTime");
@@ -227,110 +238,114 @@ public class TileEntityCompactor extends TileEntityLockable implements ITickable
         }
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see net.minecraft.tileentity.TileEntityLockable#writeToNBT(net.minecraft.nbt.NBTTagCompound)
      */
     @Override
-	public NBTTagCompound writeToNBT(NBTTagCompound compound)
+    public NBTTagCompound writeToNBT(NBTTagCompound compound)
     {
         super.writeToNBT(compound);
-        compound.setShort("CompactTime", (short)timeCanCompact);
-        compound.setShort("CookTime", (short)ticksCompactingItemSoFar);
-        compound.setShort("CookTimeTotal", (short)ticksPerItem);
+        compound.setShort("CompactTime", (short) timeCanCompact);
+        compound.setShort("CookTime", (short) ticksCompactingItemSoFar);
+        compound.setShort("CookTimeTotal", (short) ticksPerItem);
         ItemStackHelper.saveAllItems(compound, compactorItemStacks);
 
         if (hasCustomName())
         {
             compound.setString("CustomName", compactorCustomName);
         }
-        
+
         return compound;
     }
 
     /**
-     * Returns the maximum stack size for a inventory slot. Seems to always be 64, possibly will be extended. *Isn't
-     * this more of a set than a get?*
+     * Returns the maximum stack size for a inventory slot. Seems to always be 64, possibly will be extended. *Isn't this more of a set than a get?*
      *
      * @return the inventory stack limit
      */
     @Override
-	public int getInventoryStackLimit()
+    public int getInventoryStackLimit()
     {
         return 64;
     }
-    
+
     /**
      * Compacting state changed.
      *
-     * @param parHasBeenCompacting the par has been compacting
+     * @param parHasBeenCompacting
+     *            the par has been compacting
      */
     protected void compactingStateChanged(boolean parHasBeenCompacting)
     {
-    	hasBeenCompacting = true;
-		BlockCompactor.changeBlockBasedOnCompactingStatus(canCompact(), world, pos);
+        hasBeenCompacting = true;
+        BlockCompactor.changeBlockBasedOnCompactingStatus(canCompact(), world, pos);
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see net.minecraft.util.ITickable#update()
      */
     @Override
-	public void update()
+    public void update()
     {
-//    	// DEBUG
-//    	System.out.println("update() in TileEntityCompactor");
+        // // DEBUG
+        // System.out.println("update() in TileEntityCompactor");
 
         if (!world.isRemote)
         {
-        	// if something in input slot
+            // if something in input slot
             if (compactorItemStacks.get(slotEnum.INPUT_SLOT.ordinal()) != ItemStack.EMPTY)
-            {      
-            	// check if input is compactable
+            {
+                // check if input is compactable
                 if (canCompact())
                 {
-                	// check if just started compacting
-                	if (!hasBeenCompacting)
-                	{
-    	            	// DEBUG
-    	            	System.out.println("TileEntityCompactor update() started compacting");
+                    // check if just started compacting
+                    if (!hasBeenCompacting)
+                    {
+                        // DEBUG
+                        System.out.println("TileEntityCompactor update() started compacting");
 
-    	            	compactingStateChanged(true);
-    	            	startCompacting();       	
-                	}
-                	else // already compacting
-                	{
-		            	// DEBUG
-		            	System.out.println("TileEntityCompactor update() continuing compacting");
-		            	
-	                    ++ticksCompactingItemSoFar;
-	                    
-	                    // check if completed compacting an item
-	                    if (ticksCompactingItemSoFar >= ticksPerItem)
-	                    {
-	                    	// DEBUG
-	                    	System.out.println("Compacting completed another output cycle");
-	                    	
-	                    	startCompacting();
-	                        compactItem();
-	                    }
-                	}
+                        compactingStateChanged(true);
+                        startCompacting();
+                    }
+                    else // already compacting
+                    {
+                        // DEBUG
+                        System.out.println("TileEntityCompactor update() continuing compacting");
+
+                        ++ticksCompactingItemSoFar;
+
+                        // check if completed compacting an item
+                        if (ticksCompactingItemSoFar >= ticksPerItem)
+                        {
+                            // DEBUG
+                            System.out.println("Compacting completed another output cycle");
+
+                            startCompacting();
+                            compactItem();
+                        }
+                    }
                 }
                 else // item in input slot is not compactable
                 {
-                	if (hasBeenCompacting)
-                	{
-                		compactingStateChanged(false);
-                	}
-                	
+                    if (hasBeenCompacting)
+                    {
+                        compactingStateChanged(false);
+                    }
+
                     ticksCompactingItemSoFar = 0;
                 }
             }
             else // nothing in input slot
             {
-            	if (hasBeenCompacting)
-            	{
-            		compactingStateChanged(false);
-            	}
-            	
+                if (hasBeenCompacting)
+                {
+                    compactingStateChanged(false);
+                }
+
                 ticksCompactingItemSoFar = 0;
             }
         }
@@ -339,7 +354,8 @@ public class TileEntityCompactor extends TileEntityLockable implements ITickable
     /**
      * Time to compact one item.
      *
-     * @param parItemStack the par item stack
+     * @param parItemStack
+     *            the par item stack
      * @return the int
      */
     public int timeToCompactOneItem(ItemStack parItemStack)
@@ -352,66 +368,66 @@ public class TileEntityCompactor extends TileEntityLockable implements ITickable
      */
     private boolean canCompact()
     {
-    	ItemStack stackInOutputSlot = compactorItemStacks.get(slotEnum.OUTPUT_SLOT.ordinal());
-    	ItemStack stackInInputSlot = compactorItemStacks.get(slotEnum.INPUT_SLOT.ordinal());
-    			
-    	// if nothing in input slot
+        ItemStack stackInOutputSlot = compactorItemStacks.get(slotEnum.OUTPUT_SLOT.ordinal());
+        ItemStack stackInInputSlot = compactorItemStacks.get(slotEnum.INPUT_SLOT.ordinal());
+
+        // if nothing in input slot
         if (stackInInputSlot == ItemStack.EMPTY)
         {
             return false;
         }
         else // check if it has a compacting recipe
         {
-        	// DEBUG
-        	System.out.println("Checking if it has a valid compacting recipe");
+            // DEBUG
+            System.out.println("Checking if it has a valid compacting recipe");
             ItemStack itemStackToOutput = CompactorRecipes.instance().getCompactingResult(stackInInputSlot);
             if (itemStackToOutput == ItemStack.EMPTY) // no valid recipe for compacting this item
             {
-            	// DEBUG
-            	System.out.println("Does not have a valid compacting recipe");
-            	return false;
+                // DEBUG
+                System.out.println("Does not have a valid compacting recipe");
+                return false;
             }
             if (stackInOutputSlot == ItemStack.EMPTY) // output slot is empty
             {
-            	// check if enough of the input item (to allow recipes that consume multiple amounts)            }
-            	if (stackInInputSlot.getCount() >= CompactorRecipes.instance().getInputAmount(stackInInputSlot))
-            	{
-//            		// DEBUG
-//            		System.out.println("There is "+stackInInputSlot.stackSize+" in input slot and "+CompactorRecipes.instance().getInputAmount(stackInInputSlot)+" is needed");
-            		return true;
-            	}
-            	else // not enough in input stack
-            	{
-//            		// DEBUG
-//            		System.out.println("TileEntityCompactor canCompact() right item but not enough in input slot");
-            		return false;
-            	}
+                // check if enough of the input item (to allow recipes that consume multiple amounts) }
+                if (stackInInputSlot.getCount() >= CompactorRecipes.instance().getInputAmount(stackInInputSlot))
+                {
+                    // // DEBUG
+                    // System.out.println("There is "+stackInInputSlot.stackSize+" in input slot and "+CompactorRecipes.instance().getInputAmount(stackInInputSlot)+" is needed");
+                    return true;
+                }
+                else // not enough in input stack
+                {
+                    // // DEBUG
+                    // System.out.println("TileEntityCompactor canCompact() right item but not enough in input slot");
+                    return false;
+                }
             }
             if (!stackInOutputSlot.isItemEqual(itemStackToOutput)) // output slot has different item occupying it
             {
-            	return false;
+                return false;
             }
             // check if output slot is full
             int result = stackInOutputSlot.getCount() + itemStackToOutput.getCount();
             if (result <= getInventoryStackLimit() && result <= stackInOutputSlot.getMaxStackSize())
             {
-            	// check if enough of the input item (to allow recipes that consume multiple amounts)            }
-            	if (stackInInputSlot.getCount() >= CompactorRecipes.instance().getInputAmount(stackInInputSlot))
-            	{
-//            		// DEBUG
-//            		System.out.println("There is "+stackInInputSlot.stackSize+" in input slot and "+CompactorRecipes.instance().getInputAmount(stackInInputSlot)+" is needed");
-            		return true;
-            	}
-            	else // not enough in input stack
-            	{
-//            		// DEBUG
-//            		System.out.println("TileEntityCompactor canCompact() right item but not enough in input slot");
-            		return false;
-            	}
+                // check if enough of the input item (to allow recipes that consume multiple amounts) }
+                if (stackInInputSlot.getCount() >= CompactorRecipes.instance().getInputAmount(stackInInputSlot))
+                {
+                    // // DEBUG
+                    // System.out.println("There is "+stackInInputSlot.stackSize+" in input slot and "+CompactorRecipes.instance().getInputAmount(stackInInputSlot)+" is needed");
+                    return true;
+                }
+                else // not enough in input stack
+                {
+                    // // DEBUG
+                    // System.out.println("TileEntityCompactor canCompact() right item but not enough in input slot");
+                    return false;
+                }
             }
             else // no room to output
             {
-            	return false;
+                return false;
             }
         }
     }
@@ -432,14 +448,14 @@ public class TileEntityCompactor extends TileEntityLockable implements ITickable
             }
             else if (compactorItemStacks.get(slotEnum.OUTPUT_SLOT.ordinal()).getItem() == itemstack.getItem())
             {
-                compactorItemStacks.get(slotEnum.OUTPUT_SLOT.ordinal()).setCount(compactorItemStacks.get(slotEnum.OUTPUT_SLOT.ordinal()).getCount() + itemstack.getCount()); // Forge BugFix: Results may have multiple items
+                compactorItemStacks.get(slotEnum.OUTPUT_SLOT.ordinal())
+                        .setCount(compactorItemStacks.get(slotEnum.OUTPUT_SLOT.ordinal()).getCount() + itemstack.getCount()); // Forge BugFix: Results may have multiple items
             }
 
             // consume the number of input items based on recipe
             compactorItemStacks.get(slotEnum.INPUT_SLOT.ordinal()).setCount(
-            		compactorItemStacks.get(slotEnum.INPUT_SLOT.ordinal()).getCount() 
-            		- CompactorRecipes.instance().getInputAmount(compactorItemStacks.get(slotEnum.INPUT_SLOT.ordinal()))
-            		);
+                    compactorItemStacks.get(slotEnum.INPUT_SLOT.ordinal()).getCount()
+                            - CompactorRecipes.instance().getInputAmount(compactorItemStacks.get(slotEnum.INPUT_SLOT.ordinal())));
 
             if (compactorItemStacks.get(slotEnum.INPUT_SLOT.ordinal()).getCount() <= 0)
             {
@@ -448,151 +464,181 @@ public class TileEntityCompactor extends TileEntityLockable implements ITickable
         }
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see net.minecraft.inventory.IInventory#openInventory(net.minecraft.entity.player.EntityPlayer)
      */
     @Override
-	public void openInventory(EntityPlayer playerIn) {}
+    public void openInventory(EntityPlayer playerIn)
+    {
+    }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see net.minecraft.inventory.IInventory#closeInventory(net.minecraft.entity.player.EntityPlayer)
      */
     @Override
-	public void closeInventory(EntityPlayer playerIn) {}
+    public void closeInventory(EntityPlayer playerIn)
+    {
+    }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see net.minecraft.inventory.IInventory#isItemValidForSlot(int, net.minecraft.item.ItemStack)
      */
     @Override
-	public boolean isItemValidForSlot(int index, ItemStack stack)
+    public boolean isItemValidForSlot(int index, ItemStack stack)
     {
         return index == slotEnum.INPUT_SLOT.ordinal() ? true : false; // can always put things in input (may not compact though) and can't put anything in output
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see net.minecraft.inventory.ISidedInventory#getSlotsForFace(net.minecraft.util.EnumFacing)
      */
     @Override
-	public int[] getSlotsForFace(EnumFacing side)
+    public int[] getSlotsForFace(EnumFacing side)
     {
         return side == EnumFacing.DOWN ? slotsBottom : (side == EnumFacing.UP ? slotsTop : slotsSides);
     }
 
     /**
-     * Returns true if automation can insert the given item in the given slot from the given side. Args: slot, item,
-     * side
+     * Returns true if automation can insert the given item in the given slot from the given side. Args: slot, item, side
      *
-     * @param index the index
-     * @param itemStackIn the item stack in
-     * @param direction the direction
+     * @param index
+     *            the index
+     * @param itemStackIn
+     *            the item stack in
+     * @param direction
+     *            the direction
      * @return true, if successful
      */
     @Override
-	public boolean canInsertItem(int index, ItemStack itemStackIn, EnumFacing direction)
+    public boolean canInsertItem(int index, ItemStack itemStackIn, EnumFacing direction)
     {
         return isItemValidForSlot(index, itemStackIn);
     }
 
     /**
-     * Returns true if automation can extract the given item in the given slot from the given side. Args: slot, item,
-     * side
+     * Returns true if automation can extract the given item in the given slot from the given side. Args: slot, item, side
      *
-     * @param parSlotIndex the par slot index
-     * @param parStack the par stack
-     * @param parFacing the par facing
+     * @param parSlotIndex
+     *            the par slot index
+     * @param parStack
+     *            the par stack
+     * @param parFacing
+     *            the par facing
      * @return true, if successful
      */
     @Override
-	public boolean canExtractItem(int parSlotIndex, ItemStack parStack, EnumFacing parFacing)
+    public boolean canExtractItem(int parSlotIndex, ItemStack parStack, EnumFacing parFacing)
     {
         return true;
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see net.minecraft.world.IInteractionObject#getGuiID()
      */
     @Override
-	public String getGuiID()
+    public String getGuiID()
     {
-        return MainMod.MODID+":compactor";
+        return MainMod.MODID + ":compactor";
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see net.minecraft.world.IInteractionObject#createContainer(net.minecraft.entity.player.InventoryPlayer, net.minecraft.entity.player.EntityPlayer)
      */
     @Override
-	public Container createContainer(InventoryPlayer playerInventory, EntityPlayer playerIn)
+    public Container createContainer(InventoryPlayer playerInventory, EntityPlayer playerIn)
     {
-    	// DEBUG
-    	System.out.println("TileEntityCompactor createContainer()");
+        // DEBUG
+        System.out.println("TileEntityCompactor createContainer()");
         return new ContainerCompactor(playerInventory, this);
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see net.minecraft.inventory.IInventory#getField(int)
      */
     @Override
-	public int getField(int id)
+    public int getField(int id)
     {
         switch (id)
         {
-            case 0:
-                return timeCanCompact;
-            case 1:
-                return currentItemCompactTime;
-            case 2:
-                return ticksCompactingItemSoFar;
-            case 3:
-                return ticksPerItem;
-            default:
-                return 0;
+        case 0:
+            return timeCanCompact;
+        case 1:
+            return currentItemCompactTime;
+        case 2:
+            return ticksCompactingItemSoFar;
+        case 3:
+            return ticksPerItem;
+        default:
+            return 0;
         }
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see net.minecraft.inventory.IInventory#setField(int, int)
      */
     @Override
-	public void setField(int id, int value)
+    public void setField(int id, int value)
     {
         switch (id)
         {
-            case 0:
-                timeCanCompact = value;
-                break;
-            case 1:
-                currentItemCompactTime = value;
-                break;
-            case 2:
-                ticksCompactingItemSoFar = value;
-                break;
-            case 3:
-                ticksPerItem = value;
-                break;
-		default:
-			break;
+        case 0:
+            timeCanCompact = value;
+            break;
+        case 1:
+            currentItemCompactTime = value;
+            break;
+        case 2:
+            ticksCompactingItemSoFar = value;
+            break;
+        case 3:
+            ticksPerItem = value;
+            break;
+        default:
+            break;
         }
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see net.minecraft.inventory.IInventory#getFieldCount()
      */
     @Override
-	public int getFieldCount()
+    public int getFieldCount()
     {
         return 4;
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see net.minecraft.inventory.IInventory#clear()
      */
     @Override
-	public void clear()
+    public void clear()
     {
         compactorItemStacks.clear();
     }
-    
-    /* (non-Javadoc)
+
+    /*
+     * (non-Javadoc)
+     * 
      * @see net.minecraft.tileentity.TileEntityLockable#getCapability(net.minecraftforge.common.capabilities.Capability, net.minecraft.util.EnumFacing)
      */
     @Override
@@ -608,13 +654,15 @@ public class TileEntityCompactor extends TileEntityLockable implements ITickable
         return super.getCapability(capability, facing);
     }
 
-	/* (non-Javadoc)
-	 * @see net.minecraft.inventory.IInventory#isUsableByPlayer(net.minecraft.entity.player.EntityPlayer)
-	 */
-	@Override
-	public boolean isUsableByPlayer(EntityPlayer player) 
-	{
-		return true;
-	}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see net.minecraft.inventory.IInventory#isUsableByPlayer(net.minecraft.entity.player.EntityPlayer)
+     */
+    @Override
+    public boolean isUsableByPlayer(EntityPlayer player)
+    {
+        return true;
+    }
 
 }

@@ -32,7 +32,7 @@ import net.minecraft.item.ItemStack;
  * @author jabelar
  *
  */
-public class CompactorRecipes 
+public class CompactorRecipes
 {
     private static final CompactorRecipes compactingBase = new CompactorRecipes();
     /** The list of compacting results. */
@@ -59,9 +59,12 @@ public class CompactorRecipes
     /**
      * Adds the compacting recipe.
      *
-     * @param parItemStackIn the par item stack in
-     * @param parItemStackOut the par item stack out
-     * @param parExperience the par experience
+     * @param parItemStackIn
+     *            the par item stack in
+     * @param parItemStackOut
+     *            the par item stack out
+     * @param parExperience
+     *            the par experience
      */
     public void addCompactingRecipe(ItemStack parItemStackIn, ItemStack parItemStackOut, float parExperience)
     {
@@ -72,7 +75,8 @@ public class CompactorRecipes
     /**
      * Returns the compacting result of an item.
      *
-     * @param parItemStack the par item stack
+     * @param parItemStack
+     *            the par item stack
      * @return the compacting result
      */
     public ItemStack getCompactingResult(ItemStack parItemStack)
@@ -87,17 +91,18 @@ public class CompactorRecipes
                 return ItemStack.EMPTY;
             }
 
-            entry = (Entry)iterator.next();
+            entry = (Entry) iterator.next();
         }
-        while (!areItemStacksEqual(parItemStack, (ItemStack)entry.getKey()));
+        while (!areItemStacksEqual(parItemStack, (ItemStack) entry.getKey()));
 
-        return (ItemStack)entry.getValue();
+        return (ItemStack) entry.getValue();
     }
-    
+
     /**
      * Gets the input amount.
      *
-     * @param parItemStack the par item stack
+     * @param parItemStack
+     *            the par item stack
      * @return the input amount
      */
     // allows recipe to consume multiple items from input stack
@@ -113,11 +118,11 @@ public class CompactorRecipes
                 return -1;
             }
 
-            entry = (Entry)iterator.next();
+            entry = (Entry) iterator.next();
         }
-        while (!areItemStacksEqual(parItemStack, (ItemStack)entry.getKey()));
+        while (!areItemStacksEqual(parItemStack, (ItemStack) entry.getKey()));
 
-        return ((ItemStack)entry.getKey()).getCount();
+        return ((ItemStack) entry.getKey()).getCount();
     }
 
     private boolean areItemStacksEqual(ItemStack parItemStack1, ItemStack parItemStack2)
@@ -138,7 +143,8 @@ public class CompactorRecipes
     /**
      * Gets the compacting experience.
      *
-     * @param parItemStack the par item stack
+     * @param parItemStack
+     *            the par item stack
      * @return the compacting experience
      */
     public float getCompactingExperience(ItemStack parItemStack)
@@ -153,10 +159,10 @@ public class CompactorRecipes
                 return 0.0F;
             }
 
-            entry = (Entry)iterator.next();
+            entry = (Entry) iterator.next();
         }
-        while (!areItemStacksEqual(parItemStack, (ItemStack)entry.getKey()));
+        while (!areItemStacksEqual(parItemStack, (ItemStack) entry.getKey()));
 
-        return ((Float)entry.getValue()).floatValue();
+        return ((Float) entry.getValue()).floatValue();
     }
 }

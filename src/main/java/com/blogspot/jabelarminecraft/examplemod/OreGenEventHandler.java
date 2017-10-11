@@ -19,24 +19,24 @@ package com.blogspot.jabelarminecraft.examplemod;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 
 @EventBusSubscriber
-public class OreGenEventHandler 
+public class OreGenEventHandler
 {
-//    @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-//    public void onEvent(GenerateMinable event)
-//    {
-//        
-//    }
-//    
-//    @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-//    public void onEvent(OreGenEvent.Post event)
-//    {
-//        
-//    }
-//    
-//    @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-//    public void onEvent(OreGenEvent.Pre event)
-//    {
-//        
-//    }
-//    
+    // @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
+    // public void onEvent(GenerateMinable event)
+    // {
+    //
+    // }
+    //
+    // @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
+    // public void onEvent(OreGenEvent.Post event)
+    // {
+    //
+    // }
+    //
+    // @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
+    // public void onEvent(OreGenEvent.Pre event)
+    // {
+    //
+    // }
+    //
 }

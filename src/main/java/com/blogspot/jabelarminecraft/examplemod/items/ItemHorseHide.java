@@ -24,13 +24,13 @@ import net.minecraft.creativetab.CreativeTabs;
  */
 public class ItemHorseHide extends ItemHideBase
 {
-	
-	/**
-	 * Instantiates a new item horse hide.
-	 */
-	public ItemHorseHide() 
+
+    /**
+     * Instantiates a new item horse hide.
+     */
+    public ItemHorseHide()
     {
-		super("horsehide");
+        super("horsehide");
         setCreativeTab(CreativeTabs.MATERIALS);
     }
 }
