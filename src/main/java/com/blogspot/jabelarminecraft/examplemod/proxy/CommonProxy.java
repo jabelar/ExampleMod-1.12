@@ -23,7 +23,6 @@ import java.util.List;
 import com.blogspot.jabelarminecraft.examplemod.MainMod;
 import com.blogspot.jabelarminecraft.examplemod.client.gui.GuiHandler;
 import com.blogspot.jabelarminecraft.examplemod.commands.CommandStructureCapture;
-import com.blogspot.jabelarminecraft.examplemod.entities.EntityPigTest;
 import com.blogspot.jabelarminecraft.examplemod.init.ModFluids;
 import com.blogspot.jabelarminecraft.examplemod.networking.MessageExtendedReachAttack;
 import com.blogspot.jabelarminecraft.examplemod.networking.MessageRequestItemStackRegistryFromClient;
@@ -40,32 +39,23 @@ import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
-import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLServerAboutToStartEvent;
-import net.minecraftforge.fml.common.event.FMLServerStartedEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
-import net.minecraftforge.fml.common.event.FMLServerStoppedEvent;
-import net.minecraftforge.fml.common.event.FMLServerStoppingEvent;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
-import net.minecraftforge.fml.common.registry.EntityRegistry;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 
@@ -87,7 +77,7 @@ public class CommonProxy
      * @param event
      *            the event
      */
-    public void fmlLifeCycleEvent(FMLPreInitializationEvent event)
+    public void preInit(FMLPreInitializationEvent event)
     {
         // load configuration before doing anything else
         // got config tutorial from http://www.minecraftforge.net/wiki/How_to_make_an_advanced_configuration_file
@@ -96,8 +86,6 @@ public class CommonProxy
         // register stuff
         registerTileEntities();
         registerFluids();
-        // registerEntities();
-        registerEntitySpawns();
         registerFuelHandlers();
         registerSimpleNetworking();
         // VillagerRegistry.instance().registerVillagerId(10);
@@ -112,7 +100,7 @@ public class CommonProxy
      * @param event
      *            the event
      */
-    public void fmlLifeCycleEvent(FMLInitializationEvent event)
+    public void init(FMLInitializationEvent event)
     {
         // register Advancements here to allow use of items from other mods
         registerAdvancements();
@@ -153,58 +141,10 @@ public class CommonProxy
      * @param event
      *            the event
      */
-    public void fmlLifeCycleEvent(FMLPostInitializationEvent event)
+    public void postInit(FMLPostInitializationEvent event)
     {
         // can do some inter-mod stuff here
         initItemStackRegistry();
-    }
-
-    /**
-     * Fml life cycle event for Server About To Start.
-     *
-     * @param event
-     *            the event
-     */
-    public void fmlLifeCycleEvent(FMLServerAboutToStartEvent event)
-    {
-        // TODO Auto-generated method stub
-
-    }
-
-    /**
-     * Fml life cycle event for Server Started.
-     *
-     * @param event
-     *            the event
-     */
-    public void fmlLifeCycleEvent(FMLServerStartedEvent event)
-    {
-        // TODO Auto-generated method stub
-
-    }
-
-    /**
-     * Fml life cycle event for Server Stopping.
-     *
-     * @param event
-     *            the event
-     */
-    public void fmlLifeCycleEvent(FMLServerStoppingEvent event)
-    {
-        // TODO Auto-generated method stub
-
-    }
-
-    /**
-     * Fml life cycle event for Server Stopped.
-     *
-     * @param event
-     *            the event
-     */
-    public void fmlLifeCycleEvent(FMLServerStoppedEvent event)
-    {
-        // TODO Auto-generated method stub
-
     }
 
     /**
@@ -213,7 +153,7 @@ public class CommonProxy
      * @param event
      *            the event
      */
-    public void fmlLifeCycleEvent(FMLServerStartingEvent event)
+    public void serverStarting(FMLServerStartingEvent event)
     {
         // // register server commands
         event.registerServerCommand(new CommandStructureCapture());
@@ -333,114 +273,6 @@ public class CommonProxy
     }
 
     /**
-     * Registers entities as mod entities.
-     */
-    protected void registerEntities()
-    {
-        // DEBUG
-        System.out.println("Registering entities");
-        // if you want it with a spawn egg use
-        // registerModEntityWithEgg(EntityManEatingTiger.class, "tiger", 0xE18519, 0x000000);
-        // or without spawn egg use
-
-        // example: registerModEntity(EntityGoldenGoose.class, "golden_goose");
-        registerModEntityWithEgg(EntityPigTest.class, "test_pig", 0xE18519, 0x000000);
-    }
-
-    /**
-     * Registers an entity as a mod entity with no tracking.
-     *
-     * @param parEntityClass
-     *            the par entity class
-     * @param parEntityName
-     *            the par entity name
-     */
-    protected void registerModEntity(Class<? extends Entity> parEntityClass, String parEntityName)
-    {
-        final ResourceLocation resourceLocation = new ResourceLocation(MainMod.MODID, parEntityName);
-        EntityRegistry.registerModEntity(resourceLocation, parEntityClass, parEntityName, ++modEntityID, MainMod.instance, 80, 3, false);
-    }
-
-    /**
-     * Registers an entity as a mod entity with fast tracking. Good for fast moving objects like throwables
-     *
-     * @param parEntityClass
-     *            the par entity class
-     * @param parEntityName
-     *            the par entity name
-     */
-    protected void registerModEntityFastTracking(Class<? extends Entity> parEntityClass, String parEntityName)
-    {
-        final ResourceLocation resourceLocation = new ResourceLocation(MainMod.MODID, parEntityName);
-        EntityRegistry.registerModEntity(resourceLocation, parEntityClass, parEntityName, ++modEntityID, MainMod.instance, 80, 10, true);
-    }
-
-    /**
-     * Register mod entity with egg.
-     *
-     * @param parEntityClass
-     *            the par entity class
-     * @param parEntityName
-     *            the par entity name
-     * @param parEggColor
-     *            the par egg color
-     * @param parEggSpotsColor
-     *            the par egg spots color
-     */
-    public void registerModEntityWithEgg(Class<? extends Entity> parEntityClass, String parEntityName,
-            int parEggColor, int parEggSpotsColor)
-    {
-        final ResourceLocation resourceLocation = new ResourceLocation(MainMod.MODID, parEntityName);
-        EntityRegistry.registerModEntity(resourceLocation, parEntityClass, parEntityName, ++modEntityID, MainMod.instance, 80, 3, false, parEggColor,
-                parEggSpotsColor);
-    }
-
-    /**
-     * Registers entity natural spawns.
-     */
-    protected void registerEntitySpawns()
-    {
-        /*
-         * register natural spawns for entities EntityRegistry.addSpawn(MyEntity.class, spawnProbability, minSpawn, maxSpawn, enumCreatureType, [spawnBiome]); See the constructor
-         * in Biome.java to see the rarity of vanilla mobs; Sheep are probability 10 while Endermen are probability 1 minSpawn and maxSpawn are about how groups of the entity spawn
-         * enumCreatureType represents the "rules" Minecraft uses to determine spawning, based on creature type. By default, you have three choices: EnumCreatureType.creature uses
-         * rules for animals: spawn everywhere it is light out. EnumCreatureType.monster uses rules for monsters: spawn everywhere it is dark out. EnumCreatureType.waterCreature
-         * uses rules for water creatures: spawn only in water. [spawnBiome] is an optional parameter of type Biome that limits the creature spawn to a single biome type. Without
-         * this parameter, it will spawn everywhere.
-         */
-
-        // DEBUG
-        System.out.println("Registering natural spawns");
-
-        // // savanna
-        // EntityRegistry.addSpawn(EntityLion.class, 6, 1, 5, EnumCreatureType.creature, Biome.savanna); //change the values to vary the spawn rarity, biome, etc.
-        // EntityRegistry.addSpawn(EntityElephant.class, 10, 1, 5, EnumCreatureType.creature, Biome.savanna); //change the values to vary the spawn rarity, biome, etc.
-    }
-
-    /**
-     * Adds the spawn all biomes.
-     *
-     * @param parEntity
-     *            the par entity
-     * @param parChance
-     *            the par chance
-     * @param parMinGroup
-     *            the par min group
-     * @param parMaxGroup
-     *            the par max group
-     */
-    protected void addSpawnAllBiomes(EntityLiving parEntity, int parChance, int parMinGroup, int parMaxGroup)
-    {
-        Iterator<ResourceLocation> allBiomesIterator = Biome.REGISTRY.getKeys().iterator();
-        while (allBiomesIterator.hasNext())
-        {
-            Biome nextBiome = Biome.REGISTRY.getObject(allBiomesIterator.next());
-            EntityRegistry.addSpawn(parEntity.getClass(), parChance, parMinGroup, parMaxGroup, EnumCreatureType.CREATURE,
-                    nextBiome); // change the values to vary the spawn rarity, biome, etc.
-        }
-    }
-
-    /**
      * Register fuel handlers.
      */
     protected void registerFuelHandlers()
@@ -450,20 +282,6 @@ public class CommonProxy
 
         // example: GameRegistry.registerFuelHandler(handler);
     }
-    //
-    // No longer needed now that there is @EventBusSubscriber annotation
-    // /**
-    // * Register event listeners.
-    // */
-    // protected void registerEventListeners()
-    // {
-    // // DEBUG
-    // System.out.println("Registering event listeners");
-    //
-    // MinecraftForge.EVENT_BUS.register(new EventHandler());
-    // MinecraftForge.TERRAIN_GEN_BUS.register(new TerrainGenEventHandler());
-    // MinecraftForge.ORE_GEN_BUS.register(new OreGenEventHandler());
-    // }
 
     /**
      * Register Advancements.

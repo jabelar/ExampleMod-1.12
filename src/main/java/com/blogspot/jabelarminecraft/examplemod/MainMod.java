@@ -33,11 +33,7 @@ import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLServerAboutToStartEvent;
-import net.minecraftforge.fml.common.event.FMLServerStartedEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
-import net.minecraftforge.fml.common.event.FMLServerStoppedEvent;
-import net.minecraftforge.fml.common.event.FMLServerStoppingEvent;
 import net.minecraftforge.fml.common.network.FMLEventChannel;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 
@@ -76,14 +72,11 @@ public class MainMod
     // instantiate creative tabs
     public static final CustomCreativeTab CREATIVE_TAB = new CustomCreativeTab();
 
-    // instantiate materials
-    // public final static MaterialTanningRack materialTanningRack = new MaterialTanningRack();
-    // see custom armor tutorial at: http://bedrockminer.jimdo.com/modding-tutorials/basic-modding/custom-armor/
-    // public final static ArmorMaterial SAFEFALLINGLEATHER = EnumHelper.addArmorMaterial("SAFEFALLINGLEATHER", "safe_falling", 5, new int[]{2, 6, 5, 2}, 15);
+    // materials are instantiated in the ModMaterials class
+    
+    // blocks are instantiated in ModBlocks class
 
-    // blocks are instantiated in BlockRegistry class
-
-    // items are instantiated in ItemRegistry class
+    // items are instantiated in ModItems class
 
     // instantiate structures
     // important to do this after blocks in case structure uses custom block
@@ -117,14 +110,15 @@ public class MainMod
     public static boolean haveWarnedVersionOutOfDate = false;
 
     /**
-     * Fml life cycle event.
+     * Pre-Initialization FML Life Cycle event handling method which is automatically
+     * called by Forge. It must be annotated as an event handler.
      *
      * @param event
      *            the event
      */
     @EventHandler
     // preInit "Run before anything else. Read your config, create blocks, items, etc, and register them with the GameRegistry."
-    public void fmlLifeCycleEvent(FMLPreInitializationEvent event)
+    public void preInit(FMLPreInitializationEvent event)
     {
         // DEBUG
         System.out.println("preInit()" + event.getModMetadata().name);
@@ -137,11 +131,12 @@ public class MainMod
         event.getModMetadata().url = MODURL;
         event.getModMetadata().logoFile = MODLOGO;
 
-        proxy.fmlLifeCycleEvent(event);
+        proxy.preInit(event);
     }
 
     /**
-     * Fml life cycle event.
+     * Initialization FML Life Cycle event handling method which is automatically
+     * called by Forge. It must be annotated as an event handler.
      *
      * @param event
      *            the event
@@ -149,45 +144,32 @@ public class MainMod
     @EventHandler
     // Do your mod setup. Build whatever data structures you care about. Register recipes."
     // Register network handlers
-    public void fmlLifeCycleEvent(FMLInitializationEvent event)
+    public void init(FMLInitializationEvent event)
     {
 
         // DEBUG
         System.out.println("init()");
 
-        proxy.fmlLifeCycleEvent(event);
+        proxy.init(event);
     }
 
     /**
-     * Fml life cycle.
+     * Post-Initialization FML Life Cycle event handling method which is automatically
+     * called by Forge. It must be annotated as an event handler.
      *
      * @param event
      *            the event
      */
     @EventHandler
     // postInit "Handle interaction with other mods, complete your setup based on this."
-    public void fmlLifeCycle(FMLPostInitializationEvent event)
+    public void postInit(FMLPostInitializationEvent event)
     {
         // DEBUG
         System.out.println("postInit()");
 
-        proxy.fmlLifeCycleEvent(event);
+        proxy.postInit(event);
     }
 
-    /**
-     * Fml life cycle.
-     *
-     * @param event
-     *            the event
-     */
-    @EventHandler
-    public void fmlLifeCycle(FMLServerAboutToStartEvent event)
-    {
-        // DEBUG
-        System.out.println("Server about to start");
-
-        proxy.fmlLifeCycleEvent(event);
-    }
 
     /**
      * Fml life cycle.
@@ -198,71 +180,11 @@ public class MainMod
     @EventHandler
     // register server commands
     // refer to tutorial at http://www.minecraftforge.net/wiki/Server_Command#Mod_Implementation
-    public void fmlLifeCycle(FMLServerStartingEvent event)
+    public void serverStarting(FMLServerStartingEvent event)
     {
         // DEBUG
         System.out.println("Server starting");
 
-        proxy.fmlLifeCycleEvent(event);
-    }
-
-    /**
-     * Fml life cycle.
-     *
-     * @param event
-     *            the event
-     */
-    @EventHandler
-    public void fmlLifeCycle(FMLServerStartedEvent event)
-    {
-        // DEBUG
-        System.out.println("Server started");
-
-        proxy.fmlLifeCycleEvent(event);
-    }
-
-    /**
-     * Fml life cycle.
-     *
-     * @param event
-     *            the event
-     */
-    @EventHandler
-    public void fmlLifeCycle(FMLServerStoppingEvent event)
-    {
-        // DEBUG
-        System.out.println("Server stopping");
-
-        proxy.fmlLifeCycleEvent(event);
-    }
-
-    /**
-     * Fml life cycle.
-     *
-     * @param event
-     *            the event
-     */
-    @EventHandler
-    public void fmlLifeCycle(FMLServerStoppedEvent event)
-    {
-        // DEBUG
-        System.out.println("Server stopped");
-
-        proxy.fmlLifeCycleEvent(event);
-    }
-
-    /**
-     * Save properties.
-     */
-    public static void saveProperties()
-    {
-        try
-        {
-            config.save();
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
+        proxy.serverStarting(event);
     }
 }

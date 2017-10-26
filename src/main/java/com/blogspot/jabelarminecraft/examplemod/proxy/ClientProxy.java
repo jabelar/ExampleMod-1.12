@@ -68,13 +68,13 @@ public class ClientProxy extends CommonProxy
      * @see com.blogspot.jabelarminecraft.examplemod.proxy.CommonProxy#fmlLifeCycleEvent(net.minecraftforge.fml.common.event.FMLPreInitializationEvent)
      */
     @Override
-    public void fmlLifeCycleEvent(FMLPreInitializationEvent event)
+    public void preInit(FMLPreInitializationEvent event)
     {
         // DEBUG
         System.out.println("on Client side");
 
         // do common stuff
-        super.fmlLifeCycleEvent(event);
+        super.preInit(event);
 
     }
 
@@ -84,7 +84,7 @@ public class ClientProxy extends CommonProxy
      * @see com.blogspot.jabelarminecraft.examplemod.proxy.CommonProxy#fmlLifeCycleEvent(net.minecraftforge.fml.common.event.FMLInitializationEvent)
      */
     @Override
-    public void fmlLifeCycleEvent(FMLInitializationEvent event)
+    public void init(FMLInitializationEvent event)
     {
         // DEBUG
         System.out.println("on Client side");
@@ -92,7 +92,7 @@ public class ClientProxy extends CommonProxy
         /*
          * do common stuff
          */
-        super.fmlLifeCycleEvent(event);
+        super.init(event);
 
         /*
          * do client-specific stuff
@@ -116,13 +116,13 @@ public class ClientProxy extends CommonProxy
      * @see com.blogspot.jabelarminecraft.examplemod.proxy.CommonProxy#fmlLifeCycleEvent(net.minecraftforge.fml.common.event.FMLPostInitializationEvent)
      */
     @Override
-    public void fmlLifeCycleEvent(FMLPostInitializationEvent event)
+    public void postInit(FMLPostInitializationEvent event)
     {
         // DEBUG
         System.out.println("on Client side");
 
         // do common stuff
-        super.fmlLifeCycleEvent(event);
+        super.postInit(event);
 
         // do client-specific stuff
         MainMod.versionChecker = new VersionChecker();
@@ -228,26 +228,6 @@ public class ClientProxy extends CommonProxy
         sphere.draw(0.5F, 32, 32);
         GL11.glEndList();
     }
-
-    /*
-     * This initializes the List in the public field itemListFromRegistry with all possilbe ItemStack types (all valid metadata values, as well as any NBT that is used to create
-     * variants in mods like Tinker's Construct).
-     */
-    // @Override
-    // protected void initItemStackRegistry()
-    // {
-    // itemStackRegistry.clear();
-    //
-    // for (Object theObj: Item.REGISTRY)
-    // {
-    // ((Item)theObj).getSubItems((Item)theObj, null, itemStackRegistry); // this method directly appends to ItemStackRegistry
-    // }
-    //
-    // // DEBUG
-    // System.out.println("ItemStack registry = "+itemStackRegistry.toString());
-    //
-    // return;
-    // }
 
     /**
      * handles the acceleration of an object whilst in a material.
