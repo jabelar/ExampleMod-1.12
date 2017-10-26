@@ -23,7 +23,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
-import com.blogspot.jabelarminecraft.examplemod.client.gui.GuiCompactor;
 import com.blogspot.jabelarminecraft.examplemod.init.ModBlocks;
 import com.blogspot.jabelarminecraft.examplemod.init.ModItems;
 import com.blogspot.jabelarminecraft.examplemod.init.ModMaterials;
@@ -48,7 +47,6 @@ import net.minecraft.entity.passive.EntityPig;
 import net.minecraft.entity.passive.EntitySheep;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.init.Enchantments;
 import net.minecraft.init.Items;
 import net.minecraft.init.MobEffects;
@@ -71,23 +69,15 @@ import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.event.ClickEvent;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.client.event.EntityViewRenderEvent.FogDensity;
-import net.minecraftforge.client.event.GuiOpenEvent;
 import net.minecraftforge.client.event.MouseEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
-import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent;
-import net.minecraftforge.event.entity.player.PlayerEvent.LoadFromFile;
 import net.minecraftforge.event.entity.player.PlayerEvent.NameFormat;
-import net.minecraftforge.event.entity.player.PlayerEvent.SaveToFile;
-import net.minecraftforge.fluids.FluidEvent.FluidDrainingEvent;
-import net.minecraftforge.fluids.FluidEvent.FluidFillingEvent;
-import net.minecraftforge.fluids.FluidRegistry.FluidRegisterEvent;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent.OnConfigChangedEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedOutEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.PlayerTickEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.WorldTickEvent;
@@ -95,130 +85,18 @@ import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-// TODO: Auto-generated Javadoc
+/**
+ * This class contains many of the event handling methods for events posted to the event bus.
+ * Registry events are contained in separate classes in the init subpackage. It is important that
+ * this class is annotated as an event bus subscriber and that the methods should be all static.
+ */
 @Mod.EventBusSubscriber(modid = MainMod.MODID)
 public class EventHandler
 {
     /*
-     * Registry events
+     * The following event handling is complicated because it replicates vanilla code to make custom fluids act like water. However, I have also submitted a Forge Pull Request PR
+     * #4478, #4462 and #4460 which will add these features directly into Forge. If you're using a Forge version that includes those PRs, you can simply the following.
      */
-
-    /**
-     * On event.
-     *
-     * @param event
-     *            the event
-     */
-    @SubscribeEvent(priority = EventPriority.NORMAL, receiveCanceled = true)
-    public static void onEvent(RegistryEvent.NewRegistry event)
-    {
-        // can create registries here if needed
-    }
-
-    /*
-     * Miscellaneous events
-     */
-
-    // @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-    // public static void onEvent(ForceChunkEvent event)
-    // {
-    //
-    // }
-    //
-    // @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-    // public static void onEvent(UnforceChunkEvent event)
-    // {
-    //
-    // }
-    //
-    // @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-    // public static void onEvent(AnvilUpdateEvent event)
-    // {
-    //
-    // }
-    //
-    // @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-    // public static void onEvent(CommandEvent event)
-    // {
-    //
-    // }
-    //
-    // @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-    // public static void onEvent(ServerChatEvent event)
-    // {
-    //
-    // }
-    //
-    // /*
-    // * Brewing events
-    // */
-    //
-    // @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-    // public static void onEvent(PotionBrewedEvent event)
-    // {
-    //
-    // }
-    //
-    // /*
-    // * Entity related events
-    // */
-    //
-    // @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-    // public static void onEvent(EnteringChunk event)
-    // {
-    //
-    // }
-    //
-    // @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-    // public static void onEvent(EntityConstructing event)
-    // {
-    // // Register extended entity properties
-    // }
-    //
-    // @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-    // public static void onEvent(EntityJoinWorldEvent event)
-    // {
-    //
-    // }
-    //
-    // @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-    // public static void onEvent(EntityStruckByLightningEvent event)
-    // {
-    //
-    // }
-    //
-    // @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-    // public static void onEvent(PlaySoundAtEntityEvent event)
-    // {
-    //
-    // }
-    //
-    // /*
-    // * Item events (these extend EntityEvent)
-    // */
-    //
-    // @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-    // public static void onEvent(ItemExpireEvent event)
-    // {
-    //
-    // }
-    //
-    // @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-    // public static void onEvent(ItemTossEvent event)
-    // {
-    //
-    // }
-    //
-    // /*
-    // * Living events (extend EntityEvent)
-    // */
-    //
-    // @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-    // public static void onEvent(LivingJumpEvent event)
-    // {
-    //
-    // }
-    //
     public static Field activeItemStackUseCount = ReflectionHelper.findField(EntityLivingBase.class, "activeItemStackUseCount", "field_184628_bn");
     public static Field handInventory = ReflectionHelper.findField(EntityLivingBase.class, "handInventory", "field_184630_bs");
     public static Field armorArray = ReflectionHelper.findField(EntityLivingBase.class, "armorArray", "field_184631_bt");
@@ -974,27 +852,9 @@ public class EventHandler
             }
         }
     }
-    //
-    // @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-    // public static void onEvent(EnderTeleportEvent event)
-    // {
-    //
-    // }
-    //
-    // @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-    // public static void onEvent(LivingAttackEvent event)
-    // {
-    //
-    // }
-    //
-    // @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-    // public static void onEvent(LivingDeathEvent event)
-    // {
-    //
-    // }
 
     /**
-     * On event.
+     * Event handling method that is automatically called by Forge. It checks for certain entity types and modifies the items dropped accordingly.
      *
      * @param event
      *            the event
@@ -1039,78 +899,9 @@ public class EventHandler
         }
     }
 
-    // @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-    // public static void onEvent(LivingFallEvent event)
-    // {
-    //
-    // }
-    //
-    // @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-    // public static void onEvent(LivingHurtEvent event)
-    // {
-    //
-    // }
-    //
-    // @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-    // public static void onEvent(LivingPackSizeEvent event)
-    // {
-    //
-    // }
-    //
-    // @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-    // public static void onEvent(LivingSetAttackTargetEvent event)
-    // {
-    //
-    // }
-    //
-    // @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-    // public static void onEvent(ZombieEvent event)
-    // {
-    //
-    // }
-    //
-    // @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-    // public static void onEvent(CheckSpawn event)
-    // {
-    //
-    // }
-    //
-    // @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-    // public static void onEvent(SpecialSpawn event)
-    // {
-    //
-    // }
-    //
-    // @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-    // public static void onEvent(AllowDespawn event)
-    // {
-    //
-    // }
-    //
-    // /*
-    // * Player events (extend LivingEvent)
-    // */
-    //
-    // @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-    // public static void onEvent(BreakSpeed event)
-    // {
-    //
-    // }
-    //
-    // @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-    // public static void onEvent(Clone event)
-    // {
-    //
-    // }
-    //
-    // @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-    // public static void onEvent(HarvestCheck event)
-    // {
-    //
-    // }
-
     /**
-     * On event.
+     * This is an event handler that is called automatically by Forge. It is an "Easter Egg" type feature where you can give your friends with known usernames a special title or
+     * teasing.
      *
      * @param event
      *            the event
@@ -1138,268 +929,6 @@ public class EventHandler
         }
     }
 
-    // @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-    // public static void onEvent(ArrowLooseEvent event)
-    // {
-    //
-    // }
-    //
-    // @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-    // public static void onEvent(ArrowNockEvent event)
-    // {
-    //
-    // }
-    //
-    // @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-    // public static void onEvent(AttackEntityEvent event)
-    // {
-    //
-    // }
-    //
-    // @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-    // public static void onEvent(BonemealEvent event)
-    // {
-    //
-    // }
-    //
-    // @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-    // public static void onEvent(EntityInteractEvent event)
-    // {
-    //
-    // }
-    //
-    // @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-    // public static void onEvent(EntityItemPickupEvent event)
-    // {
-    //
-    // }
-    //
-    // @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-    // public static void onEvent(FillBucketEvent event)
-    // {
-    //
-    // }
-    //
-    // @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-    // public static void onEvent(ItemTooltipEvent event)
-    // {
-    //
-    // }
-    //
-    // @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-    // public static void onEvent(PlayerDestroyItemEvent event)
-    // {
-    //
-    // }
-    //
-    // @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-    // public static void onEvent(PlayerDropsEvent event)
-    // {
-    //
-    // }
-    //
-    // @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-    // public static void onEvent(PlayerFlyableFallEvent event)
-    // {
-    //
-    // }
-    //
-    // @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-    // public static void onEvent(PlayerInteractEvent event)
-    // {
-    //
-    // }
-    //
-    // @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-    // public static void onEvent(PlayerOpenContainerEvent event)
-    // {
-    //
-    // }
-    //
-    // @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-    // public static void onEvent(PlayerPickupXpEvent event)
-    // {
-    //
-    // }
-    //
-    // @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-    // public static void onEvent(PlayerSleepInBedEvent event)
-    // {
-    //
-    // }
-    //
-    // @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-    // public static void onEvent(PlayerUseItemEvent.Finish event)
-    // {
-    //
-    // }
-    //
-    // @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-    // public static void onEvent(PlayerUseItemEvent.Start event)
-    // {
-    //
-    // }
-    //
-    // @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-    // public static void onEvent(PlayerUseItemEvent.Stop event)
-    // {
-    //
-    // }
-    //
-    // @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-    // public static void onEvent(PlayerUseItemEvent.Tick event)
-    // {
-    //
-    // }
-    //
-    // @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-    // public static void onEvent(UseHoeEvent event)
-    // {
-    //
-    // }
-    //
-    // /*
-    // * Minecart events (extends EntityEvent)
-    // */
-    //
-    // @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-    // public static void onEvent(MinecartCollisionEvent event)
-    // {
-    //
-    // }
-    //
-    // @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-    // public static void onEvent(MinecartInteractEvent event)
-    // {
-    //
-    // }
-    //
-    // @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-    // public static void onEvent(MinecartUpdateEvent event)
-    // {
-    //
-    // }
-    //
-    // /*
-    // * World events
-    // */
-    //
-    // @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-    // public static void onEvent(WorldEvent.Load event)
-    // {
-    //
-    // }
-    //
-    // @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-    // public static void onEvent(WorldEvent.PotentialSpawns event)
-    // {
-    //
-    // }
-    //
-    // @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-    // public static void onEvent(WorldEvent.Unload event)
-    // {
-    //
-    // }
-    //
-    // @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-    // public static void onEvent(BlockEvent event)
-    // {
-    //
-    // }
-    //
-    // @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-    // public static void onEvent(BlockEvent.BreakEvent event)
-    // {
-    //
-    // }
-    //
-    // @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-    // public static void onEvent(BlockEvent.HarvestDropsEvent event)
-    // {
-    //
-    // }
-    //
-    // @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-    // public static void onEvent(ChunkEvent event)
-    // {
-    //
-    // }
-    //
-    // @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-    // public static void onEvent(ChunkEvent.Save event)
-    // {
-    //
-    // }
-    //
-    // @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-    // public static void onEvent(ChunkEvent.Unload event)
-    // {
-    //
-    // }
-    //
-    // @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-    // public static void onEvent(ChunkDataEvent event)
-    // {
-    //
-    // }
-    //
-    // @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-    // public static void onEvent(ChunkDataEvent.Load event)
-    // {
-    //
-    // }
-    //
-    // @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-    // public static void onEvent(ChunkDataEvent.Save event)
-    // {
-    //
-    // }
-    //
-    // @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-    // public static void onEvent(ChunkWatchEvent event)
-    // {
-    //
-    // }
-    //
-    // @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-    // public static void onEvent(ChunkWatchEvent.Watch event)
-    // {
-    //
-    // }
-    //
-    // @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-    // public static void onEvent(ChunkWatchEvent.UnWatch event)
-    // {
-    //
-    // }
-    //
-    //
-    // /*
-    // * Client events
-    // */
-    //
-    // @SideOnly(Side.CLIENT)
-    // @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-    // public static void onEvent(ClientChatReceivedEvent event)
-    // {
-    //
-    // }
-    //
-    // @SideOnly(Side.CLIENT)
-    // @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-    // public static void onEvent(DrawBlockHighlightEvent event)
-    // {
-    //
-    // }
-    //
-    // @SideOnly(Side.CLIENT)
-    // @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-    // public static void onEvent(RenderFogEvent event)
-    // {
-    //
-    // }
-
     /**
      * Use fog density to create the effect of being under custom fluid, similar to how being under water does it.
      *
@@ -1423,74 +952,6 @@ public class EventHandler
 
         event.setCanceled(true); // must cancel event for event handler to take effect
     }
-
-    // /**
-    // * Use fog color to color the view when submerged in a custom fluid.
-    // *
-    // * @param event the event
-    // */
-    // @SideOnly(Side.CLIENT)
-    // @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-    // public static void onEvent(FogColors event)
-    // {
-    // if (event.getEntity().isInsideOfMaterial(ModMaterials.SLIME))
-    // {
-    // Color theColor = Color.GREEN;
-    // event.setRed(theColor.getRed());
-    // event.setGreen(theColor.getGreen());
-    // event.setBlue(theColor.getBlue());
-    // }
-    // }
-
-    // @SideOnly(Side.CLIENT)
-    // @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-    // public static void onEvent(FOVUpdateEvent event)
-    // {
-    //
-    // }
-
-    /**
-     * On event.
-     *
-     * @param event
-     *            the event
-     */
-    @SideOnly(Side.CLIENT)
-    @SubscribeEvent(priority = EventPriority.NORMAL, receiveCanceled = true)
-    public static void onEvent(GuiOpenEvent event)
-    {
-        if (event.getGui() instanceof GuiCompactor)
-        {
-            // DEBUG
-            System.out.println("GuiOpenEvent for GuiCompactor");
-        }
-        // if (event.getGui() instanceof GuiIngameMenu)
-        // {
-        // Debug.print("GuiOpenEvent for GuiIngameModOptions");
-        // event.setGui(new GuiConfig(null));
-        // }
-    }
-
-    // @SideOnly(Side.CLIENT)
-    // @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-    // public static void onEvent(GuiScreenEvent.ActionPerformedEvent event)
-    // {
-    //
-    // }
-    //
-    // @SideOnly(Side.CLIENT)
-    // @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-    // public static void onEvent(GuiScreenEvent.DrawScreenEvent event)
-    // {
-    //
-    // }
-    //
-    // @SideOnly(Side.CLIENT)
-    // @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-    // public static void onEvent(GuiScreenEvent.InitGuiEvent event)
-    // {
-    //
-    // }
 
     /**
      * Process an extended reach weapon.
@@ -1585,365 +1046,9 @@ public class EventHandler
         }
     }
 
-    //
-    // @SideOnly(Side.CLIENT)
-    // @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-    // public static void onEvent(RenderGameOverlayEvent.Chat event)
-    // {
-    // // this event actually extends Pre
-    //
-    // }
-    //
-    // @SideOnly(Side.CLIENT)
-    // @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-    // public static void onEvent(RenderGameOverlayEvent.Post event)
-    // {
-    //
-    // }
-    //
-    // @SideOnly(Side.CLIENT)
-    // @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-    // public static void onEvent(RenderGameOverlayEvent.Pre event)
-    // {
-    // // you can check which elements of the GUI are being rendered
-    // // by checking event.type against things like ElementType.CHAT, ElementType.CROSSHAIRS, etc.
-    // // Note that ElementType.All is fired first apparently, then individual elements
-    // }
-    //
-    // @SideOnly(Side.CLIENT)
-    // @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-    // public static void onEvent(RenderGameOverlayEvent.Pre event)
-    // {
-    // if (event.getType() == ElementType.ALL)
-    // {
-    //// // DEBUG
-    //// Debug.print("render game overlay");
-    //
-    // EntityPlayer thePlayer = Minecraft.getMinecraft().player;
-    //
-    // if (thePlayer.isInsideOfMaterial(ModMaterials.SLIME))
-    // {
-    //// // DEBUG
-    //// Debug.print("player is inside of material");
-    //
-    // drawFluidOverlay(ModFluids.SLIME.getColor(), 0.2F);
-    // }
-    // }
-    // }
-
-    // @SideOnly(Side.CLIENT)
-    // @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-    // public static void onEvent(RenderBlockOverlayEvent event)
-    // {
-    // if (event.getOverlayType() == OverlayType.WATER)
-    // {
-    // IBlockState theBlock = event.getBlockForOverlay();
-    // if (theBlock instanceof ModBlockFluidClassic)
-    // {
-    // // DEBUG
-    // Debug.print("rendering fluid overlay");
-    // renderFluidOverlay(event.getRenderPartialTicks());
-    // }
-    // }
-    // }
-    //
-    // @SideOnly(Side.CLIENT)
-    // @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-    // public static void onEvent(RenderHandEvent event)
-    // {
-    //
-    // }
-    //
-    // @SideOnly(Side.CLIENT)
-    // @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-    // public static void onEvent(RenderLivingEvent.Post event)
-    // {
-    //
-    // }
-    //
-    // @SideOnly(Side.CLIENT)
-    // @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-    // public static void onEvent(RenderLivingEvent.Pre event)
-    // {
-    //
-    // }
-    //
-    // @SideOnly(Side.CLIENT)
-    // @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-    // public static void onEvent(RenderPlayerEvent.Post event)
-    // {
-    //
-    // }
-    //
-    // @SideOnly(Side.CLIENT)
-    // @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-    // public static void onEvent(RenderPlayerEvent.Pre event)
-    // {
-    //
-    // }
-    //
-    // @SideOnly(Side.CLIENT)
-    // @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-    // public static void onEvent(RenderPlayerEvent.SetArmorModel event)
-    // {
-    //
-    // }
-    //
-    // @SideOnly(Side.CLIENT)
-    // @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-    // public static void onEvent(RenderWorldEvent.Post event)
-    // {
-    //
-    // }
-    //
-    // @SideOnly(Side.CLIENT)
-    // @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-    // public static void onEvent(RenderWorldEvent.Pre event)
-    // {
-    // Minecraft.getMinecraft().gameSettings.thirdPersonView = 2;
-    // }
-    //
-    // @SideOnly(Side.CLIENT)
-    // @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-    // public static void onEvent(RenderWorldLastEvent event)
-    // {
-    //
-    // }
-    //
-    // @SideOnly(Side.CLIENT)
-    // @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-    // public static void onEvent(TextureStitchEvent.Post event)
-    // {
-    //
-    // }
-    //
-    // @SideOnly(Side.CLIENT)
-    // @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-    // public static void onEvent(TextureStitchEvent.Pre event)
-    // {
-    //
-    // }
-    //
-    // /*
-    // * Fluid events
-    // */
-    //
-    // @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-    // public static void onEvent(FluidEvent event)
-    // {
-    //
-    // }
-
-    // @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-    // public static void onEvent(FluidContainerRegisterEvent event)
-    // {
-    // // DEBUG
-    // Debug.print("Registering fluid container");
-    // }
-
     /**
-     * On event.
-     *
-     * @param event
-     *            the event
-     */
-    @SubscribeEvent(priority = EventPriority.NORMAL, receiveCanceled = true)
-    public static void onEvent(FluidDrainingEvent event)
-    {
-        // DEBUG
-        System.out.println(
-                "On client = " + event.getWorld().isRemote + " Draining fluid = " + event.getFluid().getFluid() + " with amount = " + event.getAmount());
-    }
-
-    /**
-     * On event.
-     *
-     * @param event
-     *            the event
-     */
-    @SubscribeEvent(priority = EventPriority.NORMAL, receiveCanceled = true)
-    public static void onEvent(FluidFillingEvent event)
-    {
-        // DEBUG
-        System.out.println(
-                "On client = " + event.getWorld().isRemote + " Filling fluid = " + event.getFluid().getFluid() + " with amount = " + event.getAmount());
-    }
-    //
-    // @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-    // public static void onEvent(FluidMotionEvent event)
-    // {
-    //
-    // }
-
-    /**
-     * On event.
-     *
-     * @param event
-     *            the event
-     */
-    @SubscribeEvent(priority = EventPriority.NORMAL, receiveCanceled = true)
-    public static void onEvent(FluidRegisterEvent event)
-    {
-        // DEBUG
-        System.out.println("Registering fluid");
-    }
-    //
-    // @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-    // public static void onEvent(FluidSpilledEvent event)
-    // {
-    //
-    // }
-    //
-    // /*
-    // * Ore dictionary events
-    // */
-    //
-    // @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-    // public static void onEvent(OreRegisterEvent event)
-    // {
-    //
-    // }
-    //
-    // @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-    // public static void onEvent(PopulateChunkEvent event)
-    // {
-    //
-    // }
-    //
-    // // for some reason the PopulateChunkEvents are fired on the main EVENT_BUT
-    // // even though they are in the terraingen package
-    // @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-    // public static void onEvent(PopulateChunkEvent.Populate event)
-    // {
-    //
-    // }
-    //
-    // // for some reason the PopulateChunkEvents are fired on the main EVENT_BUT
-    // // even though they are in the terraingen package
-    // @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-    // public static void onEvent(PopulateChunkEvent.Post event)
-    // {
-    //
-    // }
-    //
-    // // for some reason the PopulateChunkEvents are fired on the main EVENT_BUT
-    // // even though they are in the terraingen package
-    // @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-    // public static void onEvent(PopulateChunkEvent.Pre event)
-    // {
-    //
-    // }
-    /*
-     * Common events
-     */
-
-    // events in the cpw.mods.fml.common.event package are actually handled with
-    // @EventHandler annotation in the main mod class or the proxies.
-
-    /*
-     * Game input events
-     */
-
-    // @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-    // public static void onEvent(InputEvent event)
-    // {
-    //
-    // }
-    //
-    // @SideOnly(Side.CLIENT)
-    // @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-    // public static void onEvent(KeyInputEvent event)
-    // {
-    //
-    // }
-    //
-    // @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-    // public static void onEvent(MouseInputEvent event)
-    // {
-    //
-    // }
-    //
-    // /*
-    // * Player events
-    // */
-    //
-    // @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-    // public static void onEvent(PlayerEvent event)
-    // {
-    //
-    // }
-    //
-    // @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-    // public static void onEvent(ItemCraftedEvent event)
-    // {
-    //
-    // }
-    //
-    // @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-    // public static void onEvent(ItemPickupEvent event)
-    // {
-    //
-    // }
-    //
-    // @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-    // public static void onEvent(ItemSmeltedEvent event)
-    // {
-    //
-    // }
-    //
-    // @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-    // public static void onEvent(PlayerChangedDimensionEvent event)
-    // {
-    //
-    // }
-    //
-    // @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-    // public static void onEvent(PlayerLoggedInEvent event)
-    // {
-    //
-    // }
-
-    /**
-     * On event.
-     *
-     * @param event
-     *            the event
-     */
-    @SubscribeEvent(priority = EventPriority.NORMAL, receiveCanceled = true)
-    public static void onEvent(PlayerLoggedOutEvent event)
-    {
-        // DEBUG
-        System.out.println("Player logged out");
-
-    }
-
-    // @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-    // public static void onEvent(PlayerRespawnEvent event)
-    // {
-    // // DEBUG
-    // Debug.print("The memories of past existences are but glints of light.");
-    //
-    // }
-    //
-    // /*
-    // * Tick events
-    // */
-    //
-    // @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-    // public static void onEvent(ClientTickEvent event) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException
-    // {
-    // if (event.phase == TickEvent.Phase.END) // only proceed if START phase otherwise, will execute twice per tick
-    // {
-    // return;
-    // }
-    //
-    // }
-
-    // boolean haveRequestedItemStackRegistry = false;
-    // boolean haveGivenGift = false;
-
-    /**
-     * On event.
+     * An event handler that is called automatically by Forge. It handles the water-like
+     * behavior of fluids pushing the player.
      *
      * @param event
      *            the event
@@ -1985,29 +1090,10 @@ public class EventHandler
         return MainMod.haveWarnedVersionOutOfDate;
     }
 
-    // @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-    // public static void onEvent(RenderTickEvent event)
-    // {
-    // if (event.phase == TickEvent.Phase.END) // only proceed if START phase otherwise, will execute twice per tick
-    // {
-    // return;
-    // }
-    //
-    // }
-    //
-    // @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-    // public static void onEvent(ServerTickEvent event)
-    // {
-    // if (event.phase == TickEvent.Phase.END) // only proceed if START phase otherwise, will execute twice per tick
-    // {
-    // return;
-    // }
-    //
-    // }
-
     /**
-     * On event.
-     *
+     * An event handling method that is called automatically by Forge. This makes
+     * custom fluids push entities like water does.
+     * 
      * @param event
      *            the event
      */
@@ -2034,7 +1120,7 @@ public class EventHandler
     }
 
     /**
-     * Update air supply.
+     * Update air supply when submerged in custom fluids like water does.
      *
      * @param parEntity
      *            the par entity
@@ -2113,7 +1199,8 @@ public class EventHandler
     }
 
     /**
-     * On event.
+     * Event handling method that is called automatically by Forge. It handles when
+     * the mod configuration fields are changed.
      *
      * @param eventArgs
      *            the event args
@@ -2130,58 +1217,4 @@ public class EventHandler
             MainMod.proxy.syncConfig();
         }
     }
-
-    /**
-     * On event.
-     *
-     * @param event
-     *            the event
-     */
-    @SubscribeEvent(priority = EventPriority.NORMAL, receiveCanceled = true)
-    public static void onEvent(SaveToFile event)
-    {
-        EntityPlayer thePlayer = event.getEntityPlayer();
-        InventoryPlayer theInventory = thePlayer.inventory;
-        // DEBUG
-        System.out.print("Saving Player To File With main inventory: ");
-        Iterator<ItemStack> iterator = theInventory.mainInventory.iterator();
-        while (iterator.hasNext())
-        {
-            ItemStack stack = iterator.next();
-            System.out.print(stack + " " + stack.getTagCompound() + " ");
-        }
-        System.out.println(" ");
-    }
-
-    /**
-     * On event.
-     *
-     * @param event
-     *            the event
-     */
-    @SubscribeEvent(priority = EventPriority.NORMAL, receiveCanceled = true)
-    public static void onEvent(LoadFromFile event)
-    {
-        EntityPlayer thePlayer = event.getEntityPlayer();
-        InventoryPlayer theInventory = thePlayer.inventory;
-        // DEBUG
-        System.out.print("Loading Player from File With main inventory: ");
-        Iterator<ItemStack> iterator = theInventory.mainInventory.iterator();
-        while (iterator.hasNext())
-        {
-            ItemStack stack = iterator.next();
-            System.out.print(stack + " " + stack.getTagCompound() + " ");
-        }
-        System.out.println(" ");
-    }
-
-    // @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-    // public static void onEvent(PostConfigChangedEvent eventArgs)
-    // {
-    // // useful for doing something if another mod's config has changed
-    // // if(eventArgs.modID.equals(MagicBeans.MODID))
-    // // {
-    // // // do whatever here
-    // // }
-    // }
 }
