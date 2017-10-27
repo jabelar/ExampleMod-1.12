@@ -64,9 +64,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.text.Style;
-import net.minecraft.util.text.TextComponentString;
-import net.minecraft.util.text.event.ClickEvent;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.client.event.EntityViewRenderEvent.FogDensity;
 import net.minecraftforge.client.event.MouseEvent;
@@ -1060,34 +1057,12 @@ public class EventHandler
         if (event.phase == TickEvent.Phase.START && event.player.world.isRemote) // only proceed if START phase otherwise, will execute twice per tick
         {
             EntityPlayer thePlayer = event.player;
-            versionCheckWarning(thePlayer);
             MainMod.proxy.handleMaterialAcceleration(thePlayer, ModBlocks.SLIME_BLOCK.getDefaultState().getMaterial());
         }
         else if (event.phase == TickEvent.Phase.START && !event.player.world.isRemote)
         {
             // do server side stuff
         }
-    }
-
-    /**
-     * Version check warning.
-     *
-     * @param parPlayer
-     *            the par player
-     * @return true, if successful
-     */
-    protected static boolean versionCheckWarning(EntityPlayer parPlayer)
-    {
-        if (!MainMod.haveWarnedVersionOutOfDate && !MainMod.versionChecker.isLatestVersion())
-        {
-            ClickEvent versionCheckChatClickEvent = new ClickEvent(ClickEvent.Action.OPEN_URL, "http://jabelarminecraft.blogspot.com");
-            Style clickableStyle = new Style().setClickEvent(versionCheckChatClickEvent);
-            TextComponentString versionWarningChatComponent = new TextComponentString("Your Magic Beans Mod is not latest version!  Click here to update.");
-            versionWarningChatComponent.setStyle(clickableStyle);
-            parPlayer.sendMessage(versionWarningChatComponent);
-            MainMod.haveWarnedVersionOutOfDate = true;
-        }
-        return MainMod.haveWarnedVersionOutOfDate;
     }
 
     /**

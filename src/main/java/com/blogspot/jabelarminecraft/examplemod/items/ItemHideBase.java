@@ -111,31 +111,4 @@ public class ItemHideBase extends Item
             return new ActionResult<ItemStack>(EnumActionResult.FAIL, parPlayer.getActiveItemStack());
         }
     }
-
-    private ItemStack exchangeItemStack(ItemStack parHeldItemStack, EntityPlayer parPlayer, Item parNewItem)
-    {
-        if (parPlayer.capabilities.isCreativeMode)
-        {
-            return parHeldItemStack;
-        }
-        else
-        {
-            parHeldItemStack.setCount(parHeldItemStack.getCount() - 1);
-            if (parHeldItemStack.getCount() <= 0)
-            {
-                // DEBUG
-                System.out.println("ItemHideBase exchangeItemStack() tanned a hide");
-                return new ItemStack(parNewItem);
-            }
-            else
-            {
-                if (!parPlayer.inventory.addItemStackToInventory(new ItemStack(parNewItem)))
-                {
-                    parPlayer.dropItem(new ItemStack(parNewItem, 1, 0), false);
-                }
-
-                return parHeldItemStack;
-            }
-        }
-    }
 }

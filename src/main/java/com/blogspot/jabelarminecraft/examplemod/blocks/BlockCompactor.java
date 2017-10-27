@@ -69,7 +69,7 @@ public class BlockCompactor extends BlockContainer
         setCreativeTab(MainMod.CREATIVE_TAB);
         setSoundType(SoundType.SNOW);
         blockParticleGravity = 1.0F;
-        slipperiness = 0.6F;
+        setDefaultSlipperiness(0.6F);
         lightOpacity = 20; // cast a light shadow
         setTickRandomly(false);
         useNeighborBrightness = false;

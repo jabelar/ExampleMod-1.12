@@ -96,7 +96,7 @@ public class CommandStructureCapture implements ICommand
      * @see net.minecraft.command.ICommand#getAliases()
      */
     @Override
-    public List getAliases()
+    public List<String> getAliases()
     {
         return this.aliases;
     }

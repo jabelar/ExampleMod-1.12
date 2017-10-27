@@ -22,7 +22,6 @@ import org.lwjgl.util.glu.GLU;
 import org.lwjgl.util.glu.Sphere;
 
 import com.blogspot.jabelarminecraft.examplemod.MainMod;
-import com.blogspot.jabelarminecraft.examplemod.VersionChecker;
 import com.blogspot.jabelarminecraft.examplemod.entities.EntityPigTest;
 
 import net.minecraft.block.Block;
@@ -123,12 +122,6 @@ public class ClientProxy extends CommonProxy
 
         // do common stuff
         super.postInit(event);
-
-        // do client-specific stuff
-        MainMod.versionChecker = new VersionChecker();
-        Thread versionCheckThread = new Thread(MainMod.versionChecker, "Version Check");
-        versionCheckThread.start();
-
     }
 
     /**

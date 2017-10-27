@@ -109,10 +109,6 @@ public class MainMod
             serverSide = "com.blogspot.jabelarminecraft.examplemod.proxy.CommonProxy")
     public static CommonProxy proxy;
 
-    // Version checking instance
-    public static VersionChecker versionChecker;
-    public static boolean haveWarnedVersionOutOfDate = false;
-
     /**
      * Pre-Initialization FML Life Cycle event handling method which is automatically
      * called by Forge. It must be annotated as an event handler.

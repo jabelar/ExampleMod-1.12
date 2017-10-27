@@ -641,6 +641,7 @@ public class TileEntityCompactor extends TileEntityLockable implements ITickable
      * 
      * @see net.minecraft.tileentity.TileEntityLockable#getCapability(net.minecraftforge.common.capabilities.Capability, net.minecraft.util.EnumFacing)
      */
+    @SuppressWarnings("unchecked")
     @Override
     public <T> T getCapability(Capability<T> capability, EnumFacing facing)
     {

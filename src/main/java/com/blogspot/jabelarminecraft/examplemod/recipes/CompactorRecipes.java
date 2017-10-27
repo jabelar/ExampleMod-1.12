@@ -81,8 +81,8 @@ public class CompactorRecipes
      */
     public ItemStack getCompactingResult(ItemStack parItemStack)
     {
-        Iterator iterator = compactingList.entrySet().iterator();
-        Entry entry;
+        Iterator<Entry<ItemStack, ItemStack>> iterator = compactingList.entrySet().iterator();
+        Entry<ItemStack, ItemStack> entry;
 
         do
         {
@@ -91,11 +91,11 @@ public class CompactorRecipes
                 return ItemStack.EMPTY;
             }
 
-            entry = (Entry) iterator.next();
+            entry = iterator.next();
         }
-        while (!areItemStacksEqual(parItemStack, (ItemStack) entry.getKey()));
+        while (!areItemStacksEqual(parItemStack, entry.getKey()));
 
-        return (ItemStack) entry.getValue();
+        return entry.getValue();
     }
 
     /**
@@ -108,8 +108,8 @@ public class CompactorRecipes
     // allows recipe to consume multiple items from input stack
     public int getInputAmount(ItemStack parItemStack)
     {
-        Iterator iterator = compactingList.entrySet().iterator();
-        Entry entry;
+        Iterator<Entry<ItemStack, ItemStack>> iterator = compactingList.entrySet().iterator();
+        Entry<ItemStack, ItemStack> entry;
 
         do
         {
@@ -118,11 +118,11 @@ public class CompactorRecipes
                 return -1;
             }
 
-            entry = (Entry) iterator.next();
+            entry = iterator.next();
         }
-        while (!areItemStacksEqual(parItemStack, (ItemStack) entry.getKey()));
+        while (!areItemStacksEqual(parItemStack, entry.getKey()));
 
-        return ((ItemStack) entry.getKey()).getCount();
+        return entry.getKey().getCount();
     }
 
     private boolean areItemStacksEqual(ItemStack parItemStack1, ItemStack parItemStack2)
@@ -149,8 +149,8 @@ public class CompactorRecipes
      */
     public float getCompactingExperience(ItemStack parItemStack)
     {
-        Iterator iterator = experienceList.entrySet().iterator();
-        Entry entry;
+        Iterator<Entry<ItemStack, Float>> iterator = experienceList.entrySet().iterator();
+        Entry<ItemStack, Float> entry;
 
         do
         {
@@ -159,10 +159,10 @@ public class CompactorRecipes
                 return 0.0F;
             }
 
-            entry = (Entry) iterator.next();
+            entry = iterator.next();
         }
-        while (!areItemStacksEqual(parItemStack, (ItemStack) entry.getKey()));
+        while (!areItemStacksEqual(parItemStack, entry.getKey()));
 
-        return ((Float) entry.getValue()).floatValue();
+        return entry.getValue().floatValue();
     }
 }
