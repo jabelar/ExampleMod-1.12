@@ -37,12 +37,16 @@ import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import net.minecraftforge.fml.common.network.FMLEventChannel;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 
-// TODO: Auto-generated Javadoc
-@Mod(modid = MainMod.MODID,
+/**
+ * This is the main file for the mod, as it has the mod annotation
+ */
+@Mod(   modid = MainMod.MODID,
         name = MainMod.MODNAME,
         version = MainMod.MODVERSION,
         guiFactory = "com.blogspot.jabelarminecraft." + MainMod.MODID + ".client.gui.GuiFactory",
-        acceptedMinecraftVersions = "[1.12]")
+        acceptedMinecraftVersions = "[1.12]",
+        updateJSON = "https://raw.githubusercontent.com/jabelar/ExampleMod-1.12/master/src/main/resources/versionChecker.json"
+        )
 public class MainMod
 {
     public static final String MODID = "examplemod";
