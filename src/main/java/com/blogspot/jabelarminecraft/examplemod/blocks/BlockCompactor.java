@@ -42,6 +42,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import org.apache.logging.log4j.LogManager;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -68,7 +69,7 @@ public class BlockCompactor extends BlockContainer
         setCreativeTab(MainMod.CREATIVE_TAB);
         setSoundType(SoundType.SNOW);
         blockParticleGravity = 1.0F;
-//        setDefaultSlipperiness(0.6F);
+        setDefaultSlipperiness(0.6F);
         lightOpacity = 20; // cast a light shadow
         setTickRandomly(false);
         useNeighborBrightness = false;
