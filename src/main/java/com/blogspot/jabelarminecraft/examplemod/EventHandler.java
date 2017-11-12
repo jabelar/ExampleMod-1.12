@@ -30,7 +30,6 @@ import com.blogspot.jabelarminecraft.examplemod.items.IExtendedReach;
 import com.blogspot.jabelarminecraft.examplemod.networking.MessageExtendedReachAttack;
 import com.blogspot.jabelarminecraft.examplemod.utilities.Utilities;
 import com.google.common.base.Objects;
-
 import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiIngame;
@@ -960,9 +959,12 @@ public class EventHandler
     @SubscribeEvent(priority = EventPriority.NORMAL, receiveCanceled = true)
     public static void onEvent(MouseEvent event)
     {
+        // ensure custom MouseHelper is active
+        Minecraft mc = Minecraft.getMinecraft();
+        mc.mouseHelper = MainMod.instance.mouseHelperAI;
+       
         if (event.getButton() == 0 && event.isButtonstate())
         {
-            Minecraft mc = Minecraft.getMinecraft();
             EntityPlayer thePlayer = mc.player;
             if (thePlayer != null)
             {

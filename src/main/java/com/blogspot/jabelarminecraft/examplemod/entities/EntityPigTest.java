@@ -166,7 +166,7 @@ public class EntityPigTest extends EntityPig implements IEntity
                         {
                             // DEBUG
                             System.out.println("Not drowning");
-                            markVelocityChanged();
+//                            markVelocityChanged();
                         }
 
                         if (entity != null)

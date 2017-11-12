@@ -16,14 +16,8 @@
 
 package com.blogspot.jabelarminecraft.examplemod.proxy;
 
-import org.lwjgl.input.Keyboard;
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.util.glu.GLU;
-import org.lwjgl.util.glu.Sphere;
-
 import com.blogspot.jabelarminecraft.examplemod.MainMod;
 import com.blogspot.jabelarminecraft.examplemod.entities.EntityPigTest;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.material.Material;
@@ -46,6 +40,10 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
+import org.lwjgl.input.Keyboard;
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.util.glu.GLU;
+import org.lwjgl.util.glu.Sphere;
 
 // TODO: Auto-generated Javadoc
 public class ClientProxy extends CommonProxy
@@ -71,6 +69,8 @@ public class ClientProxy extends CommonProxy
     {
         // DEBUG
         System.out.println("on Client side");
+        
+        Minecraft.getMinecraft().mouseHelper = MainMod.instance.mouseHelperAI;
 
         // do common stuff
         super.preInit(event);

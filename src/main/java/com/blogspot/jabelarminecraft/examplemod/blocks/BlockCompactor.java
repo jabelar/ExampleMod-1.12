@@ -21,7 +21,6 @@ import java.util.Random;
 import com.blogspot.jabelarminecraft.examplemod.MainMod;
 import com.blogspot.jabelarminecraft.examplemod.tileentities.TileEntityCompactor;
 import com.blogspot.jabelarminecraft.examplemod.utilities.Utilities;
-
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
@@ -69,7 +68,7 @@ public class BlockCompactor extends BlockContainer
         setCreativeTab(MainMod.CREATIVE_TAB);
         setSoundType(SoundType.SNOW);
         blockParticleGravity = 1.0F;
-        setDefaultSlipperiness(0.6F);
+//        setDefaultSlipperiness(0.6F);
         lightOpacity = 20; // cast a light shadow
         setTickRandomly(false);
         useNeighborBrightness = false;

@@ -18,7 +18,6 @@ package com.blogspot.jabelarminecraft.examplemod.networking;
 
 import com.blogspot.jabelarminecraft.examplemod.MainMod;
 import com.blogspot.jabelarminecraft.examplemod.items.IExtendedReach;
-
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -117,7 +116,7 @@ public class MessageExtendedReachAttack implements IMessage
                             if (thePlayer.getActiveItemStack().getItem() instanceof IExtendedReach)
                             {
                                 IExtendedReach theExtendedReachWeapon = (IExtendedReach) thePlayer.getActiveItemStack().getItem();
-                                double distanceSq = thePlayer.getDistanceSq(theEntity);
+                                double distanceSq = thePlayer.getDistanceSqToEntity(theEntity);
                                 double reachSq = theExtendedReachWeapon.getReach() * theExtendedReachWeapon.getReach();
                                 if (reachSq >= distanceSq)
                                 {
