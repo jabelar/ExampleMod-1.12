@@ -111,8 +111,8 @@ public class MessageSyncEntityToClient implements IMessage
             else
             {
                 System.out.println("MessageSyncEnitityToClient onMessage(), entity ID = " + message.entityId);
+                theEntity.setSyncDataCompound(message.entitySyncDataCompound);
             }
-            theEntity.setSyncDataCompound(message.entitySyncDataCompound);
             return null; // no response in this case
         }
     }
