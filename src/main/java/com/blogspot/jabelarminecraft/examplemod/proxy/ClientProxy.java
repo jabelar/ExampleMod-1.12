@@ -16,22 +16,20 @@
 
 package com.blogspot.jabelarminecraft.examplemod.proxy;
 
-import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.glu.GLU;
 import org.lwjgl.util.glu.Sphere;
 
 import com.blogspot.jabelarminecraft.examplemod.MainMod;
 import com.blogspot.jabelarminecraft.examplemod.client.MouseHelperAI;
-import com.blogspot.jabelarminecraft.examplemod.client.renderers.RenderFactories.RenderFactoryEntityPigTest;
-import com.blogspot.jabelarminecraft.examplemod.entities.EntityPigTest;
+import com.blogspot.jabelarminecraft.examplemod.client.renderers.RenderFactories;
+import com.blogspot.jabelarminecraft.examplemod.init.ModKeyBindings;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.MouseHelper;
@@ -41,8 +39,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.client.registry.ClientRegistry;
-import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
@@ -52,11 +48,6 @@ import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 // TODO: Auto-generated Javadoc
 public class ClientProxy implements IProxy
 {
-    /*
-     * Fields related to key binding
-     */
-    public static KeyBinding[] keyBindings;
-
     /*
      * For rendering a sphere, need ids for call lists for outside and inside
      */
@@ -72,8 +63,8 @@ public class ClientProxy implements IProxy
         // DEBUG
         System.out.println("on Client side");
         
-        Minecraft.getMinecraft().mouseHelper = ClientProxy.mouseHelperAI;
-        registerEntityRenderers();
+        Minecraft.getMinecraft().mouseHelper = mouseHelperAI;
+        RenderFactories.registerEntityRenderers();
     }
 
     @Override
@@ -82,11 +73,8 @@ public class ClientProxy implements IProxy
         // DEBUG
         System.out.println("on Client side");
 
-        /*
-         * do client-specific stuff
-         */
         // register key bindings
-        registerKeyBindings();
+        ModKeyBindings.registerKeyBindings();
 
         // create sphere call list
         createSphereCallList();
@@ -100,46 +88,7 @@ public class ClientProxy implements IProxy
         System.out.println("on Client side");
     }
 
-    /**
-     * Register key bindings.
-     */
-    /*
-     * Registers key bindings
-     */
-    public static void registerKeyBindings()
-    {
-        // declare an array of key bindings
-        keyBindings = new KeyBinding[2];
 
-        // instantiate the key bindings
-        keyBindings[0] = new KeyBinding("key.structure.desc", Keyboard.KEY_P, "key.magicbeans.category");
-        keyBindings[1] = new KeyBinding("key.hud.desc", Keyboard.KEY_H, "key.magicbeans.category");
-
-        // register all the key bindings
-        for (int i = 0; i < keyBindings.length; ++i)
-        {
-            ClientRegistry.registerKeyBinding(keyBindings[i]);
-        }
-    }
-
-    /**
-     * Registers the entity renderers.
-     */
-    public static void registerEntityRenderers()
-    {
-        RenderingRegistry.registerEntityRenderingHandler(EntityPigTest.class, RenderFactoryEntityPigTest.INSTANCE);
-    }
-
-    /*
-     * Thanks to CoolAlias for this tip!
-     */
-    /**
-     * Returns a side-appropriate EntityPlayer for use during message handling.
-     *
-     * @param ctx
-     *            the ctx
-     * @return the player entity from context
-     */
     @Override
     public EntityPlayer getPlayerEntityFromContext(MessageContext ctx)
     {
@@ -152,9 +101,6 @@ public class ClientProxy implements IProxy
     }
 
     /**
-     * Creates the sphere call list.
-     */
-    /*
      * For rendering a sphere, need to make the call list Must be called after pre-init, otherwise Minecraft.getMinecraft() will fail will null pointer exception
      */
     public static void createSphereCallList()

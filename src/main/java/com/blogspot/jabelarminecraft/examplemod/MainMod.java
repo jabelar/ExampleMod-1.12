@@ -103,7 +103,7 @@ public class MainMod
      * @param event the event
      */
     @EventHandler
-    // Do your mod setup. Build whatever data structures you care about. Register recipes."
+    // Do your mod setup. Build whatever data structures you care about.
     // Register network handlers
     public void init(FMLInitializationEvent event)
     {
