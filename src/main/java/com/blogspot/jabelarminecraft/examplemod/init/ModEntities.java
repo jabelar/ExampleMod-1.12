@@ -44,7 +44,7 @@ public class ModEntities
     }
 
     // instantiate EntityEntry list
-    public static final Set<EntityEntry> SET_INSTANCES = ImmutableSet.of(
+    public static final Set<EntityEntry> SET_ENTITIES = ImmutableSet.of(
             TEST_PIG);
 
     /**
@@ -71,7 +71,7 @@ public class ModEntities
             // DEBUG
             System.out.println("Registering entities");
 
-            for (final EntityEntry entityEntry : SET_INSTANCES)
+            for (final EntityEntry entityEntry : SET_ENTITIES)
             {
                 // DEBUG
                 System.out.println("Registering entity = " + entityEntry.getEntityClass());

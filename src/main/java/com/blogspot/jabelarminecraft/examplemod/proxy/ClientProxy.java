@@ -16,8 +16,15 @@
 
 package com.blogspot.jabelarminecraft.examplemod.proxy;
 
+import org.lwjgl.input.Keyboard;
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.util.glu.GLU;
+import org.lwjgl.util.glu.Sphere;
+
 import com.blogspot.jabelarminecraft.examplemod.MainMod;
+import com.blogspot.jabelarminecraft.examplemod.client.MouseHelperAI;
 import com.blogspot.jabelarminecraft.examplemod.entities.EntityPigTest;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.material.Material;
@@ -28,6 +35,7 @@ import net.minecraft.client.renderer.entity.RenderPig;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.MouseHelper;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -39,14 +47,11 @@ import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
-import org.lwjgl.input.Keyboard;
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.util.glu.GLU;
-import org.lwjgl.util.glu.Sphere;
 
 // TODO: Auto-generated Javadoc
-public class ClientProxy extends CommonProxy
+public class ClientProxy implements IProxy
 {
     /*
      * Fields related to key binding
@@ -58,40 +63,24 @@ public class ClientProxy extends CommonProxy
      */
     public static int sphereIdOutside;
     public static int sphereIdInside;
+    
+    // mouse helper
+    public static MouseHelper mouseHelperAI = new MouseHelperAI(); // used to intercept user mouse movement for "bot" functionality
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see com.blogspot.jabelarminecraft.examplemod.proxy.CommonProxy#fmlLifeCycleEvent(net.minecraftforge.fml.common.event.FMLPreInitializationEvent)
-     */
     @Override
     public void preInit(FMLPreInitializationEvent event)
     {
         // DEBUG
         System.out.println("on Client side");
         
-        Minecraft.getMinecraft().mouseHelper = MainMod.instance.mouseHelperAI;
-
-        // do common stuff
-        super.preInit(event);
-
+        Minecraft.getMinecraft().mouseHelper = ClientProxy.mouseHelperAI;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see com.blogspot.jabelarminecraft.examplemod.proxy.CommonProxy#fmlLifeCycleEvent(net.minecraftforge.fml.common.event.FMLInitializationEvent)
-     */
     @Override
     public void init(FMLInitializationEvent event)
     {
         // DEBUG
         System.out.println("on Client side");
-
-        /*
-         * do common stuff
-         */
-        super.init(event);
 
         /*
          * do client-specific stuff
@@ -109,19 +98,11 @@ public class ClientProxy extends CommonProxy
         registerEntityRenderers();
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see com.blogspot.jabelarminecraft.examplemod.proxy.CommonProxy#fmlLifeCycleEvent(net.minecraftforge.fml.common.event.FMLPostInitializationEvent)
-     */
     @Override
     public void postInit(FMLPostInitializationEvent event)
     {
         // DEBUG
         System.out.println("on Client side");
-
-        // do common stuff
-        super.postInit(event);
     }
 
     /**
@@ -130,7 +111,7 @@ public class ClientProxy extends CommonProxy
     /*
      * Registers key bindings
      */
-    public void registerKeyBindings()
+    public static void registerKeyBindings()
     {
         // declare an array of key bindings
         keyBindings = new KeyBinding[2];
@@ -149,7 +130,7 @@ public class ClientProxy extends CommonProxy
     /**
      * Registers the entity renderers.
      */
-    public void registerEntityRenderers()
+    public static void registerEntityRenderers()
     {
         // the float parameter passed to the Render class is the shadow size for the entity
 
@@ -176,7 +157,7 @@ public class ClientProxy extends CommonProxy
         // player even when you are on the server! Sounds absurd, but it's true.
 
         // Solution is to double-check side before returning the player:
-        return (ctx.side.isClient() ? Minecraft.getMinecraft().player : super.getPlayerEntityFromContext(ctx));
+        return (ctx.side.isClient() ? Minecraft.getMinecraft().player : MainMod.proxy.getPlayerEntityFromContext(ctx));
     }
 
     /**
@@ -185,7 +166,7 @@ public class ClientProxy extends CommonProxy
     /*
      * For rendering a sphere, need to make the call list Must be called after pre-init, otherwise Minecraft.getMinecraft() will fail will null pointer exception
      */
-    public void createSphereCallList()
+    public static void createSphereCallList()
     {
         Sphere sphere = new Sphere();
         // GLU_POINT will render it as dots.
@@ -222,15 +203,6 @@ public class ClientProxy extends CommonProxy
         GL11.glEndList();
     }
 
-    /**
-     * handles the acceleration of an object whilst in a material.
-     *
-     * @param entityIn
-     *            the entity in
-     * @param materialIn
-     *            the material in
-     * @return true, if successful
-     */
     @Override
     public boolean handleMaterialAcceleration(Entity entityIn, Material materialIn)
     {
@@ -319,5 +291,10 @@ public class ClientProxy extends CommonProxy
         entityIn.fallDistance = 0.0F;
 
         return flag;
+    }
+
+    @Override
+    public void serverStarting(FMLServerStartingEvent event)
+    {
     }
 }

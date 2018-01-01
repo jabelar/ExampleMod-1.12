@@ -15,7 +15,6 @@
 */
 package com.blogspot.jabelarminecraft.examplemod.client.gui;
 
-import com.blogspot.jabelarminecraft.examplemod.MainMod;
 import com.blogspot.jabelarminecraft.examplemod.containers.ContainerCompactor;
 
 import net.minecraft.entity.player.EntityPlayer;
@@ -28,6 +27,11 @@ import net.minecraftforge.fml.common.network.IGuiHandler;
 // TODO: Auto-generated Javadoc
 public class GuiHandler implements IGuiHandler
 {
+    // enumerate guis
+    public enum GUI_ENUM
+    {
+        COMPACTOR
+    }
 
     /*
      * (non-Javadoc)
@@ -44,7 +48,7 @@ public class GuiHandler implements IGuiHandler
         // process those GUIs that have associated tile entities (i.e. for delayed results like forge)
         if (tileEntity != null)
         {
-            if (ID == MainMod.GUI_ENUM.COMPACTOR.ordinal())
+            if (ID == GUI_ENUM.COMPACTOR.ordinal())
             {
                 // DEBUG
                 System.out.println("GUI handler server element creating ContainerCompactor");
@@ -70,7 +74,7 @@ public class GuiHandler implements IGuiHandler
         // process those GUIs that have associated tile entities (i.e. for delayed results like forge)
         if (tileEntity != null)
         {
-            if (ID == MainMod.GUI_ENUM.COMPACTOR.ordinal())
+            if (ID == GUI_ENUM.COMPACTOR.ordinal())
             {
                 // DEBUG
                 System.out.println("GUI handler client element creating GUICompactor");

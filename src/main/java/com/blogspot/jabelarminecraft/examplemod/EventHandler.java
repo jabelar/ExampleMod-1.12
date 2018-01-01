@@ -24,12 +24,16 @@ import java.util.List;
 import java.util.Random;
 
 import com.blogspot.jabelarminecraft.examplemod.init.ModBlocks;
+import com.blogspot.jabelarminecraft.examplemod.init.ModConfig;
 import com.blogspot.jabelarminecraft.examplemod.init.ModItems;
 import com.blogspot.jabelarminecraft.examplemod.init.ModMaterials;
+import com.blogspot.jabelarminecraft.examplemod.init.ModNetworking;
 import com.blogspot.jabelarminecraft.examplemod.items.IExtendedReach;
 import com.blogspot.jabelarminecraft.examplemod.networking.MessageExtendedReachAttack;
+import com.blogspot.jabelarminecraft.examplemod.proxy.ClientProxy;
 import com.blogspot.jabelarminecraft.examplemod.utilities.Utilities;
 import com.google.common.base.Objects;
+
 import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiIngame;
@@ -89,6 +93,37 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @Mod.EventBusSubscriber(modid = MainMod.MODID)
 public class EventHandler
 {
+//    // This is code that will replace all blocks of one type with another
+//    // During generation (as well as loading)
+//
+//    public static Block fromBlock = Blocks.GRASS; // change this to suit your need
+//    public static Block toBlock = Blocks.SLIME_BLOCK; // change this to suit your need
+//     
+//    @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
+//    public static void onEvent(ChunkEvent.Load event)
+//    { 
+//      
+//      Chunk theChunk = event.getChunk();
+//      
+//      // replace all blocks of a type with another block type
+//  
+//      for (int x = 0; x < 16; ++x) 
+//      {
+//          for (int z = 0; z < 16; ++z) 
+//          {
+//              for (int y = theChunk.getHeightValue(x, z)-20; y < theChunk.getHeightValue(x, z)+1; ++y) 
+//              {
+//                if (theChunk.getBlockState(x, y, z).getBlock() == fromBlock)
+//                {
+//                    theChunk.setBlockState(new BlockPos(x, y, z), toBlock.getDefaultState());
+//                }
+//              }
+//          }
+//      }
+//      theChunk.markDirty();
+//  }
+
+    
     /*
      * The following event handling is complicated because it replicates vanilla code to make custom fluids act like water. However, I have also submitted a Forge Pull Request PR
      * #4478, #4462 and #4460 which will add these features directly into Forge. If you're using a Forge version that includes those PRs, you can simply the following.
@@ -961,7 +996,7 @@ public class EventHandler
     {
         // ensure custom MouseHelper is active
         Minecraft mc = Minecraft.getMinecraft();
-        mc.mouseHelper = MainMod.instance.mouseHelperAI;
+        mc.mouseHelper = ClientProxy.mouseHelperAI;
        
         if (event.getButton() == 0 && event.isButtonstate())
         {
@@ -992,7 +1027,7 @@ public class EventHandler
                             {
                                 if (mov.entityHit != thePlayer)
                                 {
-                                    MainMod.network.sendToServer(new MessageExtendedReachAttack(mov.entityHit.getEntityId()));
+                                    ModNetworking.network.sendToServer(new MessageExtendedReachAttack(mov.entityHit.getEntityId()));
                                 }
                             }
                         }
@@ -1190,8 +1225,8 @@ public class EventHandler
         if (eventArgs.getModID().equals(MainMod.MODID))
         {
             System.out.println("Syncing config for mod =" + eventArgs.getModID());
-            MainMod.config.save();
-            MainMod.proxy.syncConfig();
+            ModConfig.config.save();
+            ModConfig.syncConfig();
         }
     }
 }

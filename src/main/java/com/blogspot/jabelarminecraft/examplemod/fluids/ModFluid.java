@@ -27,6 +27,7 @@ public class ModFluid extends Fluid
     protected float overlayAlpha = 0.2F;
     protected SoundEvent emptySound = SoundEvents.ITEM_BUCKET_EMPTY;
     protected SoundEvent fillSound = SoundEvents.ITEM_BUCKET_FILL;
+    protected boolean bucketEnabled = false;
 
     /**
      * Instantiates a new mod fluid.
@@ -99,6 +100,7 @@ public class ModFluid extends Fluid
      *            the par color
      * @return the fluid
      */
+    @Override
     public ModFluid setColor(int parColor)
     {
         mapColor = parColor;
@@ -172,5 +174,16 @@ public class ModFluid extends Fluid
     public SoundEvent getFillSound()
     {
         return fillSound;
+    }
+    
+    public ModFluid setHasBucket(boolean parEnableBucket)
+    {
+        bucketEnabled = parEnableBucket;
+        return this;
+    }
+    
+    public boolean isBucketEnabled()
+    {
+        return bucketEnabled;
     }
 }

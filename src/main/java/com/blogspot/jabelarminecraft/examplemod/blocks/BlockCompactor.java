@@ -19,6 +19,8 @@ package com.blogspot.jabelarminecraft.examplemod.blocks;
 import java.util.Random;
 
 import com.blogspot.jabelarminecraft.examplemod.MainMod;
+import com.blogspot.jabelarminecraft.examplemod.client.gui.GuiHandler;
+import com.blogspot.jabelarminecraft.examplemod.init.ModCreativeTabs;
 import com.blogspot.jabelarminecraft.examplemod.tileentities.TileEntityCompactor;
 import com.blogspot.jabelarminecraft.examplemod.utilities.Utilities;
 
@@ -66,7 +68,7 @@ public class BlockCompactor extends BlockContainer
         Utilities.setBlockName(this, "compactor");
         setDefaultState(blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH));
         isCompacting = false;
-        setCreativeTab(MainMod.CREATIVE_TAB);
+        setCreativeTab(ModCreativeTabs.CREATIVE_TAB);
         setSoundType(SoundType.SNOW);
         blockParticleGravity = 1.0F;
         setDefaultSlipperiness(0.6F);
@@ -169,7 +171,7 @@ public class BlockCompactor extends BlockContainer
         {
             // DEBUG
             System.out.println("BlockCompactor onBlockActivated() on server side");
-            parPlayer.openGui(MainMod.instance, MainMod.GUI_ENUM.COMPACTOR.ordinal(), parWorld, parBlockPos.getX(), parBlockPos.getY(), parBlockPos.getZ());
+            parPlayer.openGui(MainMod.instance, GuiHandler.GUI_ENUM.COMPACTOR.ordinal(), parWorld, parBlockPos.getX(), parBlockPos.getY(), parBlockPos.getZ());
         }
 
         return true;

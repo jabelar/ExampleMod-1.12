@@ -36,7 +36,7 @@ public class WorldGenShrine implements IWorldGenerator
             IChunkProvider chunkProvider)
     {
         // DEBUG
-        System.out.println("Calling custom world generator");
+        // System.out.println("Calling custom world generator");
         // It is important to convert the passed in chunk coordinates to
         // world coordinates.
         int blockX = chunkX * 16;
