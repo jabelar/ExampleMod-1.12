@@ -19,7 +19,7 @@ package com.blogspot.jabelarminecraft.examplemod.utilities;
 import java.util.List;
 
 import com.blogspot.jabelarminecraft.examplemod.MainMod;
-import com.blogspot.jabelarminecraft.examplemod.entities.IEntity;
+import com.blogspot.jabelarminecraft.examplemod.entities.IModEntity;
 import com.blogspot.jabelarminecraft.examplemod.init.ModNetworking;
 import com.blogspot.jabelarminecraft.examplemod.networking.MessageSyncEntityToClient;
 import com.blogspot.jabelarminecraft.examplemod.networking.MessageSyncEntityToServer;
@@ -307,7 +307,7 @@ public class Utilities
      * @param parEntity
      *            the par entity
      */
-    public static void sendEntitySyncPacketToClient(IEntity parEntity)
+    public static void sendEntitySyncPacketToClient(IModEntity parEntity)
     {
         Entity theEntity = (Entity) parEntity;
         if (!theEntity.getEntityWorld().isRemote)
@@ -324,7 +324,7 @@ public class Utilities
      * @param parEntity
      *            the par entity
      */
-    public static void sendEntitySyncPacketToServer(IEntity parEntity)
+    public static void sendEntitySyncPacketToServer(IModEntity parEntity)
     {
         Entity theEntity = (Entity) parEntity;
         if (theEntity.getEntityWorld().isRemote)

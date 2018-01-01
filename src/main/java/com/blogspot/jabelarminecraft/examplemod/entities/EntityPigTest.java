@@ -32,7 +32,7 @@ import net.minecraft.world.World;
  * @author jabelar
  *
  */
-public class EntityPigTest extends EntityPig implements IEntity
+public class EntityPigTest extends EntityPig implements IModEntity
 {
 
     /**

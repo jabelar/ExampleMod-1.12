@@ -23,6 +23,7 @@ import org.lwjgl.util.glu.Sphere;
 
 import com.blogspot.jabelarminecraft.examplemod.MainMod;
 import com.blogspot.jabelarminecraft.examplemod.client.MouseHelperAI;
+import com.blogspot.jabelarminecraft.examplemod.client.renderers.RenderFactories.RenderFactoryEntityPigTest;
 import com.blogspot.jabelarminecraft.examplemod.entities.EntityPigTest;
 
 import net.minecraft.block.Block;
@@ -30,8 +31,6 @@ import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.entity.RenderManager;
-import net.minecraft.client.renderer.entity.RenderPig;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -74,6 +73,7 @@ public class ClientProxy implements IProxy
         System.out.println("on Client side");
         
         Minecraft.getMinecraft().mouseHelper = ClientProxy.mouseHelperAI;
+        registerEntityRenderers();
     }
 
     @Override
@@ -91,11 +91,6 @@ public class ClientProxy implements IProxy
         // create sphere call list
         createSphereCallList();
 
-        // register model loader
-        // ModelLoaderRegistry.registerLoader(new MyModelLoader());
-
-        // register renderers
-        registerEntityRenderers();
     }
 
     @Override
@@ -132,11 +127,7 @@ public class ClientProxy implements IProxy
      */
     public static void registerEntityRenderers()
     {
-        // the float parameter passed to the Render class is the shadow size for the entity
-
-        RenderManager renderManager = Minecraft.getMinecraft().getRenderManager();
-        // RenderingRegistry.registerEntityRenderingHandler(EntityGoldenGoose.class, new RenderGoldenGoose(renderManager, new ModelGoldenGoose(), 0.5F)); // 0.5F is shadow size
-        RenderingRegistry.registerEntityRenderingHandler(EntityPigTest.class, new RenderPig(renderManager));
+        RenderingRegistry.registerEntityRenderingHandler(EntityPigTest.class, RenderFactoryEntityPigTest.INSTANCE);
     }
 
     /*
@@ -296,5 +287,6 @@ public class ClientProxy implements IProxy
     @Override
     public void serverStarting(FMLServerStartingEvent event)
     {
+        // This will never get called on client side
     }
 }

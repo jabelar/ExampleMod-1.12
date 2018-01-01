@@ -25,7 +25,7 @@ import net.minecraft.nbt.NBTTagCompound;
  * @author jabelar
  *
  */
-public interface IEntity
+public interface IModEntity
 {
 
     /**
