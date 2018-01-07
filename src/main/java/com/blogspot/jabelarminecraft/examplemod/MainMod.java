@@ -27,6 +27,7 @@ import com.blogspot.jabelarminecraft.examplemod.proxy.IProxy;
 import com.blogspot.jabelarminecraft.examplemod.utilities.Utilities;
 
 import net.minecraft.stats.StatBasic;
+import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.Mod.Instance;
@@ -60,6 +61,11 @@ public class MainMod
 
     // instantiate advancements and stats
     public static StatBasic deconstructedItemsStat;
+
+    static
+    {
+        FluidRegistry.enableUniversalBucket();
+    }
 
     // instantiate the mod
     @Instance(MODID)

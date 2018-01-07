@@ -30,7 +30,7 @@ public class ItemSheepSkin extends ItemHideBase
      */
     public ItemSheepSkin()
     {
-        super("sheepskin");
+        super();
         setCreativeTab(CreativeTabs.MATERIALS);
     }
 }

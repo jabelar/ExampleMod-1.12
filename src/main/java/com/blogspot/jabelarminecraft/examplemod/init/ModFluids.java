@@ -29,10 +29,6 @@ public class ModFluids
     /*
      * fluids
      */
-    static
-    {
-        FluidRegistry.enableUniversalBucket();
-    }
 
     public static final ModFluid SLIME = (ModFluid) new ModFluid(
             "slime",

@@ -18,6 +18,7 @@ package com.blogspot.jabelarminecraft.examplemod.networking;
 
 import com.blogspot.jabelarminecraft.examplemod.MainMod;
 import com.blogspot.jabelarminecraft.examplemod.items.IExtendedReach;
+
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -105,21 +106,27 @@ public class MessageExtendedReachAttack implements IMessage
                         {
                             Entity theEntity = thePlayer.world.getEntityByID(message.entityId);
                             // DEBUG
-                            System.out.println("Entity = " + theEntity);
+                            System.out.println("Entity = " + theEntity + " targeted with active item = " + thePlayer.getHeldItemMainhand());
 
                             // Need to ensure that hackers can't cause trick kills, so double check weapon type
                             // and reach
-                            if (thePlayer.getActiveItemStack() == null)
+                            if (thePlayer.getHeldItemMainhand() == null)
                             {
                                 return;
                             }
-                            if (thePlayer.getActiveItemStack().getItem() instanceof IExtendedReach)
+                            if (thePlayer.getHeldItemMainhand().getItem() instanceof IExtendedReach)
                             {
-                                IExtendedReach theExtendedReachWeapon = (IExtendedReach) thePlayer.getActiveItemStack().getItem();
+                                // DEBUG
+                                System.out.println("Active item has extended reach");
+
+                                IExtendedReach theExtendedReachWeapon = (IExtendedReach) thePlayer.getHeldItemMainhand().getItem();
                                 double distanceSq = thePlayer.getDistanceSq(theEntity);
                                 double reachSq = theExtendedReachWeapon.getReach() * theExtendedReachWeapon.getReach();
                                 if (reachSq >= distanceSq)
                                 {
+                                    // DEBUG
+                                    System.out.println("The target is within range");
+                                    
                                     thePlayer.attackTargetEntityWithCurrentItem(theEntity);
                                 }
                             }

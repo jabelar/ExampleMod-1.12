@@ -97,7 +97,7 @@ public class ClientProxy implements IProxy
         // player even when you are on the server! Sounds absurd, but it's true.
 
         // Solution is to double-check side before returning the player:
-        return (ctx.side.isClient() ? Minecraft.getMinecraft().player : MainMod.proxy.getPlayerEntityFromContext(ctx));
+        return (ctx.side.isClient() ? Minecraft.getMinecraft().player : ctx.getServerHandler().player);
     }
 
     /**

@@ -30,7 +30,7 @@ public class ItemCowHide extends ItemHideBase
      */
     public ItemCowHide()
     {
-        super("cowhide");
+        super();
         setCreativeTab(ModCreativeTabs.CREATIVE_TAB);
     }
 }

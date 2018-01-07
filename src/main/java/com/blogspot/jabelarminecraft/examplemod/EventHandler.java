@@ -901,15 +901,15 @@ public class EventHandler
 
                 if (event.getEntityLiving() instanceof EntityCow)
                 {
-                    dropItem.setItem(new ItemStack(ModItems.COW_HIDE, stackSize));
+                    dropItem.setItem(new ItemStack(ModItems.cow_hide, stackSize));
                 }
                 if (event.getEntityLiving() instanceof EntityHorse)
                 {
-                    dropItem.setItem(new ItemStack(ModItems.HORSE_HIDE, stackSize));
+                    dropItem.setItem(new ItemStack(ModItems.horse_hide, stackSize));
                 }
                 if (event.getEntityLiving() instanceof EntityMooshroom)
                 {
-                    dropItem.setItem(new ItemStack(ModItems.COW_HIDE, stackSize));
+                    dropItem.setItem(new ItemStack(ModItems.cow_hide, stackSize));
                 }
             }
         }
@@ -919,14 +919,14 @@ public class EventHandler
             event.getDrops().add(new EntityItem(
                     event.getEntityLiving().world,
                     event.getEntityLiving().posX, event.getEntityLiving().posY, event.getEntityLiving().posZ,
-                    new ItemStack(ModItems.PIG_SKIN)));
+                    new ItemStack(ModItems.pig_skin)));
         }
         else if (event.getEntityLiving() instanceof EntitySheep)
         {
             event.getDrops().add(new EntityItem(
                     event.getEntityLiving().world,
                     event.getEntityLiving().posX, event.getEntityLiving().posY, event.getEntityLiving().posZ,
-                    new ItemStack(ModItems.SHEEP_SKIN)));
+                    new ItemStack(ModItems.sheep_skin)));
         }
     }
 
@@ -1094,7 +1094,7 @@ public class EventHandler
         if (event.phase == TickEvent.Phase.START && event.player.world.isRemote) // only proceed if START phase otherwise, will execute twice per tick
         {
             EntityPlayer thePlayer = event.player;
-            MainMod.proxy.handleMaterialAcceleration(thePlayer, ModBlocks.SLIME_BLOCK.getDefaultState().getMaterial());
+            MainMod.proxy.handleMaterialAcceleration(thePlayer, ModBlocks.slime.getDefaultState().getMaterial());
         }
         else if (event.phase == TickEvent.Phase.START && !event.player.world.isRemote)
         {
@@ -1127,7 +1127,7 @@ public class EventHandler
             /*
              * Update all motion of all entities except players that may be inside your fluid
              */
-            MainMod.proxy.handleMaterialAcceleration(theEntity, ModBlocks.SLIME_BLOCK.getDefaultState().getMaterial());
+            MainMod.proxy.handleMaterialAcceleration(theEntity, ModBlocks.slime.getDefaultState().getMaterial());
         }
     }
 

@@ -2,6 +2,6 @@
     "forge_marker": 1,
     "parent": "item/generated",
     "textures": {
-        "layer0": "examplemod:items/cowhide"
+        "layer0": "examplemod:items/sheep_skin"
     }
 }

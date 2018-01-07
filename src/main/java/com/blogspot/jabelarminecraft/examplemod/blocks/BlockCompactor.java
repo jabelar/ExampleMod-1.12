@@ -22,7 +22,6 @@ import com.blogspot.jabelarminecraft.examplemod.MainMod;
 import com.blogspot.jabelarminecraft.examplemod.client.gui.GuiHandler;
 import com.blogspot.jabelarminecraft.examplemod.init.ModCreativeTabs;
 import com.blogspot.jabelarminecraft.examplemod.tileentities.TileEntityCompactor;
-import com.blogspot.jabelarminecraft.examplemod.utilities.Utilities;
 
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.SoundType;
@@ -65,7 +64,6 @@ public class BlockCompactor extends BlockContainer
         super(Material.ROCK);
         // DEBUG
         System.out.println("Constructing BlockCompactor instance");
-        Utilities.setBlockName(this, "compactor");
         setDefaultState(blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH));
         isCompacting = false;
         setCreativeTab(ModCreativeTabs.CREATIVE_TAB);
