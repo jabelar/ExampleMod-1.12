@@ -33,11 +33,6 @@ public class GuiHandler implements IGuiHandler
         COMPACTOR
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see net.minecraftforge.fml.common.network.IGuiHandler#getServerGuiElement(int, net.minecraft.entity.player.EntityPlayer, net.minecraft.world.World, int, int, int)
-     */
     // On server side you return the container (not the GUI!)
     @Override
     public Object getServerGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z)
@@ -60,11 +55,6 @@ public class GuiHandler implements IGuiHandler
         return null;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see net.minecraftforge.fml.common.network.IGuiHandler#getClientGuiElement(int, net.minecraft.entity.player.EntityPlayer, net.minecraft.world.World, int, int, int)
-     */
     // On the client side you return the GUI (not the container!)
     @Override
     public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z)

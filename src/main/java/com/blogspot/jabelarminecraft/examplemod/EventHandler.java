@@ -23,6 +23,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
+import com.blogspot.jabelarminecraft.examplemod.client.gui.GuiCreateWorldMod;
 import com.blogspot.jabelarminecraft.examplemod.init.ModBlocks;
 import com.blogspot.jabelarminecraft.examplemod.init.ModConfig;
 import com.blogspot.jabelarminecraft.examplemod.init.ModItems;
@@ -36,7 +37,9 @@ import com.google.common.base.Objects;
 
 import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiCreateWorld;
 import net.minecraft.client.gui.GuiIngame;
+import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.enchantment.EnchantmentFrostWalker;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -69,6 +72,7 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.client.event.EntityViewRenderEvent.FogDensity;
+import net.minecraftforge.client.event.GuiOpenEvent;
 import net.minecraftforge.client.event.MouseEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
@@ -151,12 +155,9 @@ public class EventHandler
      * In order to allow custom fluids to cause reduction of air supply and drowning damage, need to copy almost entirety of vanilla functions and modify the hard-coded WATER to
      * accept other fluids.
      *
-     * @param event
-     *            the event
-     * @throws IllegalArgumentException
-     *             the illegal argument exception
-     * @throws IllegalAccessException
-     *             the illegal access exception
+     * @param event the event
+     * @throws IllegalArgumentException the illegal argument exception
+     * @throws IllegalAccessException the illegal access exception
      */
     @SuppressWarnings("unchecked")
     @SubscribeEvent(priority = EventPriority.NORMAL, receiveCanceled = true)
@@ -1214,19 +1215,43 @@ public class EventHandler
      * Event handling method that is called automatically by Forge. It handles when
      * the mod configuration fields are changed.
      *
-     * @param eventArgs
+     * @param event
      *            the event args
      */
     @SubscribeEvent(priority = EventPriority.NORMAL, receiveCanceled = true)
-    public static void onEvent(OnConfigChangedEvent eventArgs)
+    public static void onEvent(OnConfigChangedEvent event)
     {
         // DEBUG
         System.out.println("OnConfigChangedEvent");
-        if (eventArgs.getModID().equals(MainMod.MODID))
+        if (event.getModID().equals(MainMod.MODID))
         {
-            System.out.println("Syncing config for mod =" + eventArgs.getModID());
+            System.out.println("Syncing config for mod =" + event.getModID());
             ModConfig.config.save();
             ModConfig.syncConfig();
+        }
+    }
+    
+    public static Field parentScreen = ReflectionHelper.findField(GuiCreateWorld.class, "parentScreen", "field_146332_f");
+    /**
+     * Handling the gui open event to replace the world selection menu with one
+     * that defaults to creative mode.
+     * 
+     * @param event
+     */
+    @SubscribeEvent(priority = EventPriority.NORMAL, receiveCanceled = true)
+    public static void onEvent(GuiOpenEvent event)
+    {
+        if (event.getGui() instanceof GuiCreateWorld)
+        {
+            try
+            {
+                event.setGui(new GuiCreateWorldMod((GuiScreen)(parentScreen.get(event.getGui()))));
+            }
+            catch (IllegalArgumentException | IllegalAccessException e)
+            {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
         }
     }
 }
