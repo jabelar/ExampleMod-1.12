@@ -42,13 +42,11 @@ public class ItemHideBase extends Item
     /**
      * Instantiates a new item hide base.
      *
-     * @param parName
-     *            the par name
+     * @param parName the unlocalized name
      */
-    public ItemHideBase(String parName)
+    public ItemHideBase()
     {
         super();
-        Utilities.setItemName(this, parName);
         setCreativeTab(CreativeTabs.MATERIALS);
     }
 

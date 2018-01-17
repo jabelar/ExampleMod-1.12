@@ -15,14 +15,12 @@
 */
 package com.blogspot.jabelarminecraft.examplemod.items;
 
-import com.blogspot.jabelarminecraft.examplemod.utilities.Utilities;
-
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemSword;
 
-// TODO: Auto-generated Javadoc
 /**
+ * 
  * @author jabelar
- *
  */
 public class ItemSwordExtended extends ItemSword implements IExtendedReach
 {
@@ -30,14 +28,12 @@ public class ItemSwordExtended extends ItemSword implements IExtendedReach
     /**
      * Instantiates a new item sword extended.
      *
-     * @param parMaterial
-     *            the par material
+     * @param parMaterial the par material
      */
     public ItemSwordExtended(ToolMaterial parMaterial)
     {
         super(parMaterial);
-        Utilities.setItemName(this, "swordExtended");
-        setCreativeTab(null);
+        setCreativeTab(CreativeTabs.COMBAT);
     }
 
     /*
@@ -50,5 +46,4 @@ public class ItemSwordExtended extends ItemSword implements IExtendedReach
     {
         return 30.0F;
     }
-
 }

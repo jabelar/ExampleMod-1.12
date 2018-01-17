@@ -17,7 +17,7 @@
 package com.blogspot.jabelarminecraft.examplemod.networking;
 
 import com.blogspot.jabelarminecraft.examplemod.MainMod;
-import com.blogspot.jabelarminecraft.examplemod.entities.IEntity;
+import com.blogspot.jabelarminecraft.examplemod.entities.IModEntity;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -108,7 +108,7 @@ public class MessageSyncEntityToServer implements IMessage
                         @Override
                         public void run()
                         {
-                            IEntity theEntity = (IEntity) thePlayer.world.getEntityByID(message.entityId);
+                            IModEntity theEntity = (IModEntity) thePlayer.world.getEntityByID(message.entityId);
                             theEntity.setSyncDataCompound(message.entitySyncDataCompound);
                             // DEBUG
                             System.out.println("MessageSyncEnitityToClient onMessage(), entity ID = " + message.entityId);

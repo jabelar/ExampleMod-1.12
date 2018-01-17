@@ -16,24 +16,14 @@
 
 package com.blogspot.jabelarminecraft.examplemod.proxy;
 
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.util.glu.GLU;
-import org.lwjgl.util.glu.Sphere;
-
-import com.blogspot.jabelarminecraft.examplemod.MainMod;
-import com.blogspot.jabelarminecraft.examplemod.client.MouseHelperAI;
-import com.blogspot.jabelarminecraft.examplemod.client.renderers.RenderFactories;
-import com.blogspot.jabelarminecraft.examplemod.init.ModKeyBindings;
+import com.blogspot.jabelarminecraft.examplemod.commands.CommandStructureCapture;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.MouseHelper;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -46,98 +36,33 @@ import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
 // TODO: Auto-generated Javadoc
-public class ClientProxy implements IProxy
+public class ServerProxy implements IProxy
 {
-    /*
-     * For rendering a sphere, need ids for call lists for outside and inside
-     */
-    public static int sphereIdOutside;
-    public static int sphereIdInside;
-    
-    // mouse helper
-    public static MouseHelper mouseHelperAI = new MouseHelperAI(); // used to intercept user mouse movement for "bot" functionality
-
     @Override
     public void preInit(FMLPreInitializationEvent event)
     {
-        // DEBUG
-        System.out.println("on Client side");
-        
-        Minecraft.getMinecraft().mouseHelper = mouseHelperAI;
-        RenderFactories.registerEntityRenderers();
     }
 
     @Override
     public void init(FMLInitializationEvent event)
     {
-        // DEBUG
-        System.out.println("on Client side");
-
-        // register key bindings
-        ModKeyBindings.registerKeyBindings();
-
-        // create sphere call list
-        createSphereCallList();
-
     }
-
+    
     @Override
     public void postInit(FMLPostInitializationEvent event)
     {
-        // DEBUG
-        System.out.println("on Client side");
     }
-
-
+    
+    @Override
+    public void serverStarting(FMLServerStartingEvent event)
+    {
+        event.registerServerCommand(new CommandStructureCapture());
+    }
+    
     @Override
     public EntityPlayer getPlayerEntityFromContext(MessageContext ctx)
     {
-        // Note that if you simply return 'Minecraft.getMinecraft().thePlayer',
-        // your packets will not work because you will be getting a client
-        // player even when you are on the server! Sounds absurd, but it's true.
-
-        // Solution is to double-check side before returning the player:
-        return (ctx.side.isClient() ? Minecraft.getMinecraft().player : ctx.getServerHandler().player);
-    }
-
-    /**
-     * For rendering a sphere, need to make the call list Must be called after pre-init, otherwise Minecraft.getMinecraft() will fail will null pointer exception
-     */
-    public static void createSphereCallList()
-    {
-        Sphere sphere = new Sphere();
-        // GLU_POINT will render it as dots.
-        // GLU_LINE will render as wireframe
-        // GLU_SILHOUETTE will render as ?shadowed? wireframe
-        // GLU_FILL as a solid.
-        sphere.setDrawStyle(GLU.GLU_FILL);
-        // GLU_SMOOTH will try to smoothly apply lighting
-        // GLU_FLAT will have a solid brightness per face, and will not shade.
-        // GLU_NONE will be completely solid, and probably will have no depth to it's appearance.
-        sphere.setNormals(GLU.GLU_SMOOTH);
-        // GLU_INSIDE will render as if you are inside the sphere, making it appear inside out.(Similar to how ender portals are rendered)
-        sphere.setOrientation(GLU.GLU_OUTSIDE);
-        sphereIdOutside = GL11.glGenLists(1);
-        // Create a new list to hold our sphere data.
-        GL11.glNewList(sphereIdOutside, GL11.GL_COMPILE);
-        // binds the texture
-        ResourceLocation rL = new ResourceLocation(MainMod.MODID + ":textures/entities/sphere.png");
-        Minecraft.getMinecraft().getTextureManager().bindTexture(rL);
-        // The drawing the sphere is automatically doing is getting added to our list. Careful, the last 2 variables
-        // control the detail, but have a massive impact on performance. 32x32 is a good balance on my machine.s
-        sphere.draw(0.5F, 32, 32);
-        GL11.glEndList();
-
-        // GLU_INSIDE will render as if you are inside the sphere, making it appear inside out.(Similar to how ender portals are rendered)
-        sphere.setOrientation(GLU.GLU_INSIDE);
-        sphereIdInside = GL11.glGenLists(1);
-        // Create a new list to hold our sphere data.
-        GL11.glNewList(sphereIdInside, GL11.GL_COMPILE);
-        Minecraft.getMinecraft().getTextureManager().bindTexture(rL);
-        // The drawing the sphere is automatically doing is getting added to our list. Careful, the last 2 variables
-        // control the detail, but have a massive impact on performance. 32x32 is a good balance on my machine.s
-        sphere.draw(0.5F, 32, 32);
-        GL11.glEndList();
+        return ctx.getServerHandler().player;
     }
 
     @Override
@@ -228,11 +153,5 @@ public class ClientProxy implements IProxy
         entityIn.fallDistance = 0.0F;
 
         return flag;
-    }
-
-    @Override
-    public void serverStarting(FMLServerStartingEvent event)
-    {
-        // This will never get called on client side
     }
 }

@@ -30,7 +30,7 @@ public class ItemHorseHide extends ItemHideBase
      */
     public ItemHorseHide()
     {
-        super("horsehide");
+        super();
         setCreativeTab(CreativeTabs.MATERIALS);
     }
 }

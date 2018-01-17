@@ -20,7 +20,6 @@ import javax.annotation.Nullable;
 
 import com.blogspot.jabelarminecraft.examplemod.fluids.FluidHandlerSlimeBag;
 import com.blogspot.jabelarminecraft.examplemod.init.ModFluids;
-import com.blogspot.jabelarminecraft.examplemod.utilities.Utilities;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockDispenser;
@@ -71,7 +70,6 @@ public class ItemSlimeBag extends Item
      */
     public ItemSlimeBag()
     {
-        Utilities.setItemName(this, "slime_bag");
         setCreativeTab(CreativeTabs.MISC);
         setMaxStackSize(1);
         BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(this, DispenseFluidContainer.getInstance());

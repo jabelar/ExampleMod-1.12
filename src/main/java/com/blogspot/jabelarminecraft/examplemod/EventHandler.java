@@ -23,16 +23,23 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
+import com.blogspot.jabelarminecraft.examplemod.client.gui.GuiCreateWorldMod;
 import com.blogspot.jabelarminecraft.examplemod.init.ModBlocks;
+import com.blogspot.jabelarminecraft.examplemod.init.ModConfig;
 import com.blogspot.jabelarminecraft.examplemod.init.ModItems;
 import com.blogspot.jabelarminecraft.examplemod.init.ModMaterials;
+import com.blogspot.jabelarminecraft.examplemod.init.ModNetworking;
 import com.blogspot.jabelarminecraft.examplemod.items.IExtendedReach;
 import com.blogspot.jabelarminecraft.examplemod.networking.MessageExtendedReachAttack;
+import com.blogspot.jabelarminecraft.examplemod.proxy.ClientProxy;
 import com.blogspot.jabelarminecraft.examplemod.utilities.Utilities;
 import com.google.common.base.Objects;
+
 import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiCreateWorld;
 import net.minecraft.client.gui.GuiIngame;
+import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.enchantment.EnchantmentFrostWalker;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -65,6 +72,7 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.client.event.EntityViewRenderEvent.FogDensity;
+import net.minecraftforge.client.event.GuiOpenEvent;
 import net.minecraftforge.client.event.MouseEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
@@ -89,6 +97,37 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @Mod.EventBusSubscriber(modid = MainMod.MODID)
 public class EventHandler
 {
+//    // This is code that will replace all blocks of one type with another
+//    // During generation (as well as loading)
+//
+//    public static Block fromBlock = Blocks.GRASS; // change this to suit your need
+//    public static Block toBlock = Blocks.SLIME_BLOCK; // change this to suit your need
+//     
+//    @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
+//    public static void onEvent(ChunkEvent.Load event)
+//    { 
+//      
+//      Chunk theChunk = event.getChunk();
+//      
+//      // replace all blocks of a type with another block type
+//  
+//      for (int x = 0; x < 16; ++x) 
+//      {
+//          for (int z = 0; z < 16; ++z) 
+//          {
+//              for (int y = theChunk.getHeightValue(x, z)-20; y < theChunk.getHeightValue(x, z)+1; ++y) 
+//              {
+//                if (theChunk.getBlockState(x, y, z).getBlock() == fromBlock)
+//                {
+//                    theChunk.setBlockState(new BlockPos(x, y, z), toBlock.getDefaultState());
+//                }
+//              }
+//          }
+//      }
+//      theChunk.markDirty();
+//  }
+
+    
     /*
      * The following event handling is complicated because it replicates vanilla code to make custom fluids act like water. However, I have also submitted a Forge Pull Request PR
      * #4478, #4462 and #4460 which will add these features directly into Forge. If you're using a Forge version that includes those PRs, you can simply the following.
@@ -116,12 +155,9 @@ public class EventHandler
      * In order to allow custom fluids to cause reduction of air supply and drowning damage, need to copy almost entirety of vanilla functions and modify the hard-coded WATER to
      * accept other fluids.
      *
-     * @param event
-     *            the event
-     * @throws IllegalArgumentException
-     *             the illegal argument exception
-     * @throws IllegalAccessException
-     *             the illegal access exception
+     * @param event the event
+     * @throws IllegalArgumentException the illegal argument exception
+     * @throws IllegalAccessException the illegal access exception
      */
     @SuppressWarnings("unchecked")
     @SubscribeEvent(priority = EventPriority.NORMAL, receiveCanceled = true)
@@ -866,15 +902,15 @@ public class EventHandler
 
                 if (event.getEntityLiving() instanceof EntityCow)
                 {
-                    dropItem.setItem(new ItemStack(ModItems.COW_HIDE, stackSize));
+                    dropItem.setItem(new ItemStack(ModItems.cow_hide, stackSize));
                 }
                 if (event.getEntityLiving() instanceof EntityHorse)
                 {
-                    dropItem.setItem(new ItemStack(ModItems.HORSE_HIDE, stackSize));
+                    dropItem.setItem(new ItemStack(ModItems.horse_hide, stackSize));
                 }
                 if (event.getEntityLiving() instanceof EntityMooshroom)
                 {
-                    dropItem.setItem(new ItemStack(ModItems.COW_HIDE, stackSize));
+                    dropItem.setItem(new ItemStack(ModItems.cow_hide, stackSize));
                 }
             }
         }
@@ -884,14 +920,14 @@ public class EventHandler
             event.getDrops().add(new EntityItem(
                     event.getEntityLiving().world,
                     event.getEntityLiving().posX, event.getEntityLiving().posY, event.getEntityLiving().posZ,
-                    new ItemStack(ModItems.PIG_SKIN)));
+                    new ItemStack(ModItems.pig_skin)));
         }
         else if (event.getEntityLiving() instanceof EntitySheep)
         {
             event.getDrops().add(new EntityItem(
                     event.getEntityLiving().world,
                     event.getEntityLiving().posX, event.getEntityLiving().posY, event.getEntityLiving().posZ,
-                    new ItemStack(ModItems.SHEEP_SKIN)));
+                    new ItemStack(ModItems.sheep_skin)));
         }
     }
 
@@ -961,7 +997,7 @@ public class EventHandler
     {
         // ensure custom MouseHelper is active
         Minecraft mc = Minecraft.getMinecraft();
-        mc.mouseHelper = MainMod.instance.mouseHelperAI;
+        mc.mouseHelper = ClientProxy.mouseHelperAI;
        
         if (event.getButton() == 0 && event.isButtonstate())
         {
@@ -992,7 +1028,7 @@ public class EventHandler
                             {
                                 if (mov.entityHit != thePlayer)
                                 {
-                                    MainMod.network.sendToServer(new MessageExtendedReachAttack(mov.entityHit.getEntityId()));
+                                    ModNetworking.network.sendToServer(new MessageExtendedReachAttack(mov.entityHit.getEntityId()));
                                 }
                             }
                         }
@@ -1059,7 +1095,7 @@ public class EventHandler
         if (event.phase == TickEvent.Phase.START && event.player.world.isRemote) // only proceed if START phase otherwise, will execute twice per tick
         {
             EntityPlayer thePlayer = event.player;
-            MainMod.proxy.handleMaterialAcceleration(thePlayer, ModBlocks.SLIME_BLOCK.getDefaultState().getMaterial());
+            MainMod.proxy.handleMaterialAcceleration(thePlayer, ModBlocks.slime.getDefaultState().getMaterial());
         }
         else if (event.phase == TickEvent.Phase.START && !event.player.world.isRemote)
         {
@@ -1092,7 +1128,7 @@ public class EventHandler
             /*
              * Update all motion of all entities except players that may be inside your fluid
              */
-            MainMod.proxy.handleMaterialAcceleration(theEntity, ModBlocks.SLIME_BLOCK.getDefaultState().getMaterial());
+            MainMod.proxy.handleMaterialAcceleration(theEntity, ModBlocks.slime.getDefaultState().getMaterial());
         }
     }
 
@@ -1179,19 +1215,43 @@ public class EventHandler
      * Event handling method that is called automatically by Forge. It handles when
      * the mod configuration fields are changed.
      *
-     * @param eventArgs
+     * @param event
      *            the event args
      */
     @SubscribeEvent(priority = EventPriority.NORMAL, receiveCanceled = true)
-    public static void onEvent(OnConfigChangedEvent eventArgs)
+    public static void onEvent(OnConfigChangedEvent event)
     {
         // DEBUG
         System.out.println("OnConfigChangedEvent");
-        if (eventArgs.getModID().equals(MainMod.MODID))
+        if (event.getModID().equals(MainMod.MODID))
         {
-            System.out.println("Syncing config for mod =" + eventArgs.getModID());
-            MainMod.config.save();
-            MainMod.proxy.syncConfig();
+            System.out.println("Syncing config for mod =" + event.getModID());
+            ModConfig.config.save();
+            ModConfig.syncConfig();
+        }
+    }
+    
+    public static Field parentScreen = ReflectionHelper.findField(GuiCreateWorld.class, "parentScreen", "field_146332_f");
+    /**
+     * Handling the gui open event to replace the world selection menu with one
+     * that defaults to creative mode.
+     * 
+     * @param event
+     */
+    @SubscribeEvent(priority = EventPriority.NORMAL, receiveCanceled = true)
+    public static void onEvent(GuiOpenEvent event)
+    {
+        if (event.getGui() instanceof GuiCreateWorld)
+        {
+            try
+            {
+                event.setGui(new GuiCreateWorldMod((GuiScreen)(parentScreen.get(event.getGui()))));
+            }
+            catch (IllegalArgumentException | IllegalAccessException e)
+            {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
         }
     }
 }

@@ -17,6 +17,7 @@
 package com.blogspot.jabelarminecraft.examplemod.client.gui;
 
 import com.blogspot.jabelarminecraft.examplemod.MainMod;
+import com.blogspot.jabelarminecraft.examplemod.init.ModConfig;
 import com.blogspot.jabelarminecraft.examplemod.utilities.Utilities;
 
 /**
@@ -53,12 +54,12 @@ public class GuiConfig extends net.minecraftforge.fml.client.config.GuiConfig
     public GuiConfig(GuiScreen parent)
     {
         super(parent,
-                new ConfigElement(MainMod.config.getCategory(Configuration.CATEGORY_GENERAL)).getChildElements(),
+                new ConfigElement(ModConfig.config.getCategory(Configuration.CATEGORY_GENERAL)).getChildElements(),
                 MainMod.MODID,
                 false,
                 false,
                 Utilities.stringToGolden("Craft The Way You Want", 7));
-        titleLine2 = MainMod.configFile.getAbsolutePath();
+        titleLine2 = ModConfig.configFile.getAbsolutePath();
     }
 
     /*

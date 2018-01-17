@@ -15,8 +15,6 @@
 */
 package com.blogspot.jabelarminecraft.examplemod.init;
 
-import java.util.Set;
-
 import com.blogspot.jabelarminecraft.examplemod.MainMod;
 import com.blogspot.jabelarminecraft.examplemod.client.models.ModelSlimeBag;
 import com.blogspot.jabelarminecraft.examplemod.items.ItemCowHide;
@@ -25,7 +23,7 @@ import com.blogspot.jabelarminecraft.examplemod.items.ItemPigSkin;
 import com.blogspot.jabelarminecraft.examplemod.items.ItemSheepSkin;
 import com.blogspot.jabelarminecraft.examplemod.items.ItemSwordExtended;
 import com.blogspot.jabelarminecraft.examplemod.items.fluidcontainers.ItemSlimeBag;
-import com.google.common.collect.ImmutableSet;
+import com.blogspot.jabelarminecraft.examplemod.utilities.Utilities;
 
 import net.minecraft.client.renderer.block.model.ModelBakery;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
@@ -38,51 +36,25 @@ import net.minecraftforge.client.model.ModelLoaderRegistry;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.registry.GameRegistry.ObjectHolder;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.registries.IForgeRegistry;
 
-// TODO: Auto-generated Javadoc
+/**
+ * Instances and registration class
+ * 
+ * @author jabelar
+ */
+@ObjectHolder(MainMod.MODID)
 public class ModItems
 {
-    // public static class ArmorMaterials {
-    // public static final ItemArmor.ArmorMaterial ARMOUR_MATERIAL_REPLACEMENT = EnumHelper.addArmorMaterial(Constants.RESOURCE_PREFIX + "replacement", Constants.RESOURCE_PREFIX +
-    // "replacement", 15, new int[]{1, 4, 5, 2}, 12, SoundEvents.ITEM_ARMOR_EQUIP_CHAIN, (float) 0);
-    // }
-    //
-    // public static class ToolMaterials {
-    // public static final Item.ToolMaterial TOOL_MATERIAL_GLOWSTONE = EnumHelper.addToolMaterial("glowstone", 1, 5, 0.5f, 1.0f, 10);
-    // }
-
-    // instantiate items
-    public final static ItemCowHide COW_HIDE = new ItemCowHide();
-    public final static ItemSheepSkin SHEEP_SKIN = new ItemSheepSkin();
-    public final static ItemPigSkin PIG_SKIN = new ItemPigSkin();
-    public final static ItemHorseHide HORSE_HIDE = new ItemHorseHide();
-    // instantiate weapon items
-    public final static ItemSwordExtended SWORD_EXTENDED = new ItemSwordExtended(ToolMaterial.IRON);
-    // instantiate fluid container items
-    public final static ItemSlimeBag SLIME_BAG = new ItemSlimeBag();
-
-    // only put items with standard models here
-    public static final Set<Item> SET_ITEMS_STANDARD = ImmutableSet.of(
-            COW_HIDE,
-            SHEEP_SKIN,
-            PIG_SKIN,
-            HORSE_HIDE,
-            SWORD_EXTENDED);
-
-    // only put items with custom models here
-    public static final Set<Item> SET_ITEMS_CUSTOM = ImmutableSet.of(
-            SLIME_BAG);
-
-    /**
-     * Initialize this mod's {@link Item}s with any post-registration data.
-     */
-    private static void initialize()
-    {
-        // You can put furnace smelting recipes here
-    }
+    public final static ItemCowHide cow_hide = null;
+    public final static ItemSheepSkin sheep_skin = null;
+    public final static ItemPigSkin pig_skin = null;
+    public final static ItemHorseHide horse_hide = null;
+    public final static ItemSwordExtended sword_extended = null;
+    public final static ItemSlimeBag slime_bag = null;
 
     @Mod.EventBusSubscriber(modid = MainMod.MODID)
     public static class RegistrationHandler
@@ -90,8 +62,7 @@ public class ModItems
         /**
          * Register this mod's {@link Item}s.
          *
-         * @param event
-         *            The event
+         * @param event The event
          */
         @SubscribeEvent
         public static void onEvent(final RegistryEvent.Register<Item> event)
@@ -100,21 +71,12 @@ public class ModItems
 
             System.out.println("Registering items");
 
-            for (final Item item : SET_ITEMS_STANDARD)
-            {
-                registry.register(item);
-                // DEBUG
-                System.out.println("Registering item: " + item.getRegistryName());
-            }
-
-            for (final Item item : SET_ITEMS_CUSTOM)
-            {
-                registry.register(item);
-                // DEBUG
-                System.out.println("Registering item: " + item.getRegistryName());
-            }
-
-            initialize();
+            registry.register(Utilities.setItemName(new ItemCowHide(), "cow_hide"));
+            registry.register(Utilities.setItemName(new ItemSheepSkin(), "sheep_skin"));
+            registry.register(Utilities.setItemName(new ItemPigSkin(), "pig_skin"));
+            registry.register(Utilities.setItemName(new ItemHorseHide(), "horse_hide"));
+            registry.register(Utilities.setItemName(new ItemSwordExtended(ToolMaterial.IRON), "sword_extended"));
+            registry.register(Utilities.setItemName(new ItemSlimeBag(), "slime_bag"));
         }
 
         /**
@@ -130,21 +92,23 @@ public class ModItems
             // DEBUG
             System.out.println("Registering item models");
 
-            // register standard model items
-            for (final Item item : SET_ITEMS_STANDARD)
-            {
-                registerItemModel(item);
+            /*
+             *  Register standard model items
+             */
+            registerItemModel(cow_hide);
+            registerItemModel(sheep_skin);
+            registerItemModel(pig_skin);
+            registerItemModel(horse_hide);
+            registerItemModel(sword_extended);
 
-                // DEBUG
-                System.out.println("Registering item model for: " + item.getRegistryName());
-            }
-
-            // register custom model items
-            ModelLoaderRegistry.registerLoader(ModelSlimeBag.CustomModelLoader.INSTANCE);
-            ModelLoader.setCustomMeshDefinition(SLIME_BAG, stack -> ModelSlimeBag.LOCATION);
-            ModelBakery.registerItemVariants(SLIME_BAG, ModelSlimeBag.LOCATION);
+            /*
+             *  Register custom model items
+             */
             // DEBUG
-            System.out.println("Registering item model for: " + SLIME_BAG.getRegistryName());
+            System.out.println("Registering item model for: " + slime_bag.getRegistryName());
+            ModelLoaderRegistry.registerLoader(ModelSlimeBag.CustomModelLoader.INSTANCE);
+            ModelLoader.setCustomMeshDefinition(slime_bag, stack -> ModelSlimeBag.LOCATION);
+            ModelBakery.registerItemVariants(slime_bag, ModelSlimeBag.LOCATION);
         }
 
         /**
@@ -177,14 +141,15 @@ public class ModItems
     /**
      * Register item model.
      *
-     * @param parItem
-     *            the par item
-     * @param parMetaData
-     *            the par meta data
+     * @param parItem the par item
+     * @param parMetaData the par meta data
      */
     @SideOnly(Side.CLIENT)
     public static void registerItemModel(Item parItem, int parMetaData)
     {
+        // DEBUG
+        System.out.println("Registering item model for: " + parItem.getRegistryName());
+
         ModelLoader.setCustomModelResourceLocation(parItem, parMetaData,
                 new ModelResourceLocation(MainMod.MODID + ":" + parItem.getUnlocalizedName().substring(5), "inventory"));
     }

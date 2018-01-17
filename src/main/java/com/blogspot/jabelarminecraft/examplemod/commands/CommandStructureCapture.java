@@ -291,23 +291,26 @@ public class CommandStructureCapture implements ICommand
             e.printStackTrace();
         }
         // print dimensions to the file
-        printOut.println(dimX);
-        printOut.println(dimY);
-        printOut.println(dimZ);
-
-        // Write each string in the array on a separate line
-        for (int indY = 0; indY < dimY; indY++) // Y first to organize in layers
+        if (printOut != null)
         {
-            for (int indX = 0; indX < dimX; indX++)
+            printOut.println(dimX);
+            printOut.println(dimY);
+            printOut.println(dimZ);
+    
+            // Write each string in the array on a separate line
+            for (int indY = 0; indY < dimY; indY++) // Y first to organize in layers
             {
-                for (int indZ = 0; indZ < dimZ; indZ++)
+                for (int indX = 0; indX < dimX; indX++)
                 {
-                    printOut.println(blockNameArray[indX][indY][indZ]);
-                    printOut.println(blockMetaArray[indX][indY][indZ]);
+                    for (int indZ = 0; indZ < dimZ; indZ++)
+                    {
+                        printOut.println(blockNameArray[indX][indY][indZ]);
+                        printOut.println(blockMetaArray[indX][indY][indZ]);
+                    }
                 }
             }
+            printOut.close();
         }
-        printOut.close();
     }
 
     /*

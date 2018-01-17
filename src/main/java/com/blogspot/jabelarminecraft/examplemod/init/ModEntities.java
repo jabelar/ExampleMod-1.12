@@ -21,47 +21,35 @@ import com.blogspot.jabelarminecraft.examplemod.MainMod;
 import com.blogspot.jabelarminecraft.examplemod.entities.EntityPigTest;
 import com.google.common.collect.ImmutableSet;
 
-import net.minecraft.block.Block;
 import net.minecraft.block.material.MapColor;
-import net.minecraft.entity.EntityList.EntityEggInfo;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.event.RegistryEvent;
-import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.EntityEntry;
+import net.minecraftforge.fml.common.registry.EntityEntryBuilder;
 import net.minecraftforge.registries.IForgeRegistry;
 
 public class ModEntities
 {
-    // instantiate EntityEntry
-    public static final EntityEntry TEST_PIG = new EntityEntry(EntityPigTest.class, "test_pig");
-
-    // add eggs for those entities that need one
-    static
-    {
-        TEST_PIG.setRegistryName(new ResourceLocation(MainMod.MODID, "test_pig"));
-        TEST_PIG.setEgg(new EntityEggInfo(new ResourceLocation(MainMod.MODID, "test_pig"), MapColor.BLUE.colorValue, MapColor.YELLOW.colorValue));
-    }
-
     // instantiate EntityEntry list
-    public static final Set<EntityEntry> SET_INSTANCES = ImmutableSet.of(
-            TEST_PIG);
+    public static final Set<EntityEntry> SET_ENTITIES = ImmutableSet.of(
+            EntityEntryBuilder.create()
+            .entity(EntityPigTest.class)
+            .id(new ResourceLocation(MainMod.MODID, "test_pig"), 0)
+            .name("test_pig")
+            .tracker(80, 3, false)
+            .egg(MapColor.BLUE.colorValue, MapColor.YELLOW.colorValue)
+            .build()
+            );
 
-    /**
-     * Initialize this mod's {@link Block}s with any post-registration data.
-     */
-    private static void initialize()
-    {
-    }
-
-    @Mod.EventBusSubscriber(modid = MainMod.MODID)
+    @EventBusSubscriber(modid = MainMod.MODID)
     public static class RegistrationHandler
     {
         /**
          * Register this mod's {@link EntityEntry}s.
          *
-         * @param event
-         *            The event
+         * @param event The event
          */
         @SubscribeEvent
         public static void onEvent(final RegistryEvent.Register<EntityEntry> event)
@@ -71,15 +59,13 @@ public class ModEntities
             // DEBUG
             System.out.println("Registering entities");
 
-            for (final EntityEntry entityEntry : SET_INSTANCES)
+            for (final EntityEntry entityEntry : SET_ENTITIES)
             {
                 // DEBUG
                 System.out.println("Registering entity = " + entityEntry.getEntityClass());
 
                 registry.register(entityEntry);
             }
-
-            initialize();
         }
     }
 }

@@ -22,4 +22,13 @@ import net.minecraft.block.material.MaterialLiquid;
 public class ModMaterials
 {
     public static final Material SLIME = new MaterialLiquid(MapColor.LIME);
+    
+    // public static class ArmorMaterials {
+    // public static final ItemArmor.ArmorMaterial ARMOUR_MATERIAL_REPLACEMENT = EnumHelper.addArmorMaterial(Constants.RESOURCE_PREFIX + "replacement", Constants.RESOURCE_PREFIX +
+    // "replacement", 15, new int[]{1, 4, 5, 2}, 12, SoundEvents.ITEM_ARMOR_EQUIP_CHAIN, (float) 0);
+    // }
+    //
+    // public static class ToolMaterials {
+    // public static final Item.ToolMaterial TOOL_MATERIAL_GLOWSTONE = EnumHelper.addToolMaterial("glowstone", 1, 5, 0.5f, 1.0f, 10);
+    // }
 }

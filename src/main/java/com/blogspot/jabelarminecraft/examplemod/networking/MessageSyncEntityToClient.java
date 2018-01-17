@@ -17,7 +17,7 @@
 package com.blogspot.jabelarminecraft.examplemod.networking;
 
 import com.blogspot.jabelarminecraft.examplemod.MainMod;
-import com.blogspot.jabelarminecraft.examplemod.entities.IEntity;
+import com.blogspot.jabelarminecraft.examplemod.entities.IModEntity;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayer;
@@ -102,7 +102,7 @@ public class MessageSyncEntityToClient implements IMessage
         public IMessage onMessage(MessageSyncEntityToClient message, MessageContext ctx)
         {
             EntityPlayer thePlayer = MainMod.proxy.getPlayerEntityFromContext(ctx);
-            IEntity theEntity = (IEntity) thePlayer.world.getEntityByID(message.entityId);
+            IModEntity theEntity = (IModEntity) thePlayer.world.getEntityByID(message.entityId);
             // DEBUG
             if (theEntity == null)
             {
@@ -111,8 +111,8 @@ public class MessageSyncEntityToClient implements IMessage
             else
             {
                 System.out.println("MessageSyncEnitityToClient onMessage(), entity ID = " + message.entityId);
+                theEntity.setSyncDataCompound(message.entitySyncDataCompound);
             }
-            theEntity.setSyncDataCompound(message.entitySyncDataCompound);
             return null; // no response in this case
         }
     }

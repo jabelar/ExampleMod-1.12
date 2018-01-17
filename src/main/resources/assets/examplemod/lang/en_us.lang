@@ -1,6 +1,9 @@
 tile.compactor.name=Compactor
 container.compactor=Compactor
-item.cowhide.name=Cow Hide
+item.cow_hide.name=Cow Hide
+item.sheep_skin.name=Sheep Skin
+item.pig_skin.name=Pig Skin
+item.horse_hide.name=Horse Hide
 item.slime_bag.name=Bag
 item.slime_bag.filled.name=Slime Bag
 entity.test_pig.name=Test Pig

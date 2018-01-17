@@ -15,7 +15,6 @@
 */
 package com.blogspot.jabelarminecraft.examplemod.client.gui;
 
-import com.blogspot.jabelarminecraft.examplemod.MainMod;
 import com.blogspot.jabelarminecraft.examplemod.containers.ContainerCompactor;
 
 import net.minecraft.entity.player.EntityPlayer;
@@ -28,12 +27,12 @@ import net.minecraftforge.fml.common.network.IGuiHandler;
 // TODO: Auto-generated Javadoc
 public class GuiHandler implements IGuiHandler
 {
+    // enumerate guis
+    public enum GUI_ENUM
+    {
+        COMPACTOR
+    }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see net.minecraftforge.fml.common.network.IGuiHandler#getServerGuiElement(int, net.minecraft.entity.player.EntityPlayer, net.minecraft.world.World, int, int, int)
-     */
     // On server side you return the container (not the GUI!)
     @Override
     public Object getServerGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z)
@@ -44,7 +43,7 @@ public class GuiHandler implements IGuiHandler
         // process those GUIs that have associated tile entities (i.e. for delayed results like forge)
         if (tileEntity != null)
         {
-            if (ID == MainMod.GUI_ENUM.COMPACTOR.ordinal())
+            if (ID == GUI_ENUM.COMPACTOR.ordinal())
             {
                 // DEBUG
                 System.out.println("GUI handler server element creating ContainerCompactor");
@@ -56,11 +55,6 @@ public class GuiHandler implements IGuiHandler
         return null;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see net.minecraftforge.fml.common.network.IGuiHandler#getClientGuiElement(int, net.minecraft.entity.player.EntityPlayer, net.minecraft.world.World, int, int, int)
-     */
     // On the client side you return the GUI (not the container!)
     @Override
     public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z)
@@ -70,7 +64,7 @@ public class GuiHandler implements IGuiHandler
         // process those GUIs that have associated tile entities (i.e. for delayed results like forge)
         if (tileEntity != null)
         {
-            if (ID == MainMod.GUI_ENUM.COMPACTOR.ordinal())
+            if (ID == GUI_ENUM.COMPACTOR.ordinal())
             {
                 // DEBUG
                 System.out.println("GUI handler client element creating GUICompactor");

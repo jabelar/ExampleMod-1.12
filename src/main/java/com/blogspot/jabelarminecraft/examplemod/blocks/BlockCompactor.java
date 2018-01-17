@@ -19,8 +19,10 @@ package com.blogspot.jabelarminecraft.examplemod.blocks;
 import java.util.Random;
 
 import com.blogspot.jabelarminecraft.examplemod.MainMod;
+import com.blogspot.jabelarminecraft.examplemod.client.gui.GuiHandler;
+import com.blogspot.jabelarminecraft.examplemod.init.ModCreativeTabs;
 import com.blogspot.jabelarminecraft.examplemod.tileentities.TileEntityCompactor;
-import com.blogspot.jabelarminecraft.examplemod.utilities.Utilities;
+
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
@@ -42,7 +44,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import org.apache.logging.log4j.LogManager;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -63,10 +64,9 @@ public class BlockCompactor extends BlockContainer
         super(Material.ROCK);
         // DEBUG
         System.out.println("Constructing BlockCompactor instance");
-        Utilities.setBlockName(this, "compactor");
         setDefaultState(blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH));
         isCompacting = false;
-        setCreativeTab(MainMod.CREATIVE_TAB);
+        setCreativeTab(ModCreativeTabs.CREATIVE_TAB);
         setSoundType(SoundType.SNOW);
         blockParticleGravity = 1.0F;
         setDefaultSlipperiness(0.6F);
@@ -169,7 +169,7 @@ public class BlockCompactor extends BlockContainer
         {
             // DEBUG
             System.out.println("BlockCompactor onBlockActivated() on server side");
-            parPlayer.openGui(MainMod.instance, MainMod.GUI_ENUM.COMPACTOR.ordinal(), parWorld, parBlockPos.getX(), parBlockPos.getY(), parBlockPos.getZ());
+            parPlayer.openGui(MainMod.instance, GuiHandler.GUI_ENUM.COMPACTOR.ordinal(), parWorld, parBlockPos.getX(), parBlockPos.getY(), parBlockPos.getZ());
         }
 
         return true;
