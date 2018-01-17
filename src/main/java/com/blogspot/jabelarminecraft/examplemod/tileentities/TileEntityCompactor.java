@@ -20,7 +20,6 @@ import com.blogspot.jabelarminecraft.examplemod.MainMod;
 import com.blogspot.jabelarminecraft.examplemod.blocks.BlockCompactor;
 import com.blogspot.jabelarminecraft.examplemod.containers.ContainerCompactor;
 import com.blogspot.jabelarminecraft.examplemod.recipes.CompactorRecipes;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
@@ -156,11 +155,11 @@ public class TileEntityCompactor extends TileEntityLockable implements ITickable
         // DEBUG
         System.out.println("TileEntityCompactor setInventorySlotContents()");
 
-        boolean isSameItemStackAlreadyInSlot = stack != ItemStack.EMPTY && stack.isItemEqual(compactorItemStacks.get(index))
+        boolean isSameItemStackAlreadyInSlot = !stack.isEmpty() && stack.isItemEqual(compactorItemStacks.get(index))
                 && ItemStack.areItemStackTagsEqual(stack, compactorItemStacks.get(index));
         compactorItemStacks.set(index, stack);
 
-        if (stack != ItemStack.EMPTY && stack.getCount() > getInventoryStackLimit())
+        if (!stack.isEmpty() && stack.getCount() > getInventoryStackLimit())
         {
             stack.setCount(getInventoryStackLimit());
         }
@@ -297,7 +296,7 @@ public class TileEntityCompactor extends TileEntityLockable implements ITickable
         if (!world.isRemote)
         {
             // if something in input slot
-            if (compactorItemStacks.get(slotEnum.INPUT_SLOT.ordinal()) != ItemStack.EMPTY)
+            if (!compactorItemStacks.get(slotEnum.INPUT_SLOT.ordinal()).isEmpty())
             {
                 // check if input is compactable
                 if (canCompact())
@@ -372,7 +371,7 @@ public class TileEntityCompactor extends TileEntityLockable implements ITickable
         ItemStack stackInInputSlot = compactorItemStacks.get(slotEnum.INPUT_SLOT.ordinal());
 
         // if nothing in input slot
-        if (stackInInputSlot == ItemStack.EMPTY)
+        if (stackInInputSlot.isEmpty())
         {
             return false;
         }
@@ -381,13 +380,13 @@ public class TileEntityCompactor extends TileEntityLockable implements ITickable
             // DEBUG
             System.out.println("Checking if it has a valid compacting recipe");
             ItemStack itemStackToOutput = CompactorRecipes.instance().getCompactingResult(stackInInputSlot);
-            if (itemStackToOutput == ItemStack.EMPTY) // no valid recipe for compacting this item
+            if (itemStackToOutput.isEmpty()) // no valid recipe for compacting this item
             {
                 // DEBUG
                 System.out.println("Does not have a valid compacting recipe");
                 return false;
             }
-            if (stackInOutputSlot == ItemStack.EMPTY) // output slot is empty
+            if (stackInOutputSlot.isEmpty()) // output slot is empty
             {
                 // check if enough of the input item (to allow recipes that consume multiple amounts) }
                 if (stackInInputSlot.getCount() >= CompactorRecipes.instance().getInputAmount(stackInInputSlot))
