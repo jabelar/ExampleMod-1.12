@@ -22,7 +22,9 @@ import com.blogspot.jabelarminecraft.examplemod.entities.EntityPigTest;
 import com.google.common.collect.ImmutableSet;
 
 import net.minecraft.block.material.MapColor;
+import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -40,6 +42,7 @@ public class ModEntities
             .name("test_pig")
             .tracker(80, 3, false)
             .egg(MapColor.BLUE.colorValue, MapColor.YELLOW.colorValue)
+            .spawn(EnumCreatureType.CREATURE, 20, 1, 5, BiomeDictionary.getBiomes(BiomeDictionary.Type.FOREST))
             .build()
             );
 
