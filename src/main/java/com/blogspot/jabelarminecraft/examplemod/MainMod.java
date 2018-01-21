@@ -22,7 +22,7 @@ import com.blogspot.jabelarminecraft.examplemod.init.ModConfig;
 import com.blogspot.jabelarminecraft.examplemod.init.ModFluids;
 import com.blogspot.jabelarminecraft.examplemod.init.ModNetworking;
 import com.blogspot.jabelarminecraft.examplemod.init.ModTileEntities;
-import com.blogspot.jabelarminecraft.examplemod.init.ModWorldGenerators;
+import com.blogspot.jabelarminecraft.examplemod.init.ModWorldGen;
 import com.blogspot.jabelarminecraft.examplemod.proxy.IProxy;
 import com.blogspot.jabelarminecraft.examplemod.utilities.Utilities;
 
@@ -95,6 +95,7 @@ public class MainMod
         ModTileEntities.registerTileEntities();
         ModFluids.registerFluids();
         ModNetworking.registerSimpleNetworking();
+        ModWorldGen.registerDimensions();
         // VillagerRegistry.instance().registerVillagerId(10);
         // VillagerRegistry.instance().registerVillageTradeHandler(10, new VillageTradeHandlerMagicBeans());
         // VillagerRegistry.getRegisteredVillagers();
@@ -121,7 +122,7 @@ public class MainMod
         NetworkRegistry.INSTANCE.registerGuiHandler(instance, new GuiHandler());
 
         ModAdvancements.registerAdvancements();
-        ModWorldGenerators.registerWorldGenerators();
+        ModWorldGen.registerWorldGenerators();
 
         proxy.init(event);
     }

@@ -33,9 +33,8 @@ import net.minecraft.world.gen.structure.MapGenScatteredFeature;
 import net.minecraft.world.gen.structure.MapGenStronghold;
 import net.minecraft.world.gen.structure.MapGenVillage;
 import net.minecraft.world.gen.structure.StructureOceanMonument;
-import net.minecraft.world.gen.structure.WoodlandMansion;
 
-public class ChunkGeneratorOverworld implements IChunkGenerator
+public class ChunkGeneratorCloud implements IChunkGenerator
 {
     protected static final IBlockState STONE = Blocks.STONE.getDefaultState();
     private final Random rand;
@@ -61,14 +60,13 @@ public class ChunkGeneratorOverworld implements IChunkGenerator
     private MapGenScatteredFeature scatteredFeatureGenerator = new MapGenScatteredFeature();
     private MapGenBase ravineGenerator = new MapGenRavine();
     private StructureOceanMonument oceanMonumentGenerator = new StructureOceanMonument();
-    private WoodlandMansion woodlandMansionGenerator = new WoodlandMansion(this);
     private Biome[] biomesForGeneration;
     double[] mainNoiseRegion;
     double[] minLimitRegion;
     double[] maxLimitRegion;
     double[] depthRegion;
 
-    public ChunkGeneratorOverworld(World worldIn, long seed, boolean mapFeaturesEnabledIn, String generatorOptions)
+    public ChunkGeneratorCloud(World worldIn, long seed, boolean mapFeaturesEnabledIn, String generatorOptions)
     {
         {
             caveGenerator = net.minecraftforge.event.terraingen.TerrainGen.getModdedMapGen(caveGenerator,
@@ -85,8 +83,6 @@ public class ChunkGeneratorOverworld implements IChunkGenerator
                     net.minecraftforge.event.terraingen.InitMapGenEvent.EventType.RAVINE);
             oceanMonumentGenerator = (StructureOceanMonument) net.minecraftforge.event.terraingen.TerrainGen.getModdedMapGen(oceanMonumentGenerator,
                     net.minecraftforge.event.terraingen.InitMapGenEvent.EventType.OCEAN_MONUMENT);
-            woodlandMansionGenerator = (WoodlandMansion) net.minecraftforge.event.terraingen.TerrainGen.getModdedMapGen(woodlandMansionGenerator,
-                    net.minecraftforge.event.terraingen.InitMapGenEvent.EventType.WOODLAND_MANSION);
         }
         this.world = worldIn;
         this.mapFeaturesEnabled = mapFeaturesEnabledIn;
@@ -149,7 +145,6 @@ public class ChunkGeneratorOverworld implements IChunkGenerator
 
                 for (int i2 = 0; i2 < 32; ++i2)
                 {
-                    double d0 = 0.125D;
                     double d1 = this.heightMap[i1 + i2];
                     double d2 = this.heightMap[j1 + i2];
                     double d3 = this.heightMap[k1 + i2];
@@ -161,7 +156,6 @@ public class ChunkGeneratorOverworld implements IChunkGenerator
 
                     for (int j2 = 0; j2 < 8; ++j2)
                     {
-                        double d9 = 0.25D;
                         double d10 = d1;
                         double d11 = d2;
                         double d12 = (d3 - d1) * 0.25D;
@@ -169,7 +163,6 @@ public class ChunkGeneratorOverworld implements IChunkGenerator
 
                         for (int k2 = 0; k2 < 4; ++k2)
                         {
-                            double d14 = 0.25D;
                             double d16 = (d11 - d10) * 0.25D;
                             double lvt_45_1_ = d10 - d16;
 
@@ -203,7 +196,6 @@ public class ChunkGeneratorOverworld implements IChunkGenerator
     {
         if (!net.minecraftforge.event.ForgeEventFactory.onReplaceBiomeBlocks(this, x, z, primer, this.world))
             return;
-        double d0 = 0.03125D;
         this.depthBuffer = this.surfaceNoise.getRegion(this.depthBuffer, x * 16, z * 16, 16, 16, 0.0625D, 0.0625D, 1.0D);
 
         for (int i = 0; i < 16; ++i)
@@ -264,11 +256,6 @@ public class ChunkGeneratorOverworld implements IChunkGenerator
             {
                 this.oceanMonumentGenerator.generate(this.world, x, z, chunkprimer);
             }
-
-            if (this.settings.useMansions)
-            {
-                this.woodlandMansionGenerator.generate(this.world, x, z, chunkprimer);
-            }
         }
 
         Chunk chunk = new Chunk(this.world, chunkprimer, x, z);
@@ -305,7 +292,6 @@ public class ChunkGeneratorOverworld implements IChunkGenerator
                 float f2 = 0.0F;
                 float f3 = 0.0F;
                 float f4 = 0.0F;
-                int i1 = 2;
                 Biome biome = this.biomesForGeneration[k + 2 + (l + 2) * 10];
 
                 for (int j1 = -2; j1 <= 2; ++j1)
@@ -456,10 +442,6 @@ public class ChunkGeneratorOverworld implements IChunkGenerator
                 this.oceanMonumentGenerator.generateStructure(this.world, this.rand, chunkpos);
             }
 
-            if (this.settings.useMansions)
-            {
-                this.woodlandMansionGenerator.generateStructure(this.world, this.rand, chunkpos);
-            }
         }
 
         if (biome != Biomes.DESERT && biome != Biomes.DESERT_HILLS && this.settings.useWaterLakes && !flag
@@ -582,10 +564,6 @@ public class ChunkGeneratorOverworld implements IChunkGenerator
         {
             return this.strongholdGenerator.isInsideStructure(pos);
         }
-        else if ("Mansion".equals(structureName) && this.woodlandMansionGenerator != null)
-        {
-            return this.woodlandMansionGenerator.isInsideStructure(pos);
-        }
         else if ("Monument".equals(structureName) && this.oceanMonumentGenerator != null)
         {
             return this.oceanMonumentGenerator.isInsideStructure(pos);
@@ -615,10 +593,6 @@ public class ChunkGeneratorOverworld implements IChunkGenerator
         else if ("Stronghold".equals(structureName) && this.strongholdGenerator != null)
         {
             return this.strongholdGenerator.getNearestStructurePos(worldIn, position, findUnexplored);
-        }
-        else if ("Mansion".equals(structureName) && this.woodlandMansionGenerator != null)
-        {
-            return this.woodlandMansionGenerator.getNearestStructurePos(worldIn, position, findUnexplored);
         }
         else if ("Monument".equals(structureName) && this.oceanMonumentGenerator != null)
         {
@@ -672,11 +646,6 @@ public class ChunkGeneratorOverworld implements IChunkGenerator
             if (this.settings.useMonuments)
             {
                 this.oceanMonumentGenerator.generate(this.world, x, z, (ChunkPrimer) null);
-            }
-
-            if (this.settings.useMansions)
-            {
-                this.woodlandMansionGenerator.generate(this.world, x, z, (ChunkPrimer) null);
             }
         }
     }

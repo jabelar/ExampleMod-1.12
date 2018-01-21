@@ -10,4 +10,6 @@ entity.test_pig.name=Test Pig
 achievement.tanningahide=Tanned A Hide
 fluid.slime=Slime Juice
 itemGroup.examplemod=Example Mod
+generator.cloud=Cloud
+generator.cloud.info=It's truly heaven.
 
