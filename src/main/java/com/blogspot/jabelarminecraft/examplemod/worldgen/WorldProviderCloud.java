@@ -55,6 +55,9 @@ public class WorldProviderCloud extends WorldProvider
     @Override
     protected void init()
     {
+        // DEBUG
+        System.out.println("WorldProviderCloud init()");
+        
         hasSkyLight = true;
         biomeProvider = getTerrainType().getBiomeProvider(world);
     }

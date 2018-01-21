@@ -14,5 +14,8 @@ public class BiomeCloud extends Biome
                 .setRainDisabled()
                 .setTemperature(0.2F)
                 );
+        
+        // DEBUG
+        System.out.println("Constructing BiomeCloud");
     }
 }

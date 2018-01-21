@@ -22,6 +22,9 @@ public class WorldTypeCloud extends WorldType
     public WorldTypeCloud()
     {
         super(ModWorldGen.CLOUD_NAME);
+        
+        // DEBUG
+        System.out.println("Constructing WorldTypeCloud");
     }
 
     @Override

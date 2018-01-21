@@ -15,33 +15,25 @@
 */
 package com.blogspot.jabelarminecraft.examplemod.init;
 
-import java.util.Set;
-
 import com.blogspot.jabelarminecraft.examplemod.MainMod;
-import com.google.common.collect.ImmutableSet;
+import com.blogspot.jabelarminecraft.examplemod.worldgen.BiomeCloud;
 
-import net.minecraft.block.Block;
 import net.minecraft.world.biome.Biome;
+import net.minecraftforge.common.BiomeDictionary;
+import net.minecraftforge.common.BiomeManager;
+import net.minecraftforge.common.BiomeManager.BiomeEntry;
+import net.minecraftforge.common.BiomeManager.BiomeType;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.registry.GameRegistry.ObjectHolder;
 import net.minecraftforge.registries.IForgeRegistry;
 
+@ObjectHolder(MainMod.MODID)
 public class ModBiomes
 {
     // instantiate Biomes
-    // public final static BiomeCustom MY_COOL_BIOME = new BiomeCustom();
-
-    public static final Set<Biome> SET_BIOMES = ImmutableSet.of(
-    // MY_COOL_BIOME
-    );
-
-    /**
-     * Initialize this mod's {@link Block}s with any post-registration data.
-     */
-    private static void initialize()
-    {
-    }
+    public final static BiomeCloud cloud = null;
 
     @Mod.EventBusSubscriber(modid = MainMod.MODID)
     public static class RegistrationHandler
@@ -49,8 +41,7 @@ public class ModBiomes
         /**
          * Register this mod's {@link Biome}s.
          *
-         * @param event
-         *            The event
+         * @param event The event
          */
         @SubscribeEvent
         public static void onEvent(final RegistryEvent.Register<Biome> event)
@@ -58,22 +49,29 @@ public class ModBiomes
             final IForgeRegistry<Biome> registry = event.getRegistry();
 
             System.out.println("Registering biomes");
+            
+            registry.register(new BiomeCloud().setRegistryName(MainMod.MODID, ModWorldGen.CLOUD_NAME));
 
             // DEBUG
             System.out.println("Registry key set = " + registry.getKeys());
             System.out.println("Registry value list = " + registry.getValues());
-
-            for (final Biome biome : SET_BIOMES)
-            {
-                registry.register(biome);
-            }
-
-            // BiomeManager.addBiome(BiomeType.DESERT, new BiomeEntry(ashDesert, 10));
-            // BiomeManager.addSpawnBiome(ashDesert);
-            // BiomeManager.addStrongholdBiome(ashDesert);
-            // BiomeDictionary.addTypes(ashDesert, BiomeDictionary.Type.HOT);
-
-            initialize();
         }
+    }
+    
+    /**
+     * This method should be called during the "init" FML lifecycle 
+     * because it must happen after object handler injection
+     */
+    public static void initBiomeManagerAndDictionary()
+    {
+        BiomeManager.addBiome(BiomeType.COOL, new BiomeEntry(cloud, 10));
+        BiomeManager.addSpawnBiome(cloud);
+        BiomeManager.addStrongholdBiome(cloud);
+        BiomeManager.addVillageBiome(cloud, false);
+        BiomeDictionary.addTypes(cloud, 
+                BiomeDictionary.Type.COLD,
+                BiomeDictionary.Type.DRY,
+                BiomeDictionary.Type.MAGICAL
+                );
     }
 }

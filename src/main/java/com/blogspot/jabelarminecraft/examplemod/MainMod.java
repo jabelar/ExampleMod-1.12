@@ -18,6 +18,7 @@ package com.blogspot.jabelarminecraft.examplemod;
 
 import com.blogspot.jabelarminecraft.examplemod.client.gui.GuiHandler;
 import com.blogspot.jabelarminecraft.examplemod.init.ModAdvancements;
+import com.blogspot.jabelarminecraft.examplemod.init.ModBiomes;
 import com.blogspot.jabelarminecraft.examplemod.init.ModConfig;
 import com.blogspot.jabelarminecraft.examplemod.init.ModFluids;
 import com.blogspot.jabelarminecraft.examplemod.init.ModNetworking;
@@ -123,6 +124,7 @@ public class MainMod
 
         ModAdvancements.registerAdvancements();
         ModWorldGen.registerWorldGenerators();
+        ModBiomes.initBiomeManagerAndDictionary();
 
         proxy.init(event);
     }
