@@ -64,6 +64,9 @@ public class ModBiomes
      */
     public static void initBiomeManagerAndDictionary()
     {
+        // DEBUG
+        System.out.println("Initializing BiomeManager and BiomeDictionary");
+        
         BiomeManager.addBiome(BiomeType.COOL, new BiomeEntry(cloud, 10));
         BiomeManager.addSpawnBiome(cloud);
         BiomeManager.addStrongholdBiome(cloud);
