@@ -18,6 +18,7 @@ package com.blogspot.jabelarminecraft.examplemod.items;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemSword;
 
+// TODO: Auto-generated Javadoc
 /**
  * 
  * @author jabelar

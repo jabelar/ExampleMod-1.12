@@ -1,3 +1,18 @@
+/**
+    Copyright (C) 2017 by jabelar
+
+    This file is part of jabelar's Minecraft Forge modding examples; as such,
+    you can redistribute it and/or modify it under the terms of the GNU
+    General Public License as published by the Free Software Foundation,
+    either version 3 of the License, or (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+    GNU General Public License for more details.
+
+    For a copy of the GNU General Public License see <http://www.gnu.org/licenses/>.
+*/
 package com.blogspot.jabelarminecraft.examplemod.blocks;
 
 import java.util.ArrayList;
@@ -21,6 +36,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+// TODO: Auto-generated Javadoc
 /**
  * @author jabelar
  *
@@ -28,6 +44,9 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class BlockCloudTop extends Block
 {
 
+    /**
+     * Instantiates a new block cloud top.
+     */
     public BlockCloudTop()
     {
         super(ModMaterials.CLOUD);
@@ -48,6 +67,9 @@ public class BlockCloudTop extends Block
         useNeighborBrightness = false;
     }
 
+    /* (non-Javadoc)
+     * @see net.minecraft.block.Block#getBlockLayer()
+     */
     @Override
     @SideOnly(Side.CLIENT)
     public BlockRenderLayer getBlockLayer()
@@ -55,6 +77,9 @@ public class BlockCloudTop extends Block
         return BlockRenderLayer.TRANSLUCENT;
     }
     
+    /* (non-Javadoc)
+     * @see net.minecraft.block.Block#doesSideBlockRendering(net.minecraft.block.state.IBlockState, net.minecraft.world.IBlockAccess, net.minecraft.util.math.BlockPos, net.minecraft.util.EnumFacing)
+     */
     @Override
     public boolean doesSideBlockRendering(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing face)
     {
@@ -72,9 +97,12 @@ public class BlockCloudTop extends Block
 //    }
 
     /**
-     * Returns the mobility information of the block, 0 = free, 1 = can't push but can move over, 2 = total immobility
-     * and stop pistons
-     */
+ * Returns the mobility information of the block, 0 = free, 1 = can't push but can move over, 2 = total immobility
+ * and stop pistons.
+ *
+ * @param parIBlockState the par I block state
+ * @return the mobility flag
+ */
     @Override
     public EnumPushReaction getMobilityFlag(IBlockState parIBlockState)
     {
@@ -82,7 +110,10 @@ public class BlockCloudTop extends Block
     }
 
     /**
-     * Used to determine ambient occlusion and culling when rebuilding chunks for render
+     * Used to determine ambient occlusion and culling when rebuilding chunks for render.
+     *
+     * @param state the state
+     * @return true, if is opaque cube
      */
     @Override
     public boolean isOpaqueCube(IBlockState state)
@@ -93,11 +124,10 @@ public class BlockCloudTop extends Block
     /**
      * Checks if the block is a solid face on the given side, used by placement logic.
      *
+     * @param state the state
      * @param world The current world
-     * @param x X Position
-     * @param y Y position
-     * @param z Z position
-     * @param side The side to check
+     * @param parPos the par pos
+     * @param parSide the par side
      * @return True if the block is solid on the specified side.
      */
     @Override
@@ -106,18 +136,27 @@ public class BlockCloudTop extends Block
         return true; 
     }
     
+    /* (non-Javadoc)
+     * @see net.minecraft.block.Block#isNormalCube(net.minecraft.block.state.IBlockState)
+     */
     @Override
     public boolean isNormalCube(IBlockState state)
     {
         return true;
     }
     
+    /* (non-Javadoc)
+     * @see net.minecraft.block.Block#isNormalCube(net.minecraft.block.state.IBlockState, net.minecraft.world.IBlockAccess, net.minecraft.util.math.BlockPos)
+     */
     @Override
     public boolean isNormalCube(IBlockState parState, IBlockAccess parWorld, BlockPos parPos)
     {
         return true;
     }
     
+    /* (non-Javadoc)
+     * @see net.minecraft.block.Block#shouldSideBeRendered(net.minecraft.block.state.IBlockState, net.minecraft.world.IBlockAccess, net.minecraft.util.math.BlockPos, net.minecraft.util.EnumFacing)
+     */
     @Override
     @SideOnly(Side.CLIENT)
     public boolean shouldSideBeRendered(IBlockState blockState, IBlockAccess blockAccess, BlockPos pos, EnumFacing side)
@@ -146,10 +185,8 @@ public class BlockCloudTop extends Block
      * 300 being a 100% chance, 0, being a 0% chance.
      *
      * @param world The current world
-     * @param x The blocks X position
-     * @param y The blocks Y position
-     * @param z The blocks Z position
-     * @param face The face that the fire is coming from
+     * @param parPos the par pos
+     * @param parSide the par side
      * @return A number ranging from 0 to 300 relating used to determine if the block will be consumed by fire
      */
     @Override
@@ -163,12 +200,9 @@ public class BlockCloudTop extends Block
      * Returning true will prevent the fire from naturally dying during updating.
      * Also prevents firing from dying from rain.
      *
-     * @param world The current world
-     * @param x The blocks X position
-     * @param y The blocks Y position
-     * @param z The blocks Z position
-     * @param metadata The blocks current metadata
-     * @param side The face that the fire is coming from
+     * @param parWorld the par world
+     * @param parPos the par pos
+     * @param parSide the par side
      * @return True if this block sustains fire, meaning it will never go out.
      */
     @Override
@@ -181,9 +215,9 @@ public class BlockCloudTop extends Block
      * Metadata and fortune sensitive version, this replaces the old (int meta, Random rand)
      * version in 1.1.
      *
-     * @param meta Blocks Metadata
-     * @param fortune Current item fortune level
-     * @param random Random number generator
+     * @param parState the par state
+     * @param parFortune the par fortune
+     * @param parRandom the par random
      * @return The number of items to drop
      */
     @Override
@@ -199,11 +233,9 @@ public class BlockCloudTop extends Block
      * This returns a complete list of items dropped from this block.
      *
      * @param world The current world
-     * @param x X Position
-     * @param y Y Position
-     * @param z Z Position
-     * @param metadata Current metadata
-     * @param fortune Breakers fortune level
+     * @param parPos the par pos
+     * @param parState the par state
+     * @param parFortune the par fortune
      * @return A ArrayList containing all items this block drops
      */
     @Override
@@ -213,12 +245,18 @@ public class BlockCloudTop extends Block
         return ret;
     }
 
+    /* (non-Javadoc)
+     * @see net.minecraft.block.Block#canSilkHarvest(net.minecraft.world.World, net.minecraft.util.math.BlockPos, net.minecraft.block.state.IBlockState, net.minecraft.entity.player.EntityPlayer)
+     */
     @Override
     public boolean canSilkHarvest(World parWorld, BlockPos parPos, IBlockState parState, EntityPlayer parPlayer)
     {
         return false;
     }
 
+    /* (non-Javadoc)
+     * @see net.minecraft.block.Block#canCreatureSpawn(net.minecraft.block.state.IBlockState, net.minecraft.world.IBlockAccess, net.minecraft.util.math.BlockPos, net.minecraft.entity.EntityLiving.SpawnPlacementType)
+     */
     @Override
     public boolean canCreatureSpawn(IBlockState state, IBlockAccess parWorld, BlockPos parPos, SpawnPlacementType parType)
     {
@@ -227,6 +265,9 @@ public class BlockCloudTop extends Block
         return true;
     }
 
+    /* (non-Javadoc)
+     * @see net.minecraft.block.Block#shouldCheckWeakPower(net.minecraft.block.state.IBlockState, net.minecraft.world.IBlockAccess, net.minecraft.util.math.BlockPos, net.minecraft.util.EnumFacing)
+     */
     @Override
     public boolean shouldCheckWeakPower(IBlockState state, IBlockAccess parWorld, BlockPos parPos, EnumFacing parSide)
     {
@@ -236,10 +277,10 @@ public class BlockCloudTop extends Block
     /**
      * Checks if the specified tool type is efficient on this block, 
      * meaning that it digs at full speed.
-     * 
-     * @param type
-     * @param metadata
-     * @return
+     *
+     * @param parType the par type
+     * @param parState the par state
+     * @return true, if is tool effective
      */
     @Override
     public boolean isToolEffective(String parType, IBlockState parState)

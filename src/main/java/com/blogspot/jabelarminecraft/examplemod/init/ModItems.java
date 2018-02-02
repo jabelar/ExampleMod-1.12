@@ -41,6 +41,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.registries.IForgeRegistry;
 
+// TODO: Auto-generated Javadoc
 /**
  * Instances and registration class
  * 

@@ -176,12 +176,23 @@ public class ModFluid extends Fluid
         return fillSound;
     }
     
+    /**
+     * Sets the has bucket.
+     *
+     * @param parEnableBucket the par enable bucket
+     * @return the mod fluid
+     */
     public ModFluid setHasBucket(boolean parEnableBucket)
     {
         bucketEnabled = parEnableBucket;
         return this;
     }
     
+    /**
+     * Checks if is bucket enabled.
+     *
+     * @return true, if is bucket enabled
+     */
     public boolean isBucketEnabled()
     {
         return bucketEnabled;

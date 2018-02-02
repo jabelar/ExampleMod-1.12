@@ -24,47 +24,70 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 // TODO: Auto-generated Javadoc
 public class ServerProxy implements IProxy
 {
+    
+    /* (non-Javadoc)
+     * @see com.blogspot.jabelarminecraft.examplemod.proxy.IProxy#preInit(net.minecraftforge.fml.common.event.FMLPreInitializationEvent)
+     */
     @Override
     public void preInit(FMLPreInitializationEvent event)
     {
     }
 
+    /* (non-Javadoc)
+     * @see com.blogspot.jabelarminecraft.examplemod.proxy.IProxy#init(net.minecraftforge.fml.common.event.FMLInitializationEvent)
+     */
     @Override
     public void init(FMLInitializationEvent event)
     {
     }
     
+    /* (non-Javadoc)
+     * @see com.blogspot.jabelarminecraft.examplemod.proxy.IProxy#postInit(net.minecraftforge.fml.common.event.FMLPostInitializationEvent)
+     */
     @Override
     public void postInit(FMLPostInitializationEvent event)
     {
     }
     
+    /* (non-Javadoc)
+     * @see com.blogspot.jabelarminecraft.examplemod.proxy.IProxy#serverStarting(net.minecraftforge.fml.common.event.FMLServerStartingEvent)
+     */
     @Override
     public void serverStarting(FMLServerStartingEvent event)
     {
         event.registerServerCommand(new CommandStructureCapture());
     }
     
+    /* (non-Javadoc)
+     * @see com.blogspot.jabelarminecraft.examplemod.proxy.IProxy#getPlayerEntityFromContext(net.minecraftforge.fml.common.network.simpleimpl.MessageContext)
+     */
     @Override
     public EntityPlayer getPlayerEntityFromContext(MessageContext ctx)
     {
         return ctx.getServerHandler().player;
     }
 
+    /* (non-Javadoc)
+     * @see com.blogspot.jabelarminecraft.examplemod.proxy.IProxy#handleMaterialAcceleration(net.minecraft.entity.Entity, net.minecraft.block.material.Material)
+     */
     @Override
     public boolean handleMaterialAcceleration(Entity entityIn, Material materialIn)
     {
@@ -153,5 +176,20 @@ public class ServerProxy implements IProxy
         entityIn.fallDistance = 0.0F;
 
         return flag;
+    }
+
+    /* (non-Javadoc)
+     * @see com.blogspot.jabelarminecraft.examplemod.proxy.IProxy#shouldSideBeRendered(net.minecraft.block.state.IBlockState, net.minecraft.world.IBlockAccess, net.minecraft.util.math.BlockPos, net.minecraft.util.EnumFacing)
+     */
+    @Override
+    public boolean shouldSideBeRendered(IBlockState blockState, IBlockAccess blockAccess, BlockPos pos, EnumFacing side)
+    {
+        return false;
+    }
+
+    @SideOnly(Side.CLIENT)
+    @Override
+    public void markBlockForUpdate()
+    {
     }
 }

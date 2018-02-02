@@ -44,9 +44,12 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
  */
 public class Utilities
 {
+    
     /**
      * This allows you to add fancy formatting to the mod info displayed in the 
-     * mod list
+     * mod list.
+     *
+     * @param event the new mod info
      */
     public static void setModInfo(FMLPreInitializationEvent event)
     {

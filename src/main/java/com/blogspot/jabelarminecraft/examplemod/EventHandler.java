@@ -83,12 +83,14 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent.ClientTickEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.PlayerTickEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.WorldTickEvent;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+// TODO: Auto-generated Javadoc
 /**
  * This class contains many of the event handling methods for events posted to the event bus.
  * Registry events are contained in separate classes in the init subpackage. It is important that
@@ -1232,11 +1234,12 @@ public class EventHandler
     }
     
     public static Field parentScreen = ReflectionHelper.findField(GuiCreateWorld.class, "parentScreen", "field_146332_f");
+    
     /**
      * Handling the gui open event to replace the world selection menu with one
      * that defaults to creative mode.
-     * 
-     * @param event
+     *
+     * @param event the event
      */
     @SubscribeEvent(priority = EventPriority.NORMAL, receiveCanceled = true)
     public static void onEvent(GuiOpenEvent event)
@@ -1253,5 +1256,17 @@ public class EventHandler
                 e.printStackTrace();
             }
         }
+    }
+        
+    /**
+     * On event.
+     *
+     * @param event the event
+     */
+    @SideOnly(Side.CLIENT)
+    @SubscribeEvent(priority = EventPriority.NORMAL, receiveCanceled = true)
+    public static void onEvent(ClientTickEvent event)
+    {
+        MainMod.proxy.markBlockForUpdate();
     }
 }
