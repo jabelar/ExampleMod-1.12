@@ -21,6 +21,7 @@ import org.lwjgl.util.glu.GLU;
 import org.lwjgl.util.glu.Sphere;
 
 import com.blogspot.jabelarminecraft.examplemod.MainMod;
+import com.blogspot.jabelarminecraft.examplemod.blocks.BlockCloud;
 import com.blogspot.jabelarminecraft.examplemod.client.MouseHelperAI;
 import com.blogspot.jabelarminecraft.examplemod.client.renderers.RenderFactories;
 import com.blogspot.jabelarminecraft.examplemod.init.ModKeyBindings;
@@ -32,18 +33,22 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.MouseHelper;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 // TODO: Auto-generated Javadoc
 public class ClientProxy implements IProxy
@@ -57,6 +62,9 @@ public class ClientProxy implements IProxy
     // mouse helper
     public static MouseHelper mouseHelperAI = new MouseHelperAI(); // used to intercept user mouse movement for "bot" functionality
 
+    /* (non-Javadoc)
+     * @see com.blogspot.jabelarminecraft.examplemod.proxy.IProxy#preInit(net.minecraftforge.fml.common.event.FMLPreInitializationEvent)
+     */
     @Override
     public void preInit(FMLPreInitializationEvent event)
     {
@@ -67,6 +75,9 @@ public class ClientProxy implements IProxy
         RenderFactories.registerEntityRenderers();
     }
 
+    /* (non-Javadoc)
+     * @see com.blogspot.jabelarminecraft.examplemod.proxy.IProxy#init(net.minecraftforge.fml.common.event.FMLInitializationEvent)
+     */
     @Override
     public void init(FMLInitializationEvent event)
     {
@@ -81,6 +92,9 @@ public class ClientProxy implements IProxy
 
     }
 
+    /* (non-Javadoc)
+     * @see com.blogspot.jabelarminecraft.examplemod.proxy.IProxy#postInit(net.minecraftforge.fml.common.event.FMLPostInitializationEvent)
+     */
     @Override
     public void postInit(FMLPostInitializationEvent event)
     {
@@ -89,6 +103,9 @@ public class ClientProxy implements IProxy
     }
 
 
+    /* (non-Javadoc)
+     * @see com.blogspot.jabelarminecraft.examplemod.proxy.IProxy#getPlayerEntityFromContext(net.minecraftforge.fml.common.network.simpleimpl.MessageContext)
+     */
     @Override
     public EntityPlayer getPlayerEntityFromContext(MessageContext ctx)
     {
@@ -140,6 +157,9 @@ public class ClientProxy implements IProxy
         GL11.glEndList();
     }
 
+    /* (non-Javadoc)
+     * @see com.blogspot.jabelarminecraft.examplemod.proxy.IProxy#handleMaterialAcceleration(net.minecraft.entity.Entity, net.minecraft.block.material.Material)
+     */
     @Override
     public boolean handleMaterialAcceleration(Entity entityIn, Material materialIn)
     {
@@ -230,9 +250,47 @@ public class ClientProxy implements IProxy
         return flag;
     }
 
+    /* (non-Javadoc)
+     * @see com.blogspot.jabelarminecraft.examplemod.proxy.IProxy#serverStarting(net.minecraftforge.fml.common.event.FMLServerStartingEvent)
+     */
     @Override
     public void serverStarting(FMLServerStartingEvent event)
     {
         // This will never get called on client side
+    }
+    
+    /* (non-Javadoc)
+     * @see com.blogspot.jabelarminecraft.examplemod.proxy.IProxy#shouldSideBeRendered(net.minecraft.block.state.IBlockState, net.minecraft.world.IBlockAccess, net.minecraft.util.math.BlockPos, net.minecraft.util.EnumFacing)
+     */
+    @SuppressWarnings("deprecation")
+    @Override
+    public  boolean shouldSideBeRendered(IBlockState blockState, IBlockAccess blockAccess, BlockPos pos, EnumFacing side)
+    {
+        Minecraft mc = Minecraft.getMinecraft();
+        double dist = mc.player.getPositionVector().subtract(new Vec3d(pos)).lengthSquared();
+        
+        if (dist < 400.0D)
+        {
+            blockState.withProperty(BlockCloud.TRANSLUCENT, true);
+        }
+        else
+        {
+            blockState.withProperty(BlockCloud.TRANSLUCENT, false);
+        }
+        
+        return (dist < 64.0D && Math.abs(pos.getY()-mc.player.getPosition().getY())<4.0D);
+    }
+
+    @SideOnly(Side.CLIENT)
+    @Override
+    public void markBlockForUpdate()
+    {
+        Minecraft mc = Minecraft.getMinecraft();
+        
+        if (mc.player != null)
+        {   
+            BlockPos pos = mc.player.getPosition();
+            mc.renderGlobal.markBlockRangeForRenderUpdate(pos.getX()-6, pos.getY()-4, pos.getZ()-6, pos.getX()+6, pos.getY()+4, pos.getZ()+6);
+        }
     }
 }

@@ -1,3 +1,18 @@
+/**
+    Copyright (C) 2017 by jabelar
+
+    This file is part of jabelar's Minecraft Forge modding examples; as such,
+    you can redistribute it and/or modify it under the terms of the GNU
+    General Public License as published by the Free Software Foundation,
+    either version 3 of the License, or (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+    GNU General Public License for more details.
+
+    For a copy of the GNU General Public License see <http://www.gnu.org/licenses/>.
+*/
 package com.blogspot.jabelarminecraft.examplemod.client.gui;
 
 import java.io.IOException;
@@ -20,6 +35,7 @@ import net.minecraft.world.storage.WorldInfo;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+// TODO: Auto-generated Javadoc
 /**
  * This version of the create world gui defaults to creative mode.
  * 
@@ -64,6 +80,11 @@ public class GuiCreateWorldMod extends GuiScreen
     /** These filenames are known to be restricted on one or more OS's. */
     private static final String[] DISALLOWED_FILENAMES = new String[] {"CON", "COM", "PRN", "AUX", "CLOCK$", "NUL", "COM1", "COM2", "COM3", "COM4", "COM5", "COM6", "COM7", "COM8", "COM9", "LPT1", "LPT2", "LPT3", "LPT4", "LPT5", "LPT6", "LPT7", "LPT8", "LPT9"};
 
+    /**
+     * Instantiates a new gui create world mod.
+     *
+     * @param p_i46320_1_ the p i 46320 1
+     */
     public GuiCreateWorldMod(GuiScreen p_i46320_1_)
     {
         this.parentScreen = p_i46320_1_;
@@ -180,6 +201,10 @@ public class GuiCreateWorldMod extends GuiScreen
     /**
      * Ensures that a proposed directory name doesn't collide with existing names.
      * Returns the name, possibly modified to avoid collisions.
+     *
+     * @param saveLoader the save loader
+     * @param name the name
+     * @return the uncolliding save dir name
      */
     public static String getUncollidingSaveDirName(ISaveFormat saveLoader, String name)
     {
@@ -212,6 +237,9 @@ public class GuiCreateWorldMod extends GuiScreen
 
     /**
      * Called by the controls from the buttonList when activated. (Mouse pressed for buttons)
+     *
+     * @param button the button
+     * @throws IOException Signals that an I/O exception has occurred.
      */
     @Override
     protected void actionPerformed(GuiButton button) throws IOException
@@ -457,6 +485,10 @@ public class GuiCreateWorldMod extends GuiScreen
     /**
      * Fired when a key is typed (except F11 which toggles full screen). This is the equivalent of
      * KeyListener.keyTyped(KeyEvent e). Args : character (character on the key), keyCode (lwjgl Keyboard key code)
+     *
+     * @param typedChar the typed char
+     * @param keyCode the key code
+     * @throws IOException Signals that an I/O exception has occurred.
      */
     @Override
     protected void keyTyped(char typedChar, int keyCode) throws IOException
@@ -483,6 +515,11 @@ public class GuiCreateWorldMod extends GuiScreen
 
     /**
      * Called when the mouse is clicked. Args : mouseX, mouseY, clickedButton
+     *
+     * @param mouseX the mouse X
+     * @param mouseY the mouse Y
+     * @param mouseButton the mouse button
+     * @throws IOException Signals that an I/O exception has occurred.
      */
     @Override
     protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException
@@ -501,6 +538,10 @@ public class GuiCreateWorldMod extends GuiScreen
 
     /**
      * Draws the screen and all the components in it.
+     *
+     * @param mouseX the mouse X
+     * @param mouseY the mouse Y
+     * @param partialTicks the partial ticks
      */
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks)
@@ -546,6 +587,8 @@ public class GuiCreateWorldMod extends GuiScreen
      * Set the initial values of a new world to create, from the values from an existing world.
      *  
      * Called after construction when a user selects the "Recreate" button.
+     *
+     * @param original the original
      */
     public void recreateFromExistingWorld(WorldInfo original)
     {

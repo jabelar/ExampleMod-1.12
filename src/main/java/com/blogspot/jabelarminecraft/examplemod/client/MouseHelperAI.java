@@ -12,9 +12,6 @@
     GNU General Public License for more details.
 
     For a copy of the GNU General Public License see <http://www.gnu.org/licenses/>.
-
-	If you're interested in licensing the code under different terms you can
-	contact the author at julian_abelar@hotmail.com 
 */
 
 package com.blogspot.jabelarminecraft.examplemod.client;
@@ -23,12 +20,17 @@ import net.minecraft.util.MouseHelper;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 
+// TODO: Auto-generated Javadoc
 /**
  * @author jabelar
  *
  */
 public class MouseHelperAI extends MouseHelper
 {
+    
+    /**
+     * Instantiates a new mouse helper AI.
+     */
     public MouseHelperAI()
     {
         super();
@@ -36,6 +38,9 @@ public class MouseHelperAI extends MouseHelper
         System.out.println("Constructing MouseHelper for AI bots");
     }
     
+    /* (non-Javadoc)
+     * @see net.minecraft.util.MouseHelper#mouseXYChange()
+     */
     @Override
     public void mouseXYChange()
     {

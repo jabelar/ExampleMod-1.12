@@ -1,4 +1,5 @@
 tile.compactor.name=Compactor
+tile.cloud.name=Cloud
 container.compactor=Compactor
 item.cow_hide.name=Cow Hide
 item.sheep_skin.name=Sheep Skin

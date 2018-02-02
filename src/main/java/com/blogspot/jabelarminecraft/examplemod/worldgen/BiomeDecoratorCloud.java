@@ -15,32 +15,30 @@
 */
 package com.blogspot.jabelarminecraft.examplemod.worldgen;
 
-import com.blogspot.jabelarminecraft.examplemod.init.ModWorldGen;
+import java.util.Random;
 
-import net.minecraft.world.DimensionType;
-import net.minecraft.world.WorldProvider;
-import net.minecraft.world.gen.IChunkGenerator;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
+import net.minecraft.world.biome.Biome;
+import net.minecraft.world.biome.BiomeDecorator;
 
 // TODO: Auto-generated Javadoc
-public class WorldProviderCloud extends WorldProvider
+public class BiomeDecoratorCloud extends BiomeDecorator
 {
-    private String generatorSettings;
-
+    
     /* (non-Javadoc)
-     * @see net.minecraft.world.WorldProvider#getDimensionType()
+     * @see net.minecraft.world.biome.BiomeDecorator#decorate(net.minecraft.world.World, java.util.Random, net.minecraft.world.biome.Biome, net.minecraft.util.math.BlockPos)
      */
     @Override
-    public DimensionType getDimensionType()
+    public void decorate(World worldIn, Random random, Biome biome, BlockPos pos)
     {
-        return ModWorldGen.CLOUD_DIM_TYPE;
     }
 
     /* (non-Javadoc)
-     * @see net.minecraft.world.WorldProvider#createChunkGenerator()
+     * @see net.minecraft.world.biome.BiomeDecorator#genDecorations(net.minecraft.world.biome.Biome, net.minecraft.world.World, java.util.Random)
      */
     @Override
-    public IChunkGenerator createChunkGenerator()
+    protected void genDecorations(Biome biomeIn, World worldIn, Random random)
     {
-        return ModWorldGen.CLOUD_WORLD_TYPE.getChunkGenerator(world, generatorSettings);
     }
 }

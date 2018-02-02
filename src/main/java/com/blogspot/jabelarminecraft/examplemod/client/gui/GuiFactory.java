@@ -30,18 +30,27 @@ import net.minecraftforge.fml.client.IModGuiFactory;
 public class GuiFactory implements IModGuiFactory
 {
 
+    /* (non-Javadoc)
+     * @see net.minecraftforge.fml.client.IModGuiFactory#initialize(net.minecraft.client.Minecraft)
+     */
     @Override
     public void initialize(Minecraft minecraftInstance)
     {
 
     }
 
+    /* (non-Javadoc)
+     * @see net.minecraftforge.fml.client.IModGuiFactory#runtimeGuiCategories()
+     */
     @Override
     public Set<RuntimeOptionCategoryElement> runtimeGuiCategories()
     {
         return null;
     }
 
+    /* (non-Javadoc)
+     * @see net.minecraftforge.fml.client.IModGuiFactory#hasConfigGui()
+     */
     @Override
     public boolean hasConfigGui()
     {
@@ -49,6 +58,9 @@ public class GuiFactory implements IModGuiFactory
     }
 
 
+    /* (non-Javadoc)
+     * @see net.minecraftforge.fml.client.IModGuiFactory#createConfigGui(net.minecraft.client.gui.GuiScreen)
+     */
     @Override
     public GuiScreen createConfigGui(GuiScreen parentScreen)
     {

@@ -39,6 +39,7 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 
+// TODO: Auto-generated Javadoc
 /**
  * This is the main file for the mod, as it has the mod annotation
  */

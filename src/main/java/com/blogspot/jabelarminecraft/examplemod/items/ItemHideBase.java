@@ -41,8 +41,6 @@ public class ItemHideBase extends Item
 
     /**
      * Instantiates a new item hide base.
-     *
-     * @param parName the unlocalized name
      */
     public ItemHideBase()
     {

@@ -1,3 +1,18 @@
+/**
+    Copyright (C) 2017 by jabelar
+
+    This file is part of jabelar's Minecraft Forge modding examples; as such,
+    you can redistribute it and/or modify it under the terms of the GNU
+    General Public License as published by the Free Software Foundation,
+    either version 3 of the License, or (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+    GNU General Public License for more details.
+
+    For a copy of the GNU General Public License see <http://www.gnu.org/licenses/>.
+*/
 package com.blogspot.jabelarminecraft.examplemod.client.gui;
 
 import java.io.IOException;
@@ -33,6 +48,7 @@ import net.minecraft.world.gen.FlatLayerInfo;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+// TODO: Auto-generated Javadoc
 @SideOnly(Side.CLIENT)
 public class GuiFlatPresetsMod extends GuiScreen
 {
@@ -46,6 +62,11 @@ public class GuiFlatPresetsMod extends GuiScreen
     private GuiButton btnSelect;
     private GuiTextField export;
 
+    /**
+     * Instantiates a new gui flat presets mod.
+     *
+     * @param guiCreateFlatWorldMod the gui create flat world mod
+     */
     public GuiFlatPresetsMod(GuiCreateFlatWorldMod guiCreateFlatWorldMod)
     {
         this.parentScreen = guiCreateFlatWorldMod;
@@ -74,6 +95,8 @@ public class GuiFlatPresetsMod extends GuiScreen
 
     /**
      * Handles mouse input.
+     *
+     * @throws IOException Signals that an I/O exception has occurred.
      */
     @Override
     public void handleMouseInput() throws IOException
@@ -93,6 +116,11 @@ public class GuiFlatPresetsMod extends GuiScreen
 
     /**
      * Called when the mouse is clicked. Args : mouseX, mouseY, clickedButton
+     *
+     * @param mouseX the mouse X
+     * @param mouseY the mouse Y
+     * @param mouseButton the mouse button
+     * @throws IOException Signals that an I/O exception has occurred.
      */
     @Override
     protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException
@@ -104,6 +132,10 @@ public class GuiFlatPresetsMod extends GuiScreen
     /**
      * Fired when a key is typed (except F11 which toggles full screen). This is the equivalent of
      * KeyListener.keyTyped(KeyEvent e). Args : character (character on the key), keyCode (lwjgl Keyboard key code)
+     *
+     * @param typedChar the typed char
+     * @param keyCode the key code
+     * @throws IOException Signals that an I/O exception has occurred.
      */
     @Override
     protected void keyTyped(char typedChar, int keyCode) throws IOException
@@ -116,6 +148,9 @@ public class GuiFlatPresetsMod extends GuiScreen
 
     /**
      * Called by the controls from the buttonList when activated. (Mouse pressed for buttons)
+     *
+     * @param button the button
+     * @throws IOException Signals that an I/O exception has occurred.
      */
     @Override
     protected void actionPerformed(GuiButton button) throws IOException
@@ -133,6 +168,10 @@ public class GuiFlatPresetsMod extends GuiScreen
 
     /**
      * Draws the screen and all the components in it.
+     *
+     * @param mouseX the mouse X
+     * @param mouseY the mouse Y
+     * @param partialTicks the partial ticks
      */
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks)
@@ -156,6 +195,9 @@ public class GuiFlatPresetsMod extends GuiScreen
         super.updateScreen();
     }
 
+    /**
+     * Update button validity.
+     */
     public void updateButtonValidity()
     {
         this.btnSelect.enabled = this.hasValidSelection();
@@ -212,6 +254,14 @@ public class GuiFlatPresetsMod extends GuiScreen
             public String name;
             public String generatorInfo;
 
+            /**
+             * Instantiates a new layer item.
+             *
+             * @param iconIn the icon in
+             * @param iconMetadataIn the icon metadata in
+             * @param nameIn the name in
+             * @param generatorInfoIn the generator info in
+             */
             public LayerItem(Item iconIn, int iconMetadataIn, String nameIn, String generatorInfoIn)
             {
                 this.icon = iconIn;
@@ -226,6 +276,9 @@ public class GuiFlatPresetsMod extends GuiScreen
     {
         public int selected = -1;
 
+        /**
+         * Instantiates a new list slot.
+         */
         public ListSlot()
         {
             super(GuiFlatPresetsMod.this.mc, GuiFlatPresetsMod.this.width, GuiFlatPresetsMod.this.height, 80, GuiFlatPresetsMod.this.height - 37, 24);
@@ -260,6 +313,9 @@ public class GuiFlatPresetsMod extends GuiScreen
             tessellator.draw();
         }
 
+        /* (non-Javadoc)
+         * @see net.minecraft.client.gui.GuiSlot#getSize()
+         */
         @Override
         protected int getSize()
         {
@@ -267,7 +323,12 @@ public class GuiFlatPresetsMod extends GuiScreen
         }
 
         /**
-         * The element in the slot that was clicked, boolean for whether it was double clicked or not
+         * The element in the slot that was clicked, boolean for whether it was double clicked or not.
+         *
+         * @param slotIndex the slot index
+         * @param isDoubleClick the is double click
+         * @param mouseX the mouse X
+         * @param mouseY the mouse Y
          */
         @Override
         protected void elementClicked(int slotIndex, boolean isDoubleClick, int mouseX, int mouseY)
@@ -278,7 +339,10 @@ public class GuiFlatPresetsMod extends GuiScreen
         }
 
         /**
-         * Returns true if the element passed in is currently selected
+         * Returns true if the element passed in is currently selected.
+         *
+         * @param slotIndex the slot index
+         * @return true, if is selected
          */
         @Override
         protected boolean isSelected(int slotIndex)
@@ -286,11 +350,17 @@ public class GuiFlatPresetsMod extends GuiScreen
             return slotIndex == this.selected;
         }
 
+        /* (non-Javadoc)
+         * @see net.minecraft.client.gui.GuiSlot#drawBackground()
+         */
         @Override
         protected void drawBackground()
         {
         }
 
+        /* (non-Javadoc)
+         * @see net.minecraft.client.gui.GuiSlot#drawSlot(int, int, int, int, int, int, float)
+         */
         @Override
         protected void drawSlot(int slotIndex, int xPos, int yPos, int heightIn, int mouseXIn, int mouseYIn, float partialTicks)
         {

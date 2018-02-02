@@ -1,3 +1,18 @@
+/**
+    Copyright (C) 2017 by jabelar
+
+    This file is part of jabelar's Minecraft Forge modding examples; as such,
+    you can redistribute it and/or modify it under the terms of the GNU
+    General Public License as published by the Free Software Foundation,
+    either version 3 of the License, or (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+    GNU General Public License for more details.
+
+    For a copy of the GNU General Public License see <http://www.gnu.org/licenses/>.
+*/
 package com.blogspot.jabelarminecraft.examplemod.client.gui;
 
 import java.io.IOException;
@@ -23,6 +38,7 @@ import net.minecraft.world.gen.FlatLayerInfo;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+// TODO: Auto-generated Javadoc
 @SideOnly(Side.CLIENT)
 public class GuiCreateFlatWorldMod extends GuiScreen
 {
@@ -42,6 +58,12 @@ public class GuiCreateFlatWorldMod extends GuiScreen
     /** The remove layer button */
     private GuiButton removeLayerButton;
 
+    /**
+     * Instantiates a new gui create flat world mod.
+     *
+     * @param createWorldGuiIn the create world gui in
+     * @param preset the preset
+     */
     public GuiCreateFlatWorldMod(GuiCreateWorldMod createWorldGuiIn, String preset)
     {
         this.createWorldGui = createWorldGuiIn;
@@ -49,7 +71,9 @@ public class GuiCreateFlatWorldMod extends GuiScreen
     }
 
     /**
-     * Gets the superflat preset in the text format described on the Superflat article on the Minecraft Wiki
+     * Gets the superflat preset in the text format described on the Superflat article on the Minecraft Wiki.
+     *
+     * @return the preset
      */
     public String getPreset()
     {
@@ -58,6 +82,8 @@ public class GuiCreateFlatWorldMod extends GuiScreen
 
     /**
      * Sets the superflat preset. Invalid or null values will result in the default superflat preset being used.
+     *
+     * @param preset the new preset
      */
     public void setPreset(String preset)
     {
@@ -90,6 +116,8 @@ public class GuiCreateFlatWorldMod extends GuiScreen
 
     /**
      * Handles mouse input.
+     *
+     * @throws IOException Signals that an I/O exception has occurred.
      */
     @Override
     public void handleMouseInput() throws IOException
@@ -100,6 +128,9 @@ public class GuiCreateFlatWorldMod extends GuiScreen
 
     /**
      * Called by the controls from the buttonList when activated. (Mouse pressed for buttons)
+     *
+     * @param button the button
+     * @throws IOException Signals that an I/O exception has occurred.
      */
     @Override
     protected void actionPerformed(GuiButton button) throws IOException
@@ -131,7 +162,7 @@ public class GuiCreateFlatWorldMod extends GuiScreen
 
     /**
      * Would update whether or not the edit and remove buttons are enabled, but is currently disabled and always
-     * disables the buttons (which are invisible anyways)
+     * disables the buttons (which are invisible anyways).
      */
     public void onLayersChanged()
     {
@@ -152,6 +183,10 @@ public class GuiCreateFlatWorldMod extends GuiScreen
 
     /**
      * Draws the screen and all the components in it.
+     *
+     * @param mouseX the mouse X
+     * @param mouseY the mouse Y
+     * @param partialTicks the partial ticks
      */
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks)
@@ -174,6 +209,9 @@ public class GuiCreateFlatWorldMod extends GuiScreen
          */
         public int selectedLayer = -1;
 
+        /**
+         * Instantiates a new details.
+         */
         public Details()
         {
             super(GuiCreateFlatWorldMod.this.mc, GuiCreateFlatWorldMod.this.width, GuiCreateFlatWorldMod.this.height, 43, GuiCreateFlatWorldMod.this.height - 60, 24);
@@ -223,6 +261,9 @@ public class GuiCreateFlatWorldMod extends GuiScreen
             tessellator.draw();
         }
 
+        /* (non-Javadoc)
+         * @see net.minecraft.client.gui.GuiSlot#getSize()
+         */
         @Override
         protected int getSize()
         {
@@ -230,7 +271,12 @@ public class GuiCreateFlatWorldMod extends GuiScreen
         }
 
         /**
-         * The element in the slot that was clicked, boolean for whether it was double clicked or not
+         * The element in the slot that was clicked, boolean for whether it was double clicked or not.
+         *
+         * @param slotIndex the slot index
+         * @param isDoubleClick the is double click
+         * @param mouseX the mouse X
+         * @param mouseY the mouse Y
          */
         @Override
         protected void elementClicked(int slotIndex, boolean isDoubleClick, int mouseX, int mouseY)
@@ -240,7 +286,10 @@ public class GuiCreateFlatWorldMod extends GuiScreen
         }
 
         /**
-         * Returns true if the element passed in is currently selected
+         * Returns true if the element passed in is currently selected.
+         *
+         * @param slotIndex the slot index
+         * @return true, if is selected
          */
         @Override
         protected boolean isSelected(int slotIndex)
@@ -248,11 +297,17 @@ public class GuiCreateFlatWorldMod extends GuiScreen
             return slotIndex == this.selectedLayer;
         }
 
+        /* (non-Javadoc)
+         * @see net.minecraft.client.gui.GuiSlot#drawBackground()
+         */
         @Override
         protected void drawBackground()
         {
         }
 
+        /* (non-Javadoc)
+         * @see net.minecraft.client.gui.GuiSlot#drawSlot(int, int, int, int, int, int, float)
+         */
         @Override
         protected void drawSlot(int slotIndex, int xPos, int yPos, int heightIn, int mouseXIn, int mouseYIn, float partialTicks)
         {
@@ -298,6 +353,9 @@ public class GuiCreateFlatWorldMod extends GuiScreen
             GuiCreateFlatWorldMod.this.fontRenderer.drawString(s1, xPos + 2 + 213 - GuiCreateFlatWorldMod.this.fontRenderer.getStringWidth(s1), yPos + 3, 16777215);
         }
 
+        /* (non-Javadoc)
+         * @see net.minecraft.client.gui.GuiSlot#getScrollBarX()
+         */
         @Override
         protected int getScrollBarX()
         {

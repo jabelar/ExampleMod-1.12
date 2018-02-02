@@ -29,6 +29,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry.ObjectHolder;
 import net.minecraftforge.registries.IForgeRegistry;
 
+// TODO: Auto-generated Javadoc
 @ObjectHolder(MainMod.MODID)
 public class ModBiomes
 {
@@ -60,10 +61,13 @@ public class ModBiomes
     
     /**
      * This method should be called during the "init" FML lifecycle 
-     * because it must happen after object handler injection
+     * because it must happen after object handler injection.
      */
     public static void initBiomeManagerAndDictionary()
     {
+        // DEBUG
+        System.out.println("Initializing BiomeManager and BiomeDictionary");
+        
         BiomeManager.addBiome(BiomeType.COOL, new BiomeEntry(cloud, 10));
         BiomeManager.addSpawnBiome(cloud);
         BiomeManager.addStrongholdBiome(cloud);
