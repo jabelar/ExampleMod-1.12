@@ -2,27 +2,26 @@ package com.blogspot.jabelarminecraft.examplemod.blocks;
 
 import com.blogspot.jabelarminecraft.examplemod.init.ModMaterials;
 
-import net.minecraft.block.Block;
+import net.minecraft.block.BlockEmptyDrops;
 import net.minecraft.block.SoundType;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-/**
- * @author jabelar
- *
- */
-public class BlockCloud extends Block
+public class BlockCloudBedrock extends BlockEmptyDrops
 {
 
-    public BlockCloud()
+    public BlockCloudBedrock()
     {
-        super(ModMaterials.CLOUD);
-        
+        super(ModMaterials.CLOUD_ROCK);
+
         // DEBUG
         System.out.println("BlockCloud constructor");
-        
+
+        setBlockUnbreakable();
+        setResistance(6000000.0F);
+        disableStats();
         setCreativeTab(CreativeTabs.BUILDING_BLOCKS);
         blockSoundType = SoundType.SNOW;
         blockParticleGravity = 1.0F;
@@ -37,6 +36,6 @@ public class BlockCloud extends Block
     @SideOnly(Side.CLIENT)
     public BlockRenderLayer getBlockLayer()
     {
-        return BlockRenderLayer.TRANSLUCENT;
+        return BlockRenderLayer.SOLID;
     }
 }

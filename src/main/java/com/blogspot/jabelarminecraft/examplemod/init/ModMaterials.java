@@ -16,6 +16,7 @@
 package com.blogspot.jabelarminecraft.examplemod.init;
 
 import com.blogspot.jabelarminecraft.examplemod.materials.MaterialCloud;
+import com.blogspot.jabelarminecraft.examplemod.materials.MaterialCloudRock;
 
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.MaterialLiquid;
@@ -24,6 +25,7 @@ public class ModMaterials
 {
     public static final MaterialLiquid SLIME = new MaterialLiquid(MapColor.LIME);
     public static final MaterialCloud CLOUD = new MaterialCloud();
+    public static final MaterialCloudRock CLOUD_ROCK = new MaterialCloudRock();
     
     // public static class ArmorMaterials {
     // public static final ItemArmor.ArmorMaterial ARMOUR_MATERIAL_REPLACEMENT = EnumHelper.addArmorMaterial(Constants.RESOURCE_PREFIX + "replacement", Constants.RESOURCE_PREFIX +

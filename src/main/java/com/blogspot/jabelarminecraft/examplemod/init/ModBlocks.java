@@ -17,6 +17,7 @@ package com.blogspot.jabelarminecraft.examplemod.init;
 
 import com.blogspot.jabelarminecraft.examplemod.MainMod;
 import com.blogspot.jabelarminecraft.examplemod.blocks.BlockCloud;
+import com.blogspot.jabelarminecraft.examplemod.blocks.BlockCloudBedrock;
 import com.blogspot.jabelarminecraft.examplemod.blocks.BlockCompactor;
 import com.blogspot.jabelarminecraft.examplemod.blocks.fluids.ModBlockFluidClassic;
 import com.blogspot.jabelarminecraft.examplemod.utilities.Utilities;
@@ -50,6 +51,7 @@ public class ModBlocks
     public static final BlockCompactor compactor = null;
     public static final BlockFluidClassic slime = null;
     public static final BlockCloud cloud = null;
+    public static final BlockCloudBedrock cloud_rock = null;
     
     /*
      * ItemBlock instances
@@ -60,6 +62,8 @@ public class ModBlocks
     public static final ItemBlock itemBlock_slime = null;
     @ObjectHolder("cloud")
     public static final ItemBlock itemBlock_cloud = null;
+    @ObjectHolder("cloud_rock")
+    public static final ItemBlock itemBlock_cloud_rock = null;
 
     @Mod.EventBusSubscriber(modid = MainMod.MODID)
     public static class RegistrationHandler
@@ -80,6 +84,7 @@ public class ModBlocks
             registry.register(Utilities.setBlockName(new BlockCompactor(), "compactor"));
             registry.register(Utilities.setBlockName(new ModBlockFluidClassic(ModFluids.SLIME, ModMaterials.SLIME), "slime"));
             registry.register(Utilities.setBlockName(new BlockCloud(), "cloud"));
+            registry.register(Utilities.setBlockName(new BlockCloudBedrock(), "cloud_rock"));
         }
 
         /**
@@ -98,6 +103,7 @@ public class ModBlocks
             registry.register(Utilities.setItemName(new ItemBlock(compactor), compactor.getRegistryName().getResourcePath()));
             registry.register(Utilities.setItemName(new ItemBlock(slime), slime.getRegistryName().getResourcePath()));
             registry.register(Utilities.setItemName(new ItemBlock(cloud), cloud.getRegistryName().getResourcePath()));
+            registry.register(Utilities.setItemName(new ItemBlock(cloud_rock), cloud_rock.getRegistryName().getResourcePath()));
         }
 
         /**
@@ -115,6 +121,7 @@ public class ModBlocks
             registerBlockModel(compactor);
             registerBlockModel(slime);
             registerBlockModel(cloud);
+            registerBlockModel(cloud_rock);
             registerItemBlockModels();
         }
     }
@@ -156,6 +163,7 @@ public class ModBlocks
         registerItemBlockModel(itemBlock_compactor);
         registerItemBlockModel(itemBlock_slime);
         registerItemBlockModel(itemBlock_cloud);
+        registerItemBlockModel(itemBlock_cloud_rock);
     }
 
     /**
