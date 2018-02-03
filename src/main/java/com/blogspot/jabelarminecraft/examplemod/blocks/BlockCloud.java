@@ -1,6 +1,8 @@
 package com.blogspot.jabelarminecraft.examplemod.blocks;
 
-import net.minecraft.block.BlockIce;
+import com.blogspot.jabelarminecraft.examplemod.init.ModMaterials;
+
+import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.util.BlockRenderLayer;
@@ -11,12 +13,12 @@ import net.minecraftforge.fml.relauncher.SideOnly;
  * @author jabelar
  *
  */
-public class BlockCloud extends BlockIce
+public class BlockCloud extends Block
 {
 
     public BlockCloud()
     {
-        super();
+        super(ModMaterials.CLOUD);
         
         // DEBUG
         System.out.println("BlockCloud constructor");
@@ -56,16 +58,6 @@ public class BlockCloud extends BlockIce
 ////    {
 ////        return getMaterial(getDefaultState()).isSolid();
 ////    }
-//
-//    /**
-//     * Returns the mobility information of the block, 0 = free, 1 = can't push but can move over, 2 = total immobility
-//     * and stop pistons
-//     */
-//    @Override
-//    public EnumPushReaction getMobilityFlag(IBlockState parIBlockState)
-//    {
-//        return parIBlockState.getMobilityFlag();
-//    }
 //
 //    /**
 //     * Used to determine ambient occlusion and culling when rebuilding chunks for render
