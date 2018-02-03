@@ -5,6 +5,7 @@ import java.util.Random;
 
 import javax.annotation.Nullable;
 
+import com.blogspot.jabelarminecraft.examplemod.init.ModBiomes;
 import com.blogspot.jabelarminecraft.examplemod.init.ModBlocks;
 
 import net.minecraft.block.BlockFalling;
@@ -203,7 +204,7 @@ public class ChunkGeneratorCloud implements IChunkGenerator
         {
             for (int j = 0; j < 16; ++j)
             {
-                Biome biome = biomesIn[j + i * 16];
+                Biome biome = ModBiomes.cloud; // biomesIn[j + i * 16];
                 biome.genTerrainBlocks(world, rand, primer, x * 16 + i, z * 16 + j, depthBuffer[j + i * 16]);
             }
         }

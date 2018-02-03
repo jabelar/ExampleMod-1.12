@@ -3,6 +3,9 @@ package com.blogspot.jabelarminecraft.examplemod.blocks;
 import net.minecraft.block.BlockIce;
 import net.minecraft.block.SoundType;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.util.BlockRenderLayer;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  * @author jabelar
@@ -31,12 +34,12 @@ public class BlockCloud extends BlockIce
         useNeighborBrightness = false;
     }
 
-//    @Override
-//    @SideOnly(Side.CLIENT)
-//    public BlockRenderLayer getBlockLayer()
-//    {
-//        return BlockRenderLayer.TRANSLUCENT;
-//    }
+    @Override
+    @SideOnly(Side.CLIENT)
+    public BlockRenderLayer getBlockLayer()
+    {
+        return BlockRenderLayer.TRANSLUCENT;
+    }
 //    
 //    @Override
 //    public boolean doesSideBlockRendering(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing face)
