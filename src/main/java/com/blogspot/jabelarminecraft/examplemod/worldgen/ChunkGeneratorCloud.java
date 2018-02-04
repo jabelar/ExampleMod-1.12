@@ -81,6 +81,9 @@ public class ChunkGeneratorCloud implements IChunkGenerator
     protected MapGenScatteredFeature scatteredFeatureGenerator = new MapGenScatteredFeature();
     protected MapGenBase ravineGenerator = new MapGenRavine();
     protected StructureOceanMonument oceanMonumentGenerator = new StructureOceanMonument();
+    protected WorldGenDungeons dungeonGenerator = new WorldGenDungeons();
+    protected WorldGenLakes lakeGenerator = new WorldGenLakes(Blocks.WATER);
+    protected WorldGenLakes lavaLakeGenerator = new WorldGenLakes(Blocks.LAVA);
 
     /*
      * These values are explained here: https://minecraft.gamepedia.com/Customized#Customization
@@ -436,6 +439,7 @@ public class ChunkGeneratorCloud implements IChunkGenerator
     public void populate(int parChunkX, int parChunkZ)
     {
         BlockFalling.fallInstantly = true;
+        
         int chunkStartXInWorld = parChunkX * 16;
         int chunkStartZInWorld = parChunkZ * 16;
         BlockPos blockpos = new BlockPos(chunkStartXInWorld, 0, chunkStartZInWorld);
@@ -444,83 +448,74 @@ public class ChunkGeneratorCloud implements IChunkGenerator
         long l = rand.nextLong() / 2L * 2L + 1L;
         rand.setSeed(parChunkX * k + parChunkZ * l ^ world.getSeed());
         chunkPos = new ChunkPos(parChunkX, parChunkZ);
-        boolean villageNeedsPostProcessing = false;
+        boolean villageHasGenerated = false;
 
-        ForgeEventFactory.onChunkPopulate(true, this, world, rand, parChunkX, parChunkZ, villageNeedsPostProcessing);
+        ForgeEventFactory.onChunkPopulate(true, this, world, rand, parChunkX, parChunkZ, villageHasGenerated);
 
         if (mapFeaturesEnabled)
         {
-            villageNeedsPostProcessing = generateMapFeatures();
+            villageHasGenerated = generateMapFeatures();
         }
 
-        if (useWaterLakes && !villageNeedsPostProcessing && rand.nextInt(waterLakeChance) == 0)
-            if (TerrainGen.populate(this, world, rand, parChunkX, parChunkZ, villageNeedsPostProcessing,
-                    PopulateChunkEvent.Populate.EventType.LAKE))
+        if (useWaterLakes && !villageHasGenerated && rand.nextInt(waterLakeChance) == 0)
+            if (TerrainGen.populate(this, world, rand, parChunkX, parChunkZ, villageHasGenerated, PopulateChunkEvent.Populate.EventType.LAKE))
             {
                 int lakeStartX = rand.nextInt(16) + 8;
                 int lakeStartY = rand.nextInt(256);
                 int lakeStartZ = rand.nextInt(16) + 8;
-                (new WorldGenLakes(Blocks.WATER)).generate(world, rand, blockpos.add(lakeStartX, lakeStartY, lakeStartZ));
+                
+                // DEBUG
+                System.out.println("Generating lake at "+lakeStartX+", "+lakeStartY+", "+lakeStartZ);
+                
+                lakeGenerator.generate(world, rand, blockpos.add(lakeStartX, lakeStartY, lakeStartZ));
             }
 
-        if (!villageNeedsPostProcessing && rand.nextInt(lavaLakeChance / 10) == 0 && useLavaLakes)
-            if (TerrainGen.populate(this, world, rand, parChunkX, parChunkZ, villageNeedsPostProcessing,
-                    PopulateChunkEvent.Populate.EventType.LAVA))
+        if (useLavaLakes && !villageHasGenerated && rand.nextInt(lavaLakeChance / 10) == 0)
+            if (TerrainGen.populate(this, world, rand, parChunkX, parChunkZ, villageHasGenerated, PopulateChunkEvent.Populate.EventType.LAVA))
             {
                 int lavaStartX = rand.nextInt(16) + 8;
                 int lavaStartY = rand.nextInt(rand.nextInt(248) + 8);
                 int lavaStartZ = rand.nextInt(16) + 8;
 
                 if (lavaStartY < world.getSeaLevel() || rand.nextInt(lavaLakeChance / 8) == 0)
-                {
-                    (new WorldGenLakes(Blocks.LAVA)).generate(world, rand, blockpos.add(lavaStartX, lavaStartY, lavaStartZ));
+                {          
+                    // DEBUG
+                    System.out.println("Generating lava lake at "+lavaStartX+", "+lavaStartY+", "+lavaStartZ);
+                    
+                    lavaLakeGenerator.generate(world, rand, blockpos.add(lavaStartX, lavaStartY, lavaStartZ));
                 }
             }
 
         if (useDungeons)
-            if (TerrainGen.populate(this, world, rand, parChunkX, parChunkZ, villageNeedsPostProcessing,
-                    PopulateChunkEvent.Populate.EventType.DUNGEON))
+            if (TerrainGen.populate(this, world, rand, parChunkX, parChunkZ, villageHasGenerated, PopulateChunkEvent.Populate.EventType.DUNGEON))
             {
                 for (int dungeonAttempt = 0; dungeonAttempt < dungeonChance; ++dungeonAttempt)
                 {
-                    int dungeaonStartX = rand.nextInt(16) + 8;
+                    int dungeonStartX = rand.nextInt(16) + 8;
                     int dungeonStartY = rand.nextInt(256);
                     int dungeonStartZ = rand.nextInt(16) + 8;
-                    (new WorldGenDungeons()).generate(world, rand, blockpos.add(dungeaonStartX, dungeonStartY, dungeonStartZ));
+                    
+                    // DEBUG
+                    System.out.println("Attempting to generate dungeon at "+dungeonStartX+", "+dungeonStartY+", "+dungeonStartZ);
+                    
+                    dungeonGenerator.generate(world, rand, blockpos.add(dungeonStartX, dungeonStartY, dungeonStartZ));
                 }
             }
 
         biome.decorate(world, rand, new BlockPos(chunkStartXInWorld, 0, chunkStartZInWorld));
         
-        if (TerrainGen.populate(this, world, rand, parChunkX, parChunkZ, villageNeedsPostProcessing,
-                PopulateChunkEvent.Populate.EventType.ANIMALS))
+        /*
+         * Spawn creatures
+         */
+        if (TerrainGen.populate(this, world, rand, parChunkX, parChunkZ, villageHasGenerated, PopulateChunkEvent.Populate.EventType.CUSTOM))
+        {            
+            // DEBUG
+            System.out.println("Attempting to spawn entities");
+            
             WorldEntitySpawner.performWorldGenSpawning(world, biome, chunkStartXInWorld + 8, chunkStartZInWorld + 8, 16, 16, rand);
-        blockpos = blockpos.add(8, 0, 8);
-
-        if (TerrainGen.populate(this, world, rand, parChunkX, parChunkZ, villageNeedsPostProcessing,
-                PopulateChunkEvent.Populate.EventType.ICE))
-        {
-            for (int xInChunk = 0; xInChunk < 16; ++xInChunk)
-            {
-                for (int zInChunk = 0; zInChunk < 16; ++zInChunk)
-                {
-                    BlockPos blockpos1 = world.getPrecipitationHeight(blockpos.add(xInChunk, 0, zInChunk));
-                    BlockPos blockpos2 = blockpos1.down();
-
-//                    if (world.canBlockFreezeWater(blockpos2))
-//                    {
-//                        world.setBlockState(blockpos2, Blocks.ICE.getDefaultState(), 2);
-//                    }
-//
-//                    if (world.canSnowAt(blockpos1, true))
-//                    {
-//                        world.setBlockState(blockpos1, Blocks.SNOW_LAYER.getDefaultState(), 2);
-//                    }
-                }
-            }
-        } // Forge: End ICE
-
-        ForgeEventFactory.onChunkPopulate(false, this, world, rand, parChunkX, parChunkZ, villageNeedsPostProcessing);
+        }
+        
+        ForgeEventFactory.onChunkPopulate(false, this, world, rand, parChunkX, parChunkZ, villageHasGenerated);
 
         BlockFalling.fallInstantly = false;
     }
