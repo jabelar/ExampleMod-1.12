@@ -5,7 +5,6 @@ import com.blogspot.jabelarminecraft.examplemod.init.ModMaterials;
 import net.minecraft.block.BlockEmptyDrops;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
@@ -25,7 +24,6 @@ public class BlockCloudBedrock extends BlockEmptyDrops
         setBlockUnbreakable();
         setResistance(6000000.0F);
         disableStats();
-        setCreativeTab(CreativeTabs.BUILDING_BLOCKS);
         blockSoundType = SoundType.SNOW;
         blockParticleGravity = 1.0F;
         slipperiness = 0.6F;
