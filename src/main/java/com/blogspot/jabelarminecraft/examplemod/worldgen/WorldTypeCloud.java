@@ -8,12 +8,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.WorldType;
 import net.minecraft.world.biome.BiomeProvider;
-import net.minecraft.world.gen.ChunkGeneratorSettings;
 import net.minecraft.world.gen.IChunkGenerator;
-import net.minecraft.world.gen.layer.GenLayer;
-import net.minecraft.world.gen.layer.GenLayerBiome;
-import net.minecraft.world.gen.layer.GenLayerBiomeEdge;
-import net.minecraft.world.gen.layer.GenLayerZoom;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -120,24 +115,5 @@ public class WorldTypeCloud extends WorldType
     public float getCloudHeight()
     {
         return 128.0F;
-    }
-
-    /**
-     * Creates the GenLayerBiome used for generating the world with the specified ChunkProviderSettings JSON String
-     * *IF AND ONLY IF* this WorldType == WorldType.CUSTOMIZED.
-     *
-     *
-     * @param worldSeed The world seed
-     * @param parentLayer The parent layer to feed into any layer you return
-     * @param chunkSettings The ChunkGeneratorSettings constructed from the custom JSON
-     * @return A GenLayer that will return ints representing the Biomes to be generated, see GenLayerBiome
-     */
-    @Override
-    public GenLayer getBiomeLayer(long worldSeed, GenLayer parentLayer, ChunkGeneratorSettings chunkSettings)
-    {
-        GenLayer ret = new GenLayerBiome(200L, parentLayer, this, chunkSettings);
-        ret = GenLayerZoom.magnify(1000L, ret, 2);
-        ret = new GenLayerBiomeEdge(1000L, ret);
-        return ret;
     }
 }

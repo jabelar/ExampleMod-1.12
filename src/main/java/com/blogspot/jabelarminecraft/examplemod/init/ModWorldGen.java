@@ -15,13 +15,14 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 public class ModWorldGen
 {  
     public static final String CLOUD_NAME = "cloud";
-    public static final DimensionType CLOUD_DIM_TYPE = DimensionType.register(CLOUD_NAME, "_"+CLOUD_NAME, findFreeDimensionID(), WorldProviderCloud.class, true);
+    public static final int CLOUD_DIM_ID = findFreeDimensionID();
+    public static final DimensionType CLOUD_DIM_TYPE = DimensionType.register(CLOUD_NAME, "_"+CLOUD_NAME, CLOUD_DIM_ID, WorldProviderCloud.class, true);
     public static final WorldType CLOUD_WORLD_TYPE = new WorldTypeCloud();
     public static final WorldProvider CLOUD_WORLD_PROVIDER = new WorldProviderCloud();
     
     public static final void registerDimensions()
     {
-        DimensionManager.registerDimension(CLOUD_DIM_TYPE.getId(), CLOUD_DIM_TYPE);
+        DimensionManager.registerDimension(CLOUD_DIM_ID, CLOUD_DIM_TYPE);
     }
     
     @Nullable

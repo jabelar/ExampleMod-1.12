@@ -26,6 +26,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
+import net.minecraft.world.biome.BiomeDecorator;
 import net.minecraft.world.chunk.ChunkPrimer;
 
 public class BiomeCloud extends Biome
@@ -46,9 +47,40 @@ public class BiomeCloud extends Biome
         
         topBlock = ModBlocks.cloud.getDefaultState();
         fillerBlock = ModBlocks.cloud.getDefaultState();
+        
         setSpawnables();
         addFlowers();
     }
+    
+    /**
+     * Allocate a new BiomeDecorator for this BiomeGenBase
+     */
+    @Override
+    public BiomeDecorator createBiomeDecorator()
+    {
+        // DEBUG
+        System.out.println("Creating BiomeDecoratorCloud");
+        
+        BiomeDecorator biomeDecorator = new BiomeDecoratorCloud();
+        
+        biomeDecorator.waterlilyPerChunk = 0;
+        biomeDecorator.treesPerChunk = 3;
+        biomeDecorator.extraTreeChance = 0.1F;
+        biomeDecorator.flowersPerChunk = 100;
+        biomeDecorator.grassPerChunk = 2;
+        biomeDecorator.deadBushPerChunk = 0;
+        biomeDecorator.mushroomsPerChunk = 0;
+        biomeDecorator.reedsPerChunk = 0;
+        biomeDecorator.cactiPerChunk = 0;
+        biomeDecorator.gravelPatchesPerChunk = 1;
+        biomeDecorator.sandPatchesPerChunk = 3;
+        biomeDecorator.clayPerChunk = 1;
+        biomeDecorator.bigMushroomsPerChunk = 0;
+        biomeDecorator.generateFalls = true;
+
+        return getModdedBiomeDecorator(biomeDecorator);
+    }
+
     
     private void addFlowers()
     {

@@ -157,9 +157,9 @@ public class WorldProviderCloud extends WorldProvider
      */
     @Override
     @SideOnly(Side.CLIENT)
-    public Vec3d getFogColor(float p_76562_1_, float p_76562_2_)
+    public Vec3d getFogColor(float parCelestialAngle, float parPartialTicks)
     {
-        float f = MathHelper.cos(p_76562_1_ * ((float)Math.PI * 2F)) * 2.0F + 0.5F;
+        float f = MathHelper.cos(parCelestialAngle * ((float)Math.PI * 2F)) * 2.0F + 0.5F;
         f = MathHelper.clamp(f, 0.0F, 1.0F);
         float f1 = 0.7529412F;
         float f2 = 0.84705883F;

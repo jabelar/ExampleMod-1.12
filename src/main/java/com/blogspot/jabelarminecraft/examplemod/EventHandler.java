@@ -29,6 +29,7 @@ import com.blogspot.jabelarminecraft.examplemod.init.ModConfig;
 import com.blogspot.jabelarminecraft.examplemod.init.ModItems;
 import com.blogspot.jabelarminecraft.examplemod.init.ModMaterials;
 import com.blogspot.jabelarminecraft.examplemod.init.ModNetworking;
+import com.blogspot.jabelarminecraft.examplemod.init.ModWorldGen;
 import com.blogspot.jabelarminecraft.examplemod.items.IExtendedReach;
 import com.blogspot.jabelarminecraft.examplemod.networking.MessageExtendedReachAttack;
 import com.blogspot.jabelarminecraft.examplemod.proxy.ClientProxy;
@@ -71,6 +72,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.WorldServer;
+import net.minecraftforge.client.event.EntityViewRenderEvent.FogColors;
 import net.minecraftforge.client.event.EntityViewRenderEvent.FogDensity;
 import net.minecraftforge.client.event.GuiOpenEvent;
 import net.minecraftforge.client.event.MouseEvent;
@@ -964,15 +966,19 @@ public class EventHandler
     /**
      * Use fog density to create the effect of being under custom fluid, similar to how being under water does it.
      *
-     * @param event
-     *            the event
+     * @param event the event
      */
     @SideOnly(Side.CLIENT)
     @SubscribeEvent(priority = EventPriority.NORMAL, receiveCanceled = true)
     public static void onEvent(FogDensity event)
     {
         // EntityPlayer thePlayer = Minecraft.getMinecraft().player;
-
+        if (event.getEntity().dimension == ModWorldGen.CLOUD_DIM_ID)
+        {
+            event.setDensity(0.3F);
+        }
+        event.setDensity(0.8F);
+        
         if (event.getEntity().isInsideOfMaterial(ModMaterials.SLIME))
         {
             event.setDensity(0.5F);
@@ -983,6 +989,15 @@ public class EventHandler
         }
 
         event.setCanceled(true); // must cancel event for event handler to take effect
+    }
+    
+    @SideOnly(Side.CLIENT)
+    @SubscribeEvent(priority = EventPriority.NORMAL, receiveCanceled = true)
+    public static void onEvent(FogColors event)
+    {
+        event.setRed(0xFF);
+        event.setGreen(0xFF);
+        event.setBlue(0xFF);
     }
 
     /**
