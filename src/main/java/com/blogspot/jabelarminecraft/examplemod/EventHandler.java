@@ -975,9 +975,9 @@ public class EventHandler
         // EntityPlayer thePlayer = Minecraft.getMinecraft().player;
         if (event.getEntity().dimension == ModWorldGen.CLOUD_DIM_ID)
         {
-            event.setDensity(0.3F);
+            event.setDensity((float) Math.abs(Math.pow(((event.getEntity().posY-63)/(255-63)),4)));
         }
-        event.setDensity(0.8F);
+        event.setDensity((float) Math.abs(Math.pow(((event.getEntity().posY-63)/(255-63)),4)));
         
         if (event.getEntity().isInsideOfMaterial(ModMaterials.SLIME))
         {
