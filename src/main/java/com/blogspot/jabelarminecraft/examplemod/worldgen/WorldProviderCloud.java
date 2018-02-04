@@ -17,6 +17,7 @@ import net.minecraft.world.WorldServer;
 import net.minecraft.world.WorldType;
 import net.minecraft.world.biome.BiomeProvider;
 import net.minecraft.world.border.WorldBorder;
+import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.gen.IChunkGenerator;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.fml.relauncher.Side;
@@ -466,9 +467,15 @@ public class WorldProviderCloud extends WorldProvider
     }
 
     @Override
-    public boolean canDoRainSnowIce(net.minecraft.world.chunk.Chunk chunk)
+    public boolean canDoRainSnowIce(Chunk chunk)
     {
         return false;
+    }
+    
+    @Override
+    public boolean canSnowAt(BlockPos pos, boolean checkLight)
+    {
+        return false; 
     }
 
     /**
