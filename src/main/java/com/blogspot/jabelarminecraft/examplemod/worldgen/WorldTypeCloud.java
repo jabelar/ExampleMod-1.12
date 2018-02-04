@@ -36,7 +36,7 @@ public class WorldTypeCloud extends WorldType
     @Override
     public IChunkGenerator getChunkGenerator(World world, String generatorOptions)
     {
-        return new ChunkGeneratorCloud(world, world.getSeed(), world.getWorldInfo().isMapFeaturesEnabled(), generatorOptions);
+        return new ChunkGeneratorCloud(world);
     }
 
     @Override

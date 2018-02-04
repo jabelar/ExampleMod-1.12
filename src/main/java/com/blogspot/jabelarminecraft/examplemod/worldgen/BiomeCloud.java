@@ -5,11 +5,9 @@ import java.util.Random;
 import com.blogspot.jabelarminecraft.examplemod.init.ModBlocks;
 import com.blogspot.jabelarminecraft.examplemod.init.ModWorldGen;
 
-import net.minecraft.block.BlockSand;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.init.Blocks;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.chunk.ChunkPrimer;
@@ -29,88 +27,90 @@ public class BiomeCloud extends Biome
         
         // DEBUG
         System.out.println("Constructing BiomeCloud");
+        
+        topBlock = ModBlocks.cloud.getDefaultState();
+        fillerBlock = ModBlocks.cloud.getDefaultState();
     }
     
     @Override
     public void genTerrainBlocks(World worldIn, Random rand, ChunkPrimer chunkPrimerIn, int x, int z, double noiseVal)
     {
-        int i = worldIn.getSeaLevel();
-        IBlockState iblockstate = this.topBlock;
-        IBlockState iblockstate1 = this.fillerBlock;
+        int seaLevel = worldIn.getSeaLevel();
+        IBlockState surfaceBlock = topBlock;
+        IBlockState mainBlock = fillerBlock;
         int j = -1;
-        int k = (int)(noiseVal / 3.0D + 3.0D + rand.nextDouble() * 0.25D);
-        int l = x & 15;
-        int i1 = z & 15;
-        BlockPos.MutableBlockPos blockpos$mutableblockpos = new BlockPos.MutableBlockPos();
+        int noise = (int)(noiseVal / 3.0D + 3.0D + rand.nextDouble() * 0.25D);
+        int chunkX = x & 15;
+        int chunkZ = z & 15;
+        MutableBlockPos pos = new MutableBlockPos();
 
-        for (int j1 = 255; j1 >= 0; --j1)
+        for (int primerY = 255; primerY >= 0; --primerY)
         {
-            if (j1 <= rand.nextInt(5))
+            // lay down bedrock layer
+            if (primerY <= rand.nextInt(5))
             {
-                chunkPrimerIn.setBlockState(i1, j1, l, BEDROCK);
+                chunkPrimerIn.setBlockState(chunkX, primerY, chunkZ, BEDROCK);
             }
             else
             {
-                IBlockState iblockstate2 = chunkPrimerIn.getBlockState(i1, j1, l);
+                IBlockState blockAtPosition = chunkPrimerIn.getBlockState(chunkX, primerY, chunkZ);
 
-                if (iblockstate2.getMaterial() == Material.AIR)
+                if (blockAtPosition.getMaterial() == Material.AIR)
                 {
                     j = -1;
                 }
-                else if (iblockstate2.getBlock() == Blocks.STONE)
+                else if (blockAtPosition.getBlock() == fillerBlock)
                 {
                     if (j == -1)
                     {
-                        if (k <= 0)
+                        // create area for ocean
+                        if (noise <= 0)
                         {
-                            iblockstate = AIR;
-                            iblockstate1 = STONE;
+                            surfaceBlock = AIR;
+                            mainBlock = fillerBlock;
                         }
-                        else if (j1 >= i - 4 && j1 <= i + 1)
+                        // handle near sea level
+                        else if (primerY >= seaLevel - 4 && primerY <= seaLevel + 1)
                         {
-                            iblockstate = this.topBlock;
-                            iblockstate1 = this.fillerBlock;
+                            surfaceBlock = topBlock;
+                            mainBlock = fillerBlock;
                         }
-
-                        if (j1 < i && (iblockstate == null || iblockstate.getMaterial() == Material.AIR))
+                        
+                        // area exposed to air will be ocean
+                        if (primerY < seaLevel && (surfaceBlock == null || surfaceBlock.getMaterial() == Material.AIR))
                         {
-                            if (this.getTemperature(blockpos$mutableblockpos.setPos(x, j1, z)) < 0.15F)
+                            if (this.getTemperature(pos.setPos(x, primerY, z)) < 0.15F)
                             {
-                                iblockstate = ICE;
+                                surfaceBlock = ICE;
                             }
                             else
                             {
-                                iblockstate = WATER;
+                                surfaceBlock = WATER;
                             }
                         }
 
-                        j = k;
+                        j = noise;
 
-                        if (j1 >= i - 1)
+                        if (primerY >= seaLevel - 1)
                         {
-                            chunkPrimerIn.setBlockState(i1, j1, l, iblockstate);
+                            chunkPrimerIn.setBlockState(chunkX, primerY, chunkZ, surfaceBlock);
                         }
-                        else if (j1 < i - 7 - k)
+                        // fill in ocean bottom
+                        else if (primerY < seaLevel - 7 - noise)
                         {
-                            iblockstate = AIR;
-                            iblockstate1 = STONE;
-                            chunkPrimerIn.setBlockState(i1, j1, l, GRAVEL);
+                            surfaceBlock = AIR;
+                            mainBlock = fillerBlock;
+                            chunkPrimerIn.setBlockState(chunkX, primerY, chunkZ, fillerBlock);
                         }
                         else
                         {
-                            chunkPrimerIn.setBlockState(i1, j1, l, iblockstate1);
+                            chunkPrimerIn.setBlockState(chunkX, primerY, chunkZ, mainBlock);
                         }
                     }
-                    else if (j > 0)
+                    else if (j > 0) // fill in terrain with main block
                     {
                         --j;
-                        chunkPrimerIn.setBlockState(i1, j1, l, iblockstate1);
-
-                        if (j == 0 && iblockstate1.getBlock() == Blocks.SAND && k > 1)
-                        {
-                            j = rand.nextInt(4) + Math.max(0, j1 - 63);
-                            iblockstate1 = iblockstate1.getValue(BlockSand.VARIANT) == BlockSand.EnumType.RED_SAND ? RED_SANDSTONE : SANDSTONE;
-                        }
+                        chunkPrimerIn.setBlockState(chunkX, primerY, chunkZ, mainBlock);
                     }
                 }
             }

@@ -7,7 +7,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.lwjgl.input.Keyboard;
 
 import net.minecraft.client.gui.GuiButton;
-import net.minecraft.client.gui.GuiCustomizeWorldScreen;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.resources.I18n;
@@ -64,9 +63,9 @@ public class GuiCreateWorldMod extends GuiScreen
     /** These filenames are known to be restricted on one or more OS's. */
     private static final String[] DISALLOWED_FILENAMES = new String[] {"CON", "COM", "PRN", "AUX", "CLOCK$", "NUL", "COM1", "COM2", "COM3", "COM4", "COM5", "COM6", "COM7", "COM8", "COM9", "LPT1", "LPT2", "LPT3", "LPT4", "LPT5", "LPT6", "LPT7", "LPT8", "LPT9"};
 
-    public GuiCreateWorldMod(GuiScreen p_i46320_1_)
+    public GuiCreateWorldMod(GuiScreen parParent)
     {
-        this.parentScreen = p_i46320_1_;
+        this.parentScreen = parParent;
         this.worldSeed = "";
         this.worldName = I18n.format("selectWorld.newWorld");
     }
@@ -366,7 +365,7 @@ public class GuiCreateWorldMod extends GuiScreen
                 }
                 else if (WorldType.WORLD_TYPES[this.selectedIndex] == WorldType.CUSTOMIZED)
                 {
-                    mc.displayGuiScreen(new GuiCustomizeWorldScreen(this, chunkProviderSettingsJson));
+                    mc.displayGuiScreen(new GuiCustomizeWorldMod(this, chunkProviderSettingsJson));
                 }
             }
         }
