@@ -5,8 +5,10 @@ import net.minecraft.block.SoundType;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.util.BlockRenderLayer;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -53,5 +55,19 @@ public class BlockCloud extends BlockIce
     public boolean hasCustomBreakingProgress(IBlockState state)
     {
         return false;
+    }
+    
+    @Override
+    public boolean canSustainPlant(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing direction, net.minecraftforge.common.IPlantable plantable)
+    {
+        // TO-DO
+        // Should make this more specific to various types of plants
+        return true;
+    }
+    
+    @Override
+    public void onPlantGrow(IBlockState state, World world, BlockPos pos, BlockPos source)
+    {
+        // Some trees convert the soil under the trunk
     }
 }

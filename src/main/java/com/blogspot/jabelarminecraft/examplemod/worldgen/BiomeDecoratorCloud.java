@@ -17,24 +17,40 @@ package com.blogspot.jabelarminecraft.examplemod.worldgen;
 
 import java.util.Random;
 
+import com.blogspot.jabelarminecraft.examplemod.init.ModBiomes;
 import com.blogspot.jabelarminecraft.examplemod.init.ModBlocks;
 import com.google.common.base.Predicate;
 
+import net.minecraft.block.BlockFlower;
 import net.minecraft.block.BlockStone;
+import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.BiomeDecorator;
+import net.minecraft.world.gen.feature.WorldGenAbstractTree;
+import net.minecraft.world.gen.feature.WorldGenBigMushroom;
+import net.minecraft.world.gen.feature.WorldGenBush;
+import net.minecraft.world.gen.feature.WorldGenCactus;
+import net.minecraft.world.gen.feature.WorldGenFlowers;
+import net.minecraft.world.gen.feature.WorldGenLiquids;
 import net.minecraft.world.gen.feature.WorldGenMinable;
+import net.minecraft.world.gen.feature.WorldGenReed;
+import net.minecraft.world.gen.feature.WorldGenWaterlily;
 import net.minecraft.world.gen.feature.WorldGenerator;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.terraingen.DecorateBiomeEvent;
+import net.minecraftforge.event.terraingen.DecorateBiomeEvent.Decorate.EventType;
 import net.minecraftforge.event.terraingen.OreGenEvent;
 import net.minecraftforge.event.terraingen.TerrainGen;
 
 // TODO: Auto-generated Javadoc
 public class BiomeDecoratorCloud extends BiomeDecorator
 { 
+    // This predicate is used by WorldGen constructors to define
+    // whether a block can be replaced by ore generation.
     Predicate<IBlockState> replaceablePredicate = new CloudPredicate();
     
     // If you want to make these configurable, you'll need a ChunkGeneratorSettings
@@ -96,6 +112,15 @@ public class BiomeDecoratorCloud extends BiomeDecorator
         redstoneGen = new WorldGenMinable(Blocks.REDSTONE_ORE.getDefaultState(), redstoneSize, replaceablePredicate);
         diamondGen = new WorldGenMinable(Blocks.DIAMOND_ORE.getDefaultState(), diamondSize, replaceablePredicate);
         lapisGen = new WorldGenMinable(Blocks.LAPIS_ORE.getDefaultState(), lapisSize, replaceablePredicate);
+
+        // Good to assign your own to give full control
+        flowerGen = new WorldGenFlowers(Blocks.YELLOW_FLOWER, BlockFlower.EnumFlowerType.DANDELION);
+        mushroomBrownGen = new WorldGenBush(Blocks.BROWN_MUSHROOM);
+        mushroomRedGen = new WorldGenBush(Blocks.RED_MUSHROOM);
+        bigMushroomGen = new WorldGenBigMushroom();
+        reedGen = new WorldGenReed();
+        cactusGen = new WorldGenCactus();
+        waterlilyGen = new WorldGenWaterlily();
     }
 
     /** 
@@ -115,69 +140,165 @@ public class BiomeDecoratorCloud extends BiomeDecorator
             decorating = false;
         }
     }
+    
     /**
      * This is where things like trees are generated.
     */
     @Override
     protected void genDecorations(Biome biomeIn, World worldIn, Random random)
     {
-        super.genDecorations(biomeIn, worldIn, random);
+        MinecraftForge.EVENT_BUS.post(new DecorateBiomeEvent.Pre(worldIn, random, chunkPos));
+
+        generateOres(worldIn, random);
+
+        generate(worldIn, random, chunkPos, DecorateBiomeEvent.Decorate.EventType.SAND, sandGen, sandPatchesPerChunk);
+        generate(worldIn, random, chunkPos, DecorateBiomeEvent.Decorate.EventType.CLAY, clayGen, clayPerChunk);
+        generate(worldIn, random, chunkPos, DecorateBiomeEvent.Decorate.EventType.SAND_PASS2, gravelGen, gravelPatchesPerChunk);
+        generate(worldIn, random, chunkPos, DecorateBiomeEvent.Decorate.EventType.SAND_PASS2, gravelGen, gravelPatchesPerChunk);
+        generateTrees(worldIn, random, chunkPos);
+        
+        if(TerrainGen.decorate(worldIn, random, chunkPos, DecorateBiomeEvent.Decorate.EventType.FLOWERS))
+        for (int l2 = 0; l2 < flowersPerChunk; ++l2)
+        {
+            int i7 = random.nextInt(16) + 8;
+            int l10 = random.nextInt(16) + 8;
+            int j14 = worldIn.getHeight(chunkPos.add(i7, 0, l10)).getY() + 32;
+
+            if (j14 > 0)
+            {
+                int k17 = random.nextInt(j14);
+                BlockPos blockpos1 = chunkPos.add(i7, k17, l10);
+                BlockFlower.EnumFlowerType blockflower$enumflowertype = biomeIn.pickRandomFlower(random, blockpos1);
+                BlockFlower blockflower = blockflower$enumflowertype.getBlockType().getBlock();
+
+                if (blockflower.getDefaultState().getMaterial() != Material.AIR)
+                {
+                    flowerGen.setGeneratedBlock(blockflower, blockflower$enumflowertype);
+                    flowerGen.generate(worldIn, random, blockpos1);
+                }
+            }
+        }
+
+        if(TerrainGen.decorate(worldIn, random, chunkPos, DecorateBiomeEvent.Decorate.EventType.GRASS))
+        for (int i3 = 0; i3 < grassPerChunk; ++i3)
+        {
+            int j7 = random.nextInt(16) + 8;
+            int i11 = random.nextInt(16) + 8;
+            int k14 = worldIn.getHeight(chunkPos.add(j7, 0, i11)).getY() * 2;
+
+            if (k14 > 0)
+            {
+                int l17 = random.nextInt(k14);
+                biomeIn.getRandomWorldGenForGrass(random).generate(worldIn, random, chunkPos.add(j7, l17, i11));
+            }
+        }
+
+
+        if (generateFalls)
+        {
+            generateFalls(worldIn, random, chunkPos);
+        }
+        MinecraftForge.EVENT_BUS.post(new DecorateBiomeEvent.Post(worldIn, random, chunkPos));
     }
     
+    private void generateTrees(World worldIn, Random random, BlockPos chunkPos)
+    {
+        int k1 = treesPerChunk;
+
+        if (random.nextFloat() < extraTreeChance)
+        {
+            ++k1;
+        }
+
+        if(TerrainGen.decorate(worldIn, random, chunkPos, DecorateBiomeEvent.Decorate.EventType.TREE))
+        for (int j2 = 0; j2 < k1; ++j2)
+        {
+            int k6 = random.nextInt(16) + 8;
+            int l = random.nextInt(16) + 8;
+            WorldGenAbstractTree worldgenabstracttree = ModBiomes.cloud.getRandomTreeFeature(random);
+            worldgenabstracttree.setDecorationDefaults();
+            BlockPos blockpos = worldIn.getHeight(chunkPos.add(k6, 0, l));
+
+            if (worldgenabstracttree.generate(worldIn, random, blockpos))
+            {
+                worldgenabstracttree.generateSaplings(worldIn, random, blockpos);
+            }
+        }
+    }
+
+    private void generateFalls(World worldIn, Random random, BlockPos chunkPos)
+    {
+        if(TerrainGen.decorate(worldIn, random, chunkPos, DecorateBiomeEvent.Decorate.EventType.LAKE_WATER))
+        for (int k5 = 0; k5 < 50; ++k5)
+        {
+            int i10 = random.nextInt(16) + 8;
+            int l13 = random.nextInt(16) + 8;
+            int i17 = random.nextInt(248) + 8;
+
+            if (i17 > 0)
+            {
+                int k19 = random.nextInt(i17);
+                BlockPos blockpos6 = chunkPos.add(i10, k19, l13);
+                (new WorldGenLiquids(Blocks.FLOWING_WATER)).generate(worldIn, random, blockpos6);
+            }
+        }
+
+        if(TerrainGen.decorate(worldIn, random, chunkPos, DecorateBiomeEvent.Decorate.EventType.LAKE_LAVA))
+        for (int l5 = 0; l5 < 20; ++l5)
+        {
+            int j10 = random.nextInt(16) + 8;
+            int i14 = random.nextInt(16) + 8;
+            int j17 = random.nextInt(random.nextInt(random.nextInt(240) + 8) + 8);
+            BlockPos blockpos3 = chunkPos.add(j10, j17, i14);
+            (new WorldGenLiquids(Blocks.FLOWING_LAVA)).generate(worldIn, random, blockpos3);
+        }
+    }
+
+    private void generate(World worldIn, Random random, BlockPos chunkPos, EventType eventType, WorldGenerator generator, int countPerChunk)
+    {
+        if(TerrainGen.decorate(worldIn, random, chunkPos, eventType))
+        {
+            for (int count = 0; count < countPerChunk; ++count)
+            {
+                int randX = random.nextInt(16) + 8;
+                int randZ = random.nextInt(16) + 8;
+                generator.generate(worldIn, random, worldIn.getTopSolidOrLiquidBlock(chunkPos.add(randX, 0, randZ)));
+            }
+        }
+    }
+
     /**
      * Generates ores in the current chunk
      */
     @Override
     protected void generateOres(World worldIn, Random random)
     {
-        net.minecraftforge.common.MinecraftForge.ORE_GEN_BUS.post(new OreGenEvent.Pre(worldIn, random, chunkPos));
+        MinecraftForge.ORE_GEN_BUS.post(new OreGenEvent.Pre(worldIn, random, chunkPos));
         if (TerrainGen.generateOre(worldIn, random, dirtGen, chunkPos, OreGenEvent.GenerateMinable.EventType.DIRT))
-        this.genStandardOre1(worldIn, random, dirtCount, this.dirtGen, oreGenMinHeight, dirtMaxHeight);
+        genStandardOre1(worldIn, random, dirtCount, dirtGen, oreGenMinHeight, dirtMaxHeight);
         if (TerrainGen.generateOre(worldIn, random, gravelOreGen, chunkPos, OreGenEvent.GenerateMinable.EventType.GRAVEL))
-        this.genStandardOre1(worldIn, random, gravelCount, this.gravelOreGen, oreGenMinHeight, gravelMaxHeight);
+        genStandardOre1(worldIn, random, gravelCount, gravelOreGen, oreGenMinHeight, gravelMaxHeight);
         if (TerrainGen.generateOre(worldIn, random, dioriteGen, chunkPos, OreGenEvent.GenerateMinable.EventType.DIORITE))
-        this.genStandardOre1(worldIn, random, dioriteCount, this.dioriteGen, oreGenMinHeight, dioriteMaxHeight);
+        genStandardOre1(worldIn, random, dioriteCount, dioriteGen, oreGenMinHeight, dioriteMaxHeight);
         if (TerrainGen.generateOre(worldIn, random, graniteGen, chunkPos, OreGenEvent.GenerateMinable.EventType.GRANITE))
-        this.genStandardOre1(worldIn, random, graniteCount, this.graniteGen, oreGenMinHeight, graniteMaxHeight);
+        genStandardOre1(worldIn, random, graniteCount, graniteGen, oreGenMinHeight, graniteMaxHeight);
         if (TerrainGen.generateOre(worldIn, random, andesiteGen, chunkPos, OreGenEvent.GenerateMinable.EventType.ANDESITE))
-        this.genStandardOre1(worldIn, random, andesiteCount, this.andesiteGen, oreGenMinHeight, andesiteMaxHeight);
+        genStandardOre1(worldIn, random, andesiteCount, andesiteGen, oreGenMinHeight, andesiteMaxHeight);
         if (TerrainGen.generateOre(worldIn, random, coalGen, chunkPos, OreGenEvent.GenerateMinable.EventType.COAL))
-        this.genStandardOre1(worldIn, random, coalCount, this.coalGen, oreGenMinHeight, coalMaxHeight);
+        genStandardOre1(worldIn, random, coalCount, coalGen, oreGenMinHeight, coalMaxHeight);
         if (TerrainGen.generateOre(worldIn, random, ironGen, chunkPos, OreGenEvent.GenerateMinable.EventType.IRON))
-        this.genStandardOre1(worldIn, random, ironCount, this.ironGen, oreGenMinHeight, ironMaxHeight);
+        genStandardOre1(worldIn, random, ironCount, ironGen, oreGenMinHeight, ironMaxHeight);
         if (TerrainGen.generateOre(worldIn, random, goldGen, chunkPos, OreGenEvent.GenerateMinable.EventType.GOLD))
-        this.genStandardOre1(worldIn, random, goldCount, this.goldGen, oreGenMinHeight, goldMaxHeight);
+        genStandardOre1(worldIn, random, goldCount, goldGen, oreGenMinHeight, goldMaxHeight);
         if (TerrainGen.generateOre(worldIn, random, redstoneGen, chunkPos, OreGenEvent.GenerateMinable.EventType.REDSTONE))
-        this.genStandardOre1(worldIn, random, redstoneCount, this.redstoneGen, oreGenMinHeight, redstoneMaxHeight);
+        genStandardOre1(worldIn, random, redstoneCount, redstoneGen, oreGenMinHeight, redstoneMaxHeight);
         if (TerrainGen.generateOre(worldIn, random, diamondGen, chunkPos, OreGenEvent.GenerateMinable.EventType.DIAMOND))
-        this.genStandardOre1(worldIn, random, diamondCount, this.diamondGen, oreGenMinHeight, diamondMaxHeight);
+        genStandardOre1(worldIn, random, diamondCount, diamondGen, oreGenMinHeight, diamondMaxHeight);
         if (TerrainGen.generateOre(worldIn, random, lapisGen, chunkPos, OreGenEvent.GenerateMinable.EventType.LAPIS))
-        this.genStandardOre2(worldIn, random, lapisCount, this.lapisGen, lapisCenterHeight, lapisSpread);
-        net.minecraftforge.common.MinecraftForge.ORE_GEN_BUS.post(new OreGenEvent.Post(worldIn, random, chunkPos));
+        genStandardOre2(worldIn, random, lapisCount, lapisGen, lapisCenterHeight, lapisSpread);
+        MinecraftForge.ORE_GEN_BUS.post(new OreGenEvent.Post(worldIn, random, chunkPos));
     }
 
-    /**
-     * Standard ore generation helper. Vanilla uses this to generate most ores.
-     * The main difference between this and {@link #genStandardOre2} is that this takes min and max heights, while
-     * genStandardOre2 takes center and spread.
-     */
-    @Override
-    protected void genStandardOre1(World worldIn, Random random, int blockCount, WorldGenerator generator, int minHeight, int maxHeight)
-    {
-        super.genStandardOre1(worldIn, random, blockCount, generator, minHeight, maxHeight);
-    }
-
-    /**
-     * Standard ore generation helper. Vanilla uses this to generate Lapis Lazuli.
-     * The main difference between this and {@link #genStandardOre1} is that this takes takes center and spread, while
-     * genStandardOre1 takes min and max heights.
-     */
-    @Override
-    protected void genStandardOre2(World worldIn, Random random, int blockCount, WorldGenerator generator, int centerHeight, int spread)
-    {
-        super.genStandardOre2(worldIn, random, blockCount, generator, centerHeight, spread);
-    }
-    
     static class CloudPredicate implements Predicate<IBlockState>
     {
         private CloudPredicate()

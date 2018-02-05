@@ -6,6 +6,7 @@ import com.blogspot.jabelarminecraft.examplemod.init.ModBlocks;
 import com.blogspot.jabelarminecraft.examplemod.init.ModWorldGen;
 
 import net.minecraft.block.BlockFlower;
+import net.minecraft.block.BlockTallGrass;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.monster.EntityCreeper;
@@ -23,11 +24,15 @@ import net.minecraft.entity.passive.EntityPig;
 import net.minecraft.entity.passive.EntitySheep;
 import net.minecraft.entity.passive.EntitySquid;
 import net.minecraft.init.Blocks;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.BiomeDecorator;
 import net.minecraft.world.chunk.ChunkPrimer;
+import net.minecraft.world.gen.feature.WorldGenAbstractTree;
+import net.minecraft.world.gen.feature.WorldGenTallGrass;
+import net.minecraft.world.gen.feature.WorldGenerator;
 
 public class BiomeCloud extends Biome
 {
@@ -81,6 +86,28 @@ public class BiomeCloud extends Biome
         return getModdedBiomeDecorator(biomeDecorator);
     }
 
+
+    @Override
+    public WorldGenAbstractTree getRandomTreeFeature(Random rand)
+    {
+        return new WorldGenTreesCloud(false);
+    }
+
+    /**
+     * Gets a WorldGen appropriate for this biome.
+     */
+    @Override
+    public WorldGenerator getRandomWorldGenForGrass(Random rand)
+    {
+        return new WorldGenTallGrass(BlockTallGrass.EnumType.GRASS);
+    }
+
+    @Override
+    public BlockFlower.EnumFlowerType pickRandomFlower(Random rand, BlockPos pos)
+    {
+        return rand.nextInt(3) > 0 ? BlockFlower.EnumFlowerType.DANDELION : BlockFlower.EnumFlowerType.POPPY;
+    }
+    
     
     private void addFlowers()
     {
