@@ -1,0 +1,9 @@
+{
+    "forge_marker": 1,
+    "variants": {
+        "axis=y":  { "model": "examplemod:cloud_log" },
+        "axis=z":   { "model": "examplemod:cloud_log", "x": 90 },
+        "axis=x":   { "model": "examplemod:cloud_log", "x": 90, "y": 90 },
+        "axis=none": { "model": "examplemod:cloud_log" }
+    }
+}

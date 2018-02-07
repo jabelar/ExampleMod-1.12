@@ -2,9 +2,10 @@ package com.blogspot.jabelarminecraft.examplemod.worldgen;
 
 import java.util.Random;
 
+import com.blogspot.jabelarminecraft.examplemod.init.ModBlocks;
+
 import net.minecraft.block.BlockLeaves;
 import net.minecraft.block.BlockOldLeaf;
-import net.minecraft.block.BlockOldLog;
 import net.minecraft.block.BlockPlanks;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -17,7 +18,7 @@ import net.minecraftforge.common.IPlantable;
 
 public class WorldGenTreesCloud extends WorldGenAbstractTree
 {
-    private IBlockState blockStateWood = Blocks.LOG.getDefaultState().withProperty(BlockOldLog.VARIANT, BlockPlanks.EnumType.OAK);
+    private IBlockState blockStateWood = ModBlocks.cloud_log.getDefaultState();
     private IBlockState blockStateLeaves = Blocks.LEAVES.getDefaultState().withProperty(BlockOldLeaf.VARIANT, BlockPlanks.EnumType.OAK).withProperty(BlockLeaves.CHECK_DECAY, Boolean.valueOf(false));
     /** The minimum height of a generated tree. */
     private final int minTreeHeight = 4;
@@ -31,38 +32,11 @@ public class WorldGenTreesCloud extends WorldGenAbstractTree
     public boolean generate(World parWorld, Random parRandom, BlockPos parBlockPos)
     {
         int minHeight = parRandom.nextInt(3) + minTreeHeight;
-        boolean isSuitableLocation = true;
         
         // Check if tree fits in world
         if (parBlockPos.getY() >= 1 && parBlockPos.getY() + minHeight + 1 <= parWorld.getHeight())
         {
-            for (int checkY = parBlockPos.getY(); checkY <= parBlockPos.getY() + 1 + minHeight; ++checkY)
-            {
-                // Handle increasing space towards top of tree
-                int extraSpaceNeeded = 1;
-                // Handle base location
-                if (checkY == parBlockPos.getY())
-                {
-                    extraSpaceNeeded = 0;
-                }             
-                // Handle top location
-                if (checkY >= parBlockPos.getY() + 1 + minHeight - 2)
-                {
-                    extraSpaceNeeded = 2;
-                }
-
-                BlockPos.MutableBlockPos blockPos = new BlockPos.MutableBlockPos();
-
-                for (int checkX = parBlockPos.getX() - extraSpaceNeeded; checkX <= parBlockPos.getX() + extraSpaceNeeded && isSuitableLocation; ++checkX)
-                {
-                    for (int checkZ = parBlockPos.getZ() - extraSpaceNeeded; checkZ <= parBlockPos.getZ() + extraSpaceNeeded && isSuitableLocation; ++checkZ)
-                    {
-                        isSuitableLocation = isReplaceable(parWorld,blockPos.setPos(checkX, checkY, checkZ));
-                    }
-                }
-            }
-
-            if (!isSuitableLocation)
+            if (!isSuitableLocation(parWorld, parBlockPos, minHeight))
             {
                 return false;
             }
@@ -73,45 +47,8 @@ public class WorldGenTreesCloud extends WorldGenAbstractTree
                 if (state.getBlock().canSustainPlant(state, parWorld, parBlockPos.down(), EnumFacing.UP, (IPlantable) Blocks.SAPLING) && parBlockPos.getY() < parWorld.getHeight() - minHeight - 1)
                 {
                     state.getBlock().onPlantGrow(state, parWorld, parBlockPos.down(), parBlockPos);
-
-                    for (int i3 = parBlockPos.getY() - 3 + minHeight; i3 <= parBlockPos.getY() + minHeight; ++i3)
-                    {
-                        int i4 = i3 - (parBlockPos.getY() + minHeight);
-                        int j1 = 1 - i4 / 2;
-
-                        for (int k1 = parBlockPos.getX() - j1; k1 <= parBlockPos.getX() + j1; ++k1)
-                        {
-                            int l1 = k1 - parBlockPos.getX();
-
-                            for (int i2 = parBlockPos.getZ() - j1; i2 <= parBlockPos.getZ() + j1; ++i2)
-                            {
-                                int j2 = i2 - parBlockPos.getZ();
-
-                                if (Math.abs(l1) != j1 || Math.abs(j2) != j1 || parRandom.nextInt(2) != 0 && i4 != 0)
-                                {
-                                    BlockPos blockpos = new BlockPos(k1, i3, i2);
-                                    state = parWorld.getBlockState(blockpos);
-
-                                    if (state.getBlock().isAir(state, parWorld, blockpos) || state.getBlock().isLeaves(state, parWorld, blockpos) || state.getMaterial() == Material.VINE)
-                                    {
-                                        setBlockAndNotifyAdequately(parWorld, blockpos, blockStateLeaves);
-                                    }
-                                }
-                            }
-                        }
-                    }
-
-                    for (int j3 = 0; j3 < minHeight; ++j3)
-                    {
-                        BlockPos upN = parBlockPos.up(j3);
-                        state = parWorld.getBlockState(upN);
-
-                        if (state.getBlock().isAir(state, parWorld, upN) || state.getBlock().isLeaves(state, parWorld, upN) || state.getMaterial() == Material.VINE)
-                        {
-                            setBlockAndNotifyAdequately(parWorld, parBlockPos.up(j3), blockStateWood);
-                        }
-                    }
-
+                    generateLeaves(parWorld, parBlockPos, minHeight, parRandom);
+                    generateTrunk(parWorld, parBlockPos, minHeight);
                     return true;
                 }
                 else
@@ -124,5 +61,83 @@ public class WorldGenTreesCloud extends WorldGenAbstractTree
         {
             return false;
         }
+    }
+
+    private void generateLeaves(World parWorld, BlockPos parBlockPos, int minHeight, Random parRandom)
+    {
+        for (int foliageY = parBlockPos.getY() - 3 + minHeight; foliageY <= parBlockPos.getY() + minHeight; ++foliageY)
+        {
+            int foliageLayer = foliageY - (parBlockPos.getY() + minHeight);
+            int foliageLayerRadius = 1 - foliageLayer / 2;
+
+            for (int foliageX = parBlockPos.getX() - foliageLayerRadius; foliageX <= parBlockPos.getX() + foliageLayerRadius; ++foliageX)
+            {
+                int foliageRelativeX = foliageX - parBlockPos.getX();
+
+                for (int foliageZ = parBlockPos.getZ() - foliageLayerRadius; foliageZ <= parBlockPos.getZ() + foliageLayerRadius; ++foliageZ)
+                {
+                    int foliageRelativeZ = foliageZ - parBlockPos.getZ();
+
+                    // Fill in layer with some randomness
+                    if (Math.abs(foliageRelativeX) != foliageLayerRadius || Math.abs(foliageRelativeZ) != foliageLayerRadius || parRandom.nextInt(2) != 0 && foliageLayer != 0)
+                    {
+                        BlockPos blockPos = new BlockPos(foliageX, foliageY, foliageZ);
+                        IBlockState state = parWorld.getBlockState(blockPos);
+
+                        if (state.getBlock().isAir(state, parWorld, blockPos) || state.getBlock().isLeaves(state, parWorld, blockPos) || state.getMaterial() == Material.VINE)
+                        {
+                            setBlockAndNotifyAdequately(parWorld, blockPos, blockStateLeaves);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private void generateTrunk(World parWorld, BlockPos parBlockPos, int minHeight)
+    {
+        for (int height = 0; height < minHeight; ++height)
+        {
+            BlockPos upN = parBlockPos.up(height);
+            IBlockState state = parWorld.getBlockState(upN);
+
+            if (state.getBlock().isAir(state, parWorld, upN) || state.getBlock().isLeaves(state, parWorld, upN) || state.getMaterial() == Material.VINE)
+            {
+                setBlockAndNotifyAdequately(parWorld, parBlockPos.up(height), blockStateWood);
+            }
+        }
+    }
+
+    private boolean isSuitableLocation(World parWorld, BlockPos parBlockPos, int minHeight)
+    {
+        boolean isSuitableLocation = true;
+        
+        for (int checkY = parBlockPos.getY(); checkY <= parBlockPos.getY() + 1 + minHeight; ++checkY)
+        {
+            // Handle increasing space towards top of tree
+            int extraSpaceNeeded = 1;
+            // Handle base location
+            if (checkY == parBlockPos.getY())
+            {
+                extraSpaceNeeded = 0;
+            }             
+            // Handle top location
+            if (checkY >= parBlockPos.getY() + 1 + minHeight - 2)
+            {
+                extraSpaceNeeded = 2;
+            }
+
+            BlockPos.MutableBlockPos blockPos = new BlockPos.MutableBlockPos();
+
+            for (int checkX = parBlockPos.getX() - extraSpaceNeeded; checkX <= parBlockPos.getX() + extraSpaceNeeded && isSuitableLocation; ++checkX)
+            {
+                for (int checkZ = parBlockPos.getZ() - extraSpaceNeeded; checkZ <= parBlockPos.getZ() + extraSpaceNeeded && isSuitableLocation; ++checkZ)
+                {
+                    isSuitableLocation = isReplaceable(parWorld,blockPos.setPos(checkX, checkY, checkZ));
+                }
+            }
+        }
+        
+        return isSuitableLocation;
     }
 }
