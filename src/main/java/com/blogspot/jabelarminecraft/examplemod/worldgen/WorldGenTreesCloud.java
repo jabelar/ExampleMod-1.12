@@ -5,6 +5,7 @@ import java.util.Random;
 import com.blogspot.jabelarminecraft.examplemod.init.ModBlocks;
 
 import net.minecraft.block.BlockLeaves;
+import net.minecraft.block.BlockLog;
 import net.minecraft.block.BlockOldLeaf;
 import net.minecraft.block.BlockPlanks;
 import net.minecraft.block.material.Material;
@@ -103,7 +104,7 @@ public class WorldGenTreesCloud extends WorldGenAbstractTree
 
             if (state.getBlock().isAir(state, parWorld, upN) || state.getBlock().isLeaves(state, parWorld, upN) || state.getMaterial() == Material.VINE)
             {
-                setBlockAndNotifyAdequately(parWorld, parBlockPos.up(height), blockStateWood);
+                setBlockAndNotifyAdequately(parWorld, parBlockPos.up(height), blockStateWood.withProperty(BlockLog.LOG_AXIS, BlockLog.EnumAxis.Y));
             }
         }
     }

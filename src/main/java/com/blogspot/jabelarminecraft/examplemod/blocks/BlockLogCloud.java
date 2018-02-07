@@ -1,7 +1,6 @@
 package com.blogspot.jabelarminecraft.examplemod.blocks;
 
 import net.minecraft.block.BlockLog;
-import net.minecraft.block.BlockPlanks;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.BlockStateContainer;
@@ -19,6 +18,8 @@ public class BlockLogCloud extends BlockLog
     public BlockLogCloud()
     {
         super();
+        setDefaultState(blockState.getBaseState().withProperty(LOG_AXIS, BlockLog.EnumAxis.Y));
+
     }
 
     /**
@@ -36,8 +37,7 @@ public class BlockLogCloud extends BlockLog
     @Override
     public void getSubBlocks(CreativeTabs itemIn, NonNullList<ItemStack> items)
     {
-        items.add(new ItemStack(this, 1, BlockPlanks.EnumType.ACACIA.getMetadata() - 4));
-        items.add(new ItemStack(this, 1, BlockPlanks.EnumType.DARK_OAK.getMetadata() - 4));
+        items.add(new ItemStack(this));
     }
 
     /**
