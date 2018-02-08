@@ -8,7 +8,6 @@ import net.minecraft.block.BlockLeaves;
 import net.minecraft.block.BlockLog;
 import net.minecraft.block.BlockOldLeaf;
 import net.minecraft.block.BlockPlanks;
-import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumFacing;
@@ -85,7 +84,7 @@ public class WorldGenTreesCloud extends WorldGenAbstractTree
                         BlockPos blockPos = new BlockPos(foliageX, foliageY, foliageZ);
                         IBlockState state = parWorld.getBlockState(blockPos);
 
-                        if (state.getBlock().isAir(state, parWorld, blockPos) || state.getBlock().isLeaves(state, parWorld, blockPos) || state.getMaterial() == Material.VINE)
+                        if (state.getBlock().isAir(state, parWorld, blockPos) || state.getBlock().isLeaves(state, parWorld, blockPos))
                         {
                             setBlockAndNotifyAdequately(parWorld, blockPos, blockStateLeaves);
                         }
@@ -102,7 +101,7 @@ public class WorldGenTreesCloud extends WorldGenAbstractTree
             BlockPos upN = parBlockPos.up(height);
             IBlockState state = parWorld.getBlockState(upN);
 
-            if (state.getBlock().isAir(state, parWorld, upN) || state.getBlock().isLeaves(state, parWorld, upN) || state.getMaterial() == Material.VINE)
+            if (state.getBlock().isAir(state, parWorld, upN) || state.getBlock().isLeaves(state, parWorld, upN))
             {
                 setBlockAndNotifyAdequately(parWorld, parBlockPos.up(height), blockStateWood.withProperty(BlockLog.LOG_AXIS, BlockLog.EnumAxis.Y));
             }
