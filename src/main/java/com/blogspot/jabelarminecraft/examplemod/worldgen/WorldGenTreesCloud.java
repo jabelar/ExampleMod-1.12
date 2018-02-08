@@ -6,8 +6,6 @@ import com.blogspot.jabelarminecraft.examplemod.init.ModBlocks;
 
 import net.minecraft.block.BlockLeaves;
 import net.minecraft.block.BlockLog;
-import net.minecraft.block.BlockOldLeaf;
-import net.minecraft.block.BlockPlanks;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumFacing;
@@ -19,7 +17,7 @@ import net.minecraftforge.common.IPlantable;
 public class WorldGenTreesCloud extends WorldGenAbstractTree
 {
     private IBlockState blockStateWood = ModBlocks.cloud_log.getDefaultState();
-    private IBlockState blockStateLeaves = Blocks.LEAVES.getDefaultState().withProperty(BlockOldLeaf.VARIANT, BlockPlanks.EnumType.OAK).withProperty(BlockLeaves.CHECK_DECAY, Boolean.valueOf(false));
+    private IBlockState blockStateLeaves = ModBlocks.cloud_leaves.getDefaultState().withProperty(BlockLeaves.CHECK_DECAY, Boolean.valueOf(false));
     /** The minimum height of a generated tree. */
     private final int minTreeHeight = 4;
 

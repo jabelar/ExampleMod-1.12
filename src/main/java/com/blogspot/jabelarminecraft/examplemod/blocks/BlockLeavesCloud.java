@@ -14,9 +14,12 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.stats.StatList;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class BlockLeavesCloud extends BlockLeaves
 {
@@ -39,6 +42,13 @@ public class BlockLeavesCloud extends BlockLeaves
     protected int getSaplingDropChance(IBlockState state)
     {
         return super.getSaplingDropChance(state);
+    }
+    
+    @Override
+    @SideOnly(Side.CLIENT)
+    public BlockRenderLayer getBlockLayer()
+    {
+        return BlockRenderLayer.CUTOUT_MIPPED;
     }
 
     /**
