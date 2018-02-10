@@ -1,6 +1,10 @@
 package com.blogspot.jabelarminecraft.examplemod.blocks;
 
+import java.util.Random;
+
 import javax.annotation.Nullable;
+
+import com.blogspot.jabelarminecraft.examplemod.init.ModBlocks;
 
 import net.minecraft.block.BlockLeaves;
 import net.minecraft.block.BlockPlanks.EnumType;
@@ -14,18 +18,16 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.stats.StatList;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class BlockLeavesCloud extends BlockLeaves
 {
 
     public BlockLeavesCloud()
     {
+        setGraphicsLevel(true);
         setDefaultState(blockState.getBaseState().withProperty(CHECK_DECAY, Boolean.valueOf(true)).withProperty(DECAYABLE, Boolean.valueOf(true)));
     }
 
@@ -37,18 +39,14 @@ public class BlockLeavesCloud extends BlockLeaves
             spawnAsEntity(worldIn, pos, new ItemStack(Items.APPLE));
         }
     }
-
-    @Override
-    protected int getSaplingDropChance(IBlockState state)
-    {
-        return super.getSaplingDropChance(state);
-    }
     
+    /**
+     * Get the Item that this Block should drop when harvested.
+     */
     @Override
-    @SideOnly(Side.CLIENT)
-    public BlockRenderLayer getBlockLayer()
+    public Item getItemDropped(IBlockState state, Random rand, int fortune)
     {
-        return BlockRenderLayer.CUTOUT_MIPPED;
+        return Item.getItemFromBlock(ModBlocks.cloud_sapling);
     }
 
     /**
