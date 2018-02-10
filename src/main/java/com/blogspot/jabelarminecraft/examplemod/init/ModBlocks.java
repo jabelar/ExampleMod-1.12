@@ -30,6 +30,7 @@ import net.minecraft.block.BlockFlower;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
+import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.event.RegistryEvent;
@@ -126,7 +127,13 @@ public class ModBlocks
             registry.register(Utilities.setItemName(new ItemBlock(cloud_rock), cloud_rock.getRegistryName().getResourcePath()));
             registry.register(Utilities.setItemName(new ItemBlock(cloud_log), cloud_log.getRegistryName().getResourcePath()));
             registry.register(Utilities.setItemName(new ItemBlock(cloud_leaves), cloud_leaves.getRegistryName().getResourcePath()));
-            registry.register(Utilities.setItemName(new ItemBlock(cloud_sapling), cloud_sapling.getRegistryName().getResourcePath()));
+            registry.register(Utilities.setItemName(new ItemBlock(cloud_sapling) {
+                @Override
+                public int getItemBurnTime(ItemStack itemStack)
+                {
+                    return 100;
+                }
+            }, cloud_sapling.getRegistryName().getResourcePath()));
         }
 
         /**
