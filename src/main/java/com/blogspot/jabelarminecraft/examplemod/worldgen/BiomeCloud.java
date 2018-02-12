@@ -6,7 +6,6 @@ import com.blogspot.jabelarminecraft.examplemod.init.ModBlocks;
 import com.blogspot.jabelarminecraft.examplemod.init.ModWorldGen;
 
 import net.minecraft.block.BlockFlower;
-import net.minecraft.block.BlockTallGrass;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.monster.EntityCreeper;
@@ -31,7 +30,6 @@ import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.BiomeDecorator;
 import net.minecraft.world.chunk.ChunkPrimer;
 import net.minecraft.world.gen.feature.WorldGenAbstractTree;
-import net.minecraft.world.gen.feature.WorldGenTallGrass;
 import net.minecraft.world.gen.feature.WorldGenerator;
 
 public class BiomeCloud extends Biome
@@ -99,7 +97,7 @@ public class BiomeCloud extends Biome
     @Override
     public WorldGenerator getRandomWorldGenForGrass(Random rand)
     {
-        return new WorldGenTallGrass(BlockTallGrass.EnumType.GRASS);
+        return new WorldGenGrassCloud();
     }
 
     @Override

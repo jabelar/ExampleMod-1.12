@@ -19,6 +19,7 @@ import com.blogspot.jabelarminecraft.examplemod.MainMod;
 import com.blogspot.jabelarminecraft.examplemod.blocks.BlockCloud;
 import com.blogspot.jabelarminecraft.examplemod.blocks.BlockCloudBedrock;
 import com.blogspot.jabelarminecraft.examplemod.blocks.BlockCompactor;
+import com.blogspot.jabelarminecraft.examplemod.blocks.BlockGrassCloud;
 import com.blogspot.jabelarminecraft.examplemod.blocks.BlockLeavesCloud;
 import com.blogspot.jabelarminecraft.examplemod.blocks.BlockLogCloud;
 import com.blogspot.jabelarminecraft.examplemod.blocks.BlockSaplingCloud;
@@ -61,6 +62,7 @@ public class ModBlocks
     public static final BlockLogCloud cloud_log = null;
     public static final BlockLeavesCloud cloud_leaves = null;
     public static final BlockSaplingCloud cloud_sapling = null;
+    public static final BlockGrassCloud cloud_grass = null;
     
     /*
      * ItemBlock instances
@@ -81,6 +83,8 @@ public class ModBlocks
     public static final ItemBlock itemBlock_cloud_leaves = null;
     @ObjectHolder("cloud_sapling")
     public static final ItemBlock itemBlock_cloud_sapling = null;
+    @ObjectHolder("cloud_grass")
+    public static final ItemBlock itemBlock_cloud_grass = null;
 
     @Mod.EventBusSubscriber(modid = MainMod.MODID)
     public static class RegistrationHandler
@@ -106,6 +110,7 @@ public class ModBlocks
             registry.register(Utilities.setBlockName(new BlockLogCloud(), "cloud_log"));
             registry.register(Utilities.setBlockName(new BlockLeavesCloud(), "cloud_leaves"));
             registry.register(Utilities.setBlockName(new BlockSaplingCloud(), "cloud_sapling"));
+            registry.register(Utilities.setBlockName(new BlockGrassCloud(), "cloud_grass"));
         }
 
         /**
@@ -134,6 +139,7 @@ public class ModBlocks
                     return 100;
                 }
             }, cloud_sapling.getRegistryName().getResourcePath()));
+            registry.register(Utilities.setItemName(new ItemBlock(cloud_grass), cloud_grass.getRegistryName().getResourcePath()));
         }
 
         /**
@@ -155,6 +161,7 @@ public class ModBlocks
             registerBlockModel(cloud_log);
             registerBlockModel(cloud_leaves);
             registerBlockModel(cloud_sapling);
+            registerBlockModel(cloud_grass);
             registerItemBlockModels();
         }
     }
@@ -199,6 +206,7 @@ public class ModBlocks
         registerItemBlockModel(itemBlock_cloud_rock);
         registerItemBlockModel(itemBlock_cloud_leaves);
         registerItemBlockModel(itemBlock_cloud_sapling);
+        registerItemBlockModel(itemBlock_cloud_grass);
     }
 
     /**

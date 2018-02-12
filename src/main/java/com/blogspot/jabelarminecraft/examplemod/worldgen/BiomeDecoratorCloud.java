@@ -17,7 +17,6 @@ package com.blogspot.jabelarminecraft.examplemod.worldgen;
 
 import java.util.Random;
 
-import com.blogspot.jabelarminecraft.examplemod.init.ModBiomes;
 import com.blogspot.jabelarminecraft.examplemod.init.ModBlocks;
 import com.google.common.base.Predicate;
 
@@ -155,44 +154,9 @@ public class BiomeDecoratorCloud extends BiomeDecorator
         generate(worldIn, random, chunkPos, DecorateBiomeEvent.Decorate.EventType.CLAY, clayGen, clayPerChunk);
         generate(worldIn, random, chunkPos, DecorateBiomeEvent.Decorate.EventType.SAND_PASS2, gravelGen, gravelPatchesPerChunk);
         generate(worldIn, random, chunkPos, DecorateBiomeEvent.Decorate.EventType.SAND_PASS2, gravelGen, gravelPatchesPerChunk);
-        generateTrees(worldIn, random, chunkPos);
-        
-        if(TerrainGen.decorate(worldIn, random, chunkPos, DecorateBiomeEvent.Decorate.EventType.FLOWERS))
-        for (int l2 = 0; l2 < flowersPerChunk; ++l2)
-        {
-            int i7 = random.nextInt(16) + 8;
-            int l10 = random.nextInt(16) + 8;
-            int j14 = worldIn.getHeight(chunkPos.add(i7, 0, l10)).getY() + 32;
-
-            if (j14 > 0)
-            {
-                int k17 = random.nextInt(j14);
-                BlockPos blockpos1 = chunkPos.add(i7, k17, l10);
-                BlockFlower.EnumFlowerType blockflower$enumflowertype = biomeIn.pickRandomFlower(random, blockpos1);
-                BlockFlower blockflower = blockflower$enumflowertype.getBlockType().getBlock();
-
-                if (blockflower.getDefaultState().getMaterial() != Material.AIR)
-                {
-                    flowerGen.setGeneratedBlock(blockflower, blockflower$enumflowertype);
-                    flowerGen.generate(worldIn, random, blockpos1);
-                }
-            }
-        }
-
-        if(TerrainGen.decorate(worldIn, random, chunkPos, DecorateBiomeEvent.Decorate.EventType.GRASS))
-        for (int i3 = 0; i3 < grassPerChunk; ++i3)
-        {
-            int j7 = random.nextInt(16) + 8;
-            int i11 = random.nextInt(16) + 8;
-            int k14 = worldIn.getHeight(chunkPos.add(j7, 0, i11)).getY() * 2;
-
-            if (k14 > 0)
-            {
-                int l17 = random.nextInt(k14);
-                biomeIn.getRandomWorldGenForGrass(random).generate(worldIn, random, chunkPos.add(j7, l17, i11));
-            }
-        }
-
+        generateTrees(worldIn, biomeIn, random, chunkPos);
+        generateFlowers(worldIn, biomeIn, random, chunkPos);
+        generateGrass(worldIn, biomeIn, random, chunkPos);
 
         if (generateFalls)
         {
@@ -201,31 +165,73 @@ public class BiomeDecoratorCloud extends BiomeDecorator
         MinecraftForge.EVENT_BUS.post(new DecorateBiomeEvent.Post(worldIn, random, chunkPos));
     }
     
-    private void generateTrees(World worldIn, Random random, BlockPos chunkPos)
+    private void generateTrees(World worldIn, Biome biomeIn, Random random, BlockPos chunkPos)
     {
-        int k1 = treesPerChunk;
+        int treesToGen = treesPerChunk;
 
         if (random.nextFloat() < extraTreeChance)
         {
-            ++k1;
+            ++treesToGen;
         }
 
         if(TerrainGen.decorate(worldIn, random, chunkPos, DecorateBiomeEvent.Decorate.EventType.TREE))
-        for (int j2 = 0; j2 < k1; ++j2)
+        for (int numTreesGenerated = 0; numTreesGenerated < treesToGen; ++numTreesGenerated)
         {
-            int k6 = random.nextInt(16) + 8;
-            int l = random.nextInt(16) + 8;
-            WorldGenAbstractTree worldgenabstracttree = ModBiomes.cloud.getRandomTreeFeature(random);
-            worldgenabstracttree.setDecorationDefaults();
-            BlockPos blockpos = worldIn.getHeight(chunkPos.add(k6, 0, l));
+            int treeX = random.nextInt(16) + 8;
+            int treeZ = random.nextInt(16) + 8;
+            WorldGenAbstractTree treeGen = biomeIn.getRandomTreeFeature(random);
+            treeGen.setDecorationDefaults();
+            BlockPos blockpos = worldIn.getHeight(chunkPos.add(treeX, 0, treeZ));
 
-            if (worldgenabstracttree.generate(worldIn, random, blockpos))
+            if (treeGen.generate(worldIn, random, blockpos))
             {
-                worldgenabstracttree.generateSaplings(worldIn, random, blockpos);
+                treeGen.generateSaplings(worldIn, random, blockpos);
             }
         }
     }
+    
+    private void generateFlowers(World worldIn, Biome biomeIn, Random random, BlockPos chunkPos)
+    {
+        if(TerrainGen.decorate(worldIn, random, chunkPos, DecorateBiomeEvent.Decorate.EventType.FLOWERS))
+        for (int numFlowersGenerated = 0; numFlowersGenerated < flowersPerChunk; ++numFlowersGenerated)
+        {
+            int flowerX = random.nextInt(16) + 8;
+            int flowerZ = random.nextInt(16) + 8;
+            int yRange = worldIn.getHeight(chunkPos.add(flowerX, 0, flowerZ)).getY() + 32;
 
+            if (yRange > 0)
+            {
+                int flowerY = random.nextInt(yRange);
+                BlockPos flowerBlockPos = chunkPos.add(flowerX, flowerY, flowerZ);
+                BlockFlower.EnumFlowerType flowerType = biomeIn.pickRandomFlower(random, flowerBlockPos);
+                BlockFlower blockFlower = flowerType.getBlockType().getBlock();
+
+                if (blockFlower.getDefaultState().getMaterial() != Material.AIR)
+                {
+                    flowerGen.setGeneratedBlock(blockFlower, flowerType);
+                    flowerGen.generate(worldIn, random, flowerBlockPos);
+                }
+            }
+        }
+    }
+    
+    private void generateGrass(World worldIn, Biome biomeIn, Random random, BlockPos chunkPos)
+    {
+        if(TerrainGen.decorate(worldIn, random, chunkPos, DecorateBiomeEvent.Decorate.EventType.GRASS))
+        for (int numGrassPerChunk = 0; numGrassPerChunk < grassPerChunk; ++numGrassPerChunk)
+        {
+            int grassX = random.nextInt(16) + 8;
+            int grassZ = random.nextInt(16) + 8;
+            int yRange = worldIn.getHeight(chunkPos.add(grassX, 0, grassZ)).getY() * 2;
+
+            if (yRange > 0)
+            {
+                int grassY = random.nextInt(yRange);
+                biomeIn.getRandomWorldGenForGrass(random).generate(worldIn, random, chunkPos.add(grassX, grassY, grassZ));
+            }
+        }
+    }
+    
     private void generateFalls(World worldIn, Random random, BlockPos chunkPos)
     {
         if(TerrainGen.decorate(worldIn, random, chunkPos, DecorateBiomeEvent.Decorate.EventType.LAKE_WATER))
