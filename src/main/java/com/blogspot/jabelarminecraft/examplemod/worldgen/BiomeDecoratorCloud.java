@@ -20,9 +20,7 @@ import java.util.Random;
 import com.blogspot.jabelarminecraft.examplemod.init.ModBlocks;
 import com.google.common.base.Predicate;
 
-import net.minecraft.block.BlockFlower;
 import net.minecraft.block.BlockStone;
-import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
@@ -30,14 +28,8 @@ import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.BiomeDecorator;
 import net.minecraft.world.gen.feature.WorldGenAbstractTree;
-import net.minecraft.world.gen.feature.WorldGenBigMushroom;
-import net.minecraft.world.gen.feature.WorldGenBush;
-import net.minecraft.world.gen.feature.WorldGenCactus;
-import net.minecraft.world.gen.feature.WorldGenFlowers;
 import net.minecraft.world.gen.feature.WorldGenLiquids;
 import net.minecraft.world.gen.feature.WorldGenMinable;
-import net.minecraft.world.gen.feature.WorldGenReed;
-import net.minecraft.world.gen.feature.WorldGenWaterlily;
 import net.minecraft.world.gen.feature.WorldGenerator;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.terraingen.DecorateBiomeEvent;
@@ -93,6 +85,8 @@ public class BiomeDecoratorCloud extends BiomeDecorator
     private int goldMaxHeight = 32;
     private int redstoneMaxHeight = 16;
     private int diamondMaxHeight = 16;
+    
+    protected WorldGenFlowersCloud flowerGen;
 
     public BiomeDecoratorCloud()
     {
@@ -111,15 +105,6 @@ public class BiomeDecoratorCloud extends BiomeDecorator
         redstoneGen = new WorldGenMinable(Blocks.REDSTONE_ORE.getDefaultState(), redstoneSize, replaceablePredicate);
         diamondGen = new WorldGenMinable(Blocks.DIAMOND_ORE.getDefaultState(), diamondSize, replaceablePredicate);
         lapisGen = new WorldGenMinable(Blocks.LAPIS_ORE.getDefaultState(), lapisSize, replaceablePredicate);
-
-        // Good to assign your own to give full control
-        flowerGen = new WorldGenFlowers(Blocks.YELLOW_FLOWER, BlockFlower.EnumFlowerType.DANDELION);
-        mushroomBrownGen = new WorldGenBush(Blocks.BROWN_MUSHROOM);
-        mushroomRedGen = new WorldGenBush(Blocks.RED_MUSHROOM);
-        bigMushroomGen = new WorldGenBigMushroom();
-        reedGen = new WorldGenReed();
-        cactusGen = new WorldGenCactus();
-        waterlilyGen = new WorldGenWaterlily();
     }
 
     /** 
@@ -199,18 +184,13 @@ public class BiomeDecoratorCloud extends BiomeDecorator
             int flowerZ = random.nextInt(16) + 8;
             int yRange = worldIn.getHeight(chunkPos.add(flowerX, 0, flowerZ)).getY() + 32;
 
+            flowerGen = new WorldGenFlowersCloud();
+            
             if (yRange > 0)
             {
                 int flowerY = random.nextInt(yRange);
                 BlockPos flowerBlockPos = chunkPos.add(flowerX, flowerY, flowerZ);
-                BlockFlower.EnumFlowerType flowerType = biomeIn.pickRandomFlower(random, flowerBlockPos);
-                BlockFlower blockFlower = flowerType.getBlockType().getBlock();
-
-                if (blockFlower.getDefaultState().getMaterial() != Material.AIR)
-                {
-                    flowerGen.setGeneratedBlock(blockFlower, flowerType);
-                    flowerGen.generate(worldIn, random, flowerBlockPos);
-                }
+                flowerGen.generate(worldIn, random, flowerBlockPos);
             }
         }
     }

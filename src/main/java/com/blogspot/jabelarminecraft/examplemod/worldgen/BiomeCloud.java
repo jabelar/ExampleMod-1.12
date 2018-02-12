@@ -1,5 +1,6 @@
 package com.blogspot.jabelarminecraft.examplemod.worldgen;
 
+import java.util.List;
 import java.util.Random;
 
 import com.blogspot.jabelarminecraft.examplemod.init.ModBlocks;
@@ -22,7 +23,6 @@ import net.minecraft.entity.passive.EntityCow;
 import net.minecraft.entity.passive.EntityPig;
 import net.minecraft.entity.passive.EntitySheep;
 import net.minecraft.entity.passive.EntitySquid;
-import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraft.world.World;
@@ -102,15 +102,21 @@ public class BiomeCloud extends Biome
 
     @Override
     public BlockFlower.EnumFlowerType pickRandomFlower(Random rand, BlockPos pos)
+    {   
+        // Note that this should never be called but worthwhile overriding
+        // because parent class has it.
+        return BlockFlower.EnumFlowerType.WHITE_TULIP;
+    }
+    
+    public List<FlowerEntry> getFlowerList()
     {
-        return rand.nextInt(3) > 0 ? BlockFlower.EnumFlowerType.DANDELION : BlockFlower.EnumFlowerType.POPPY;
+        return flowers;
     }
     
     private void addFlowers()
     {
         flowers.clear();
-        addFlower(Blocks.YELLOW_FLOWER.getDefaultState().withProperty(Blocks.YELLOW_FLOWER.getTypeProperty(), BlockFlower.EnumFlowerType.DANDELION), 20);
-        addFlower(Blocks.RED_FLOWER.getDefaultState().withProperty(Blocks.RED_FLOWER.getTypeProperty(), BlockFlower.EnumFlowerType.POPPY), 10);
+        addFlower(ModBlocks.cloud_flower.getDefaultState(), 20);
     }
 
     private void setSpawnables()
