@@ -19,6 +19,7 @@ import com.blogspot.jabelarminecraft.examplemod.MainMod;
 import com.blogspot.jabelarminecraft.examplemod.blocks.BlockCloud;
 import com.blogspot.jabelarminecraft.examplemod.blocks.BlockCloudBedrock;
 import com.blogspot.jabelarminecraft.examplemod.blocks.BlockCompactor;
+import com.blogspot.jabelarminecraft.examplemod.blocks.BlockFlowerCloud;
 import com.blogspot.jabelarminecraft.examplemod.blocks.BlockGrassCloud;
 import com.blogspot.jabelarminecraft.examplemod.blocks.BlockLeavesCloud;
 import com.blogspot.jabelarminecraft.examplemod.blocks.BlockLogCloud;
@@ -27,7 +28,6 @@ import com.blogspot.jabelarminecraft.examplemod.blocks.fluids.ModBlockFluidClass
 import com.blogspot.jabelarminecraft.examplemod.utilities.Utilities;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockFlower;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
@@ -58,33 +58,33 @@ public class ModBlocks
     public static final BlockFluidClassic slime = null;
     public static final BlockCloud cloud = null;
     public static final BlockCloudBedrock cloud_rock = null;
-    public static final BlockFlower cloud_flower = null;
     public static final BlockLogCloud cloud_log = null;
     public static final BlockLeavesCloud cloud_leaves = null;
     public static final BlockSaplingCloud cloud_sapling = null;
     public static final BlockGrassCloud cloud_grass = null;
+    public static final BlockFlowerCloud cloud_flower = null;
     
     /*
      * ItemBlock instances
      */
     @ObjectHolder("compactor")
-    public static final ItemBlock itemBlock_compactor = null;
+    public static final ItemBlock item_block_compactor = null;
     @ObjectHolder("slime")
-    public static final ItemBlock itemBlock_slime = null;
+    public static final ItemBlock item_block_slime = null;
     @ObjectHolder("cloud")
-    public static final ItemBlock itemBlock_cloud = null;
+    public static final ItemBlock item_block_cloud = null;
     @ObjectHolder("cloud_rock")
-    public static final ItemBlock itemBlock_cloud_rock = null;
+    public static final ItemBlock item_block_cloud_rock = null;
     @ObjectHolder("cloud_flower")
-    public static final ItemBlock itemBlock_cloud_flower = null;
+    public static final ItemBlock item_block_cloud_flower = null;
     @ObjectHolder("cloud_log")
     public static final ItemBlock itemBlock_cloud_log = null;
     @ObjectHolder("cloud_leaves")
-    public static final ItemBlock itemBlock_cloud_leaves = null;
+    public static final ItemBlock item_block_cloud_leaves = null;
     @ObjectHolder("cloud_sapling")
-    public static final ItemBlock itemBlock_cloud_sapling = null;
+    public static final ItemBlock item_block_cloud_sapling = null;
     @ObjectHolder("cloud_grass")
-    public static final ItemBlock itemBlock_cloud_grass = null;
+    public static final ItemBlock item_block_cloud_grass = null;
 
     @Mod.EventBusSubscriber(modid = MainMod.MODID)
     public static class RegistrationHandler
@@ -106,11 +106,11 @@ public class ModBlocks
             registry.register(Utilities.setBlockName(new ModBlockFluidClassic(ModFluids.SLIME, ModMaterials.SLIME), "slime"));
             registry.register(Utilities.setBlockName(new BlockCloud(), "cloud"));
             registry.register(Utilities.setBlockName(new BlockCloudBedrock(), "cloud_rock"));
-//            registry.register(Utilities.setBlockName(new BlockFlowerCloud(), "cloud_flower"));
             registry.register(Utilities.setBlockName(new BlockLogCloud(), "cloud_log"));
             registry.register(Utilities.setBlockName(new BlockLeavesCloud(), "cloud_leaves"));
             registry.register(Utilities.setBlockName(new BlockSaplingCloud(), "cloud_sapling"));
             registry.register(Utilities.setBlockName(new BlockGrassCloud(), "cloud_grass"));
+            registry.register(Utilities.setBlockName(new BlockFlowerCloud(), "cloud_flower"));
         }
 
         /**
@@ -140,6 +140,7 @@ public class ModBlocks
                 }
             }, cloud_sapling.getRegistryName().getResourcePath()));
             registry.register(Utilities.setItemName(new ItemBlock(cloud_grass), cloud_grass.getRegistryName().getResourcePath()));
+            registry.register(Utilities.setItemName(new ItemBlock(cloud_flower), cloud_flower.getRegistryName().getResourcePath()));
         }
 
         /**
@@ -162,6 +163,7 @@ public class ModBlocks
             registerBlockModel(cloud_leaves);
             registerBlockModel(cloud_sapling);
             registerBlockModel(cloud_grass);
+            registerBlockModel(cloud_flower);
             registerItemBlockModels();
         }
     }
@@ -200,13 +202,14 @@ public class ModBlocks
     @SideOnly(Side.CLIENT)
     public static void registerItemBlockModels()
     {
-        registerItemBlockModel(itemBlock_compactor);
-        registerItemBlockModel(itemBlock_slime);
-        registerItemBlockModel(itemBlock_cloud);
-        registerItemBlockModel(itemBlock_cloud_rock);
-        registerItemBlockModel(itemBlock_cloud_leaves);
-        registerItemBlockModel(itemBlock_cloud_sapling);
-        registerItemBlockModel(itemBlock_cloud_grass);
+        registerItemBlockModel(item_block_compactor);
+        registerItemBlockModel(item_block_slime);
+        registerItemBlockModel(item_block_cloud);
+        registerItemBlockModel(item_block_cloud_rock);
+        registerItemBlockModel(item_block_cloud_leaves);
+        registerItemBlockModel(item_block_cloud_sapling);
+        registerItemBlockModel(item_block_cloud_grass);
+        registerItemBlockModel(item_block_cloud_flower);
     }
 
     /**

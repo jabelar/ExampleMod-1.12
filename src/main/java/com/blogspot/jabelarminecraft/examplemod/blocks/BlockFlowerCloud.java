@@ -7,9 +7,9 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 
-public abstract class BlockFlowerCloud extends BlockBush
+public class BlockFlowerCloud extends BlockBush
 {
-    protected BlockFlowerCloud()
+    public BlockFlowerCloud()
     {
     }
 
