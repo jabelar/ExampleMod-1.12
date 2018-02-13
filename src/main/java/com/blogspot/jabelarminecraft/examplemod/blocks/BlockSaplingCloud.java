@@ -18,6 +18,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
+import net.minecraftforge.event.terraingen.TerrainGen;
 
 public class BlockSaplingCloud extends BlockBush implements IGrowable
 {
@@ -53,7 +54,7 @@ public class BlockSaplingCloud extends BlockBush implements IGrowable
 
     public void generateTree(World worldIn, BlockPos pos, IBlockState state, Random rand)
     {
-        if (!net.minecraftforge.event.terraingen.TerrainGen.saplingGrowTree(worldIn, rand, pos)) return;
+        if (!TerrainGen.saplingGrowTree(worldIn, rand, pos)) return;
         WorldGenerator worldgenerator = new WorldGenTreesCloud(true);
 
         worldIn.setBlockState(pos, Blocks.AIR.getDefaultState(), 4);

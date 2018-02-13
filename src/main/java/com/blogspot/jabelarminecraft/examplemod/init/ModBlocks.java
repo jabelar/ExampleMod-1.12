@@ -41,6 +41,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry.ObjectHolder;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.registries.IForgeRegistry;
 
 /**
@@ -130,7 +131,13 @@ public class ModBlocks
             registry.register(Utilities.setItemName(new ItemBlock(slime), slime.getRegistryName().getResourcePath()));
             registry.register(Utilities.setItemName(new ItemBlock(cloud), cloud.getRegistryName().getResourcePath()));
             registry.register(Utilities.setItemName(new ItemBlock(cloud_rock), cloud_rock.getRegistryName().getResourcePath()));
-            registry.register(Utilities.setItemName(new ItemBlock(cloud_log), cloud_log.getRegistryName().getResourcePath()));
+            registry.register(Utilities.setItemName(new ItemBlock(cloud_log) {
+                @Override
+                public int getItemBurnTime(ItemStack itemStack)
+                {
+                     return 300; // same value as vanilla wood
+                }
+           }, cloud_log.getRegistryName().getResourcePath()));
             registry.register(Utilities.setItemName(new ItemBlock(cloud_leaves), cloud_leaves.getRegistryName().getResourcePath()));
             registry.register(Utilities.setItemName(new ItemBlock(cloud_sapling) {
                 @Override
@@ -141,6 +148,15 @@ public class ModBlocks
             }, cloud_sapling.getRegistryName().getResourcePath()));
             registry.register(Utilities.setItemName(new ItemBlock(cloud_grass), cloud_grass.getRegistryName().getResourcePath()));
             registry.register(Utilities.setItemName(new ItemBlock(cloud_flower), cloud_flower.getRegistryName().getResourcePath()));
+
+            /*
+             * Register Ore Dictionary here
+             */
+            OreDictionary.registerOre("logWood", cloud_log);
+            OreDictionary.registerOre("treeLeaves", cloud_leaves);
+            OreDictionary.registerOre("treeSapling", cloud_sapling);
+            OreDictionary.registerOre("grass", cloud_log);
+            OreDictionary.registerOre("blockSlime", slime);
         }
 
         /**
