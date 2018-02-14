@@ -19,14 +19,18 @@
 
 package com.blogspot.jabelarminecraft.examplemod.client;
 
-import net.minecraft.util.MouseHelper;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
+
+import net.minecraft.util.MouseHelper;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  * @author jabelar
  *
  */
+@SideOnly(Side.CLIENT)
 public class MouseHelperAI extends MouseHelper
 {
     public MouseHelperAI()

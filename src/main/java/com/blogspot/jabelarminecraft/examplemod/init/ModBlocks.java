@@ -148,15 +148,6 @@ public class ModBlocks
             }, cloud_sapling.getRegistryName().getResourcePath()));
             registry.register(Utilities.setItemName(new ItemBlock(cloud_grass), cloud_grass.getRegistryName().getResourcePath()));
             registry.register(Utilities.setItemName(new ItemBlock(cloud_flower), cloud_flower.getRegistryName().getResourcePath()));
-
-            /*
-             * Register Ore Dictionary here
-             */
-            OreDictionary.registerOre("logWood", cloud_log);
-            OreDictionary.registerOre("treeLeaves", cloud_leaves);
-            OreDictionary.registerOre("treeSapling", cloud_sapling);
-            OreDictionary.registerOre("grass", cloud_log);
-            OreDictionary.registerOre("blockSlime", slime);
         }
 
         /**
@@ -254,5 +245,17 @@ public class ModBlocks
         
         ModelLoader.setCustomModelResourceLocation(parBlock, parMetaData,
                 new ModelResourceLocation(MainMod.MODID + ":" + parBlock.getUnlocalizedName().substring(5), "inventory"));
+    }
+    
+    public static void registerOreDictionaryEntries()
+    {
+        /*
+         * Look in the OreDictionary class to check the strings for vanilla items.
+         */
+        OreDictionary.registerOre("logWood", cloud_log);
+        OreDictionary.registerOre("treeLeaves", cloud_leaves);
+        OreDictionary.registerOre("treeSapling", cloud_sapling);
+        OreDictionary.registerOre("grass", cloud_grass);
+        OreDictionary.registerOre("blockSlime", slime);
     }
 }
