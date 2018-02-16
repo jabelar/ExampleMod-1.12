@@ -16,6 +16,7 @@
 
 package com.blogspot.jabelarminecraft.examplemod.proxy;
 
+import com.blogspot.jabelarminecraft.examplemod.blocks.BlockLeavesCloud;
 import com.blogspot.jabelarminecraft.examplemod.commands.CommandStructureCapture;
 
 import net.minecraft.block.Block;
@@ -153,5 +154,10 @@ public class ServerProxy implements IProxy
         entityIn.fallDistance = 0.0F;
 
         return flag;
+    }
+
+    @Override
+    public void setGraphicsLevel(BlockLeavesCloud parBlock, boolean parFancyEnabled)
+    {
     }
 }

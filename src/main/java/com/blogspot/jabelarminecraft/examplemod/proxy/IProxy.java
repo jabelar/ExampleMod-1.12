@@ -1,5 +1,7 @@
 package com.blogspot.jabelarminecraft.examplemod.proxy;
 
+import com.blogspot.jabelarminecraft.examplemod.blocks.BlockLeavesCloud;
+
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -62,4 +64,6 @@ public interface IProxy
      * @return true, if successful
      */
     boolean handleMaterialAcceleration(Entity parEntity, Material parMaterial);
+
+    void setGraphicsLevel(BlockLeavesCloud parBlock, boolean parFancyEnabled);
 }

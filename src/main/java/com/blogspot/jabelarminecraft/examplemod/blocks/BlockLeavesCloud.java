@@ -4,6 +4,7 @@ import java.util.Random;
 
 import javax.annotation.Nullable;
 
+import com.blogspot.jabelarminecraft.examplemod.MainMod;
 import com.blogspot.jabelarminecraft.examplemod.init.ModBlocks;
 
 import net.minecraft.block.BlockLeaves;
@@ -27,7 +28,7 @@ public class BlockLeavesCloud extends BlockLeaves
 
     public BlockLeavesCloud()
     {
-        setGraphicsLevel(true);
+        MainMod.proxy.setGraphicsLevel(this, true);
         setDefaultState(blockState.getBaseState().withProperty(CHECK_DECAY, Boolean.valueOf(true)).withProperty(DECAYABLE, Boolean.valueOf(true)));
     }
 

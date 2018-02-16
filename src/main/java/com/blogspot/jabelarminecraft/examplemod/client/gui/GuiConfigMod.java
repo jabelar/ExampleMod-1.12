@@ -31,6 +31,7 @@ import net.minecraft.util.text.TextComponentString;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.ConfigElement;
 import net.minecraftforge.common.config.Configuration;
+import net.minecraftforge.fml.client.config.GuiConfig;
 import net.minecraftforge.fml.client.config.GuiMessageDialog;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent.OnConfigChangedEvent;
@@ -42,7 +43,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 // TODO: Auto-generated Javadoc
 @SideOnly(Side.CLIENT)
-public class GuiConfig extends net.minecraftforge.fml.client.config.GuiConfig
+public class GuiConfigMod extends GuiConfig
 {
 
     /**
@@ -51,7 +52,7 @@ public class GuiConfig extends net.minecraftforge.fml.client.config.GuiConfig
      * @param parent
      *            the parent
      */
-    public GuiConfig(GuiScreen parent)
+    public GuiConfigMod(GuiScreen parent)
     {
         super(parent,
                 new ConfigElement(ModConfig.config.getCategory(Configuration.CATEGORY_GENERAL)).getChildElements(),
@@ -89,7 +90,7 @@ public class GuiConfig extends net.minecraftforge.fml.client.config.GuiConfig
             boolean flag = true;
             try
             {
-                if ((configID != null || this.parentScreen == null || !(this.parentScreen instanceof GuiConfig))
+                if ((configID != null || this.parentScreen == null || !(this.parentScreen instanceof GuiConfigMod))
                         && (this.entryList.hasChangedEntry(true)))
                 {
                     // DEBUG
@@ -110,8 +111,8 @@ public class GuiConfig extends net.minecraftforge.fml.client.config.GuiConfig
                                     new TextComponentString(I18n.format("fml.configgui.gameRestartRequired")), "fml.configgui.confirmRestartMessage"));
                         }
 
-                        if (this.parentScreen instanceof GuiConfig)
-                            ((GuiConfig) this.parentScreen).needsRefresh = true;
+                        if (this.parentScreen instanceof GuiConfigMod)
+                            ((GuiConfigMod) this.parentScreen).needsRefresh = true;
                     }
                 }
             }
