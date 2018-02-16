@@ -54,7 +54,7 @@ public class ModBiomes
 
             // DEBUG
             System.out.println("Registry key set = " + registry.getKeys());
-            System.out.println("Registry value list = " + registry.getValues());
+            System.out.println("Registry value list = " + registry.getValuesCollection());
         }
     }
     
