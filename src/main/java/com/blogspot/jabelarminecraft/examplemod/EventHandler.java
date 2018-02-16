@@ -23,25 +23,13 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
-import com.blogspot.jabelarminecraft.examplemod.client.gui.GuiCreateWorldMod;
 import com.blogspot.jabelarminecraft.examplemod.init.ModBlocks;
 import com.blogspot.jabelarminecraft.examplemod.init.ModConfig;
 import com.blogspot.jabelarminecraft.examplemod.init.ModItems;
 import com.blogspot.jabelarminecraft.examplemod.init.ModMaterials;
-import com.blogspot.jabelarminecraft.examplemod.init.ModNetworking;
-import com.blogspot.jabelarminecraft.examplemod.init.ModWorldGen;
-import com.blogspot.jabelarminecraft.examplemod.items.IExtendedReach;
-import com.blogspot.jabelarminecraft.examplemod.networking.MessageExtendedReachAttack;
-import com.blogspot.jabelarminecraft.examplemod.proxy.ClientProxy;
-import com.blogspot.jabelarminecraft.examplemod.utilities.Utilities;
 import com.google.common.base.Objects;
 
 import net.minecraft.block.material.Material;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiCreateWorld;
-import net.minecraft.client.gui.GuiIngame;
-import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.enchantment.EnchantmentFrostWalker;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
@@ -69,14 +57,8 @@ import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.WorldServer;
-import net.minecraftforge.client.event.EntityViewRenderEvent.FogColors;
-import net.minecraftforge.client.event.EntityViewRenderEvent.FogDensity;
-import net.minecraftforge.client.event.GuiOpenEvent;
-import net.minecraftforge.client.event.MouseEvent;
-import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
@@ -91,8 +73,6 @@ import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.PlayerTickEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.WorldTickEvent;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  * This class contains many of the event handling methods for events posted to the event bus.
@@ -1108,165 +1088,6 @@ public class EventHandler
             System.out.println("Syncing config for mod =" + event.getModID());
             ModConfig.config.save();
             ModConfig.syncConfig();
-        }
-    }
-    
-    /**
-     * Render the air indicator when submerged in a liquid.
-     *
-     * @param event the event
-     */
-    @SideOnly(Side.CLIENT)
-    @SubscribeEvent(priority = EventPriority.HIGHEST, receiveCanceled = true)
-    public static void onEvent(RenderGameOverlayEvent event)
-    {
-        Minecraft mc = Minecraft.getMinecraft();
-        GuiIngame ingameGUI = mc.ingameGUI;
-        ScaledResolution scaledRes = event.getResolution();
-
-        if (mc.getRenderViewEntity() instanceof EntityPlayer)
-        {
-            EntityPlayer entityplayer = (EntityPlayer) mc.getRenderViewEntity();
-
-            int airIndicatorX = scaledRes.getScaledWidth() / 2 + 91;
-            int airIndicatorBottom = scaledRes.getScaledHeight() - 39;
-            int airIndicatorTop = airIndicatorBottom - 10;
-
-            if (entityplayer.isInsideOfMaterial(Material.WATER) || entityplayer.isInsideOfMaterial(ModMaterials.SLIME))
-            {
-                int airAmount = mc.player.getAir();
-                int airLostPercent = MathHelper.ceil((airAmount - 2) * 10.0D / 300.0D);
-                int airLeftPercent = MathHelper.ceil(airAmount * 10.0D / 300.0D) - airLostPercent;
-
-                for (int airUnitIndex = 0; airUnitIndex < airLostPercent + airLeftPercent; ++airUnitIndex)
-                {
-                    if (airUnitIndex < airLostPercent)
-                    {
-                        ingameGUI.drawTexturedModalRect(airIndicatorX - airUnitIndex * 8 - 9, airIndicatorTop, 16, 18, 9, 9);
-                    }
-                    else
-                    {
-                        ingameGUI.drawTexturedModalRect(airIndicatorX - airUnitIndex * 8 - 9, airIndicatorTop, 25, 18, 9, 9);
-                    }
-                }
-            }
-        }
-    }
-
-    /**
-     * Use fog density to create the effect of being under custom fluid, similar to how being under water does it.
-     *
-     * @param event the event
-     */
-    @SideOnly(Side.CLIENT)
-    @SubscribeEvent(priority = EventPriority.NORMAL, receiveCanceled = true)
-    public static void onEvent(FogDensity event)
-    {
-        // EntityPlayer thePlayer = Minecraft.getMinecraft().player;
-        if (event.getEntity().dimension == ModWorldGen.CLOUD_DIM_ID)
-        {
-            event.setDensity((float) Math.abs(Math.pow(((event.getEntity().posY-63)/(255-63)),4)));
-        }
-        event.setDensity((float) Math.abs(Math.pow(((event.getEntity().posY-63)/(255-63)),4)));
-        
-        if (event.getEntity().isInsideOfMaterial(ModMaterials.SLIME))
-        {
-            event.setDensity(0.5F);
-        }
-        else
-        {
-            event.setDensity(0.0001F);
-        }
-
-        event.setCanceled(true); // must cancel event for event handler to take effect
-    }
-    
-    @SideOnly(Side.CLIENT)
-    @SubscribeEvent(priority = EventPriority.NORMAL, receiveCanceled = true)
-    public static void onEvent(FogColors event)
-    {
-        event.setRed(0xFF);
-        event.setGreen(0xFF);
-        event.setBlue(0xFF);
-    }
-    
-
-    /**
-     * Process an extended reach weapon.
-     *
-     * @param event the event
-     */
-    @SideOnly(Side.CLIENT)
-    @SubscribeEvent(priority = EventPriority.NORMAL, receiveCanceled = true)
-    public static void onEvent(MouseEvent event)
-    {
-        // ensure custom MouseHelper is active
-        Minecraft mc = Minecraft.getMinecraft();
-        mc.mouseHelper = ClientProxy.mouseHelperAI;
-       
-        if (event.getButton() == 0 && event.isButtonstate())
-        {
-            EntityPlayer thePlayer = mc.player;
-            if (thePlayer != null)
-            {
-                ItemStack itemstack = thePlayer.getHeldItemMainhand();
-                IExtendedReach ieri;
-                if (itemstack != null)
-                {
-                    if (itemstack.getItem() instanceof IExtendedReach)
-                    {
-                        ieri = (IExtendedReach) itemstack.getItem();
-                    }
-                    else
-                    {
-                        ieri = null;
-                    }
-
-                    if (ieri != null)
-                    {
-                        float reach = ieri.getReach();
-                        RayTraceResult mov = Utilities.getMouseOverExtended(reach);
-
-                        if (mov != null)
-                        {
-                            if (mov.entityHit != null && mov.entityHit.hurtResistantTime == 0)
-                            {
-                                if (mov.entityHit != thePlayer)
-                                {
-                                    ModNetworking.network.sendToServer(new MessageExtendedReachAttack(mov.entityHit.getEntityId()));
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-    
-//    @SideOnly(Side.CLIENT)
-    public static Field parentScreen = ReflectionHelper.findField(GuiCreateWorld.class, "parentScreen", "field_146332_f");
-
-    /**
-     * Handling the gui open event to replace the world selection menu with one
-     * that defaults to creative mode.
-     * 
-     * @param event
-     */
-    @SideOnly(Side.CLIENT)
-    @SubscribeEvent(priority = EventPriority.NORMAL, receiveCanceled = true)
-    public static void onEvent(GuiOpenEvent event)
-    {
-        if (event.getGui() instanceof GuiCreateWorld)
-        {
-            try
-            {
-                event.setGui(new GuiCreateWorldMod((GuiScreen)(parentScreen.get(event.getGui()))));
-            }
-            catch (IllegalArgumentException | IllegalAccessException e)
-            {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
         }
     }
 }
