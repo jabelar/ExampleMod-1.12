@@ -83,15 +83,15 @@ public class ClientProxy implements IProxy
     public static int sphereIdInside;
     
     // mouse helper
-    public static MouseHelper mouseHelperAI = null; // used to intercept user mouse movement for "bot" functionality
+    public static MouseHelper mouseHelperAI; // used to intercept user mouse movement for "bot" functionality
 
     @Override
     public void preInit(FMLPreInitializationEvent event)
     {
         // DEBUG
         System.out.println("on Client side");
-        
-        Minecraft.getMinecraft().mouseHelper = new MouseHelperAI();
+        mouseHelperAI = new MouseHelperAI();
+        Minecraft.getMinecraft().mouseHelper = mouseHelperAI;
         RenderFactories.registerEntityRenderers();
     }
 
@@ -379,9 +379,9 @@ public class ClientProxy implements IProxy
     @SubscribeEvent(priority = EventPriority.NORMAL, receiveCanceled = true)
     public static void onEvent(MouseEvent event)
     {
-        // ensure custom MouseHelper is active
+//        // ensure custom MouseHelper is active
         Minecraft mc = Minecraft.getMinecraft();
-        mc.mouseHelper = ClientProxy.mouseHelperAI;
+//        mc.mouseHelper = ClientProxy.mouseHelperAI;
        
         if (event.getButton() == 0 && event.isButtonstate())
         {
