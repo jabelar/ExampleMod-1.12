@@ -39,6 +39,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry.ObjectHolder;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.registries.IForgeRegistry;
 
 /**
@@ -153,5 +154,12 @@ public class ModItems
         ModelLoader.setCustomModelResourceLocation(parItem, parMetaData,
                 new ModelResourceLocation(MainMod.MODID + ":" + parItem.getUnlocalizedName().substring(5), "inventory"));
     }
-
+    
+    public static void registerOreDictionaryEntries()
+    {
+        /*
+         * Look in the OreDictionary class to check the strings for vanilla items.
+         */
+        OreDictionary.registerOre("blockSlime", slime_bag);
+    }
 }

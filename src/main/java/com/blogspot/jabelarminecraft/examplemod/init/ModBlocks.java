@@ -252,7 +252,7 @@ public class ModBlocks
         /*
          * Look in the OreDictionary class to check the strings for vanilla items.
          */
-        OreDictionary.registerOre("logWood", cloud_log);
+        OreDictionary.registerOre("logWood", new ItemStack(cloud_log, 1, OreDictionary.WILDCARD_VALUE));
         OreDictionary.registerOre("treeLeaves", cloud_leaves);
         OreDictionary.registerOre("treeSapling", cloud_sapling);
         OreDictionary.registerOre("grass", cloud_grass);

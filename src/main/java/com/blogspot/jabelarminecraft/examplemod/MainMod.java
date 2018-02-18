@@ -22,6 +22,7 @@ import com.blogspot.jabelarminecraft.examplemod.init.ModBiomes;
 import com.blogspot.jabelarminecraft.examplemod.init.ModBlocks;
 import com.blogspot.jabelarminecraft.examplemod.init.ModConfig;
 import com.blogspot.jabelarminecraft.examplemod.init.ModFluids;
+import com.blogspot.jabelarminecraft.examplemod.init.ModItems;
 import com.blogspot.jabelarminecraft.examplemod.init.ModNetworking;
 import com.blogspot.jabelarminecraft.examplemod.init.ModTileEntities;
 import com.blogspot.jabelarminecraft.examplemod.init.ModWorldGen;
@@ -127,6 +128,7 @@ public class MainMod
         ModWorldGen.registerWorldGenerators();
         ModBiomes.initBiomeManagerAndDictionary();
         ModBlocks.registerOreDictionaryEntries();
+        ModItems.registerOreDictionaryEntries();
         proxy.init(event);
     }
 
