@@ -36,7 +36,7 @@ import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fluids.BlockFluidClassic;
-import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry.ObjectHolder;
 import net.minecraftforge.fml.relauncher.Side;
@@ -87,7 +87,7 @@ public class ModBlocks
     @ObjectHolder("cloud_grass")
     public static final ItemBlock item_block_cloud_grass = null;
 
-    @Mod.EventBusSubscriber(modid = MainMod.MODID)
+    @EventBusSubscriber(modid = MainMod.MODID)
     public static class RegistrationHandler
     {
         /**
