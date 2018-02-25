@@ -4,6 +4,8 @@ import java.util.Random;
 
 import com.blogspot.jabelarminecraft.examplemod.init.ModWorldGen;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiCreateWorld;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.WorldType;
@@ -82,7 +84,7 @@ public class WorldTypeCloud extends WorldType
      */
     @Override
     @SideOnly(Side.CLIENT)
-    public void onCustomizeButton(net.minecraft.client.Minecraft mc, net.minecraft.client.gui.GuiCreateWorld guiCreateWorld)
+    public void onCustomizeButton(Minecraft mc, GuiCreateWorld guiCreateWorld)
     {
     }
 

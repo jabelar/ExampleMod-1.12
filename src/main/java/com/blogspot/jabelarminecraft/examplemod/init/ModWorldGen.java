@@ -5,12 +5,14 @@ import javax.annotation.Nullable;
 import com.blogspot.jabelarminecraft.examplemod.worldgen.WorldGenShrine;
 import com.blogspot.jabelarminecraft.examplemod.worldgen.WorldProviderCloud;
 import com.blogspot.jabelarminecraft.examplemod.worldgen.WorldTypeCloud;
+import com.blogspot.jabelarminecraft.examplemod.worldgen.structures.villages.VillageHouseCloudCreationHandler;
 
 import net.minecraft.world.DimensionType;
 import net.minecraft.world.WorldProvider;
 import net.minecraft.world.WorldType;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.common.registry.VillagerRegistry.IVillageCreationHandler;
 
 public class ModWorldGen
 {  
@@ -19,6 +21,7 @@ public class ModWorldGen
     public static final DimensionType CLOUD_DIM_TYPE = DimensionType.register(CLOUD_NAME, "_"+CLOUD_NAME, CLOUD_DIM_ID, WorldProviderCloud.class, true);
     public static final WorldType CLOUD_WORLD_TYPE = new WorldTypeCloud();
     public static final WorldProvider CLOUD_WORLD_PROVIDER = new WorldProviderCloud();
+    public static final IVillageCreationHandler CLOUD_VILLAGE_HANDLER = new VillageHouseCloudCreationHandler();
     
     public static final void registerDimensions()
     {

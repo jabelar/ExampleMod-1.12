@@ -986,12 +986,10 @@ public class EventHandler
 
         while (iterator.hasNext())
         {
-            Entity theEntity = iterator.next();
-
             /*
              * Update all motion of all entities except players that may be inside your fluid
              */
-            MainMod.proxy.handleMaterialAcceleration(theEntity, ModBlocks.slime.getDefaultState().getMaterial());
+            MainMod.proxy.handleMaterialAcceleration(iterator.next(), ModBlocks.slime.getDefaultState().getMaterial());
         }
     }
 

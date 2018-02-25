@@ -19,9 +19,6 @@ public class BlockFlowerCloud extends BlockBush
         return super.getBoundingBox(state, source, pos).offset(state.getOffset(source, pos));
     }
 
-    /**
-     * Get the OffsetType for this Block. Determines if the model is rendered slightly offset.
-     */
     @Override
     public Block.EnumOffsetType getOffsetType()
     {

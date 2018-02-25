@@ -28,8 +28,10 @@ import com.blogspot.jabelarminecraft.examplemod.init.ModTileEntities;
 import com.blogspot.jabelarminecraft.examplemod.init.ModWorldGen;
 import com.blogspot.jabelarminecraft.examplemod.proxy.IProxy;
 import com.blogspot.jabelarminecraft.examplemod.utilities.Utilities;
+import com.blogspot.jabelarminecraft.examplemod.worldgen.structures.villages.VillageHouseCloud;
 
 import net.minecraft.stats.StatBasic;
+import net.minecraft.world.gen.structure.MapGenStructureIO;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
@@ -40,6 +42,7 @@ import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
+import net.minecraftforge.fml.common.registry.VillagerRegistry;
 
 /**
  * This is the main file for the mod, as it has the mod annotation
@@ -129,6 +132,8 @@ public class MainMod
         ModBiomes.initBiomeManagerAndDictionary();
         ModBlocks.registerOreDictionaryEntries();
         ModItems.registerOreDictionaryEntries();
+        MapGenStructureIO.registerStructureComponent(VillageHouseCloud.class, MODID+":cloud_house");
+        VillagerRegistry.instance().registerVillageCreationHandler(ModWorldGen.CLOUD_VILLAGE_HANDLER);
         proxy.init(event);
     }
 

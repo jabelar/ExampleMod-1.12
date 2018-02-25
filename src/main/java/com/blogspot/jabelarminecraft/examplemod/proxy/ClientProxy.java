@@ -45,6 +45,7 @@ import net.minecraft.client.gui.GuiCreateWorld;
 import net.minecraft.client.gui.GuiIngame;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
+import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -68,6 +69,7 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.InputEvent;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import net.minecraftforge.fml.relauncher.Side;
@@ -371,6 +373,16 @@ public class ClientProxy implements IProxy
     }
     
 
+    @SubscribeEvent(priority = EventPriority.NORMAL, receiveCanceled = true)
+    public static void onEvent(InputEvent.MouseInputEvent event)
+    {
+        Minecraft mc = Minecraft.getMinecraft();
+        if (mc.gameSettings.keyBindAttack.isPressed())
+        {
+            KeyBinding.setKeyBindState(mc.gameSettings.keyBindAttack.getKeyCode(), false);
+        }
+    }
+    
     /**
      * Process an extended reach weapon.
      *
@@ -381,7 +393,6 @@ public class ClientProxy implements IProxy
     {
 //        // ensure custom MouseHelper is active
         Minecraft mc = Minecraft.getMinecraft();
-//        mc.mouseHelper = ClientProxy.mouseHelperAI;
        
         if (event.getButton() == 0 && event.isButtonstate())
         {
