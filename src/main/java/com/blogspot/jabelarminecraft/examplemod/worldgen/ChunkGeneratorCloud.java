@@ -7,6 +7,7 @@ import javax.annotation.Nullable;
 
 import com.blogspot.jabelarminecraft.examplemod.init.ModBiomes;
 import com.blogspot.jabelarminecraft.examplemod.init.ModBlocks;
+import com.blogspot.jabelarminecraft.examplemod.worldgen.structures.villages.MapGenVillageCloud;
 
 import net.minecraft.block.BlockFalling;
 import net.minecraft.block.state.IBlockState;
@@ -76,7 +77,7 @@ public class ChunkGeneratorCloud implements IChunkGenerator
     
     protected MapGenBase caveGenerator = new MapGenCaves();
     protected MapGenStronghold strongholdGenerator = new MapGenStronghold();
-    protected MapGenVillage villageGenerator = new MapGenVillage();
+    protected MapGenVillageCloud villageGenerator = new MapGenVillageCloud();
     protected MapGenMineshaft mineshaftGenerator = new MapGenMineshaft();
     protected MapGenScatteredFeature scatteredFeatureGenerator = new MapGenScatteredFeature();
     protected MapGenBase ravineGenerator = new MapGenRavine();
@@ -128,13 +129,15 @@ public class ChunkGeneratorCloud implements IChunkGenerator
         terrainType = world.getWorldInfo().getTerrainType();
         mapFeaturesEnabled = world.getWorldInfo().isMapFeaturesEnabled();
         world.setSeaLevel(63);
+        
+        MapGenVillage.VILLAGE_SPAWN_BIOMES.add(ModBiomes.cloud);
 
         initNoiseGenerators();
         postTerrainGenEvents();
         setBiomeWeights();        
         postNoiseEvent();
     }
-
+    
     private void postNoiseEvent()
     {
         InitNoiseGensEvent.ContextOverworld ctx = new InitNoiseGensEvent.ContextOverworld(minLimitPerlinNoise, maxLimitPerlinNoise, mainPerlinNoise, surfaceNoise, scaleNoise, depthNoise, forestNoise);
@@ -175,7 +178,7 @@ public class ChunkGeneratorCloud implements IChunkGenerator
     {
         caveGenerator = TerrainGen.getModdedMapGen(caveGenerator, InitMapGenEvent.EventType.CAVE);
         strongholdGenerator = (MapGenStronghold) TerrainGen.getModdedMapGen(strongholdGenerator, InitMapGenEvent.EventType.STRONGHOLD);
-        villageGenerator = (MapGenVillage) TerrainGen.getModdedMapGen(villageGenerator, InitMapGenEvent.EventType.VILLAGE);
+        villageGenerator = (MapGenVillageCloud) TerrainGen.getModdedMapGen(villageGenerator, InitMapGenEvent.EventType.VILLAGE);
         mineshaftGenerator = (MapGenMineshaft) TerrainGen.getModdedMapGen(mineshaftGenerator, InitMapGenEvent.EventType.MINESHAFT);
         scatteredFeatureGenerator = (MapGenScatteredFeature) TerrainGen.getModdedMapGen(scatteredFeatureGenerator, InitMapGenEvent.EventType.SCATTERED_FEATURE);
         ravineGenerator = TerrainGen.getModdedMapGen(ravineGenerator, InitMapGenEvent.EventType.RAVINE);

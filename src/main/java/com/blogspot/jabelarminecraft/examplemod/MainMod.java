@@ -28,6 +28,7 @@ import com.blogspot.jabelarminecraft.examplemod.init.ModTileEntities;
 import com.blogspot.jabelarminecraft.examplemod.init.ModWorldGen;
 import com.blogspot.jabelarminecraft.examplemod.proxy.IProxy;
 import com.blogspot.jabelarminecraft.examplemod.utilities.Utilities;
+import com.blogspot.jabelarminecraft.examplemod.worldgen.structures.villages.MapGenVillageCloud;
 import com.blogspot.jabelarminecraft.examplemod.worldgen.structures.villages.VillageHouseCloud;
 
 import net.minecraft.stats.StatBasic;
@@ -132,6 +133,7 @@ public class MainMod
         ModBiomes.initBiomeManagerAndDictionary();
         ModBlocks.registerOreDictionaryEntries();
         ModItems.registerOreDictionaryEntries();
+        MapGenStructureIO.registerStructure(MapGenVillageCloud.Start.class, MODID+":cloud_village");
         MapGenStructureIO.registerStructureComponent(VillageHouseCloud.class, MODID+":cloud_house");
         VillagerRegistry.instance().registerVillageCreationHandler(ModWorldGen.CLOUD_VILLAGE_HANDLER);
         proxy.init(event);
