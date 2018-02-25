@@ -1,6 +1,5 @@
 package com.blogspot.jabelarminecraft.examplemod.worldgen.structures.villages;
 
-import java.util.List;
 import java.util.Random;
 
 import com.blogspot.jabelarminecraft.examplemod.init.ModBlocks;
@@ -13,7 +12,6 @@ import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.structure.StructureBoundingBox;
-import net.minecraft.world.gen.structure.StructureComponent;
 import net.minecraft.world.gen.structure.StructureVillagePieces;
 
 public class VillageHouseCloud extends StructureVillagePieces.Village
@@ -27,12 +25,6 @@ public class VillageHouseCloud extends StructureVillagePieces.Village
         super(parStart, parType);
         setCoordBaseMode(parFacing);
         boundingBox = parStructBB;
-    }
-
-    public static StructureVillagePieces.House3 createPiece(StructureVillagePieces.Start parStart, List<StructureComponent> parStructList, Random parRand, int parMinX, int parMinY, int parMinZ, EnumFacing parFacing, int parType)
-    {
-        StructureBoundingBox structureboundingbox = StructureBoundingBox.getComponentToAddBoundingBox(parMinX, parMinY, parMinZ, 0, 0, 0, 9, 7, 12, parFacing);
-        return canVillageGoDeeper(structureboundingbox) && StructureComponent.findIntersecting(parStructList, structureboundingbox) == null ? new StructureVillagePieces.House3(parStart, parType, parRand, structureboundingbox, parFacing) : null;
     }
 
     /**
