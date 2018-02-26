@@ -15,33 +15,35 @@
 */
 package com.blogspot.jabelarminecraft.examplemod.init;
 
-import java.util.Set;
+import java.util.Random;
 
 import com.blogspot.jabelarminecraft.examplemod.MainMod;
-import com.google.common.collect.ImmutableSet;
 
-import net.minecraft.block.Block;
+import net.minecraft.entity.IMerchant;
+import net.minecraft.entity.passive.EntityVillager;
+import net.minecraft.entity.passive.EntityVillager.ITradeList;
+import net.minecraft.entity.passive.EntityVillager.PriceInfo;
+import net.minecraft.init.Items;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.village.MerchantRecipe;
+import net.minecraft.village.MerchantRecipeList;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.registry.GameRegistry.ObjectHolder;
+import net.minecraftforge.fml.common.registry.VillagerRegistry.VillagerCareer;
 import net.minecraftforge.fml.common.registry.VillagerRegistry.VillagerProfession;
 import net.minecraftforge.registries.IForgeRegistry;
 
+@ObjectHolder(MainMod.MODID)
 public class ModProfessions
 {
     // instantiate VillagerProfessions
-    // public final static VillagerProfessionCustom MY_COOL_VillagerProfession = new VillagerProfessionCustom();
-
-    public static final Set<VillagerProfession> SET_INSTANCES = ImmutableSet.of(
-    // MY_COOL_VillagerProfession
-    );
-
-    /**
-     * Initialize this mod's {@link Block}s with any post-registration data.
-     */
-    private static void initialize()
-    {
-    }
+    public final static VillagerProfession mysterious_stranger = null;
+    
+    // declare VillagerCareers
+    public static VillagerCareer cloud_enchanter;
 
     @Mod.EventBusSubscriber(modid = MainMod.MODID)
     public static class RegistrationHandler
@@ -57,14 +59,53 @@ public class ModProfessions
         {
             final IForgeRegistry<VillagerProfession> registry = event.getRegistry();
 
-            System.out.println("Registering recipes");
-
-            for (final VillagerProfession profession : SET_INSTANCES)
-            {
-                registry.register(profession);
-            }
-
-            initialize();
+            // DEBUG
+            System.out.println("Registering villager professions");
+            
+            registry.register(new VillagerProfession(
+                    MainMod.MODID+":mysterious_stranger", 
+                    MainMod.MODID+":textures/entities/mysterious_stranger.png", 
+                    MainMod.MODID+":textures/entities/mysterious_stranger.png"
+                    )
+             );
         }
     }
+    
+    public static void associateCareersAndTrades()
+    {
+        // DEBUG
+        System.out.println("Associating careers and trades to villager professions");
+        
+        cloud_enchanter = (new VillagerCareer(mysterious_stranger, "cloud_enchanter"))
+                .addTrade(1, new TradeEmeraldForItem(Items.GOLDEN_BOOTS, new PriceInfo(17, 64)));       
+    }
+    
+    public static class TradeEmeraldForItem implements ITradeList
+    {
+        /** The  item stack to buy */
+        public ItemStack stack;
+        /** The price info determining the amount of emeralds to trade in for the enchanted item */
+        public EntityVillager.PriceInfo priceInfo;
+
+        public TradeEmeraldForItem(Item parItem, EntityVillager.PriceInfo parPriceInfo)
+        {
+            stack = new ItemStack(parItem);
+            priceInfo = parPriceInfo;
+        }
+
+        @Override
+        public void addMerchantRecipe(IMerchant merchant, MerchantRecipeList recipeList, Random random)
+        {
+            int actualPrice = 1;
+
+            if (priceInfo != null)
+            {
+                actualPrice = priceInfo.getPrice(random);
+            }
+
+            ItemStack stackToPay = new ItemStack(Items.EMERALD, actualPrice, 0);
+            recipeList.add(new MerchantRecipe(stackToPay, stack));
+        }
+    }
+    
 }

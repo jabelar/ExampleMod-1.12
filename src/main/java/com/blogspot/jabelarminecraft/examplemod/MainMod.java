@@ -24,6 +24,7 @@ import com.blogspot.jabelarminecraft.examplemod.init.ModConfig;
 import com.blogspot.jabelarminecraft.examplemod.init.ModFluids;
 import com.blogspot.jabelarminecraft.examplemod.init.ModItems;
 import com.blogspot.jabelarminecraft.examplemod.init.ModNetworking;
+import com.blogspot.jabelarminecraft.examplemod.init.ModProfessions;
 import com.blogspot.jabelarminecraft.examplemod.init.ModTileEntities;
 import com.blogspot.jabelarminecraft.examplemod.init.ModWorldGen;
 import com.blogspot.jabelarminecraft.examplemod.proxy.IProxy;
@@ -136,6 +137,7 @@ public class MainMod
         MapGenStructureIO.registerStructure(MapGenVillageCloud.Start.class, MODID+":cloud_village");
         MapGenStructureIO.registerStructureComponent(VillageHouseCloud.class, MODID+":cloud_house");
         VillagerRegistry.instance().registerVillageCreationHandler(ModWorldGen.CLOUD_VILLAGE_HANDLER);
+        ModProfessions.associateCareersAndTrades();
         proxy.init(event);
     }
 

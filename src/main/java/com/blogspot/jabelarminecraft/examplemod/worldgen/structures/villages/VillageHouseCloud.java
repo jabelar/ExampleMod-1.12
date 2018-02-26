@@ -3,6 +3,7 @@ package com.blogspot.jabelarminecraft.examplemod.worldgen.structures.villages;
 import java.util.Random;
 
 import com.blogspot.jabelarminecraft.examplemod.init.ModBlocks;
+import com.blogspot.jabelarminecraft.examplemod.init.ModProfessions;
 
 import net.minecraft.block.BlockDoor;
 import net.minecraft.block.BlockStairs;
@@ -13,6 +14,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.structure.StructureBoundingBox;
 import net.minecraft.world.gen.structure.StructureVillagePieces;
+import net.minecraftforge.fml.common.registry.VillagerRegistry;
 
 public class VillageHouseCloud extends StructureVillagePieces.Village
 {
@@ -200,5 +202,11 @@ public class VillageHouseCloud extends StructureVillagePieces.Village
          * structure accordingly.
          */
          return Blocks.OAK_DOOR;
+    }
+    
+    @Override
+    protected VillagerRegistry.VillagerProfession chooseForgeProfession(int count, VillagerRegistry.VillagerProfession prof)
+    {
+        return ModProfessions.mysterious_stranger;
     }
 }

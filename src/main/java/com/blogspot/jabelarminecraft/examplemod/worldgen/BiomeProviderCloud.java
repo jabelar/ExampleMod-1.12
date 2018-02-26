@@ -13,11 +13,4 @@ public class BiomeProviderCloud extends BiomeProviderSingle
         // DEBUG
         System.out.println("Constructing BiomeProviderCloud");
     }
-    
-//    @Override
-//    public boolean areBiomesViable(int x, int z, int radius, List<Biome> allowed)
-//    {
-//        System.out.println("List of allowed biomes = "+allowed);
-//        return allowed.contains(getBiome(new BlockPos(x, 64, z)));
-//    }
 }

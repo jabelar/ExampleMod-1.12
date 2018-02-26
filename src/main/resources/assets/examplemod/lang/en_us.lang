@@ -13,6 +13,7 @@ item.horse_hide.name=Horse Hide
 item.slime_bag.name=Bag
 item.slime_bag.filled.name=Slime Bag
 entity.test_pig.name=Test Pig
+entity.Villager.cloud_enchanter=Cloud Enchanter
 achievement.tanningahide=Tanned A Hide
 fluid.slime=Slime Juice
 itemGroup.examplemod=Example Mod
