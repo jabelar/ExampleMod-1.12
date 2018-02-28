@@ -67,7 +67,7 @@ public class ModBiomes
         BiomeManager.addBiome(BiomeType.COOL, new BiomeEntry(cloud, 10));
         BiomeManager.addSpawnBiome(cloud);
         BiomeManager.addStrongholdBiome(cloud);
-        BiomeManager.addVillageBiome(cloud, false);
+        BiomeManager.addVillageBiome(cloud, true);
         BiomeDictionary.addTypes(cloud, 
                 BiomeDictionary.Type.COLD,
                 BiomeDictionary.Type.DRY,

@@ -5,14 +5,10 @@ import com.blogspot.jabelarminecraft.examplemod.init.ModWorldGen;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.DimensionType;
 import net.minecraft.world.WorldProvider;
-import net.minecraft.world.WorldType;
 import net.minecraft.world.chunk.Chunk;
 
 public class WorldProviderCloud extends WorldProvider
 {
-    private String generatorSettings;
-    private float[] colorsSunriseSunset;
-
     @Override
     public DimensionType getDimensionType()
     {
@@ -46,10 +42,5 @@ public class WorldProviderCloud extends WorldProvider
     public boolean canSnowAt(BlockPos pos, boolean checkLight)
     {
         return false; 
-    }
-
-    public WorldType getTerrainType()
-    {
-        return ModWorldGen.CLOUD_WORLD_TYPE;
     }
 }

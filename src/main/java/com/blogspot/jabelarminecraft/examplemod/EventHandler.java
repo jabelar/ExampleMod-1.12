@@ -65,8 +65,9 @@ import net.minecraftforge.event.entity.living.LivingDropsEvent;
 import net.minecraftforge.event.entity.living.LivingEquipmentChangeEvent;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent.NameFormat;
+import net.minecraftforge.event.terraingen.PopulateChunkEvent;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent.OnConfigChangedEvent;
-import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
@@ -79,7 +80,7 @@ import net.minecraftforge.fml.relauncher.ReflectionHelper;
  * Registry events are contained in separate classes in the init subpackage. It is important that
  * this class is annotated as an event bus subscriber and that the methods should be all static.
  */
-@Mod.EventBusSubscriber(modid = MainMod.MODID)
+@EventBusSubscriber(modid = MainMod.MODID)
 public class EventHandler
 {
 //    // This is code that will replace all blocks of one type with another
@@ -1087,5 +1088,11 @@ public class EventHandler
             ModConfig.config.save();
             ModConfig.syncConfig();
         }
+    }
+    
+    @SubscribeEvent(priority = EventPriority.NORMAL, receiveCanceled = true)
+    public static void onEvent(PopulateChunkEvent.Populate event)
+    {
+            System.out.println("Generator called for type = "+event.getType());
     }
 }

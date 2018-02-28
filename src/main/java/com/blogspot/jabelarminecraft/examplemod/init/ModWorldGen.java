@@ -8,7 +8,6 @@ import com.blogspot.jabelarminecraft.examplemod.worldgen.WorldTypeCloud;
 import com.blogspot.jabelarminecraft.examplemod.worldgen.structures.villages.VillageHouseCloudCreationHandler;
 
 import net.minecraft.world.DimensionType;
-import net.minecraft.world.WorldProvider;
 import net.minecraft.world.WorldType;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.fml.common.registry.GameRegistry;
@@ -19,8 +18,7 @@ public class ModWorldGen
     public static final String CLOUD_NAME = "cloud";
     public static final int CLOUD_DIM_ID = findFreeDimensionID();
     public static final DimensionType CLOUD_DIM_TYPE = DimensionType.register(CLOUD_NAME, "_"+CLOUD_NAME, CLOUD_DIM_ID, WorldProviderCloud.class, true);
-    public static final WorldType CLOUD_WORLD_TYPE = new WorldTypeCloud();
-    public static final WorldProvider CLOUD_WORLD_PROVIDER = new WorldProviderCloud();
+    public static final WorldType CLOUD_WORLD_TYPE = new WorldTypeCloud(); // although instance isn't used, must create the instance to register the WorldType
     public static final IVillageCreationHandler CLOUD_VILLAGE_HANDLER = new VillageHouseCloudCreationHandler();
     
     public static final void registerDimensions()
