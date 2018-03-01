@@ -16,14 +16,41 @@
 
 package com.blogspot.jabelarminecraft.examplemod;
 
+import java.util.Random;
+
+import com.blogspot.jabelarminecraft.examplemod.worldgen.WorldGenDungeonsModded;
+
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.gen.ChunkGeneratorSettings;
+import net.minecraftforge.event.terraingen.PopulateChunkEvent;
+import net.minecraftforge.event.terraingen.PopulateChunkEvent.Populate.EventType;
+import net.minecraftforge.fml.common.eventhandler.Event.Result;
+import net.minecraftforge.fml.common.eventhandler.EventPriority;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+
 public class TerrainGenEventHandler
 {
-//    @SubscribeEvent(priority = EventPriority.NORMAL, receiveCanceled = true)
-//    public  void onEvent(PopulateChunkEvent.Populate event)
-//    {
-//        if (event.getType() == EventType.DUNGEON)
-//        {
-//            System.out.println("Dungeon populate event");
-//        }
-//    }
+    @SubscribeEvent(priority = EventPriority.NORMAL, receiveCanceled = true)
+    public  void onEvent(PopulateChunkEvent.Populate event)
+    {
+        if (event.getType() == EventType.DUNGEON)
+        {
+//            // DEBUG
+//            System.out.println("Dungeon populate event at chunk start "+event.getChunkX()*16+" and "+event.getChunkZ()*16);
+            
+            ChunkGeneratorSettings settings = ChunkGeneratorSettings.Factory.jsonToFactory(event.getWorld().getWorldInfo().getGeneratorOptions()).build();
+            Random rand = new Random(event.getWorld().getSeed());
+            BlockPos blockpos = new BlockPos(event.getChunkX()*16, 0, event.getChunkZ()*16);
+            
+            for (int j2 = 0; j2 < settings.dungeonChance; ++j2)
+            {
+                int i3 = rand.nextInt(16) + 8;
+                int l3 = rand.nextInt(256);
+                int l1 = rand.nextInt(16) + 8;
+                (new WorldGenDungeonsModded()).generate(event.getWorld(), rand, blockpos.add(i3, l3, l1));
+            }
+            
+            event.setResult(Result.DENY);
+        }
+    }
 }
