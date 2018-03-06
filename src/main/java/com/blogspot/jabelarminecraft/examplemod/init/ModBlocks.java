@@ -195,9 +195,9 @@ public class ModBlocks
     @SideOnly(Side.CLIENT)
     public static void registerBlockModel(Block parBlock, int parMetaData)
     {
-        // DEBUG
-        System.out.println("Registering block model for"
-                + ": " + parBlock.getRegistryName());
+//        // DEBUG
+//        System.out.println("Registering block model for"
+//                + ": " + parBlock.getRegistryName());
 
         ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(parBlock), parMetaData,
                 new ModelResourceLocation(MainMod.MODID + ":" + parBlock.getUnlocalizedName().substring(5), "inventory"));
@@ -239,9 +239,9 @@ public class ModBlocks
     @SideOnly(Side.CLIENT)
     public static void registerItemBlockModel(ItemBlock parBlock, int parMetaData)
     {
-        // DEBUG
-        System.out.println("Registering item block model for"
-                + ": " + parBlock.getRegistryName());
+//        // DEBUG
+//        System.out.println("Registering item block model for"
+//                + ": " + parBlock.getRegistryName());
         
         ModelLoader.setCustomModelResourceLocation(parBlock, parMetaData,
                 new ModelResourceLocation(MainMod.MODID + ":" + parBlock.getUnlocalizedName().substring(5), "inventory"));

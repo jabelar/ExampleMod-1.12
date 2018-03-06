@@ -64,8 +64,8 @@ public class ModEntities
 
             for (final EntityEntry entityEntry : SET_ENTITIES)
             {
-                // DEBUG
-                System.out.println("Registering entity = " + entityEntry.getEntityClass());
+//                // DEBUG
+//                System.out.println("Registering entity = " + entityEntry.getEntityClass());
 
                 registry.register(entityEntry);
             }

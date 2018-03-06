@@ -51,10 +51,6 @@ public class ModBiomes
             System.out.println("Registering biomes");
             
             registry.register(new BiomeCloud().setRegistryName(MainMod.MODID, ModWorldGen.CLOUD_NAME));
-
-            // DEBUG
-            System.out.println("Registry key set = " + registry.getKeys());
-            System.out.println("Registry value list = " + registry.getValuesCollection());
         }
     }
     

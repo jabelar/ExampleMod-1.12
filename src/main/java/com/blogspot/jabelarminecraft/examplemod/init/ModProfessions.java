@@ -90,6 +90,7 @@ public class ModProfessions
         public TradeEmeraldForItem(Item parItem, EntityVillager.PriceInfo parPriceInfo)
         {
             stack = new ItemStack(parItem);
+            stack.addEnchantment(ModEnchantments.safe_falling, 2);
             priceInfo = parPriceInfo;
         }
 

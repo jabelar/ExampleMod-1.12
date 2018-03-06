@@ -15,56 +15,33 @@
 */
 package com.blogspot.jabelarminecraft.examplemod.init;
 
-import java.util.Set;
-
 import com.blogspot.jabelarminecraft.examplemod.MainMod;
-import com.google.common.collect.ImmutableSet;
+import com.blogspot.jabelarminecraft.examplemod.enchantments.EnchantmentSafeFalling;
 
-import net.minecraft.block.Block;
+import net.minecraft.enchantment.Enchantment;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.registry.EntityEntry;
+import net.minecraftforge.fml.common.registry.GameRegistry.ObjectHolder;
 import net.minecraftforge.registries.IForgeRegistry;
 
+@ObjectHolder(MainMod.MODID)
 public class ModEnchantments
 {
-    // instantiate EntityEntrys
-    // public final static EntityEntryCustom MY_COOL_EntityEntry = new EntityEntryCustom();
-
-    public static final Set<EntityEntry> SET_INSTANCES = ImmutableSet.of(
-    // MY_COOL_EntityEntry
-    );
-
-    /**
-     * Initialize this mod's {@link Block}s with any post-registration data.
-     */
-    private static void initialize()
-    {
-    }
-
+    public static final Enchantment safe_falling = null;
+            
     @Mod.EventBusSubscriber(modid = MainMod.MODID)
     public static class RegistrationHandler
     {
-        /**
-         * Register this mod's {@link EntityEntry}s.
-         *
-         * @param event
-         *            The event
-         */
         @SubscribeEvent
-        public static void onEvent(final RegistryEvent.Register<EntityEntry> event)
+        public static void onEvent(final RegistryEvent.Register<Enchantment> event)
         {
-            final IForgeRegistry<EntityEntry> registry = event.getRegistry();
+            // DEBUG
+            System.out.println("Registering Enchantments");
 
-            System.out.println("Registering recipes");
-
-            for (final EntityEntry entityEntry : SET_INSTANCES)
-            {
-                registry.register(entityEntry);
-            }
-
-            initialize();
+            final IForgeRegistry<Enchantment> registry = event.getRegistry();
+                        
+            registry.register(new EnchantmentSafeFalling());            
         }
     }
 }

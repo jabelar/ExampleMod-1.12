@@ -44,10 +44,7 @@ public class BiomeCloud extends Biome
                 .setRainDisabled()
                 .setTemperature(0.2F)
                 );
-        
-        // DEBUG
-        System.out.println("Constructing BiomeCloud");
-        
+                
         topBlock = ModBlocks.cloud.getDefaultState();
         fillerBlock = ModBlocks.cloud.getDefaultState();
         
@@ -61,9 +58,6 @@ public class BiomeCloud extends Biome
     @Override
     public BiomeDecorator createBiomeDecorator()
     {
-        // DEBUG
-        System.out.println("Creating BiomeDecoratorCloud");
-        
         BiomeDecorator biomeDecorator = new BiomeDecoratorCloud();
         
         biomeDecorator.waterlilyPerChunk = 0;

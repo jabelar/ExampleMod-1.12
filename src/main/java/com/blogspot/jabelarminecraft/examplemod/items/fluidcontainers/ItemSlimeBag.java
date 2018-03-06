@@ -73,9 +73,6 @@ public class ItemSlimeBag extends Item
         setCreativeTab(CreativeTabs.MISC);
         setMaxStackSize(1);
         BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(this, DispenseFluidContainer.getInstance());
-
-        // DEBUG
-        System.out.println("Constructing ItemSlimeBag");
     }
 
     /*

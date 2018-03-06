@@ -15,12 +15,8 @@
 */
 package com.blogspot.jabelarminecraft.examplemod.init;
 
-import java.util.Set;
-
 import com.blogspot.jabelarminecraft.examplemod.MainMod;
-import com.google.common.collect.ImmutableSet;
 
-import net.minecraft.block.Block;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -29,19 +25,6 @@ import net.minecraftforge.registries.IForgeRegistry;
 
 public class ModRecipes
 {
-    // instantiate IRecipes
-    // public final static IRecipeCustom MY_COOL_RECIPE = new IRecipeCustom();
-
-    public static final Set<IRecipe> SET_INSTANCES = ImmutableSet.of(
-    // MY_COOL_RECIPE
-    );
-
-    /**
-     * Initialize this mod's {@link Block}s with any post-registration data.
-     */
-    private static void initialize()
-    {
-    }
 
     @Mod.EventBusSubscriber(modid = MainMod.MODID)
     public static class RegistrationHandler
@@ -59,12 +42,7 @@ public class ModRecipes
 
             System.out.println("Registering recipes");
 
-            for (final IRecipe recipe : SET_INSTANCES)
-            {
-                registry.register(recipe);
-            }
-
-            initialize();
+//            registry.register(recipe);
         }
     }
 }
