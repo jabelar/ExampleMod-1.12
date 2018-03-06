@@ -76,7 +76,7 @@ public class ModProfessions
         System.out.println("Associating careers and trades to villager professions");
         
         cloud_enchanter = (new VillagerCareer(mysterious_stranger, "cloud_enchanter"))
-                .addTrade(1, new TradeEmeraldsForEnchantedBoots());       
+                .addTrade(1, new TradeEmeraldsForEnchantedBoots());
     }
     
     public static class TradeEmeraldsForEnchantedBoots implements ITradeList
@@ -89,6 +89,7 @@ public class ModProfessions
         public TradeEmeraldsForEnchantedBoots()
         {
             stack = new ItemStack(Items.GOLDEN_BOOTS);
+            stack.addEnchantment(ModEnchantments.safe_falling, 2);
             priceInfo = new PriceInfo(17, 64);
         }
 
@@ -103,7 +104,6 @@ public class ModProfessions
             }
 
             ItemStack stackToPay = new ItemStack(Items.EMERALD, actualPrice, 0);
-            stack.addEnchantment(ModEnchantments.safe_falling, 2);
             recipeList.add(new MerchantRecipe(stackToPay, stack));
             
             // DEBUG

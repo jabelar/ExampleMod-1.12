@@ -61,11 +61,11 @@ public class WorldGenTreesCloud extends WorldGenAbstractTree
         }
     }
 
-    private void generateLeaves(World parWorld, BlockPos parBlockPos, int minHeight, Random parRandom)
+    private void generateLeaves(World parWorld, BlockPos parBlockPos, int height, Random parRandom)
     {
-        for (int foliageY = parBlockPos.getY() - 3 + minHeight; foliageY <= parBlockPos.getY() + minHeight; ++foliageY)
+        for (int foliageY = parBlockPos.getY() - 3 + height; foliageY <= parBlockPos.getY() + height; ++foliageY)
         {
-            int foliageLayer = foliageY - (parBlockPos.getY() + minHeight);
+            int foliageLayer = foliageY - (parBlockPos.getY() + height);
             int foliageLayerRadius = 1 - foliageLayer / 2;
 
             for (int foliageX = parBlockPos.getX() - foliageLayerRadius; foliageX <= parBlockPos.getX() + foliageLayerRadius; ++foliageX)
