@@ -24,7 +24,6 @@ import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.entity.passive.EntityVillager.ITradeList;
 import net.minecraft.entity.passive.EntityVillager.PriceInfo;
 import net.minecraft.init.Items;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.village.MerchantRecipe;
 import net.minecraft.village.MerchantRecipeList;
@@ -77,21 +76,20 @@ public class ModProfessions
         System.out.println("Associating careers and trades to villager professions");
         
         cloud_enchanter = (new VillagerCareer(mysterious_stranger, "cloud_enchanter"))
-                .addTrade(1, new TradeEmeraldForItem(Items.GOLDEN_BOOTS, new PriceInfo(17, 64)));       
+                .addTrade(1, new TradeEmeraldsForEnchantedBoots());       
     }
     
-    public static class TradeEmeraldForItem implements ITradeList
+    public static class TradeEmeraldsForEnchantedBoots implements ITradeList
     {
         /** The  item stack to buy */
         public ItemStack stack;
         /** The price info determining the amount of emeralds to trade in for the enchanted item */
         public EntityVillager.PriceInfo priceInfo;
 
-        public TradeEmeraldForItem(Item parItem, EntityVillager.PriceInfo parPriceInfo)
+        public TradeEmeraldsForEnchantedBoots()
         {
-            stack = new ItemStack(parItem);
-            stack.addEnchantment(ModEnchantments.safe_falling, 2);
-            priceInfo = parPriceInfo;
+            stack = new ItemStack(Items.GOLDEN_BOOTS);
+            priceInfo = new PriceInfo(17, 64);
         }
 
         @Override
@@ -105,8 +103,11 @@ public class ModProfessions
             }
 
             ItemStack stackToPay = new ItemStack(Items.EMERALD, actualPrice, 0);
+            stack.addEnchantment(ModEnchantments.safe_falling, 2);
             recipeList.add(new MerchantRecipe(stackToPay, stack));
+            
+            // DEBUG
+            System.out.println("Merchant recipe list = "+recipeList.getRecipiesAsTags());
         }
-    }
-    
+    }    
 }
