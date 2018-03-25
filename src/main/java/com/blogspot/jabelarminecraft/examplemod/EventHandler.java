@@ -25,6 +25,7 @@ import com.blogspot.jabelarminecraft.examplemod.init.ModEnchantments;
 import com.blogspot.jabelarminecraft.examplemod.init.ModItems;
 
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
@@ -36,6 +37,7 @@ import net.minecraft.entity.passive.EntityMooshroom;
 import net.minecraft.entity.passive.EntityPig;
 import net.minecraft.entity.passive.EntitySheep;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.init.MobEffects;
 import net.minecraft.item.ItemStack;
@@ -43,6 +45,8 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
 import net.minecraftforge.event.entity.living.LivingFallEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent.NameFormat;
@@ -50,6 +54,7 @@ import net.minecraftforge.fml.client.event.ConfigChangedEvent.OnConfigChangedEve
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent.PlayerTickEvent;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
 
 /**
@@ -1106,4 +1111,23 @@ public class EventHandler
             }
         }
     }
+    
+    /**
+     * Render the air indicator when submerged in a liquid.
+     *
+     * @param event the event
+     */
+    @SubscribeEvent(priority = EventPriority.HIGHEST, receiveCanceled = true)
+    public static void onEvent(PlayerTickEvent event)
+    {
+        BlockPos playerPos = event.player.getPosition().down();
+        if (event.player.world != null && event.player.ticksExisted%5 == 0)
+        {
+            World world = event.player.world;
+            IBlockState state = world.getBlockState(playerPos);
+            world.setBlockState(playerPos, Blocks.AIR.getDefaultState());
+            world.setBlockState(playerPos, state);
+        }
+    }
+
 }
