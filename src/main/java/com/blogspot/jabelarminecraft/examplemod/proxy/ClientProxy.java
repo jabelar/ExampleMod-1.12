@@ -28,6 +28,7 @@ import com.blogspot.jabelarminecraft.examplemod.MainMod;
 import com.blogspot.jabelarminecraft.examplemod.blocks.BlockLeavesCloud;
 import com.blogspot.jabelarminecraft.examplemod.client.gui.GuiCreateWorldMod;
 import com.blogspot.jabelarminecraft.examplemod.client.renderers.RenderFactories;
+import com.blogspot.jabelarminecraft.examplemod.init.ModBlockColors;
 import com.blogspot.jabelarminecraft.examplemod.init.ModKeyBindings;
 import com.blogspot.jabelarminecraft.examplemod.init.ModMaterials;
 import com.blogspot.jabelarminecraft.examplemod.init.ModNetworking;
@@ -101,8 +102,8 @@ public class ClientProxy implements IProxy
         // DEBUG
         System.out.println("on Client side");
 
-        // register key bindings
         ModKeyBindings.registerKeyBindings();
+        ModBlockColors.registerBlockColors();
 
         // create sphere call list
         createSphereCallList();
