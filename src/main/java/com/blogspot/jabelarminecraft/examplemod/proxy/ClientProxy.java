@@ -46,6 +46,7 @@ import net.minecraft.client.gui.GuiCreateWorld;
 import net.minecraft.client.gui.GuiIngame;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
+import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -69,6 +70,7 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.InputEvent.KeyInputEvent;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import net.minecraftforge.fml.relauncher.Side;
@@ -371,6 +373,33 @@ public class ClientProxy implements IProxy
         event.setBlue(0xFF);
     }
     
+    @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
+    public static void onEvent(KeyInputEvent event)
+    {
+        // DEBUG
+        System.out.println("Key Input Event");
+
+        // make local copy of key binding array
+        KeyBinding[] keyBindings = ModKeyBindings.keyBindings;
+       
+        // check each enumerated key binding type for pressed and take appropriate action
+        if (keyBindings[0].isPressed()) 
+        {
+            // DEBUG
+            System.out.println("Key binding ="+keyBindings[0].getKeyDescription());
+                
+            // do stuff for this key binding here
+            // remember you may need to send packet to server
+        }
+        if (keyBindings[1].isPressed()) 
+        {
+            // DEBUG
+            System.out.println("Key binding ="+keyBindings[1].getKeyDescription());
+                
+            // do stuff for this key binding here
+            // remember you may need to send packet to server
+        }
+    }    
 
 //    @SubscribeEvent(priority = EventPriority.NORMAL, receiveCanceled = true)
 //    public static void onEvent(InputEvent.MouseInputEvent event)
