@@ -244,7 +244,7 @@ public class ModBlocks
 //                + ": " + parBlock.getRegistryName());
         
         ModelLoader.setCustomModelResourceLocation(parBlock, parMetaData,
-                new ModelResourceLocation(MainMod.MODID + ":" + parBlock.getUnlocalizedName().substring(5), "inventory"));
+                new ModelResourceLocation(parBlock.getRegistryName(), "inventory"));
     }
     
     public static void registerOreDictionaryEntries()

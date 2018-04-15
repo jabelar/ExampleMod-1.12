@@ -152,7 +152,7 @@ public class ModItems
         System.out.println("Registering item model for: " + parItem.getRegistryName());
 
         ModelLoader.setCustomModelResourceLocation(parItem, parMetaData,
-                new ModelResourceLocation(MainMod.MODID + ":" + parItem.getUnlocalizedName().substring(5), "inventory"));
+                new ModelResourceLocation(parItem.getRegistryName(), "inventory"));
     }
     
     public static void registerOreDictionaryEntries()
