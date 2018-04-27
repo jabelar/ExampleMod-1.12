@@ -46,6 +46,7 @@ import net.minecraft.client.gui.GuiCreateWorld;
 import net.minecraft.client.gui.GuiIngame;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
+import net.minecraft.client.resources.LanguageManager;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -96,6 +97,7 @@ public class ClientProxy implements IProxy
         mouseHelperAI = new MouseHelperAI();
         Minecraft.getMinecraft().mouseHelper = mouseHelperAI;
         RenderFactories.registerEntityRenderers();
+        this.printOutLangMap();
     }
 
     @Override
@@ -110,6 +112,7 @@ public class ClientProxy implements IProxy
         // create sphere call list
         createSphereCallList();
 
+        this.printOutLangMap();
     }
 
     @Override
@@ -117,6 +120,8 @@ public class ClientProxy implements IProxy
     {
         // DEBUG
         System.out.println("on Client side");
+        
+        this.printOutLangMap();
     }
 
 
@@ -484,5 +489,14 @@ public class ClientProxy implements IProxy
                 e.printStackTrace();
             }
         }
+    }
+
+    public static Field locale = ReflectionHelper.findField(LanguageManager.class, "CURRENT_LOCALE", "CURRENT_LOCALE");
+
+    
+    @Override
+    public void printOutLangMap()
+    {
+        System.out.println("Locale = "+locale);
     }
 }
