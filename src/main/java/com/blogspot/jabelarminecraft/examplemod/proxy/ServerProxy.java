@@ -160,11 +160,4 @@ public class ServerProxy implements IProxy
     public void setGraphicsLevel(BlockLeavesCloud parBlock, boolean parFancyEnabled)
     {
     }
-
-    @Override
-    public void printOutLangMap()
-    {
-        // TODO Auto-generated method stub
-        
-    }
 }

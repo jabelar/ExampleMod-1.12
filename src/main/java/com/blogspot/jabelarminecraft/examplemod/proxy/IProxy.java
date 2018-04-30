@@ -66,6 +66,4 @@ public interface IProxy
     boolean handleMaterialAcceleration(Entity parEntity, Material parMaterial);
 
     void setGraphicsLevel(BlockLeavesCloud parBlock, boolean parFancyEnabled);
-    
-    void printOutLangMap();
 }

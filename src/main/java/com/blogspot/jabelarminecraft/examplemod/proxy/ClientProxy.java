@@ -17,6 +17,7 @@
 package com.blogspot.jabelarminecraft.examplemod.proxy;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
@@ -27,6 +28,7 @@ import org.lwjgl.util.glu.Sphere;
 import com.blogspot.jabelarminecraft.examplemod.MainMod;
 import com.blogspot.jabelarminecraft.examplemod.blocks.BlockLeavesCloud;
 import com.blogspot.jabelarminecraft.examplemod.client.gui.GuiCreateWorldMod;
+import com.blogspot.jabelarminecraft.examplemod.client.localization.ModLocale;
 import com.blogspot.jabelarminecraft.examplemod.client.renderers.RenderFactories;
 import com.blogspot.jabelarminecraft.examplemod.init.ModBlockColors;
 import com.blogspot.jabelarminecraft.examplemod.init.ModKeyBindings;
@@ -89,6 +91,8 @@ public class ClientProxy implements IProxy
     // mouse helper
     public static MouseHelper mouseHelperAI; // used to intercept user mouse movement for "bot" functionality
 
+    public static Field locale = ReflectionHelper.findField(LanguageManager.class, "CURRENT_LOCALE", "CURRENT_LOCALE");
+
     @Override
     public void preInit(FMLPreInitializationEvent event)
     {
@@ -97,7 +101,44 @@ public class ClientProxy implements IProxy
         mouseHelperAI = new MouseHelperAI();
         Minecraft.getMinecraft().mouseHelper = mouseHelperAI;
         RenderFactories.registerEntityRenderers();
-        this.printOutLangMap();
+        
+        // DEBUG
+        System.out.println("Swapping in custom locale class");
+        Field modifiersField;
+        try
+        {
+            modifiersField = Field.class.getDeclaredField("modifiers");
+            modifiersField.setAccessible(true);
+            try
+            {
+                modifiersField.setInt(locale, locale.getModifiers() & ~Modifier.FINAL);
+            }
+            catch (IllegalArgumentException | IllegalAccessException e)
+            {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        }
+        catch (NoSuchFieldException | SecurityException e1)
+        {
+            // TODO Auto-generated catch block
+            e1.printStackTrace();
+        }
+
+        try
+        {
+            locale.set(null, new ModLocale());
+        }
+        catch (IllegalArgumentException e)
+        {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        catch (IllegalAccessException e)
+        {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -111,8 +152,6 @@ public class ClientProxy implements IProxy
 
         // create sphere call list
         createSphereCallList();
-
-        this.printOutLangMap();
     }
 
     @Override
@@ -120,8 +159,6 @@ public class ClientProxy implements IProxy
     {
         // DEBUG
         System.out.println("on Client side");
-        
-        this.printOutLangMap();
     }
 
 
@@ -489,14 +526,5 @@ public class ClientProxy implements IProxy
                 e.printStackTrace();
             }
         }
-    }
-
-    public static Field locale = ReflectionHelper.findField(LanguageManager.class, "CURRENT_LOCALE", "CURRENT_LOCALE");
-
-    
-    @Override
-    public void printOutLangMap()
-    {
-        System.out.println("Locale = "+locale);
     }
 }
