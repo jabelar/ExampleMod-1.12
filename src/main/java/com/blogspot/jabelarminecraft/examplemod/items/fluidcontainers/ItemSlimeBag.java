@@ -113,8 +113,8 @@ public class ItemSlimeBag extends Item
                 final ItemStack filledStack = fluidHandler.getContainer();
                 subItems.add(filledStack);
 
-                // DEBUG
-                System.out.println("Filled bag and adding as sub-item = " + filledStack + " with amount = " + FluidUtil.getFluidContained(filledStack).amount);
+//                // DEBUG
+//                System.out.println("Filled bag and adding as sub-item = " + filledStack + " with amount = " + FluidUtil.getFluidContained(filledStack).amount);
             }
             else
             {

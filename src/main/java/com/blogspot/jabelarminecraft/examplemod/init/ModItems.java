@@ -83,8 +83,7 @@ public class ModItems
         /**
          * ModelRegistryEvent handler.
          *
-         * @param event
-         *            the event
+         * @param event the event
          */
         @SubscribeEvent
         @SideOnly(Side.CLIENT)
@@ -106,7 +105,7 @@ public class ModItems
              *  Register custom model items
              */
             // DEBUG
-            System.out.println("Registering item model for: " + slime_bag.getRegistryName());
+            System.out.println("Registering custom item models");
             ModelLoaderRegistry.registerLoader(ModelSlimeBag.CustomModelLoader.INSTANCE);
             ModelLoader.setCustomMeshDefinition(slime_bag, stack -> ModelSlimeBag.LOCATION);
             ModelBakery.registerItemVariants(slime_bag, ModelSlimeBag.LOCATION);
@@ -115,8 +114,7 @@ public class ModItems
         /**
          * ModelBakeEvent handler.
          *
-         * @param event
-         *            the event
+         * @param event the event
          */
         @SubscribeEvent
         @SideOnly(Side.CLIENT)
@@ -148,8 +146,8 @@ public class ModItems
     @SideOnly(Side.CLIENT)
     public static void registerItemModel(Item parItem, int parMetaData)
     {
-        // DEBUG
-        System.out.println("Registering item model for: " + parItem.getRegistryName());
+//        // DEBUG
+//        System.out.println("Registering item model for: " + parItem.getRegistryName());
 
         ModelLoader.setCustomModelResourceLocation(parItem, parMetaData,
                 new ModelResourceLocation(parItem.getRegistryName(), "inventory"));
