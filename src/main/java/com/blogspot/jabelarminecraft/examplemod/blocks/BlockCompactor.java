@@ -16,8 +16,6 @@
 
 package com.blogspot.jabelarminecraft.examplemod.blocks;
 
-import java.util.Random;
-
 import com.blogspot.jabelarminecraft.examplemod.MainMod;
 import com.blogspot.jabelarminecraft.examplemod.client.gui.GuiHandler;
 import com.blogspot.jabelarminecraft.examplemod.init.ModCreativeTabs;
@@ -39,7 +37,6 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
-import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -53,8 +50,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class BlockCompactor extends BlockContainer
 {
     public static final PropertyDirection FACING = PropertyDirection.create("facing", EnumFacing.Plane.HORIZONTAL);
-    private final boolean isCompacting;
-    private boolean hasTileEntity;
 
     /**
      * Instantiates a new block compactor.
@@ -65,7 +60,6 @@ public class BlockCompactor extends BlockContainer
         // DEBUG
         System.out.println("Constructing BlockCompactor instance");
         setDefaultState(blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH));
-        isCompacting = false;
         setCreativeTab(ModCreativeTabs.CREATIVE_TAB);
         setSoundType(SoundType.SNOW);
         blockParticleGravity = 1.0F;
@@ -110,48 +104,6 @@ public class BlockCompactor extends BlockContainer
             }
 
             parWorld.setBlockState(parBlockPos, parIBlockState.withProperty(FACING, enumfacing), 2);
-        }
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see net.minecraft.block.Block#randomDisplayTick(net.minecraft.block.state.IBlockState, net.minecraft.world.World, net.minecraft.util.math.BlockPos, java.util.Random)
-     */
-    @Override
-    @SideOnly(Side.CLIENT)
-    public void randomDisplayTick(IBlockState state, World worldIn, BlockPos pos, Random rand)
-    {
-        if (isCompacting)
-        {
-            EnumFacing enumfacing = state.getValue(FACING);
-            double d0 = pos.getX() + 0.5D;
-            double d1 = pos.getY() + rand.nextDouble() * 6.0D / 16.0D;
-            double d2 = pos.getZ() + 0.5D;
-            double d3 = 0.52D;
-            double d4 = rand.nextDouble() * 0.6D - 0.3D;
-
-            switch (BlockCompactor.SwitchEnumFacing.enumFacingArray[enumfacing.ordinal()])
-            {
-            case 1:
-                worldIn.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, d0 - d3, d1, d2 + d4, 0.0D, 0.0D, 0.0D, new int[0]);
-                worldIn.spawnParticle(EnumParticleTypes.FLAME, d0 - d3, d1, d2 + d4, 0.0D, 0.0D, 0.0D, new int[0]);
-                break;
-            case 2:
-                worldIn.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, d0 + d3, d1, d2 + d4, 0.0D, 0.0D, 0.0D, new int[0]);
-                worldIn.spawnParticle(EnumParticleTypes.FLAME, d0 + d3, d1, d2 + d4, 0.0D, 0.0D, 0.0D, new int[0]);
-                break;
-            case 3:
-                worldIn.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, d0 + d4, d1, d2 - d3, 0.0D, 0.0D, 0.0D, new int[0]);
-                worldIn.spawnParticle(EnumParticleTypes.FLAME, d0 + d4, d1, d2 - d3, 0.0D, 0.0D, 0.0D, new int[0]);
-                break;
-            case 4:
-                worldIn.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, d0 + d4, d1, d2 + d3, 0.0D, 0.0D, 0.0D, new int[0]);
-                worldIn.spawnParticle(EnumParticleTypes.FLAME, d0 + d4, d1, d2 + d3, 0.0D, 0.0D, 0.0D, new int[0]);
-                break;
-            default:
-                break;
-            }
         }
     }
 
@@ -271,15 +223,12 @@ public class BlockCompactor extends BlockContainer
     @Override
     public void breakBlock(World worldIn, BlockPos pos, IBlockState state)
     {
-        if (!hasTileEntity)
-        {
-            TileEntity tileentity = worldIn.getTileEntity(pos);
+        TileEntity tileentity = worldIn.getTileEntity(pos);
 
-            if (tileentity instanceof TileEntityCompactor)
-            {
-                InventoryHelper.dropInventoryItems(worldIn, pos, (TileEntityCompactor) tileentity);
-                worldIn.updateComparatorOutputLevel(pos, this);
-            }
+        if (tileentity instanceof TileEntityCompactor)
+        {
+            InventoryHelper.dropInventoryItems(worldIn, pos, (TileEntityCompactor) tileentity);
+            worldIn.updateComparatorOutputLevel(pos, this);
         }
 
         super.breakBlock(worldIn, pos, state);
