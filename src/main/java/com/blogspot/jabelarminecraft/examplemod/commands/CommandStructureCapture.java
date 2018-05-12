@@ -37,7 +37,7 @@ import net.minecraft.world.World;
  * to a file, in basically a simplified schematic format. This can be used in 
  * conjuction with a complementary build structure command that takes the file
  * and places the blocks to recreate the structure.
- * 
+ * moved wrongly
  * @author jabelar
  *
  */

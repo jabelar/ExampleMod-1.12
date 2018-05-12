@@ -17,18 +17,25 @@
 package com.blogspot.jabelarminecraft.examplemod;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
+
+import javax.annotation.Nullable;
 
 import com.blogspot.jabelarminecraft.examplemod.init.ModConfig;
 import com.blogspot.jabelarminecraft.examplemod.init.ModEnchantments;
 import com.blogspot.jabelarminecraft.examplemod.init.ModItems;
 
+import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.passive.EntityCow;
@@ -36,25 +43,41 @@ import net.minecraft.entity.passive.EntityHorse;
 import net.minecraft.entity.passive.EntityMooshroom;
 import net.minecraft.entity.passive.EntityPig;
 import net.minecraft.entity.passive.EntitySheep;
+import net.minecraft.entity.passive.EntityTameable;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.init.MobEffects;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.network.datasync.DataParameter;
+import net.minecraft.scoreboard.IScoreCriteria;
+import net.minecraft.scoreboard.Score;
+import net.minecraft.scoreboard.ScoreObjective;
+import net.minecraft.scoreboard.Team;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.stats.StatList;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.DimensionType;
+import net.minecraft.world.GameType;
 import net.minecraft.world.World;
+import net.minecraftforge.event.entity.EntityJoinWorldEvent;
+import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
 import net.minecraftforge.event.entity.living.LivingFallEvent;
+import net.minecraftforge.event.entity.player.PlayerEvent.Clone;
 import net.minecraftforge.event.entity.player.PlayerEvent.NameFormat;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent.OnConfigChangedEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 import net.minecraftforge.fml.common.gameevent.TickEvent.PlayerTickEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent.ServerTickEvent;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
 
 /**
@@ -112,6 +135,9 @@ public class EventHandler
     public static Field firstUpdate = ReflectionHelper.findField(Entity.class, "firstUpdate", "field_70148_d");
     public static Field attackingPlayer = ReflectionHelper.findField(EntityLivingBase.class, "attackingPlayer", "field_70717_bb");
     public static Field recentlyHit = ReflectionHelper.findField(EntityLivingBase.class, "recentlyHit", "field_70718_bc");
+    public static Field scoreValue = ReflectionHelper.findField(EntityLivingBase.class, "scoreValue", "field_70744_aE");
+    public static Field LEFT_SHOULDER_ENTITY = ReflectionHelper.findField(EntityPlayer.class, "LEFT_SHOULDER_ENTITY", "field_192032_bt");
+    public static Field RIGHT_SHOULDER_ENTITY = ReflectionHelper.findField(EntityPlayer.class, "RIGHT_SHOULDER_ENTITY", "field_192033_bu");
 
     public static Method setFlag = ReflectionHelper.findMethod(Entity.class, "setFlag", "func_70052_a", Integer.TYPE, Boolean.TYPE);
     public static Method getFlag = ReflectionHelper.findMethod(Entity.class, "getFlag", "func_70083_f", Integer.TYPE);
@@ -1128,6 +1154,250 @@ public class EventHandler
             world.setBlockState(playerPos, Blocks.AIR.getDefaultState());
             world.setBlockState(playerPos, state);
         }
+    }
+
+    public static List<EntityPlayerMP> playersToRespawn = new ArrayList<EntityPlayerMP>();
+
+    @SubscribeEvent(priority = EventPriority.NORMAL, receiveCanceled = true)
+    public static void onEvent(ServerTickEvent event)
+    {
+        if (event.phase == Phase.START)
+        {
+            return;
+        }
+        
+        for (EntityPlayerMP player : playersToRespawn)
+        {
+            performRespawn(player);
+            
+            // DEBUG
+            System.out.println("Performing delayed respawn for player = "+player.getName());
+        }
+        
+        playersToRespawn.clear();
+    }
+    
+    @SubscribeEvent(priority = EventPriority.NORMAL, receiveCanceled = true)
+    public static void onEvent(LivingDeathEvent event)
+    {
+        if (event.getEntity().getEntityWorld().isRemote)
+        {
+            return;
+        }
+        
+        if (event.getEntityLiving() instanceof EntityPlayerMP)
+        {
+            EntityPlayerMP thePlayerMP = (EntityPlayerMP)(event.getEntityLiving());
+            // DEBUG
+            System.out.println("Player died, performing auto-respawn");
+            
+            onDeath(thePlayerMP, event.getSource());
+            playersToRespawn.add(thePlayerMP);
+            event.setCanceled(true);
+        }
+    }
+    
+    public static void onDeath(EntityPlayerMP thePlayer, DamageSource cause)
+    {
+        boolean flag = thePlayer.world.getGameRules().getBoolean("showDeathMessages");
+
+        if (flag)
+        {
+            Team team = thePlayer.getTeam();
+
+            if (team != null && team.getDeathMessageVisibility() != Team.EnumVisible.ALWAYS)
+            {
+                if (team.getDeathMessageVisibility() == Team.EnumVisible.HIDE_FOR_OTHER_TEAMS)
+                {
+                    thePlayer.mcServer.getPlayerList().sendMessageToAllTeamMembers(thePlayer, thePlayer.getCombatTracker().getDeathMessage());
+                }
+                else if (team.getDeathMessageVisibility() == Team.EnumVisible.HIDE_FOR_OWN_TEAM)
+                {
+                    thePlayer.mcServer.getPlayerList().sendMessageToTeamOrAllPlayers(thePlayer, thePlayer.getCombatTracker().getDeathMessage());
+                }
+            }
+            else
+            {
+                thePlayer.mcServer.getPlayerList().sendMessage(thePlayer.getCombatTracker().getDeathMessage());
+            }
+        }
+
+        spawnShoulderEntities(thePlayer);
+
+        if (!thePlayer.world.getGameRules().getBoolean("keepInventory") && !thePlayer.isSpectator())
+        {
+            thePlayer.captureDrops = true;
+            thePlayer.capturedDrops.clear();
+            destroyVanishingCursedItems(thePlayer);
+            thePlayer.inventory.dropAllItems();
+
+            thePlayer.captureDrops = false;
+            net.minecraftforge.event.entity.player.PlayerDropsEvent event;
+            try
+            {
+                event = new net.minecraftforge.event.entity.player.PlayerDropsEvent(thePlayer, cause, thePlayer.capturedDrops, (recentlyHit.getInt(thePlayer) > 0));
+                if (!net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(event))
+                {
+                    for (net.minecraft.entity.item.EntityItem item : thePlayer.capturedDrops)
+                    {
+                        thePlayer.world.spawnEntity(item);
+                    }
+                }
+            }
+            catch (IllegalArgumentException | IllegalAccessException e)
+            {
+                e.printStackTrace();
+            }
+        }
+
+        for (ScoreObjective scoreobjective : thePlayer.world.getScoreboard().getObjectivesFromCriteria(IScoreCriteria.DEATH_COUNT))
+        {
+            Score score = thePlayer.getWorldScoreboard().getOrCreateScore(thePlayer.getName(), scoreobjective);
+            score.incrementScore();
+        }
+
+        EntityLivingBase entitylivingbase = thePlayer.getAttackingEntity();
+
+        if (entitylivingbase != null)
+        {
+            EntityList.EntityEggInfo entitylist$entityegginfo = EntityList.ENTITY_EGGS.get(EntityList.getKey(entitylivingbase));
+
+            if (entitylist$entityegginfo != null)
+            {
+                thePlayer.addStat(entitylist$entityegginfo.entityKilledByStat);
+            }
+
+            try
+            {
+                entitylivingbase.awardKillScore(thePlayer, scoreValue.getInt(thePlayer), cause);
+            }
+            catch (IllegalArgumentException | IllegalAccessException e)
+            {
+                e.printStackTrace();
+            }
+        }
+
+        thePlayer.addStat(StatList.DEATHS);
+        thePlayer.takeStat(StatList.TIME_SINCE_DEATH);
+        thePlayer.extinguish();
+        try
+        {
+            setFlag.invoke(thePlayer, 0, false);
+        }
+        catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e)
+        {
+            e.printStackTrace();
+        }
+        thePlayer.getCombatTracker().reset();
+    }
+    
+    protected static void destroyVanishingCursedItems(EntityPlayerMP thePlayer)
+    {
+        for (int i = 0; i < thePlayer.inventory.getSizeInventory(); ++i)
+        {
+            ItemStack itemstack = thePlayer.inventory.getStackInSlot(i);
+
+            if (!itemstack.isEmpty() && EnchantmentHelper.hasVanishingCurse(itemstack))
+            {
+                thePlayer.inventory.removeStackFromSlot(i);
+            }
+        }
+    }
+    
+    protected static void spawnShoulderEntities(EntityPlayerMP thePlayer)
+    {
+        spawnShoulderEntity(thePlayer, thePlayer.getLeftShoulderEntity());
+        setLeftShoulderEntity(thePlayer);
+        spawnShoulderEntity(thePlayer, thePlayer.getRightShoulderEntity());
+        setRightShoulderEntity(thePlayer);
+    }
+
+    private static void spawnShoulderEntity(EntityPlayerMP thePlayer, @Nullable NBTTagCompound theTagCompound)
+    {
+        if (!thePlayer.world.isRemote && !theTagCompound.hasNoTags())
+        {
+            Entity entity = EntityList.createEntityFromNBT(theTagCompound, thePlayer.world);
+
+            if (entity instanceof EntityTameable)
+            {
+                ((EntityTameable)entity).setOwnerId(thePlayer.getUniqueID());
+            }
+
+            entity.setPosition(thePlayer.posX, thePlayer.posY + 0.699999988079071D, thePlayer.posZ);
+            thePlayer.world.spawnEntity(entity);
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    protected static void setLeftShoulderEntity(EntityPlayerMP thePlayer)
+    {
+        try
+        {
+            thePlayer.getDataManager().set((DataParameter<NBTTagCompound>)(LEFT_SHOULDER_ENTITY.get(thePlayer)), new NBTTagCompound());
+        }
+        catch (IllegalArgumentException | IllegalAccessException e)
+        {
+            e.printStackTrace();
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    protected static void setRightShoulderEntity(EntityPlayerMP thePlayer)
+    {
+        try
+        {
+            thePlayer.getDataManager().set((DataParameter<NBTTagCompound>)(RIGHT_SHOULDER_ENTITY.get(thePlayer)), new NBTTagCompound());
+        }
+        catch (IllegalArgumentException | IllegalAccessException e)
+        {
+            e.printStackTrace();
+        }
+    }
+    
+    protected static void performRespawn(EntityPlayerMP thePlayer)
+    {
+        MinecraftServer theServer = thePlayer.getServer();
+        
+        if (thePlayer.queuedEndExit)
+        {
+            thePlayer.queuedEndExit = false;
+            thePlayer = theServer.getPlayerList().recreatePlayerEntity(thePlayer, 0, true);
+            CriteriaTriggers.CHANGED_DIMENSION.trigger(thePlayer, DimensionType.THE_END, DimensionType.OVERWORLD);
+        }
+        else
+        {
+            if (thePlayer.getHealth() > 0.0F)
+            {
+                return;
+            }
+
+            thePlayer = theServer.getPlayerList().recreatePlayerEntity(thePlayer, thePlayer.dimension, false);
+
+            if (theServer.isHardcore())
+            {
+                thePlayer.setGameType(GameType.SPECTATOR);
+                thePlayer.getServerWorld().getGameRules().setOrCreateGameRule("spectatorsGenerateChunks", "false");
+            }
+        }
+    }
+    
+    @SubscribeEvent(priority = EventPriority.NORMAL, receiveCanceled = true)
+    public static void onEvent(EntityJoinWorldEvent event)
+    {
+        if (event.getEntity() instanceof EntityPlayer)
+        {
+            EntityPlayer thePlayer = (EntityPlayer)(event.getEntity());
+            
+            // DEBUG
+            System.out.println("Player joined world. Name = "+thePlayer.getName()+" UUID = "+thePlayer.getUniqueID());
+        }
+    }
+    
+    @SubscribeEvent(priority = EventPriority.NORMAL, receiveCanceled = true)
+    public static void onEvent(Clone event)
+    {
+        // DEBUG
+        System.out.println("Player cloned. Name = "+event.getEntityPlayer().getName()+" UUID = "+event.getEntityPlayer().getUniqueID()+" and cause was death = "+event.isWasDeath());
     }
 
 }
