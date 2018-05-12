@@ -19,8 +19,6 @@ package com.blogspot.jabelarminecraft.examplemod;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
 
 import javax.annotation.Nullable;
@@ -75,9 +73,7 @@ import net.minecraftforge.fml.client.event.ConfigChangedEvent.OnConfigChangedEve
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 import net.minecraftforge.fml.common.gameevent.TickEvent.PlayerTickEvent;
-import net.minecraftforge.fml.common.gameevent.TickEvent.ServerTickEvent;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
 
 /**
@@ -1156,26 +1152,6 @@ public class EventHandler
         }
     }
 
-    public static List<EntityPlayerMP> playersToRespawn = new ArrayList<EntityPlayerMP>();
-
-    @SubscribeEvent(priority = EventPriority.NORMAL, receiveCanceled = true)
-    public static void onEvent(ServerTickEvent event)
-    {
-        if (event.phase == Phase.START)
-        {
-            return;
-        }
-        
-        for (EntityPlayerMP player : playersToRespawn)
-        {
-            performRespawn(player);
-            
-            // DEBUG
-            System.out.println("Performing delayed respawn for player = "+player.getName());
-        }
-        
-        playersToRespawn.clear();
-    }
     
     @SubscribeEvent(priority = EventPriority.NORMAL, receiveCanceled = true)
     public static void onEvent(LivingDeathEvent event)
@@ -1192,7 +1168,7 @@ public class EventHandler
             System.out.println("Player died, performing auto-respawn");
             
             onDeath(thePlayerMP, event.getSource());
-            playersToRespawn.add(thePlayerMP);
+            performRespawn(thePlayerMP);
             event.setCanceled(true);
         }
     }
