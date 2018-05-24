@@ -23,6 +23,7 @@ import com.blogspot.jabelarminecraft.examplemod.blocks.BlockFlowerCloud;
 import com.blogspot.jabelarminecraft.examplemod.blocks.BlockGrassCloud;
 import com.blogspot.jabelarminecraft.examplemod.blocks.BlockLeavesCloud;
 import com.blogspot.jabelarminecraft.examplemod.blocks.BlockLogCloud;
+import com.blogspot.jabelarminecraft.examplemod.blocks.BlockParticleEmitter;
 import com.blogspot.jabelarminecraft.examplemod.blocks.BlockSaplingCloud;
 import com.blogspot.jabelarminecraft.examplemod.blocks.fluids.ModBlockFluidClassic;
 import com.blogspot.jabelarminecraft.examplemod.utilities.Utilities;
@@ -64,6 +65,7 @@ public class ModBlocks
     public static final BlockSaplingCloud cloud_sapling = null;
     public static final BlockGrassCloud cloud_grass = null;
     public static final BlockFlowerCloud cloud_flower = null;
+    public static final BlockParticleEmitter particle_emitter = null;
     
     /*
      * ItemBlock instances
@@ -86,6 +88,8 @@ public class ModBlocks
     public static final ItemBlock item_block_cloud_sapling = null;
     @ObjectHolder("cloud_grass")
     public static final ItemBlock item_block_cloud_grass = null;
+    @ObjectHolder("particle_emitter")
+    public static final ItemBlock item_block_particle_emitter = null;
 
     @EventBusSubscriber(modid = MainMod.MODID)
     public static class RegistrationHandler
@@ -112,6 +116,7 @@ public class ModBlocks
             registry.register(Utilities.setBlockName(new BlockSaplingCloud(), "cloud_sapling"));
             registry.register(Utilities.setBlockName(new BlockGrassCloud(), "cloud_grass"));
             registry.register(Utilities.setBlockName(new BlockFlowerCloud(), "cloud_flower"));
+            registry.register(Utilities.setBlockName(new BlockParticleEmitter(), "particle_emitter"));
         }
 
         /**
@@ -148,6 +153,7 @@ public class ModBlocks
             }, cloud_sapling.getRegistryName().getResourcePath()));
             registry.register(Utilities.setItemName(new ItemBlock(cloud_grass), cloud_grass.getRegistryName().getResourcePath()));
             registry.register(Utilities.setItemName(new ItemBlock(cloud_flower), cloud_flower.getRegistryName().getResourcePath()));
+            registry.register(Utilities.setItemName(new ItemBlock(particle_emitter), particle_emitter.getRegistryName().getResourcePath()));
         }
 
         /**
@@ -171,6 +177,7 @@ public class ModBlocks
             registerBlockModel(cloud_sapling);
             registerBlockModel(cloud_grass);
             registerBlockModel(cloud_flower);
+            registerBlockModel(particle_emitter);
             registerItemBlockModels();
         }
     }
@@ -217,6 +224,7 @@ public class ModBlocks
         registerItemBlockModel(item_block_cloud_sapling);
         registerItemBlockModel(item_block_cloud_grass);
         registerItemBlockModel(item_block_cloud_flower);
+        registerItemBlockModel(item_block_particle_emitter);
     }
 
     /**
