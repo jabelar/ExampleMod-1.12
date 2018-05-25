@@ -426,8 +426,8 @@ public class ClientProxy implements IProxy
     @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
     public static void onEvent(KeyInputEvent event)
     {
-        // DEBUG
-        System.out.println("Key Input Event");
+//        // DEBUG
+//        System.out.println("Key Input Event");
 
         // make local copy of key binding array
         KeyBinding[] keyBindings = ModKeyBindings.keyBindings;

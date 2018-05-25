@@ -112,6 +112,9 @@ public class EventHandler
     public static Field firstUpdate = ReflectionHelper.findField(Entity.class, "firstUpdate", "field_70148_d");
     public static Field attackingPlayer = ReflectionHelper.findField(EntityLivingBase.class, "attackingPlayer", "field_70717_bb");
     public static Field recentlyHit = ReflectionHelper.findField(EntityLivingBase.class, "recentlyHit", "field_70718_bc");
+    public static Field scoreValue = ReflectionHelper.findField(EntityLivingBase.class, "scoreValue", "field_70744_aE");
+    public static Field LEFT_SHOULDER_ENTITY = ReflectionHelper.findField(EntityPlayer.class, "LEFT_SHOULDER_ENTITY", "field_192032_bt");
+    public static Field RIGHT_SHOULDER_ENTITY = ReflectionHelper.findField(EntityPlayer.class, "RIGHT_SHOULDER_ENTITY", "field_192033_bu");
 
     public static Method setFlag = ReflectionHelper.findMethod(Entity.class, "setFlag", "func_70052_a", Integer.TYPE, Boolean.TYPE);
     public static Method getFlag = ReflectionHelper.findMethod(Entity.class, "getFlag", "func_70083_f", Integer.TYPE);
@@ -1129,5 +1132,4 @@ public class EventHandler
             world.setBlockState(playerPos, state);
         }
     }
-
 }

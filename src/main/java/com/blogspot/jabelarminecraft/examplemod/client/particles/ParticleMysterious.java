@@ -14,44 +14,55 @@
     For a copy of the GNU General Public License see <http://www.gnu.org/licenses/>.
 */
 
-package com.blogspot.jabelarminecraft.examplemod.particles;
+package com.blogspot.jabelarminecraft.examplemod.client.particles;
 
 import net.minecraft.client.particle.Particle;
+import net.minecraft.client.renderer.BufferBuilder;
+import net.minecraft.entity.Entity;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  * @author jabelar
  *
  */
-public class EntityParticleFXMysterious extends Particle
+@SideOnly(Side.CLIENT)
+public class ParticleMysterious extends Particle
 {
 
     /**
      * Instantiates a new entity particle FX mysterious.
      *
-     * @param parWorld
-     *            the par world
-     * @param parX
-     *            the par X
-     * @param parY
-     *            the par Y
-     * @param parZ
-     *            the par Z
-     * @param parMotionX
-     *            the par motion X
-     * @param parMotionY
-     *            the par motion Y
-     * @param parMotionZ
-     *            the par motion Z
+     * @param parWorld the par world
+     * @param parX the par X
+     * @param parY the par Y
+     * @param parZ the par Z
+     * @param parMotionX the par motion X
+     * @param parMotionY the par motion Y
+     * @param parMotionZ the par motion Z
      */
-    public EntityParticleFXMysterious(World parWorld,
+    public ParticleMysterious(
+            World parWorld,
             double parX, double parY, double parZ,
             double parMotionX, double parMotionY, double parMotionZ)
     {
         super(parWorld, parX, parY, parZ, parMotionX, parMotionY, parMotionZ);
         setParticleTextureIndex(82); // same as happy villager
         particleScale = 2.0F;
+        particleGravity = 0.2F;
         setRBGColorF(0x88, 0x00, 0x88);
     }
-
+    
+    @Override
+    public void onUpdate()
+    {
+        super.onUpdate();
+    }
+    
+    @Override
+    public void renderParticle(BufferBuilder buffer, Entity entityIn, float partialTicks, float rotationX, float rotationZ, float rotationYZ, float rotationXY, float rotationXZ)
+    {
+        super.renderParticle(buffer, entityIn, partialTicks, rotationX, rotationZ, rotationYZ, rotationXY, rotationXZ);
+    }
 }

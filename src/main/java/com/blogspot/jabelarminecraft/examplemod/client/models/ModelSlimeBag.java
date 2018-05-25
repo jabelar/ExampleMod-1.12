@@ -140,7 +140,7 @@ public final class ModelSlimeBag implements IModel
             Function<ResourceLocation, TextureAtlasSprite> bakedTextureGetter)
     {
         // DEBUG
-        System.out.println("baking");
+        System.out.println("Baking custom model");
 
         ImmutableMap<TransformType, TRSRTransformation> transformMap = PerspectiveMapWrapper.getTransforms(state);
 
@@ -158,8 +158,8 @@ public final class ModelSlimeBag implements IModel
 
         if (emptyLocation != null)
         {
-            // DEBUG
-            System.out.println("Buiding empty model");
+//            // DEBUG
+//            System.out.println("Buiding empty model");
 
             IBakedModel model = (new ItemLayerModel(ImmutableList.of(emptyLocation))).bake(state, format, bakedTextureGetter);
             builder.addAll(model.getQuads(null, null, 0));
@@ -254,8 +254,8 @@ public final class ModelSlimeBag implements IModel
         @Override
         public IModel loadModel(ResourceLocation modelLocation)
         {
-            // DEBUG
-            System.out.println("Loading model");
+//            // DEBUG
+//            System.out.println("Loading model");
 
             return MODEL;
         }
@@ -280,8 +280,8 @@ public final class ModelSlimeBag implements IModel
         {
             super(ImmutableList.<ItemOverride> of());
 
-            // DEBUG
-            System.out.println("Constructing BakedOverrideHandler");
+//            // DEBUG
+//            System.out.println("Constructing BakedOverrideHandler");
         }
 
         @Override
@@ -360,8 +360,8 @@ public final class ModelSlimeBag implements IModel
             this.transforms = transforms;
             this.cache = cache;
 
-            // DEBUG
-            System.out.println("Constructing Baked");
+//            // DEBUG
+//            System.out.println("Constructing Baked");
         }
 
         @Override

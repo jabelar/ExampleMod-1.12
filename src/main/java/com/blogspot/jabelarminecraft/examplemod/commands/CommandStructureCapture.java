@@ -24,7 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.block.Block;
-import net.minecraft.command.ICommand;
+import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.Entity;
 import net.minecraft.server.MinecraftServer;
@@ -32,12 +32,16 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
 
-// TODO: Auto-generated Javadoc
 /**
+ * This command is used to write information about every block in an area
+ * to a file, in basically a simplified schematic format. This can be used in 
+ * conjuction with a complementary build structure command that takes the file
+ * and places the blocks to recreate the structure.
+ * moved wrongly
  * @author jabelar
  *
  */
-public class CommandStructureCapture implements ICommand
+public class CommandStructureCapture extends CommandBase
 {
     private final List<String> aliases;
 
@@ -120,7 +124,7 @@ public class CommandStructureCapture implements ICommand
 
             if (argString.length != 7)
             {
-                sender.sendMessage(new TextComponentString("Invalid argument"));
+                sender.sendMessage(new TextComponentString("Invalid number of arguments"));
                 return;
             }
 
@@ -275,8 +279,7 @@ public class CommandStructureCapture implements ICommand
     /**
      * Write file name array.
      *
-     * @param fileName
-     *            the file name
+     * @param fileName the file name
      */
     protected void writeFileNameArray(String fileName)
     {
@@ -327,30 +330,6 @@ public class CommandStructureCapture implements ICommand
     /*
      * (non-Javadoc)
      * 
-     * @see net.minecraft.command.ICommand#isUsernameIndex(java.lang.String[], int)
-     */
-    @Override
-    public boolean isUsernameIndex(String[] var1, int var2)
-    {
-        // TODO Auto-generated method stub
-        return false;
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see java.lang.Comparable#compareTo(java.lang.Object)
-     */
-    @Override
-    public int compareTo(ICommand o)
-    {
-        // TODO Auto-generated method stub
-        return 0;
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
      * @see net.minecraft.command.ICommand#getTabCompletions(net.minecraft.server.MinecraftServer, net.minecraft.command.ICommandSender, java.lang.String[],
      * net.minecraft.util.math.BlockPos)
      */
@@ -358,7 +337,6 @@ public class CommandStructureCapture implements ICommand
     public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args,
             BlockPos targetPos)
     {
-        // TODO Auto-generated method stub
         return null;
     }
 }
