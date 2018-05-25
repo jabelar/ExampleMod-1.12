@@ -2,7 +2,8 @@ package com.blogspot.jabelarminecraft.examplemod.blocks;
 
 import java.util.Random;
 
-import com.blogspot.jabelarminecraft.examplemod.client.particles.ParticleEmoji;
+import com.blogspot.jabelarminecraft.examplemod.client.particles.ParticleCustom;
+import com.blogspot.jabelarminecraft.examplemod.init.ModParticles;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
@@ -25,7 +26,6 @@ public class BlockParticleEmitter extends Block
         System.out.println("BlockParticleEmitter constructor");
 
         blockSoundType = SoundType.STONE;
-        blockParticleGravity = 0.1F;
     }
     
     @Override
@@ -35,11 +35,19 @@ public class BlockParticleEmitter extends Block
         double xPos = pos.getX() + 0.5D;
         double yPos = pos.getY() + 1.0D;
         double zPos = pos.getZ() + 0.5D;
-        double xMotion = RANDOM.nextDouble()*1.0D;
-        double yMotion = 2.0D;
-        double zMotion = RANDOM.nextDouble()*1.0D;
+        double xMotion = 0.1D*RANDOM.nextDouble() - 0.05D;
+        double yMotion = 0.3D;
+        double zMotion = 0.1D*RANDOM.nextDouble() - 0.05D;
         
-        Particle theParticle = new ParticleEmoji(worldIn, xPos, yPos, zPos, xMotion, yMotion, zMotion);                
+        Particle theParticle = new ParticleCustom(
+                ModParticles.EMOJI,
+                worldIn, 
+                xPos, yPos, zPos, 
+                xMotion, yMotion, zMotion)
+                .setRotSpeed(((float)Math.random() - 0.5F) * 0.1F)
+                .setLifeSpan(20 + rand.nextInt(20))
+                .setGravity(0.2F)
+                .setScale(2.0F);                
         Minecraft.getMinecraft().effectRenderer.addEffect(theParticle);
     }
 }

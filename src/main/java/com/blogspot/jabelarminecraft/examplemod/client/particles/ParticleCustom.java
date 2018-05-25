@@ -16,6 +16,8 @@
 
 package com.blogspot.jabelarminecraft.examplemod.client.particles;
 
+import java.awt.Color;
+
 import com.blogspot.jabelarminecraft.examplemod.MainMod;
 
 import net.minecraft.client.Minecraft;
@@ -38,12 +40,14 @@ import net.minecraftforge.fml.relauncher.SideOnly;
  *
  */
 @SideOnly(Side.CLIENT)
-public class ParticleEmoji extends Particle
+public class ParticleCustom extends Particle
 {
     private static final double GRAVITY = 0.04D;
     private static final double GROUND_DECCEL = 0.7D;
     
-    private static final ResourceLocation PARTICLE_TEXTURE = new ResourceLocation(MainMod.MODID, "textures/particles/particle_emoji_hi_res.png");
+    private TextureDefinition TEXTURE_DEF;
+//    private String particleName;    
+//    private static ResourceLocation PARTICLE_TEXTURE ;
     private static final VertexFormat VERTEX_FORMAT = (new VertexFormat()).addElement(DefaultVertexFormats.POSITION_3F).addElement(DefaultVertexFormats.TEX_2F).addElement(DefaultVertexFormats.COLOR_4UB).addElement(DefaultVertexFormats.TEX_2S).addElement(DefaultVertexFormats.NORMAL_3B).addElement(DefaultVertexFormats.PADDING_1B);
 
     private float rotSpeed = 0.0F;
@@ -52,7 +56,18 @@ public class ParticleEmoji extends Particle
     
     private float progress = 0.0F;
     
+    private boolean enableDepth = true;
+    
     private double deccel = 0.98D;
+
+    public ParticleCustom(
+            TextureDefinition parTexDef,
+            World parWorld,
+            double parX, double parY, double parZ)
+    {
+        super(parWorld, parX, parY, parZ);
+        TEXTURE_DEF = parTexDef;
+    }
 
     /**
      * Instantiates a new entity particle FX mysterious.
@@ -65,42 +80,40 @@ public class ParticleEmoji extends Particle
      * @param parMotionY the par motion Y
      * @param parMotionZ the par motion Z
      */
-    public ParticleEmoji(
+    public ParticleCustom(
+            TextureDefinition parTexDef,
             World parWorld,
             double parX, double parY, double parZ,
             double parMotionX, double parMotionY, double parMotionZ)
     {
-        super(parWorld, parX, parY, parZ, parMotionX, parMotionY, parMotionZ);
-        particleScale = 2.0F;
-        particleGravity = 0.2F;
-        rotSpeed = ((float)Math.random() - 0.5F) * 0.1F;
-        particleMaxAge = 20 + rand.nextInt(20);
+        super(parWorld, parX, parY, parZ);
+        TEXTURE_DEF = parTexDef;
+        motionX = parMotionX;
+        motionY = parMotionY;
+        motionZ = parMotionZ;
     }
     
     @Override
     public void onUpdate()
     {
-        if (particleAge++ >= particleMaxAge)
-        {
-            setExpired();
-        }
-
-        updatePrevious();
+        updateTick();
         processGravityAndDeccel();
         move(motionX, motionY, motionZ);
         
-
-        progress = ((float)particleAge) / ((float)particleMaxAge);
-        particleAngle += (float)Math.PI * rotSpeed * 2.0F;
         particleAlpha = 1.0F - progress;
     }
     
-    private void updatePrevious()
+    private void updateTick()
     {
+        if (particleAge++ >= particleMaxAge) { setExpired(); }
+        progress = ((float)particleAge) / ((float)particleMaxAge);
+
         prevPosX = posX;
         prevPosY = posY;
         prevPosZ = posZ;
+        
         prevParticleAngle = particleAngle;
+        particleAngle += (float)Math.PI * rotSpeed * 2.0F;
     }
     
     private void processGravityAndDeccel()
@@ -124,6 +137,12 @@ public class ParticleEmoji extends Particle
     }
     
     @Override
+    public boolean shouldDisableDepth()
+    {
+        return (!enableDepth);
+    }
+    
+    @Override
     public void renderParticle(
             BufferBuilder bufferIn, 
             Entity entityIn, 
@@ -137,12 +156,12 @@ public class ParticleEmoji extends Particle
         GlStateManager.alphaFunc(516, 0.003921569F);
         GlStateManager.color(1.0F, 1.0F, 1.0F, particleAlpha);
 
-        Minecraft.getMinecraft().getTextureManager().bindTexture(PARTICLE_TEXTURE);
+        Minecraft.getMinecraft().getTextureManager().bindTexture(TEXTURE_DEF.getResourceLocation());
    
-        float uMin = 0.0F;
-        float uMax = 1.0f;
-        float vMin = 0.0F;
-        float vMax = 1.0f;
+        float uMin = TEXTURE_DEF.getUMin();
+        float uMax = TEXTURE_DEF.getUMax();
+        float vMin = TEXTURE_DEF.getVmin();
+        float vMax = TEXTURE_DEF.getVMax();
         float scale = 0.1F * particleScale;
         float xInterp = (float)(prevPosX + (posX - prevPosX) * partialTicks - interpPosX);
         float yInterp = (float)(prevPosY + (posY - prevPosY) * partialTicks - interpPosY);
@@ -210,4 +229,117 @@ public class ParticleEmoji extends Particle
         Tessellator.getInstance().draw();
         GlStateManager.popMatrix();
     } 
+    
+    /*
+     * Chainable setter methods to help avoid needing multiple 
+     * constructor overloads
+     */
+    
+    
+    public ParticleCustom setLifeSpan(int lifeIn)
+    {
+        particleMaxAge = lifeIn;
+        return this;
+    }
+    
+    public ParticleCustom setScale(float scaleIn)
+    {
+        particleScale = scaleIn;
+        return this;
+    }
+
+    public ParticleCustom setTintColor(float redIn, float greenIn, float blueIn)
+    {
+        particleRed = redIn;
+        particleGreen = greenIn;
+        particleBlue = blueIn;
+        return this;
+    }
+    
+    public ParticleCustom setTintColor(Color colorIn)
+    {
+        particleGreen = colorIn.getGreen();
+        particleBlue = colorIn.getBlue();
+        particleRed = colorIn.getRed();
+        return this;
+    }
+
+    public ParticleCustom setTintColorAndAlpha(float redIn, float greenIn, float blueIn, float alphaIn)
+    {
+        particleRed = redIn;
+        particleGreen = greenIn;
+        particleBlue = blueIn;
+        particleAlpha = alphaIn;
+        return this;
+    }
+
+    public ParticleCustom setTintColorAndAlpha(Color colorIn)
+    {
+        particleGreen = colorIn.getGreen();
+        particleBlue = colorIn.getBlue();
+        particleRed = colorIn.getRed();
+        particleAlpha = colorIn.getAlpha();
+        return this;
+    }
+    
+    public ParticleCustom setAlpha(float alphaIn)
+    {
+        particleAlpha = alphaIn;
+        return this;
+    }
+    
+    public ParticleCustom setAlpha(Color colorIn)
+    {
+        particleAlpha = colorIn.getAlpha();
+        return this;
+    }
+    
+    public ParticleCustom setGravity(float gravityIn)
+    {
+        particleGravity = gravityIn;
+        return this;
+    }
+    
+    public ParticleCustom setRotSpeed(float rotIn)
+    {
+        rotSpeed = rotIn;
+        return this;
+    }
+    
+    public ParticleCustom setEnableDepth(boolean enableDepthIn)
+    {
+        enableDepth = enableDepthIn;
+        return this;
+    }
+    
+    public static class TextureDefinition
+    {
+        private String name;
+        private ResourceLocation resourceLocation;
+        private float uMin;
+        private float vMin;
+        private float uMax;
+        private float vMax;
+        
+        public TextureDefinition(String parName, float parUMin, float parVMin, float parUMax, float parVMax)
+        {
+            name = parName;
+            resourceLocation = new ResourceLocation(MainMod.MODID, "textures/particles/"+name+".png");
+            uMin = parUMin;
+            vMin = parVMin;
+            uMax = parUMax;
+            vMax = parVMax;
+        }
+        
+        /* 
+         * Getter methods.
+         */
+        
+        public String getName() { return name; };
+        public ResourceLocation getResourceLocation() { return resourceLocation; };
+        public float getUMin() { return uMin; };
+        public float getVmin() { return vMin; };
+        public float getUMax() { return uMax; };
+        public float getVMax() { return vMax; };
+    }
 }
