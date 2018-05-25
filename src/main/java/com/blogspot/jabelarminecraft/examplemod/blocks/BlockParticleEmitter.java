@@ -2,7 +2,7 @@ package com.blogspot.jabelarminecraft.examplemod.blocks;
 
 import java.util.Random;
 
-import com.blogspot.jabelarminecraft.examplemod.client.particles.ParticleMysterious;
+import com.blogspot.jabelarminecraft.examplemod.client.particles.ParticleEmoji;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
@@ -39,7 +39,7 @@ public class BlockParticleEmitter extends Block
         double yMotion = 2.0D;
         double zMotion = RANDOM.nextDouble()*1.0D;
         
-        Particle theParticle = new ParticleMysterious(worldIn, xPos, yPos, zPos, xMotion, yMotion, zMotion);                
+        Particle theParticle = new ParticleEmoji(worldIn, xPos, yPos, zPos, xMotion, yMotion, zMotion);                
         Minecraft.getMinecraft().effectRenderer.addEffect(theParticle);
     }
 }
