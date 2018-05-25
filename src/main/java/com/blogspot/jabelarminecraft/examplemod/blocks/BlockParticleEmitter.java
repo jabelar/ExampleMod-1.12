@@ -1,5 +1,6 @@
 package com.blogspot.jabelarminecraft.examplemod.blocks;
 
+import java.awt.Color;
 import java.util.Random;
 
 import com.blogspot.jabelarminecraft.examplemod.client.particles.ParticleCustom;
@@ -47,7 +48,8 @@ public class BlockParticleEmitter extends Block
                 .setRotSpeed(((float)Math.random() - 0.5F) * 0.1F)
                 .setLifeSpan(20 + rand.nextInt(20))
                 .setGravity(0.2F)
-                .setScale(2.0F);                
+                .setScale(2.0F)
+                .setTintColor(Color.RED);                
         Minecraft.getMinecraft().effectRenderer.addEffect(theParticle);
     }
 }

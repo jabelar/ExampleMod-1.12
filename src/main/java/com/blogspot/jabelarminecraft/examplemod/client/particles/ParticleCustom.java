@@ -258,9 +258,9 @@ public class ParticleCustom extends Particle
     
     public ParticleCustom setTintColor(Color colorIn)
     {
-        particleGreen = colorIn.getGreen();
-        particleBlue = colorIn.getBlue();
-        particleRed = colorIn.getRed();
+        particleGreen = colorIn.getGreen() / 256.0F;
+        particleBlue = colorIn.getBlue() / 256.0F;
+        particleRed = colorIn.getRed() / 256.0F;
         return this;
     }
 
