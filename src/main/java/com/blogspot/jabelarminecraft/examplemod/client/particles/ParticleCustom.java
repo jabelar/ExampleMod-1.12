@@ -61,6 +61,10 @@ public class ParticleCustom extends Particle
     private boolean enableDepth = true;
     
     private double deccel = 0.98D;
+    
+    private boolean tweenAnimationMode = true;
+    private int animationFrameCount = 1;
+    private int currentAnimationFrame = 0;
 
     public ParticleCustom(
             TextureDefinition parTexDef,
@@ -109,7 +113,16 @@ public class ParticleCustom extends Particle
     {
         if (particleAge++ >= particleMaxAge) { setExpired(); }
         progress = ((float)particleAge) / ((float)particleMaxAge);
-
+  
+        if (tweenAnimationMode)
+        {
+            currentAnimationFrame = (int) (progress * (animationFrameCount + 1)) ;
+        }
+        else
+        {
+            if (currentAnimationFrame++ >= animationFrameCount) { currentAnimationFrame = 0; }
+        }
+        
         prevPosX = posX;
         prevPosY = posY;
         prevPosZ = posZ;
@@ -174,8 +187,9 @@ public class ParticleCustom extends Particle
    
         float uMin = TEXTURE_DEF.getUMin();
         float uMax = TEXTURE_DEF.getUMax();
-        float vMin = TEXTURE_DEF.getVmin();
-        float vMax = TEXTURE_DEF.getVMax();
+        float frameV = currentAnimationFrame * (TEXTURE_DEF.getVMax() - TEXTURE_DEF.getVmin());
+        float vMin = TEXTURE_DEF.getVmin() + frameV;
+        float vMax = TEXTURE_DEF.getVMax() + frameV;
         float scale = 0.1F * particleScale;
         float xInterp = (float)(prevPosX + (posX - prevPosX) * partialTicks - interpPosX);
         float yInterp = (float)(prevPosY + (posY - prevPosY) * partialTicks - interpPosY);
@@ -364,6 +378,13 @@ public class ParticleCustom extends Particle
     public ParticleCustom setEnableDepth(boolean enableDepthIn)
     {
         enableDepth = enableDepthIn;
+        return this;
+    }
+    
+    public ParticleCustom setAnimationMode(boolean parTweenEnable, int parNumFrames)
+    {
+        tweenAnimationMode = parTweenEnable;
+        animationFrameCount = parNumFrames;
         return this;
     }
     

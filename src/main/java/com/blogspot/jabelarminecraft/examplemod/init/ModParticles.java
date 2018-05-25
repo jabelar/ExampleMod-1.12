@@ -6,4 +6,5 @@ import com.blogspot.jabelarminecraft.examplemod.client.particles.ParticleCustom.
 public class ModParticles
 {
     public static final ParticleCustom.TextureDefinition EMOJI = new TextureDefinition("particle_emoji_hi_res", 0.0F, 0.0F, 1.0F, 1.0F);
+    public static final ParticleCustom.TextureDefinition EMOJI_ANIMATED = new TextureDefinition("particle_emoji_hi_res_anim", 0.0F, 0.0F, 1.0F, 0.5F);
 }

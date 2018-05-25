@@ -41,7 +41,7 @@ public class BlockParticleEmitter extends Block
         double zMotion = 0.1D*RANDOM.nextDouble() - 0.05D;
         
         Particle theParticle = new ParticleCustom(
-                ModParticles.EMOJI,
+                ModParticles.EMOJI_ANIMATED,
                 worldIn, 
                 xPos, yPos, zPos, 
                 xMotion, yMotion, zMotion)
@@ -52,7 +52,8 @@ public class BlockParticleEmitter extends Block
                 .setInitialAlpha(1.0F)
                 .setFinalAlpha(0.0F)
                 .setInitalTint(Color.WHITE)
-                .setFinalTint(Color.RED);                
+                .setFinalTint(Color.RED)
+                .setAnimationMode(true, 2);                
         Minecraft.getMinecraft().effectRenderer.addEffect(theParticle);
     }
 }
