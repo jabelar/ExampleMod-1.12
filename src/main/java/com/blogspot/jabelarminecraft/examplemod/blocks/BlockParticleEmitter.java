@@ -1,5 +1,6 @@
 package com.blogspot.jabelarminecraft.examplemod.blocks;
 
+import java.awt.Color;
 import java.util.Random;
 
 import com.blogspot.jabelarminecraft.examplemod.client.particles.ParticleCustom;
@@ -49,7 +50,9 @@ public class BlockParticleEmitter extends Block
                 .setGravity(0.2F)
                 .setScale(2.0F)
                 .setInitialAlpha(1.0F)
-                .setFinalAlpha(0.0F);                
+                .setFinalAlpha(0.0F)
+                .setInitalTint(Color.WHITE)
+                .setFinalTint(Color.RED);                
         Minecraft.getMinecraft().effectRenderer.addEffect(theParticle);
     }
 }

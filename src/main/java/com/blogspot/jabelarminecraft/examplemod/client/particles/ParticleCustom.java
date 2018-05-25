@@ -53,6 +53,8 @@ public class ParticleCustom extends Particle
     private float rotSpeed = 0.0F;
     private float initialAlpha = 1.0F;
     private float finalAlpha = 1.0F;
+    private Color initialTint = Color.WHITE;
+    private Color finalTint = Color.WHITE;
     
     private float progress = 0.0F;
     
@@ -100,6 +102,7 @@ public class ParticleCustom extends Particle
         processGravityAndDeccel();
         move(motionX, motionY, motionZ);
         processAlphaTween();
+        processTintTween();
     }
     
     private void updateTick()
@@ -132,6 +135,13 @@ public class ParticleCustom extends Particle
     protected void processAlphaTween()
     {
         particleAlpha = initialAlpha + progress * (finalAlpha - initialAlpha);
+    }
+    
+    protected void processTintTween()
+    {
+        particleRed = (initialTint.getRed() + progress * (finalTint.getRed() - initialTint.getRed())) / 256.0F;
+        particleBlue = (initialTint.getBlue() + progress * (finalTint.getBlue() - initialTint.getBlue())) / 256.0F;
+        particleGreen = (initialTint.getGreen() + progress * (finalTint.getGreen() - initialTint.getGreen())) / 256.0F;
     }
     
     @Override
@@ -295,6 +305,21 @@ public class ParticleCustom extends Particle
     public ParticleCustom setAlpha(Color colorIn)
     {
         particleAlpha = colorIn.getAlpha() / 256.0F;
+        return this;
+    }
+    
+    public ParticleCustom setInitalTint(Color colorIn)
+    {
+        initialTint = colorIn;
+        particleGreen = colorIn.getGreen() / 256.0F;
+        particleBlue = colorIn.getBlue() / 256.0F;
+        particleRed = colorIn.getRed() / 256.0F;
+        return this;
+    }
+    
+    public ParticleCustom setFinalTint(Color colorIn)
+    {
+        finalTint = colorIn;
         return this;
     }
     
