@@ -41,7 +41,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class ParticleEmoji extends Particle
 {
-    private static final ResourceLocation PARTICLE_TEXTURE = new ResourceLocation(MainMod.MODID, "textures/particles/particle_emoji.png");
+    private static final ResourceLocation PARTICLE_TEXTURE = new ResourceLocation(MainMod.MODID, "textures/particles/particle_emoji_hi_res.png");
     private static final VertexFormat VERTEX_FORMAT = (new VertexFormat()).addElement(DefaultVertexFormats.POSITION_3F).addElement(DefaultVertexFormats.TEX_2F).addElement(DefaultVertexFormats.COLOR_4UB).addElement(DefaultVertexFormats.TEX_2S).addElement(DefaultVertexFormats.NORMAL_3B).addElement(DefaultVertexFormats.PADDING_1B);
 
     /**
@@ -86,7 +86,7 @@ public class ParticleEmoji extends Particle
             float rotationYZ, float rotationXY, float rotationXZ)
     {
         GL11.glPushMatrix();
-        GL11.glDepthFunc(GL11.GL_ALWAYS);
+        GL11.glDepthFunc(GL11.GL_LEQUAL);
         GL11.glColor4f(1.0F, 1.0F, 1.0F, particleAlpha);
         GlStateManager.disableLighting();
         RenderHelper.disableStandardItemLighting();
@@ -140,7 +140,6 @@ public class ParticleEmoji extends Particle
                 .endVertex();
         Tessellator.getInstance().draw();
         GlStateManager.enableLighting();
-        GL11.glDepthFunc(GL11.GL_LEQUAL);
         GL11.glPopMatrix();
     } 
 }
