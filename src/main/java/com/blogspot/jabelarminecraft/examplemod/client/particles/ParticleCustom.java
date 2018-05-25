@@ -99,8 +99,7 @@ public class ParticleCustom extends Particle
         updateTick();
         processGravityAndDeccel();
         move(motionX, motionY, motionZ);
-        
-        particleAlpha = 1.0F - progress;
+        processAlphaTween();
     }
     
     private void updateTick()
@@ -128,6 +127,11 @@ public class ParticleCustom extends Particle
             motionX *= GROUND_DECCEL * deccel;
             motionZ *= GROUND_DECCEL * deccel;
         }
+    }
+    
+    protected void processAlphaTween()
+    {
+        particleAlpha = initialAlpha + progress * (finalAlpha - initialAlpha);
     }
     
     @Override
@@ -275,10 +279,10 @@ public class ParticleCustom extends Particle
 
     public ParticleCustom setTintColorAndAlpha(Color colorIn)
     {
-        particleGreen = colorIn.getGreen();
-        particleBlue = colorIn.getBlue();
-        particleRed = colorIn.getRed();
-        particleAlpha = colorIn.getAlpha();
+        particleGreen = colorIn.getGreen() / 256.0F;
+        particleBlue = colorIn.getBlue() / 256.0F;
+        particleRed = colorIn.getRed() / 256.0F;
+        particleAlpha = colorIn.getAlpha() / 256.0F;
         return this;
     }
     
@@ -290,10 +294,36 @@ public class ParticleCustom extends Particle
     
     public ParticleCustom setAlpha(Color colorIn)
     {
-        particleAlpha = colorIn.getAlpha();
+        particleAlpha = colorIn.getAlpha() / 256.0F;
         return this;
     }
     
+    public ParticleCustom setInitialAlpha(float alphaIn)
+    {
+        initialAlpha = alphaIn;
+        particleAlpha = alphaIn;
+        return this;
+    }
+    
+    public ParticleCustom setInitialAlpha(Color colorIn)
+    {
+        initialAlpha = colorIn.getAlpha() / 256.0F;
+        particleAlpha = colorIn.getAlpha() / 256.0F;
+        return this;
+    }
+    
+    public ParticleCustom setFinalAlpha(float alphaIn)
+    {
+        finalAlpha = alphaIn;
+        return this;
+    }
+    
+    public ParticleCustom setFinalAlpha(Color colorIn)
+    {
+        finalAlpha = colorIn.getAlpha() / 256.0F;
+        return this;
+    }
+   
     public ParticleCustom setGravity(float gravityIn)
     {
         particleGravity = gravityIn;
