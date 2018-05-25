@@ -40,6 +40,9 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class ParticleEmoji extends Particle
 {
+    private static final double GRAVITY = 0.04D;
+    private static final double GROUND_DECCEL = 0.7D;
+    
     private static final ResourceLocation PARTICLE_TEXTURE = new ResourceLocation(MainMod.MODID, "textures/particles/particle_emoji_hi_res.png");
     private static final VertexFormat VERTEX_FORMAT = (new VertexFormat()).addElement(DefaultVertexFormats.POSITION_3F).addElement(DefaultVertexFormats.TEX_2F).addElement(DefaultVertexFormats.COLOR_4UB).addElement(DefaultVertexFormats.TEX_2S).addElement(DefaultVertexFormats.NORMAL_3B).addElement(DefaultVertexFormats.PADDING_1B);
 
@@ -48,6 +51,8 @@ public class ParticleEmoji extends Particle
     private float finalAlpha = 1.0F;
     
     private float progress = 0.0F;
+    
+    private double deccel = 0.98D;
 
     /**
      * Instantiates a new entity particle FX mysterious.
@@ -75,12 +80,41 @@ public class ParticleEmoji extends Particle
     @Override
     public void onUpdate()
     {
-        super.onUpdate();
-        progress = particleAge / particleMaxAge;
-        prevParticleAngle = particleAngle;
+        if (particleAge++ >= particleMaxAge)
+        {
+            setExpired();
+        }
+
+        updatePrevious();
+        processGravityAndDeccel();
+        move(motionX, motionY, motionZ);
+        
+
+        progress = ((float)particleAge) / ((float)particleMaxAge);
         particleAngle += (float)Math.PI * rotSpeed * 2.0F;
-        particleAlpha -= 1.0 / particleMaxAge;
-//        particleAlpha = 0.5F; // 1.0F - progress;
+        particleAlpha = 1.0F - progress;
+    }
+    
+    private void updatePrevious()
+    {
+        prevPosX = posX;
+        prevPosY = posY;
+        prevPosZ = posZ;
+        prevParticleAngle = particleAngle;
+    }
+    
+    private void processGravityAndDeccel()
+    {
+        motionY -= GRAVITY * particleGravity;
+        motionX *= deccel;
+        motionY *= deccel;
+        motionZ *= deccel;
+        rotSpeed *= deccel;
+        if (onGround && canCollide)
+        {
+            motionX *= GROUND_DECCEL * deccel;
+            motionZ *= GROUND_DECCEL * deccel;
+        }
     }
     
     @Override
