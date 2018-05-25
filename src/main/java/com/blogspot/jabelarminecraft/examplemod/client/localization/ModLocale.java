@@ -1,25 +1,22 @@
 package com.blogspot.jabelarminecraft.examplemod.client.localization;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.charset.StandardCharsets;
-import java.util.IllegalFormatException;
-import java.util.List;
-import java.util.Map;
-import java.util.regex.Pattern;
-
-import org.apache.commons.io.IOUtils;
-
 import com.google.common.base.Splitter;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Maps;
-
 import net.minecraft.client.resources.IResource;
 import net.minecraft.client.resources.IResourceManager;
 import net.minecraft.client.resources.Locale;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import org.apache.commons.io.IOUtils;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
+import java.util.*;
+import java.util.regex.Pattern;
+import java.util.concurrent.ConcurrentSkipListSet;
 
 @SideOnly(Side.CLIENT)
 public class ModLocale extends Locale
@@ -27,7 +24,7 @@ public class ModLocale extends Locale
     /** Splits on "=" */
     private static final Splitter SPLITTER = Splitter.on('=').limit(2);
     private static final Pattern PATTERN = Pattern.compile("%(\\d+\\$)?[\\d\\.]*[df]");
-    Map<String, String> properties = Maps.<String, String>newHashMap();
+    public static Map<String, String> properties = Maps.<String, String>newHashMap();
     private boolean unicode;
 
     /**
@@ -49,11 +46,20 @@ public class ModLocale extends Locale
             System.out.println("Loading lang file = "+s1);
             System.out.println("Will loop through following resource domains: "+resourceManager.getResourceDomains());
 
-            for (String s2 : resourceManager.getResourceDomains())
+            SortedSet<String> sortedResourceDomains = new ConcurrentSkipListSet<String>(new DomainComparator());
+            for (String domainString : resourceManager.getResourceDomains())
+            {
+                sortedResourceDomains.add(domainString);
+            }
+
+            // DEBUG
+            System.out.println("Sorted resource domains = "+sortedResourceDomains);
+
+            for (String s2 : sortedResourceDomains)
             {
                 // DEBUG
-                System.out.println("For resource domain ="+s2);
-                
+                System.out.println("For resource domain = "+s2);
+
                 try
                 {
                     this.loadLocaleData(resourceManager.getAllResources(new ResourceLocation(s2, s1)));
@@ -181,5 +187,76 @@ public class ModLocale extends Locale
     public boolean hasKey(String key)
     {
         return this.properties.containsKey(key);
+    }
+
+    class DomainComparator implements Comparator<String>
+    {
+        public int compare(String domain1, String domain2)
+        {
+            // DEBUG
+            System.out.println("Comparing "+domain1+" to "+domain2);
+
+            if (domain1.equals("realms"))
+            {
+                return -1;
+            }
+            else
+            {
+                if (domain2.equals("realms"))
+                {
+                    return 1;
+                }
+            }
+
+            if (domain1.equals(".mcassetsroot"))
+            {
+                return -1;
+            }
+            else
+            {
+                if (domain2.equals(".mcassetsroot"))
+                {
+                    return 1;
+                }
+            }
+
+            if (domain1.equals("fml"))
+            {
+                return -1;
+            }
+            else
+            {
+                if (domain2.equals("fml"))
+                {
+                    return 1;
+                }
+            }
+
+            if (domain1.equals("forge"))
+            {
+                return -1;
+            }
+            else
+            {
+                if (domain2.equals("forge"))
+                {
+                    return 1;
+                }
+            }
+
+            if (domain1.equals("minecraft"))
+            {
+                return 1;
+            }
+            else
+            {
+                if (domain2.equals("minecraft"))
+            {
+                    return -1;
+                }
+            }
+
+            return 0;
+        }
     }
 }
