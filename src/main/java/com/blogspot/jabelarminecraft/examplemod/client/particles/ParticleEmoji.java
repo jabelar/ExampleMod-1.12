@@ -16,13 +16,12 @@
 
 package com.blogspot.jabelarminecraft.examplemod.client.particles;
 
-import org.lwjgl.opengl.GL11;
-
 import com.blogspot.jabelarminecraft.examplemod.MainMod;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.renderer.BufferBuilder;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.renderer.vertex.VertexFormat;
@@ -44,7 +43,11 @@ public class ParticleEmoji extends Particle
     private static final ResourceLocation PARTICLE_TEXTURE = new ResourceLocation(MainMod.MODID, "textures/particles/particle_emoji_hi_res.png");
     private static final VertexFormat VERTEX_FORMAT = (new VertexFormat()).addElement(DefaultVertexFormats.POSITION_3F).addElement(DefaultVertexFormats.TEX_2F).addElement(DefaultVertexFormats.COLOR_4UB).addElement(DefaultVertexFormats.TEX_2S).addElement(DefaultVertexFormats.NORMAL_3B).addElement(DefaultVertexFormats.PADDING_1B);
 
-    final float rotSpeed;
+    private float rotSpeed = 0.0F;
+    private float initialAlpha = 1.0F;
+    private float finalAlpha = 1.0F;
+    
+    private float progress = 0.0F;
 
     /**
      * Instantiates a new entity particle FX mysterious.
@@ -66,14 +69,18 @@ public class ParticleEmoji extends Particle
         particleScale = 2.0F;
         particleGravity = 0.2F;
         rotSpeed = ((float)Math.random() - 0.5F) * 0.1F;
+        particleMaxAge = 20 + rand.nextInt(20);
     }
     
     @Override
     public void onUpdate()
     {
         super.onUpdate();
+        progress = particleAge / particleMaxAge;
         prevParticleAngle = particleAngle;
         particleAngle += (float)Math.PI * rotSpeed * 2.0F;
+        particleAlpha -= 1.0 / particleMaxAge;
+//        particleAlpha = 0.5F; // 1.0F - progress;
     }
     
     @Override
@@ -90,7 +97,11 @@ public class ParticleEmoji extends Particle
             float rotationX, float rotationZ, 
             float rotationYZ, float rotationXY, float rotationXZ)
     {
-        GL11.glPushMatrix();
+        GlStateManager.pushMatrix();
+        GlStateManager.enableBlend();
+        GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+        GlStateManager.alphaFunc(516, 0.003921569F);
+        GlStateManager.color(1.0F, 1.0F, 1.0F, particleAlpha);
 
         Minecraft.getMinecraft().getTextureManager().bindTexture(PARTICLE_TEXTURE);
    
@@ -163,6 +174,6 @@ public class ParticleEmoji extends Particle
                 .endVertex();
 
         Tessellator.getInstance().draw();
-        GL11.glPopMatrix();
+        GlStateManager.popMatrix();
     } 
 }
