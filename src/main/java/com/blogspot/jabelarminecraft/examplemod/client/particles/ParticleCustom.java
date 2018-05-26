@@ -46,8 +46,6 @@ public class ParticleCustom extends Particle
     private static final double GROUND_DECCEL = 0.7D;
     
     private TextureDefinition TEXTURE_DEF;
-//    private String particleName;    
-//    private static ResourceLocation PARTICLE_TEXTURE ;
     private static final VertexFormat VERTEX_FORMAT = (new VertexFormat()).addElement(DefaultVertexFormats.POSITION_3F).addElement(DefaultVertexFormats.TEX_2F).addElement(DefaultVertexFormats.COLOR_4UB).addElement(DefaultVertexFormats.TEX_2S).addElement(DefaultVertexFormats.NORMAL_3B).addElement(DefaultVertexFormats.PADDING_1B);
 
     private float rotSpeed = 0.0F;
@@ -380,14 +378,7 @@ public class ParticleCustom extends Particle
         enableDepth = enableDepthIn;
         return this;
     }
-    
-    public ParticleCustom setAnimationMode(boolean parTweenEnable, int parNumFrames)
-    {
-        tweenAnimationMode = parTweenEnable;
-        animationFrameCount = parNumFrames;
-        return this;
-    }
-    
+
     public static class TextureDefinition
     {
         private String name;
@@ -396,8 +387,20 @@ public class ParticleCustom extends Particle
         private float vMin;
         private float uMax;
         private float vMax;
-        
+        private boolean tweenAnimationMode;
+        private int animationFrameCount;
+
+        public TextureDefinition(String parName)
+        {
+            this(parName, 0.0F, 0.0F, 1.0F, 1.0F);
+        }
+
         public TextureDefinition(String parName, float parUMin, float parVMin, float parUMax, float parVMax)
+        {
+            this(parName, 0.0F, 0.0F, 1.0F, 1.0F, false, 1);
+        }
+
+        public TextureDefinition(String parName, float parUMin, float parVMin, float parUMax, float parVMax, boolean parAnimMode, int parAnimFrames)
         {
             name = parName;
             resourceLocation = new ResourceLocation(MainMod.MODID, "textures/particles/"+name+".png");
@@ -405,17 +408,21 @@ public class ParticleCustom extends Particle
             vMin = parVMin;
             uMax = parUMax;
             vMax = parVMax;
+            tweenAnimationMode = parAnimMode;
+            animationFrameCount = parAnimFrames;
         }
-        
+
         /* 
          * Getter methods.
          */
         
-        public String getName() { return name; };
-        public ResourceLocation getResourceLocation() { return resourceLocation; };
-        public float getUMin() { return uMin; };
-        public float getVmin() { return vMin; };
-        public float getUMax() { return uMax; };
-        public float getVMax() { return vMax; };
+        public String getName() { return name; }
+        public ResourceLocation getResourceLocation() { return resourceLocation; }
+        public float getUMin() { return uMin; }
+        public float getVmin() { return vMin; }
+        public float getUMax() { return uMax; }
+        public float getVMax() { return vMax; }
+        public boolean isTweenAnimationMode() { return tweenAnimationMode; }
+        public int getAnimationFrameCount() { return animationFrameCount; }
     }
 }
