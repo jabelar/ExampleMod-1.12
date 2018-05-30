@@ -52,8 +52,7 @@ public class BlockParticleEmitter extends Block
                 .setInitialAlpha(1.0F)
                 .setFinalAlpha(0.0F)
                 .setInitalTint(Color.WHITE)
-                .setFinalTint(Color.RED)
-                .setAnimationMode(true, 2);                
+                .setFinalTint(Color.RED);
         Minecraft.getMinecraft().effectRenderer.addEffect(theParticle);
     }
 }

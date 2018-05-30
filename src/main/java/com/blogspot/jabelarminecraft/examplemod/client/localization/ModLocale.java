@@ -1,22 +1,28 @@
 package com.blogspot.jabelarminecraft.examplemod.client.localization;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
+import java.util.Comparator;
+import java.util.IllegalFormatException;
+import java.util.List;
+import java.util.Map;
+import java.util.SortedSet;
+import java.util.concurrent.ConcurrentSkipListSet;
+import java.util.regex.Pattern;
+
+import org.apache.commons.io.IOUtils;
+
 import com.google.common.base.Splitter;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Maps;
+
 import net.minecraft.client.resources.IResource;
 import net.minecraft.client.resources.IResourceManager;
 import net.minecraft.client.resources.Locale;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import org.apache.commons.io.IOUtils;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.charset.StandardCharsets;
-import java.util.*;
-import java.util.regex.Pattern;
-import java.util.concurrent.ConcurrentSkipListSet;
 
 @SideOnly(Side.CLIENT)
 public class ModLocale extends Locale
@@ -24,7 +30,7 @@ public class ModLocale extends Locale
     /** Splits on "=" */
     private static final Splitter SPLITTER = Splitter.on('=').limit(2);
     private static final Pattern PATTERN = Pattern.compile("%(\\d+\\$)?[\\d\\.]*[df]");
-    public static Map<String, String> properties = Maps.<String, String>newHashMap();
+    public Map<String, String> properties = Maps.<String, String>newHashMap();
     private boolean unicode;
 
     /**
@@ -191,6 +197,7 @@ public class ModLocale extends Locale
 
     class DomainComparator implements Comparator<String>
     {
+        @Override
         public int compare(String domain1, String domain2)
         {
             // DEBUG
