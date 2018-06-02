@@ -1114,19 +1114,12 @@ public class EventHandler
         }
     }
     
-    public static Field recipeBook = ReflectionHelper.findField(EntityPlayerMP.class, "recipeBook", "field_184628_bn");
+    public static Field recipeBook = ReflectionHelper.findField(EntityPlayerMP.class, "recipeBook", "field_192036_cb\r\n" + 
+            "");
     
     @SubscribeEvent(priority = EventPriority.HIGHEST, receiveCanceled = true)
     public static void onEvent(PlayerTickEvent event)
     {
-//        BlockPos playerPos = event.player.getPosition().down();
-//        if (event.player.world != null && event.player.ticksExisted%5 == 0)
-//        {
-//            World world = event.player.world;
-//            IBlockState state = world.getBlockState(playerPos);
-//            world.setBlockState(playerPos, Blocks.AIR.getDefaultState());
-//            world.setBlockState(playerPos, state);
-//        }
         if (event.player instanceof EntityPlayerMP)
         {
             EntityPlayerMP playerMP = (EntityPlayerMP) event.player;
@@ -1144,10 +1137,8 @@ public class EventHandler
                 }
                 catch (IllegalArgumentException | IllegalAccessException e)
                 {
-                    // TODO Auto-generated catch block
                     e.printStackTrace();
                 }
-//                recipeBookCurrent = recipeBookNew;
             }
         }
     }
