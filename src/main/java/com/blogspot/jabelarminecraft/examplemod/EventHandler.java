@@ -1114,8 +1114,7 @@ public class EventHandler
         }
     }
     
-    public static Field recipeBook = ReflectionHelper.findField(EntityPlayerMP.class, "recipeBook", "field_192036_cb\r\n" + 
-            "");
+    public static Field recipeBook = ReflectionHelper.findField(EntityPlayerMP.class, "recipeBook", "field_192036_cb");
     
     @SubscribeEvent(priority = EventPriority.HIGHEST, receiveCanceled = true)
     public static void onEvent(PlayerTickEvent event)
