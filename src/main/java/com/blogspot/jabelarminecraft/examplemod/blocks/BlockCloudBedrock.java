@@ -14,6 +14,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class BlockCloudBedrock extends BlockEmptyDrops
 {
 
+    @SuppressWarnings("deprecation")
     public BlockCloudBedrock()
     {
         super(ModMaterials.CLOUD_ROCK);

@@ -19,6 +19,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class BlockCloud extends BlockIce
 {
 
+    @SuppressWarnings("deprecation")
     public BlockCloud()
     {
         super();

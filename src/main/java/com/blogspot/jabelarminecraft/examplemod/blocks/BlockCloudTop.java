@@ -47,6 +47,7 @@ public class BlockCloudTop extends Block
     /**
      * Instantiates a new block cloud top.
      */
+    @SuppressWarnings("deprecation")
     public BlockCloudTop()
     {
         super(ModMaterials.CLOUD);
