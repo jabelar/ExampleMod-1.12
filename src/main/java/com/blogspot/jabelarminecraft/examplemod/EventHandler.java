@@ -20,9 +20,11 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.Random;
 
+import com.blogspot.jabelarminecraft.examplemod.init.ModBlocks;
 import com.blogspot.jabelarminecraft.examplemod.init.ModConfig;
 import com.blogspot.jabelarminecraft.examplemod.init.ModEnchantments;
 import com.blogspot.jabelarminecraft.examplemod.init.ModItems;
+import com.blogspot.jabelarminecraft.examplemod.init.ModTriggers;
 import com.blogspot.jabelarminecraft.examplemod.recipes.RecipeBookServerCustom;
 
 import net.minecraft.block.material.Material;
@@ -49,6 +51,7 @@ import net.minecraft.util.EnumParticleTypes;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
 import net.minecraftforge.event.entity.living.LivingFallEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent.NameFormat;
+import net.minecraftforge.event.entity.player.PlayerInteractEvent.RightClickBlock;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent.OnConfigChangedEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
@@ -1138,6 +1141,28 @@ public class EventHandler
                 {
                     e.printStackTrace();
                 }
+            }
+        }
+    }
+    
+    /**
+     * This method is part of my simple custom advancement triggering tutorial.
+     * See: http://jabelarminecraft.blogspot.com/p/minecraft-modding-custom-triggers-aka.html
+     */
+    @SubscribeEvent(priority = EventPriority.HIGHEST, receiveCanceled = true)
+    public static void onEvent(RightClickBlock event)
+    {
+        EntityPlayer thePlayer = event.getEntityPlayer();
+        if (thePlayer instanceof EntityPlayerMP)
+        {
+            EntityPlayerMP thePlayerMP = (EntityPlayerMP)thePlayer;
+            
+            // DEBUG
+            System.out.println("Right clicking block with "+thePlayer.getHeldItem(event.getHand()));
+   
+            if (thePlayer.getHeldItem(event.getHand()).getItem() == ModBlocks.item_block_cloud_sapling)
+            {
+                ModTriggers.PLACE_CLOUD_SAPLING.trigger(thePlayerMP);
             }
         }
     }

@@ -15,6 +15,12 @@ import net.minecraft.advancements.critereon.AbstractCriterionInstance;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.ResourceLocation;
 
+/**
+ * This class is part of my simple custom advancement triggering tutorial.
+ * See: http://jabelarminecraft.blogspot.com/p/minecraft-modding-custom-triggers-aka.html
+ * 
+ * @author jabelar
+ */
 public class CustomTrigger implements ICriterionTrigger<CustomTrigger.Instance>
 {
     private final ResourceLocation RL;

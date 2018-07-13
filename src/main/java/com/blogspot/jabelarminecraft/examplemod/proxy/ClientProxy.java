@@ -107,6 +107,11 @@ public class ClientProxy implements IProxy
         Minecraft.getMinecraft().mouseHelper = mouseHelperAI;
         RenderFactories.registerEntityRenderers();
         
+        fixLocaleClass();
+    }
+    
+    public void fixLocaleClass()
+    {
         // DEBUG
         System.out.println("Swapping in custom locale class");
         Field modifiersField;
@@ -165,6 +170,11 @@ public class ClientProxy implements IProxy
         // DEBUG
         System.out.println("on Client side");
 
+        refreshLangResources();
+    }
+
+    public void refreshLangResources()
+    {
         // DEBUG
         System.out.println("Refreshing lang files with proper precedence");
 //        Minecraft.getMinecraft().refreshResources();
@@ -179,7 +189,6 @@ public class ClientProxy implements IProxy
         MOD_LOCALE.loadLocaleDataFiles(Minecraft.getMinecraft().getResourceManager(), list);
         LanguageMap.replaceWith(MOD_LOCALE.properties);
     }
-
 
     @Override
     public EntityPlayer getPlayerEntityFromContext(MessageContext ctx)
