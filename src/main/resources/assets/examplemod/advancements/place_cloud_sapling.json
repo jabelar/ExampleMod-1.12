@@ -1,7 +1,7 @@
 {
     "display": {
         "icon": {
-            "item": "minecraft:lead"
+            "item": "minecraft:sapling"
         },
         "title": {
             "translate": "advancements.place_cloud_sapling.title"

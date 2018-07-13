@@ -21,4 +21,5 @@ itemGroup.examplemod=Example Mod
 generator.cloud=Cloud
 generator.cloud.info=It's truly heaven.
 enchantment.safe_falling=Safe Falling
-
+advancements.place_cloud_sapling.title=Plant A Cloud Sapling
+advancements.place_cloud_sapling.description=Plant a sapling from a cloud tree (found in the cloud dimension).
