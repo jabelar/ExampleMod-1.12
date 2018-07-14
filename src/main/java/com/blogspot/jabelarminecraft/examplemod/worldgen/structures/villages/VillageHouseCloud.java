@@ -1,3 +1,18 @@
+/**
+    Copyright (C) 2017 by jabelar
+
+    This file is part of jabelar's Minecraft Forge modding examples; as such,
+    you can redistribute it and/or modify it under the terms of the GNU
+    General Public License as published by the Free Software Foundation,
+    either version 3 of the License, or (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+    GNU General Public License for more details.
+
+    For a copy of the GNU General Public License see <http://www.gnu.org/licenses/>.
+*/
 package com.blogspot.jabelarminecraft.examplemod.worldgen.structures.villages;
 
 import java.util.Random;
@@ -16,12 +31,26 @@ import net.minecraft.world.gen.structure.StructureBoundingBox;
 import net.minecraft.world.gen.structure.StructureVillagePieces;
 import net.minecraftforge.fml.common.registry.VillagerRegistry;
 
+// TODO: Auto-generated Javadoc
 public class VillageHouseCloud extends StructureVillagePieces.Village
 {
+    
+    /**
+     * Instantiates a new village house cloud.
+     */
     public VillageHouseCloud()
     {
     }
 
+    /**
+     * Instantiates a new village house cloud.
+     *
+     * @param parStart the par start
+     * @param parType the par type
+     * @param parRand the par rand
+     * @param parStructBB the par struct BB
+     * @param parFacing the par facing
+     */
     public VillageHouseCloud(StructureVillagePieces.Start parStart, int parType, Random parRand, StructureBoundingBox parStructBB, EnumFacing parFacing)
     {
         super(parStart, parType);
@@ -32,6 +61,11 @@ public class VillageHouseCloud extends StructureVillagePieces.Village
     /**
      * second Part of Structure generating, this for example places Spiderwebs, Mob Spawners, it closes
      * Mineshafts at the end, it adds Fences...
+     *
+     * @param parWorld the par world
+     * @param parRand the par rand
+     * @param parStructBB the par struct BB
+     * @return true, if successful
      */
     @Override
     public boolean addComponentParts(World parWorld, Random parRand, StructureBoundingBox parStructBB)
@@ -179,6 +213,9 @@ public class VillageHouseCloud extends StructureVillagePieces.Village
         return true;
     }
     
+    /* (non-Javadoc)
+     * @see net.minecraft.world.gen.structure.StructureVillagePieces.Village#getBiomeSpecificBlockState(net.minecraft.block.state.IBlockState)
+     */
     @Override
     protected IBlockState getBiomeSpecificBlockState(IBlockState blockstateIn)
     {
@@ -193,6 +230,9 @@ public class VillageHouseCloud extends StructureVillagePieces.Village
         return blockstateIn;
     }
 
+    /* (non-Javadoc)
+     * @see net.minecraft.world.gen.structure.StructureVillagePieces.Village#biomeDoor()
+     */
     @Override
     protected BlockDoor biomeDoor()
     {
@@ -204,6 +244,9 @@ public class VillageHouseCloud extends StructureVillagePieces.Village
          return Blocks.OAK_DOOR;
     }
     
+    /* (non-Javadoc)
+     * @see net.minecraft.world.gen.structure.StructureVillagePieces.Village#chooseForgeProfession(int, net.minecraftforge.fml.common.registry.VillagerRegistry.VillagerProfession)
+     */
     @Override
     protected VillagerRegistry.VillagerProfession chooseForgeProfession(int count, VillagerRegistry.VillagerProfession prof)
     {

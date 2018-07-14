@@ -1,3 +1,18 @@
+/**
+    Copyright (C) 2017 by jabelar
+
+    This file is part of jabelar's Minecraft Forge modding examples; as such,
+    you can redistribute it and/or modify it under the terms of the GNU
+    General Public License as published by the Free Software Foundation,
+    either version 3 of the License, or (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+    GNU General Public License for more details.
+
+    For a copy of the GNU General Public License see <http://www.gnu.org/licenses/>.
+*/
 package com.blogspot.jabelarminecraft.examplemod.client.gui;
 
 import java.io.IOException;
@@ -27,6 +42,7 @@ import net.minecraft.world.gen.ChunkGeneratorSettings;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+// TODO: Auto-generated Javadoc
 @SideOnly(Side.CLIENT)
 public class GuiCustomizeWorldMod extends GuiScreen implements GuiSlider.FormatHelper, GuiPageButtonList.GuiResponder
 {
@@ -61,6 +77,12 @@ public class GuiCustomizeWorldMod extends GuiScreen implements GuiSlider.FormatH
     /** A Random instance for this world customization */
     private final Random random = new Random();
 
+    /**
+     * Instantiates a new gui customize world mod.
+     *
+     * @param parentIn the parent in
+     * @param p_i45521_2_ the p i 45521 2
+     */
     public GuiCustomizeWorldMod(GuiCreateWorldMod parentIn, String p_i45521_2_)
     {
         this.parent = parentIn;
@@ -117,6 +139,8 @@ public class GuiCustomizeWorldMod extends GuiScreen implements GuiSlider.FormatH
 
     /**
      * Handles mouse input.
+     *
+     * @throws IOException Signals that an I/O exception has occurred.
      */
     @Override
     public void handleMouseInput() throws IOException
@@ -141,11 +165,21 @@ public class GuiCustomizeWorldMod extends GuiScreen implements GuiSlider.FormatH
         this.updatePageControls();
     }
 
+    /**
+     * Save values.
+     *
+     * @return the string
+     */
     public String saveValues()
     {
         return this.settings.toString().replace("\n", "");
     }
 
+    /**
+     * Load values.
+     *
+     * @param p_175324_1_ the p 175324 1
+     */
     public void loadValues(String p_175324_1_)
     {
         if (p_175324_1_ != null && !p_175324_1_.isEmpty())
@@ -158,6 +192,9 @@ public class GuiCustomizeWorldMod extends GuiScreen implements GuiSlider.FormatH
         }
     }
 
+    /* (non-Javadoc)
+     * @see net.minecraft.client.gui.GuiPageButtonList.GuiResponder#setEntryValue(int, java.lang.String)
+     */
     @Override
     public void setEntryValue(int id, String value)
     {
@@ -260,6 +297,9 @@ public class GuiCustomizeWorldMod extends GuiScreen implements GuiSlider.FormatH
         this.defaults.enabled = modified;
     }
 
+    /* (non-Javadoc)
+     * @see net.minecraft.client.gui.GuiSlider.FormatHelper#getText(int, java.lang.String, float)
+     */
     @Override
     public String getText(int id, String name, float value)
     {
@@ -355,6 +395,9 @@ public class GuiCustomizeWorldMod extends GuiScreen implements GuiSlider.FormatH
         }
     }
 
+    /* (non-Javadoc)
+     * @see net.minecraft.client.gui.GuiPageButtonList.GuiResponder#setEntryValue(int, boolean)
+     */
     @Override
     public void setEntryValue(int id, boolean value)
     {
@@ -403,6 +446,9 @@ public class GuiCustomizeWorldMod extends GuiScreen implements GuiSlider.FormatH
         }
     }
 
+    /* (non-Javadoc)
+     * @see net.minecraft.client.gui.GuiPageButtonList.GuiResponder#setEntryValue(int, float)
+     */
     @Override
     public void setEntryValue(int id, float value)
     {
@@ -672,6 +718,9 @@ public class GuiCustomizeWorldMod extends GuiScreen implements GuiSlider.FormatH
 
     /**
      * Called by the controls from the buttonList when activated. (Mouse pressed for buttons)
+     *
+     * @param button the button
+     * @throws IOException Signals that an I/O exception has occurred.
      */
     @Override
     protected void actionPerformed(GuiButton button) throws IOException
@@ -808,6 +857,10 @@ public class GuiCustomizeWorldMod extends GuiScreen implements GuiSlider.FormatH
     /**
      * Fired when a key is typed (except F11 which toggles full screen). This is the equivalent of
      * KeyListener.keyTyped(KeyEvent e). Args : character (character on the key), keyCode (lwjgl Keyboard key code)
+     *
+     * @param typedChar the typed char
+     * @param keyCode the key code
+     * @throws IOException Signals that an I/O exception has occurred.
      */
     @Override
     protected void keyTyped(char typedChar, int keyCode) throws IOException
@@ -873,6 +926,11 @@ public class GuiCustomizeWorldMod extends GuiScreen implements GuiSlider.FormatH
 
     /**
      * Called when the mouse is clicked. Args : mouseX, mouseY, clickedButton
+     *
+     * @param mouseX the mouse X
+     * @param mouseY the mouse Y
+     * @param mouseButton the mouse button
+     * @throws IOException Signals that an I/O exception has occurred.
      */
     @Override
     protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException
@@ -887,6 +945,10 @@ public class GuiCustomizeWorldMod extends GuiScreen implements GuiSlider.FormatH
 
     /**
      * Called when a mouse button is released.
+     *
+     * @param mouseX the mouse X
+     * @param mouseY the mouse Y
+     * @param state the state
      */
     @Override
     protected void mouseReleased(int mouseX, int mouseY, int state)
@@ -905,6 +967,10 @@ public class GuiCustomizeWorldMod extends GuiScreen implements GuiSlider.FormatH
 
     /**
      * Draws the screen and all the components in it.
+     *
+     * @param mouseX the mouse X
+     * @param mouseY the mouse Y
+     * @param partialTicks the partial ticks
      */
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks)

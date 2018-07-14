@@ -1,15 +1,35 @@
+/**
+    Copyright (C) 2017 by jabelar
+
+    This file is part of jabelar's Minecraft Forge modding examples; as such,
+    you can redistribute it and/or modify it under the terms of the GNU
+    General Public License as published by the Free Software Foundation,
+    either version 3 of the License, or (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+    GNU General Public License for more details.
+
+    For a copy of the GNU General Public License see <http://www.gnu.org/licenses/>.
+*/
 package com.blogspot.jabelarminecraft.examplemod.materials;
 
 
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
 
+// TODO: Auto-generated Javadoc
 /**
  * @author jabelar
  *
  */
 public class MaterialCloud extends Material
 {
+    
+    /**
+     * Instantiates a new material cloud.
+     */
     public MaterialCloud() 
     {
         super(MapColor.SNOW);
@@ -59,8 +79,10 @@ public class MaterialCloud extends Material
 //    }
 
     /**
-     * Indicate if the material is opaque
-     */
+ * Indicate if the material is opaque.
+ *
+ * @return true, if is opaque
+ */
     @Override
     public boolean isOpaque()
     {

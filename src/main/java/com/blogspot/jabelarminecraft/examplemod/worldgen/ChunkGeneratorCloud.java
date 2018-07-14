@@ -1,3 +1,18 @@
+/**
+    Copyright (C) 2017 by jabelar
+
+    This file is part of jabelar's Minecraft Forge modding examples; as such,
+    you can redistribute it and/or modify it under the terms of the GNU
+    General Public License as published by the Free Software Foundation,
+    either version 3 of the License, or (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+    GNU General Public License for more details.
+
+    For a copy of the GNU General Public License see <http://www.gnu.org/licenses/>.
+*/
 package com.blogspot.jabelarminecraft.examplemod.worldgen;
 
 import java.util.List;
@@ -41,6 +56,7 @@ import net.minecraftforge.event.terraingen.InitNoiseGensEvent;
 import net.minecraftforge.event.terraingen.PopulateChunkEvent;
 import net.minecraftforge.event.terraingen.TerrainGen;
 
+// TODO: Auto-generated Javadoc
 public class ChunkGeneratorCloud implements IChunkGenerator
 {
     protected  World world;
@@ -119,6 +135,11 @@ public class ChunkGeneratorCloud implements IChunkGenerator
     private int dungeonChance = 7;
     private int lavaLakeChance = 80;
 
+    /**
+     * Instantiates a new chunk generator cloud.
+     *
+     * @param worldIn the world in
+     */
     public ChunkGeneratorCloud(World worldIn)
     {
         // DEBUG
@@ -163,6 +184,9 @@ public class ChunkGeneratorCloud implements IChunkGenerator
         }
     }
 
+    /**
+     * Inits the noise generators.
+     */
     protected void initNoiseGenerators()
     {
         minLimitPerlinNoise = new NoiseGeneratorOctaves(rand, 16);
@@ -174,6 +198,9 @@ public class ChunkGeneratorCloud implements IChunkGenerator
         forestNoise = new NoiseGeneratorOctaves(rand, 8);
     }
 
+    /**
+     * Post terrain gen events.
+     */
     protected void postTerrainGenEvents()
     {
         caveGenerator = TerrainGen.getModdedMapGen(caveGenerator, InitMapGenEvent.EventType.CAVE);
@@ -184,8 +211,13 @@ public class ChunkGeneratorCloud implements IChunkGenerator
         ravineGenerator = TerrainGen.getModdedMapGen(ravineGenerator, InitMapGenEvent.EventType.RAVINE);
         oceanMonumentGenerator = (StructureOceanMonument) TerrainGen.getModdedMapGen(oceanMonumentGenerator, InitMapGenEvent.EventType.OCEAN_MONUMENT);
     }
+    
     /**
-     * Generates the chunk at the specified position, from scratch
+     * Generates the chunk at the specified position, from scratch.
+     *
+     * @param parChunkX the par chunk X
+     * @param parChunkZ the par chunk Z
+     * @return the chunk
      */
     @Override
     public Chunk generateChunk(int parChunkX, int parChunkZ)
@@ -248,6 +280,9 @@ public class ChunkGeneratorCloud implements IChunkGenerator
     }
 
 
+    /**
+     * Sets the blocks in chunk.
+     */
     public void setBlocksInChunk()
     {
         for (int i = 0; i < 4; ++i)
@@ -287,6 +322,9 @@ public class ChunkGeneratorCloud implements IChunkGenerator
         }
     }
 
+    /**
+     * Replace biome blocks.
+     */
     public void replaceBiomeBlocks()
     {
         if (!ForgeEventFactory.onReplaceBiomeBlocks(this, chunkX, chunkZ, chunkPrimer, world))
@@ -319,10 +357,6 @@ public class ChunkGeneratorCloud implements IChunkGenerator
      * and mesas have low mountains with flat plateaus, etc. Each biome type has an 
      * individual biome depth (Biome Depth) and an individual biome factor (Biome Scale) 
      * in order to perform the biome specific deformations.
-     * 
-     * @param parXOffset
-     * @param parYOffset
-     * @param parZOffset
      */
     protected void generateHeightmap()
     {
@@ -544,7 +578,12 @@ public class ChunkGeneratorCloud implements IChunkGenerator
     }
 
     /**
-     * Called to generate additional structures after initial worldgen, used by ocean monuments
+     * Called to generate additional structures after initial worldgen, used by ocean monuments.
+     *
+     * @param chunkIn the chunk in
+     * @param x the x
+     * @param z the z
+     * @return true, if successful
      */
     @Override
     public boolean generateStructures(Chunk chunkIn, int x, int z)
@@ -559,6 +598,9 @@ public class ChunkGeneratorCloud implements IChunkGenerator
         return structureHasGenerated;
     }
 
+    /* (non-Javadoc)
+     * @see net.minecraft.world.gen.IChunkGenerator#getPossibleCreatures(net.minecraft.entity.EnumCreatureType, net.minecraft.util.math.BlockPos)
+     */
     @Override
     public List<Biome.SpawnListEntry> getPossibleCreatures(EnumCreatureType creatureType, BlockPos pos)
     {
@@ -580,6 +622,9 @@ public class ChunkGeneratorCloud implements IChunkGenerator
         return biome.getSpawnableList(creatureType);
     }
 
+    /* (non-Javadoc)
+     * @see net.minecraft.world.gen.IChunkGenerator#isInsideStructure(net.minecraft.world.World, java.lang.String, net.minecraft.util.math.BlockPos)
+     */
     @Override
     public boolean isInsideStructure(World worldIn, String structureName, BlockPos pos)
     {
@@ -609,6 +654,9 @@ public class ChunkGeneratorCloud implements IChunkGenerator
         }
     }
 
+    /* (non-Javadoc)
+     * @see net.minecraft.world.gen.IChunkGenerator#getNearestStructurePos(net.minecraft.world.World, java.lang.String, net.minecraft.util.math.BlockPos, boolean)
+     */
     @Override
     @Nullable
     public BlockPos getNearestStructurePos(World worldIn, String structureName, BlockPos position, boolean findUnexplored)
@@ -644,6 +692,10 @@ public class ChunkGeneratorCloud implements IChunkGenerator
     /**
      * Recreates data about structures intersecting given chunk (used for example by getPossibleCreatures), without placing any blocks. When called for the first time before any
      * chunk is generated - also initializes the internal state needed by getPossibleCreatures.
+     *
+     * @param chunkIn the chunk in
+     * @param x the x
+     * @param z the z
      */
     @Override
     public void recreateStructures(Chunk chunkIn, int x, int z)

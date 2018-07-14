@@ -59,6 +59,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.PlayerTickEvent;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
 
+// TODO: Auto-generated Javadoc
 /**
  * This class contains many of the event handling methods for events posted to the event bus.
  * Registry events are contained in separate classes in the init subpackage. It is important that
@@ -1092,7 +1093,12 @@ public class EventHandler
 //        }
 //    }
     
-    @SubscribeEvent(priority = EventPriority.NORMAL, receiveCanceled = true)
+    /**
+ * On event.
+ *
+ * @param event the event
+ */
+@SubscribeEvent(priority = EventPriority.NORMAL, receiveCanceled = true)
     public static void onEvent(LivingFallEvent event)
     {
         if (event.getEntityLiving() instanceof EntityPlayer)
@@ -1119,6 +1125,11 @@ public class EventHandler
     
     public static Field recipeBook = ReflectionHelper.findField(EntityPlayerMP.class, "recipeBook", "field_192036_cb");
     
+    /**
+     * On event.
+     *
+     * @param event the event
+     */
     @SubscribeEvent(priority = EventPriority.HIGHEST, receiveCanceled = true)
     public static void onEvent(PlayerTickEvent event)
     {
@@ -1148,6 +1159,8 @@ public class EventHandler
     /**
      * This method is part of my simple custom advancement triggering tutorial.
      * See: http://jabelarminecraft.blogspot.com/p/minecraft-modding-custom-triggers-aka.html
+     *
+     * @param event the event
      */
     @SubscribeEvent(priority = EventPriority.HIGHEST, receiveCanceled = true)
     public static void onEvent(RightClickBlock event)

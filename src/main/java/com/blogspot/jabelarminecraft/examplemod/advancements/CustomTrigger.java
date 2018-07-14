@@ -1,3 +1,18 @@
+/**
+    Copyright (C) 2017 by jabelar
+
+    This file is part of jabelar's Minecraft Forge modding examples; as such,
+    you can redistribute it and/or modify it under the terms of the GNU
+    General Public License as published by the Free Software Foundation,
+    either version 3 of the License, or (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+    GNU General Public License for more details.
+
+    For a copy of the GNU General Public License see <http://www.gnu.org/licenses/>.
+*/
 package com.blogspot.jabelarminecraft.examplemod.advancements;
 import java.util.ArrayList;
 import java.util.Map;
@@ -15,6 +30,7 @@ import net.minecraft.advancements.critereon.AbstractCriterionInstance;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.ResourceLocation;
 
+// TODO: Auto-generated Javadoc
 /**
  * This class is part of my simple custom advancement triggering tutorial.
  * See: http://jabelarminecraft.blogspot.com/p/minecraft-modding-custom-triggers-aka.html
@@ -26,12 +42,22 @@ public class CustomTrigger implements ICriterionTrigger<CustomTrigger.Instance>
     private final ResourceLocation RL;
     private final Map<PlayerAdvancements, CustomTrigger.Listeners> listeners = Maps.newHashMap();
 
+    /**
+     * Instantiates a new custom trigger.
+     *
+     * @param parString the par string
+     */
     public CustomTrigger(String parString)
     {
         super();
         RL = new ResourceLocation(parString);
     }
     
+    /**
+     * Instantiates a new custom trigger.
+     *
+     * @param parRL the par RL
+     */
     public CustomTrigger(ResourceLocation parRL)
     {
         super();
@@ -125,6 +151,8 @@ public class CustomTrigger implements ICriterionTrigger<CustomTrigger.Instance>
         
         /**
          * Instantiates a new instance.
+         *
+         * @param parRL the par RL
          */
         public Instance(ResourceLocation parRL)
         {

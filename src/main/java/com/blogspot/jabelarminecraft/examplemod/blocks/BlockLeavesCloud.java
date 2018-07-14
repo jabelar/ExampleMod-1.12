@@ -1,3 +1,18 @@
+/**
+    Copyright (C) 2017 by jabelar
+
+    This file is part of jabelar's Minecraft Forge modding examples; as such,
+    you can redistribute it and/or modify it under the terms of the GNU
+    General Public License as published by the Free Software Foundation,
+    either version 3 of the License, or (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+    GNU General Public License for more details.
+
+    For a copy of the GNU General Public License see <http://www.gnu.org/licenses/>.
+*/
 package com.blogspot.jabelarminecraft.examplemod.blocks;
 
 import java.util.Random;
@@ -23,15 +38,22 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
+// TODO: Auto-generated Javadoc
 public class BlockLeavesCloud extends BlockLeaves
 {
 
+    /**
+     * Instantiates a new block leaves cloud.
+     */
     public BlockLeavesCloud()
     {
         MainMod.proxy.setGraphicsLevel(this, true);
         setDefaultState(blockState.getBaseState().withProperty(CHECK_DECAY, Boolean.valueOf(true)).withProperty(DECAYABLE, Boolean.valueOf(true)));
     }
 
+    /* (non-Javadoc)
+     * @see net.minecraft.block.BlockLeaves#dropApple(net.minecraft.world.World, net.minecraft.util.math.BlockPos, net.minecraft.block.state.IBlockState, int)
+     */
     @Override
     protected void dropApple(World worldIn, BlockPos pos, IBlockState state, int chance)
     {
@@ -43,6 +65,11 @@ public class BlockLeavesCloud extends BlockLeaves
     
     /**
      * Get the Item that this Block should drop when harvested.
+     *
+     * @param state the state
+     * @param rand the rand
+     * @param fortune the fortune
+     * @return the item dropped
      */
     @Override
     public Item getItemDropped(IBlockState state, Random rand, int fortune)
@@ -51,7 +78,11 @@ public class BlockLeavesCloud extends BlockLeaves
     }
 
     /**
-     * returns a list of blocks with the same ID, but different meta (eg: wood returns 4 blocks)
+     * returns a list of blocks with the same ID, but different meta (eg: wood returns 4 blocks).
+     *
+     * @param itemIn the item in
+     * @param items the items
+     * @return the sub blocks
      */
     @Override
     public void getSubBlocks(CreativeTabs itemIn, NonNullList<ItemStack> items)
@@ -59,6 +90,9 @@ public class BlockLeavesCloud extends BlockLeaves
         items.add(new ItemStack(this));
     }
 
+    /* (non-Javadoc)
+     * @see net.minecraft.block.Block#getSilkTouchDrop(net.minecraft.block.state.IBlockState)
+     */
     @Override
     protected ItemStack getSilkTouchDrop(IBlockState state)
     {
@@ -66,7 +100,10 @@ public class BlockLeavesCloud extends BlockLeaves
     }
 
     /**
-     * Convert the given metadata into a BlockState for this Block
+     * Convert the given metadata into a BlockState for this Block.
+     *
+     * @param meta the meta
+     * @return the state from meta
      */
     @Override
     public IBlockState getStateFromMeta(int meta)
@@ -75,7 +112,10 @@ public class BlockLeavesCloud extends BlockLeaves
     }
 
     /**
-     * Convert the BlockState into the correct metadata value
+     * Convert the BlockState into the correct metadata value.
+     *
+     * @param state the state
+     * @return the meta from state
      */
     @Override
     public int getMetaFromState(IBlockState state)
@@ -95,6 +135,9 @@ public class BlockLeavesCloud extends BlockLeaves
         return i;
     }
 
+    /* (non-Javadoc)
+     * @see net.minecraft.block.Block#createBlockState()
+     */
     @Override
     protected BlockStateContainer createBlockState()
     {
@@ -104,6 +147,9 @@ public class BlockLeavesCloud extends BlockLeaves
     /**
      * Gets the metadata of the item this Block can drop. This method is called when the block gets destroyed. It
      * returns the metadata of the dropped item based on the old metadata of the block.
+     *
+     * @param state the state
+     * @return the int
      */
     @Override
     public int damageDropped(IBlockState state)
@@ -114,6 +160,13 @@ public class BlockLeavesCloud extends BlockLeaves
     /**
      * Spawns the block's drops in the world. By the time this is called the Block has possibly been set to air via
      * Block.removedByPlayer
+     *
+     * @param worldIn the world in
+     * @param player the player
+     * @param pos the pos
+     * @param state the state
+     * @param te the te
+     * @param stack the stack
      */
     @Override
     public void harvestBlock(World worldIn, EntityPlayer player, BlockPos pos, IBlockState state, @Nullable TileEntity te, ItemStack stack)
@@ -128,11 +181,18 @@ public class BlockLeavesCloud extends BlockLeaves
         }
     }
 
+    /* (non-Javadoc)
+     * @see net.minecraftforge.common.IShearable#onSheared(net.minecraft.item.ItemStack, net.minecraft.world.IBlockAccess, net.minecraft.util.math.BlockPos, int)
+     */
     @Override
     public NonNullList<ItemStack> onSheared(ItemStack item, net.minecraft.world.IBlockAccess world, BlockPos pos, int fortune)
     {
         return NonNullList.withSize(1, new ItemStack(this));
     }
+    
+    /* (non-Javadoc)
+     * @see net.minecraft.block.BlockLeaves#getWoodType(int)
+     */
     @Override
     public EnumType getWoodType(int meta)
     {

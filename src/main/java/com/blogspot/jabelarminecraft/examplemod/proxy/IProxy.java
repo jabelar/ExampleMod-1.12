@@ -1,3 +1,18 @@
+/**
+    Copyright (C) 2017 by jabelar
+
+    This file is part of jabelar's Minecraft Forge modding examples; as such,
+    you can redistribute it and/or modify it under the terms of the GNU
+    General Public License as published by the Free Software Foundation,
+    either version 3 of the License, or (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+    GNU General Public License for more details.
+
+    For a copy of the GNU General Public License see <http://www.gnu.org/licenses/>.
+*/
 package com.blogspot.jabelarminecraft.examplemod.proxy;
 
 import com.blogspot.jabelarminecraft.examplemod.blocks.BlockLeavesCloud;
@@ -11,6 +26,7 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
+// TODO: Auto-generated Javadoc
 public interface IProxy
 {
     /**
@@ -65,5 +81,11 @@ public interface IProxy
      */
     boolean handleMaterialAcceleration(Entity parEntity, Material parMaterial);
 
+    /**
+     * Sets the graphics level.
+     *
+     * @param parBlock the par block
+     * @param parFancyEnabled the par fancy enabled
+     */
     void setGraphicsLevel(BlockLeavesCloud parBlock, boolean parFancyEnabled);
 }

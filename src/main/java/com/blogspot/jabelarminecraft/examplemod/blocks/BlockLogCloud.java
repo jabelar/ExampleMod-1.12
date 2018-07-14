@@ -1,3 +1,18 @@
+/**
+    Copyright (C) 2017 by jabelar
+
+    This file is part of jabelar's Minecraft Forge modding examples; as such,
+    you can redistribute it and/or modify it under the terms of the GNU
+    General Public License as published by the Free Software Foundation,
+    either version 3 of the License, or (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+    GNU General Public License for more details.
+
+    For a copy of the GNU General Public License see <http://www.gnu.org/licenses/>.
+*/
 package com.blogspot.jabelarminecraft.examplemod.blocks;
 
 import net.minecraft.block.BlockLog;
@@ -13,8 +28,13 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 
+// TODO: Auto-generated Javadoc
 public class BlockLogCloud extends BlockLog
 {
+    
+    /**
+     * Instantiates a new block log cloud.
+     */
     public BlockLogCloud()
     {
         super();
@@ -23,7 +43,12 @@ public class BlockLogCloud extends BlockLog
     }
 
     /**
-     * Get the MapColor for this Block and the given BlockState
+     * Get the MapColor for this Block and the given BlockState.
+     *
+     * @param state the state
+     * @param worldIn the world in
+     * @param pos the pos
+     * @return the map color
      */
     @Override
     public MapColor getMapColor(IBlockState state, IBlockAccess worldIn, BlockPos pos)
@@ -32,7 +57,11 @@ public class BlockLogCloud extends BlockLog
     }
 
     /**
-     * returns a list of blocks with the same ID, but different meta (eg: wood returns 4 blocks)
+     * returns a list of blocks with the same ID, but different meta (eg: wood returns 4 blocks).
+     *
+     * @param itemIn the item in
+     * @param items the items
+     * @return the sub blocks
      */
     @Override
     public void getSubBlocks(CreativeTabs itemIn, NonNullList<ItemStack> items)
@@ -41,7 +70,10 @@ public class BlockLogCloud extends BlockLog
     }
 
     /**
-     * Convert the given metadata into a BlockState for this Block
+     * Convert the given metadata into a BlockState for this Block.
+     *
+     * @param meta the meta
+     * @return the state from meta
      */
     @Override
     public IBlockState getStateFromMeta(int meta)
@@ -67,7 +99,10 @@ public class BlockLogCloud extends BlockLog
     }
 
     /**
-     * Convert the BlockState into the correct metadata value
+     * Convert the BlockState into the correct metadata value.
+     *
+     * @param state the state
+     * @return the meta from state
      */
     @Override
     @SuppressWarnings("incomplete-switch")
@@ -90,12 +125,18 @@ public class BlockLogCloud extends BlockLog
         return meta;
     }
 
+    /* (non-Javadoc)
+     * @see net.minecraft.block.BlockRotatedPillar#createBlockState()
+     */
     @Override
     protected BlockStateContainer createBlockState()
     {
         return new BlockStateContainer(this, new IProperty[] {LOG_AXIS});
     }
 
+    /* (non-Javadoc)
+     * @see net.minecraft.block.BlockRotatedPillar#getSilkTouchDrop(net.minecraft.block.state.IBlockState)
+     */
     @Override
     protected ItemStack getSilkTouchDrop(IBlockState state)
     {
@@ -105,6 +146,9 @@ public class BlockLogCloud extends BlockLog
     /**
      * Gets the metadata of the item this Block can drop. This method is called when the block gets destroyed. It
      * returns the metadata of the dropped item based on the old metadata of the block.
+     *
+     * @param state the state
+     * @return the int
      */
     @Override
     public int damageDropped(IBlockState state)

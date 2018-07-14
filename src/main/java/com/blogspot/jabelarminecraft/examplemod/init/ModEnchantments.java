@@ -33,6 +33,12 @@ public class ModEnchantments
     @Mod.EventBusSubscriber(modid = MainMod.MODID)
     public static class RegistrationHandler
     {
+        
+        /**
+         * On event.
+         *
+         * @param event the event
+         */
         @SubscribeEvent
         public static void onEvent(final RegistryEvent.Register<Enchantment> event)
         {

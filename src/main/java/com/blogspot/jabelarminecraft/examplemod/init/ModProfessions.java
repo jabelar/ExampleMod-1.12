@@ -35,6 +35,7 @@ import net.minecraftforge.fml.common.registry.VillagerRegistry.VillagerCareer;
 import net.minecraftforge.fml.common.registry.VillagerRegistry.VillagerProfession;
 import net.minecraftforge.registries.IForgeRegistry;
 
+// TODO: Auto-generated Javadoc
 @ObjectHolder(MainMod.MODID)
 public class ModProfessions
 {
@@ -70,6 +71,9 @@ public class ModProfessions
         }
     }
     
+    /**
+     * Associate careers and trades.
+     */
     public static void associateCareersAndTrades()
     {
         // DEBUG
@@ -86,6 +90,9 @@ public class ModProfessions
         /** The price info determining the amount of emeralds to trade in for the enchanted item */
         public EntityVillager.PriceInfo priceInfo;
 
+        /**
+         * Instantiates a new trade emeralds for enchanted boots.
+         */
         public TradeEmeraldsForEnchantedBoots()
         {
             stack = new ItemStack(Items.GOLDEN_BOOTS);
@@ -93,6 +100,9 @@ public class ModProfessions
             priceInfo = new PriceInfo(17, 64);
         }
 
+        /* (non-Javadoc)
+         * @see net.minecraft.entity.passive.EntityVillager.ITradeList#addMerchantRecipe(net.minecraft.entity.IMerchant, net.minecraft.village.MerchantRecipeList, java.util.Random)
+         */
         @Override
         public void addMerchantRecipe(IMerchant merchant, MerchantRecipeList recipeList, Random random)
         {

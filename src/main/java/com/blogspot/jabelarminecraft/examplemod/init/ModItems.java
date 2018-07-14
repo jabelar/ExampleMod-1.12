@@ -42,6 +42,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.registries.IForgeRegistry;
 
+// TODO: Auto-generated Javadoc
 /**
  * Instances and registration class
  * 
@@ -153,6 +154,9 @@ public class ModItems
                 new ModelResourceLocation(parItem.getRegistryName(), "inventory"));
     }
     
+    /**
+     * Register ore dictionary entries.
+     */
     public static void registerOreDictionaryEntries()
     {
         /*

@@ -1,3 +1,18 @@
+/**
+    Copyright (C) 2017 by jabelar
+
+    This file is part of jabelar's Minecraft Forge modding examples; as such,
+    you can redistribute it and/or modify it under the terms of the GNU
+    General Public License as published by the Free Software Foundation,
+    either version 3 of the License, or (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+    GNU General Public License for more details.
+
+    For a copy of the GNU General Public License see <http://www.gnu.org/licenses/>.
+*/
 package com.blogspot.jabelarminecraft.examplemod.init;
 
 import javax.annotation.Nullable;
@@ -13,6 +28,7 @@ import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.common.registry.VillagerRegistry.IVillageCreationHandler;
 
+// TODO: Auto-generated Javadoc
 public class ModWorldGen
 {  
     public static final String CLOUD_NAME = "cloud";
@@ -21,6 +37,9 @@ public class ModWorldGen
     public static final WorldType CLOUD_WORLD_TYPE = new WorldTypeCloud(); // although instance isn't used, must create the instance to register the WorldType
     public static final IVillageCreationHandler CLOUD_VILLAGE_HANDLER = new VillageHouseCloudCreationHandler();
     
+    /**
+     * Register dimensions.
+     */
     public static final void registerDimensions()
     {
         DimensionManager.registerDimension(CLOUD_DIM_ID, CLOUD_DIM_TYPE);

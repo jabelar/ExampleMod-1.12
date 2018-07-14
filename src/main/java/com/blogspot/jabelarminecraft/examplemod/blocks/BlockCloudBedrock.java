@@ -1,3 +1,18 @@
+/**
+    Copyright (C) 2017 by jabelar
+
+    This file is part of jabelar's Minecraft Forge modding examples; as such,
+    you can redistribute it and/or modify it under the terms of the GNU
+    General Public License as published by the Free Software Foundation,
+    either version 3 of the License, or (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+    GNU General Public License for more details.
+
+    For a copy of the GNU General Public License see <http://www.gnu.org/licenses/>.
+*/
 package com.blogspot.jabelarminecraft.examplemod.blocks;
 
 import com.blogspot.jabelarminecraft.examplemod.init.ModMaterials;
@@ -11,9 +26,13 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+// TODO: Auto-generated Javadoc
 public class BlockCloudBedrock extends BlockEmptyDrops
 {
 
+    /**
+     * Instantiates a new block cloud bedrock.
+     */
     @SuppressWarnings("deprecation")
     public BlockCloudBedrock()
     {
@@ -34,6 +53,9 @@ public class BlockCloudBedrock extends BlockEmptyDrops
         useNeighborBrightness = false;
     }
 
+    /* (non-Javadoc)
+     * @see net.minecraft.block.Block#getBlockLayer()
+     */
     @Override
     @SideOnly(Side.CLIENT)
     public BlockRenderLayer getBlockLayer()
@@ -41,6 +63,9 @@ public class BlockCloudBedrock extends BlockEmptyDrops
         return BlockRenderLayer.SOLID;
     }
     
+    /* (non-Javadoc)
+     * @see net.minecraft.block.Block#canCreatureSpawn(net.minecraft.block.state.IBlockState, net.minecraft.world.IBlockAccess, net.minecraft.util.math.BlockPos, net.minecraft.entity.EntityLiving.SpawnPlacementType)
+     */
     @Override
     public boolean canCreatureSpawn(IBlockState state, IBlockAccess world, BlockPos pos, net.minecraft.entity.EntityLiving.SpawnPlacementType type)
     {

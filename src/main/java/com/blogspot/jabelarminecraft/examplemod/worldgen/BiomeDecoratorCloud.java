@@ -88,6 +88,9 @@ public class BiomeDecoratorCloud extends BiomeDecorator
     
     protected WorldGenFlowersCloud flowerGen;
 
+    /**
+     * Instantiates a new biome decorator cloud.
+     */
     public BiomeDecoratorCloud()
     {
         super();
@@ -107,8 +110,14 @@ public class BiomeDecoratorCloud extends BiomeDecorator
         lapisGen = new WorldGenMinable(Blocks.LAPIS_ORE.getDefaultState(), lapisSize, replaceablePredicate);
     }
 
-    /** 
+    /**
+     *  
      * This is the function where ore generation and things like flowers are generated.
+     *
+     * @param worldIn the world in
+     * @param random the random
+     * @param biome the biome
+     * @param pos the pos
      */
     @Override
     public void decorate(World worldIn, Random random, Biome biome, BlockPos pos)
@@ -127,7 +136,11 @@ public class BiomeDecoratorCloud extends BiomeDecorator
     
     /**
      * This is where things like trees are generated.
-    */
+     *
+     * @param biomeIn the biome in
+     * @param worldIn the world in
+     * @param random the random
+     */
     @Override
     protected void genDecorations(Biome biomeIn, World worldIn, Random random)
     {
@@ -254,7 +267,10 @@ public class BiomeDecoratorCloud extends BiomeDecorator
     }
 
     /**
-     * Generates ores in the current chunk
+     * Generates ores in the current chunk.
+     *
+     * @param worldIn the world in
+     * @param random the random
      */
     @Override
     protected void generateOres(World worldIn, Random random)
@@ -291,6 +307,9 @@ public class BiomeDecoratorCloud extends BiomeDecorator
         {
         }
 
+        /* (non-Javadoc)
+         * @see com.google.common.base.Predicate#apply(java.lang.Object)
+         */
         @Override
         public boolean apply(IBlockState parBlockState)
         {

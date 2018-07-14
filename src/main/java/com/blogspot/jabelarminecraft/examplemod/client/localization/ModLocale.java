@@ -1,3 +1,18 @@
+/**
+    Copyright (C) 2017 by jabelar
+
+    This file is part of jabelar's Minecraft Forge modding examples; as such,
+    you can redistribute it and/or modify it under the terms of the GNU
+    General Public License as published by the Free Software Foundation,
+    either version 3 of the License, or (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+    GNU General Public License for more details.
+
+    For a copy of the GNU General Public License see <http://www.gnu.org/licenses/>.
+*/
 package com.blogspot.jabelarminecraft.examplemod.client.localization;
 
 import java.io.IOException;
@@ -24,6 +39,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+// TODO: Auto-generated Javadoc
 @SideOnly(Side.CLIENT)
 public class ModLocale extends Locale
 {
@@ -35,6 +51,9 @@ public class ModLocale extends Locale
 
     /**
      * For each domain $D and language $L, attempts to load the resource $D:lang/$L.lang
+     *
+     * @param resourceManager the resource manager
+     * @param languageList the language list
      */
     @Override
     public synchronized void loadLocaleDataFiles(IResourceManager resourceManager, List<String> languageList)
@@ -83,6 +102,9 @@ public class ModLocale extends Locale
         this.checkUnicode();
     }
 
+    /* (non-Javadoc)
+     * @see net.minecraft.client.resources.Locale#isUnicode()
+     */
     @Override
     public boolean isUnicode()
     {
@@ -173,6 +195,10 @@ public class ModLocale extends Locale
 
     /**
      * Calls String.format(translateKey(key), params)
+     *
+     * @param translateKey the translate key
+     * @param parameters the parameters
+     * @return the string
      */
     @Override
     public String formatMessage(String translateKey, Object[] parameters)
@@ -189,6 +215,9 @@ public class ModLocale extends Locale
         }
     }
 
+    /* (non-Javadoc)
+     * @see net.minecraft.client.resources.Locale#hasKey(java.lang.String)
+     */
     @Override
     public boolean hasKey(String key)
     {
@@ -197,6 +226,10 @@ public class ModLocale extends Locale
 
     class DomainComparator implements Comparator<String>
     {
+        
+        /* (non-Javadoc)
+         * @see java.util.Comparator#compare(java.lang.Object, java.lang.Object)
+         */
         @Override
         public int compare(String domain1, String domain2)
         {

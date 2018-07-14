@@ -1,3 +1,18 @@
+/**
+    Copyright (C) 2017 by jabelar
+
+    This file is part of jabelar's Minecraft Forge modding examples; as such,
+    you can redistribute it and/or modify it under the terms of the GNU
+    General Public License as published by the Free Software Foundation,
+    either version 3 of the License, or (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+    GNU General Public License for more details.
+
+    For a copy of the GNU General Public License see <http://www.gnu.org/licenses/>.
+*/
 package com.blogspot.jabelarminecraft.examplemod.blocks;
 
 import net.minecraft.block.BlockIce;
@@ -12,6 +27,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+// TODO: Auto-generated Javadoc
 /**
  * @author jabelar
  *
@@ -19,6 +35,9 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class BlockCloud extends BlockIce
 {
 
+    /**
+     * Instantiates a new block cloud.
+     */
     @SuppressWarnings("deprecation")
     public BlockCloud()
     {
@@ -36,6 +55,9 @@ public class BlockCloud extends BlockIce
         setLightLevel(0.5F); // redstone light has light value of 1.0F
     }
 
+    /* (non-Javadoc)
+     * @see net.minecraft.block.BlockIce#getBlockLayer()
+     */
     @Override
     @SideOnly(Side.CLIENT)
     public BlockRenderLayer getBlockLayer()
@@ -43,6 +65,9 @@ public class BlockCloud extends BlockIce
         return BlockRenderLayer.TRANSLUCENT;
     }
     
+    /* (non-Javadoc)
+     * @see net.minecraft.block.Block#canCreatureSpawn(net.minecraft.block.state.IBlockState, net.minecraft.world.IBlockAccess, net.minecraft.util.math.BlockPos, net.minecraft.entity.EntityLiving.SpawnPlacementType)
+     */
     @Override
     public boolean canCreatureSpawn(IBlockState state, IBlockAccess world, BlockPos pos, net.minecraft.entity.EntityLiving.SpawnPlacementType type)
     {
@@ -50,6 +75,9 @@ public class BlockCloud extends BlockIce
     }
     
 
+    /* (non-Javadoc)
+     * @see net.minecraft.block.Block#hasCustomBreakingProgress(net.minecraft.block.state.IBlockState)
+     */
     @Override
     @Deprecated
     @SideOnly(Side.CLIENT)
@@ -58,6 +86,9 @@ public class BlockCloud extends BlockIce
         return false;
     }
     
+    /* (non-Javadoc)
+     * @see net.minecraft.block.Block#canSustainPlant(net.minecraft.block.state.IBlockState, net.minecraft.world.IBlockAccess, net.minecraft.util.math.BlockPos, net.minecraft.util.EnumFacing, net.minecraftforge.common.IPlantable)
+     */
     @Override
     public boolean canSustainPlant(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing direction, net.minecraftforge.common.IPlantable plantable)
     {
@@ -66,6 +97,9 @@ public class BlockCloud extends BlockIce
         return true;
     }
     
+    /* (non-Javadoc)
+     * @see net.minecraft.block.Block#onPlantGrow(net.minecraft.block.state.IBlockState, net.minecraft.world.World, net.minecraft.util.math.BlockPos, net.minecraft.util.math.BlockPos)
+     */
     @Override
     public void onPlantGrow(IBlockState state, World world, BlockPos pos, BlockPos source)
     {

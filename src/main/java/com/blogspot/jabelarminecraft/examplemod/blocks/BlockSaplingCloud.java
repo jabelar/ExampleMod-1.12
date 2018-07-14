@@ -1,3 +1,18 @@
+/**
+    Copyright (C) 2017 by jabelar
+
+    This file is part of jabelar's Minecraft Forge modding examples; as such,
+    you can redistribute it and/or modify it under the terms of the GNU
+    General Public License as published by the Free Software Foundation,
+    either version 3 of the License, or (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+    GNU General Public License for more details.
+
+    For a copy of the GNU General Public License see <http://www.gnu.org/licenses/>.
+*/
 package com.blogspot.jabelarminecraft.examplemod.blocks;
 
 import java.util.Random;
@@ -20,11 +35,15 @@ import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
 import net.minecraftforge.event.terraingen.TerrainGen;
 
+// TODO: Auto-generated Javadoc
 public class BlockSaplingCloud extends BlockBush implements IGrowable
 {
     public static final PropertyInteger STAGE = PropertyInteger.create("stage", 0, 1);
     protected static final AxisAlignedBB SAPLING_AABB = new AxisAlignedBB(0.09999999403953552D, 0.0D, 0.09999999403953552D, 0.8999999761581421D, 0.800000011920929D, 0.8999999761581421D);
 
+    /**
+     * Instantiates a new block sapling cloud.
+     */
     public BlockSaplingCloud()
     {
         setCreativeTab(CreativeTabs.DECORATIONS);
@@ -32,12 +51,18 @@ public class BlockSaplingCloud extends BlockBush implements IGrowable
         setSoundType(SoundType.PLANT);
     }
 
+    /* (non-Javadoc)
+     * @see net.minecraft.block.BlockBush#getBoundingBox(net.minecraft.block.state.IBlockState, net.minecraft.world.IBlockAccess, net.minecraft.util.math.BlockPos)
+     */
     @Override
     public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos)
     {
         return SAPLING_AABB;
     }
 
+    /* (non-Javadoc)
+     * @see net.minecraft.block.BlockBush#updateTick(net.minecraft.world.World, net.minecraft.util.math.BlockPos, net.minecraft.block.state.IBlockState, java.util.Random)
+     */
     @Override
     public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand)
     {
@@ -52,6 +77,14 @@ public class BlockSaplingCloud extends BlockBush implements IGrowable
         }
     }
 
+    /**
+     * Generate tree.
+     *
+     * @param worldIn the world in
+     * @param pos the pos
+     * @param state the state
+     * @param rand the rand
+     */
     public void generateTree(World worldIn, BlockPos pos, IBlockState state, Random rand)
     {
         if (!TerrainGen.saplingGrowTree(worldIn, rand, pos)) return;
@@ -63,7 +96,13 @@ public class BlockSaplingCloud extends BlockBush implements IGrowable
     }
 
     /**
-     * Whether this IGrowable can grow
+     * Whether this IGrowable can grow.
+     *
+     * @param worldIn the world in
+     * @param pos the pos
+     * @param state the state
+     * @param isClient the is client
+     * @return true, if successful
      */
     @Override
     public boolean canGrow(World worldIn, BlockPos pos, IBlockState state, boolean isClient)
@@ -71,12 +110,18 @@ public class BlockSaplingCloud extends BlockBush implements IGrowable
         return true;
     }
 
+    /* (non-Javadoc)
+     * @see net.minecraft.block.IGrowable#canUseBonemeal(net.minecraft.world.World, java.util.Random, net.minecraft.util.math.BlockPos, net.minecraft.block.state.IBlockState)
+     */
     @Override
     public boolean canUseBonemeal(World worldIn, Random rand, BlockPos pos, IBlockState state)
     {
         return worldIn.rand.nextFloat() < 0.45D;
     }
 
+    /* (non-Javadoc)
+     * @see net.minecraft.block.IGrowable#grow(net.minecraft.world.World, java.util.Random, net.minecraft.util.math.BlockPos, net.minecraft.block.state.IBlockState)
+     */
     @Override
     public void grow(World worldIn, Random rand, BlockPos pos, IBlockState state)
     {
@@ -91,7 +136,10 @@ public class BlockSaplingCloud extends BlockBush implements IGrowable
     }
 
     /**
-     * Convert the given metadata into a BlockState for this Block
+     * Convert the given metadata into a BlockState for this Block.
+     *
+     * @param meta the meta
+     * @return the state from meta
      */
     @Override
     public IBlockState getStateFromMeta(int meta)
@@ -100,7 +148,10 @@ public class BlockSaplingCloud extends BlockBush implements IGrowable
     }
 
     /**
-     * Convert the BlockState into the correct metadata value
+     * Convert the BlockState into the correct metadata value.
+     *
+     * @param state the state
+     * @return the meta from state
      */
     @Override
     public int getMetaFromState(IBlockState state)
@@ -110,6 +161,9 @@ public class BlockSaplingCloud extends BlockBush implements IGrowable
         return i;
     }
 
+    /* (non-Javadoc)
+     * @see net.minecraft.block.Block#createBlockState()
+     */
     @Override
     protected BlockStateContainer createBlockState()
     {

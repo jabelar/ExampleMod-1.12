@@ -1,3 +1,18 @@
+/**
+    Copyright (C) 2017 by jabelar
+
+    This file is part of jabelar's Minecraft Forge modding examples; as such,
+    you can redistribute it and/or modify it under the terms of the GNU
+    General Public License as published by the Free Software Foundation,
+    either version 3 of the License, or (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+    GNU General Public License for more details.
+
+    For a copy of the GNU General Public License see <http://www.gnu.org/licenses/>.
+*/
 package com.blogspot.jabelarminecraft.examplemod.worldgen;
 
 import java.util.List;
@@ -32,10 +47,14 @@ import net.minecraft.world.chunk.ChunkPrimer;
 import net.minecraft.world.gen.feature.WorldGenAbstractTree;
 import net.minecraft.world.gen.feature.WorldGenerator;
 
+// TODO: Auto-generated Javadoc
 public class BiomeCloud extends Biome
 {
     protected static final IBlockState BEDROCK = ModBlocks.cloud_rock.getDefaultState();
         
+    /**
+     * Instantiates a new biome cloud.
+     */
     public BiomeCloud()
     {
         super(new BiomeProperties(ModWorldGen.CLOUD_NAME)
@@ -53,7 +72,9 @@ public class BiomeCloud extends Biome
     }
     
     /**
-     * Allocate a new BiomeDecorator for this BiomeGenBase
+     * Allocate a new BiomeDecorator for this BiomeGenBase.
+     *
+     * @return the biome decorator
      */
     @Override
     public BiomeDecorator createBiomeDecorator()
@@ -79,6 +100,9 @@ public class BiomeCloud extends Biome
     }
 
 
+    /* (non-Javadoc)
+     * @see net.minecraft.world.biome.Biome#getRandomTreeFeature(java.util.Random)
+     */
     @Override
     public WorldGenAbstractTree getRandomTreeFeature(Random rand)
     {
@@ -87,6 +111,9 @@ public class BiomeCloud extends Biome
 
     /**
      * Gets a WorldGen appropriate for this biome.
+     *
+     * @param rand the rand
+     * @return the random world gen for grass
      */
     @Override
     public WorldGenerator getRandomWorldGenForGrass(Random rand)
@@ -94,6 +121,9 @@ public class BiomeCloud extends Biome
         return new WorldGenGrassCloud();
     }
 
+    /* (non-Javadoc)
+     * @see net.minecraft.world.biome.Biome#pickRandomFlower(java.util.Random, net.minecraft.util.math.BlockPos)
+     */
     @Override
     public BlockFlower.EnumFlowerType pickRandomFlower(Random rand, BlockPos pos)
     {   
@@ -102,6 +132,11 @@ public class BiomeCloud extends Biome
         return BlockFlower.EnumFlowerType.WHITE_TULIP;
     }
     
+    /**
+     * Gets the flower list.
+     *
+     * @return the flower list
+     */
     public List<FlowerEntry> getFlowerList()
     {
         return flowers;
@@ -135,6 +170,9 @@ public class BiomeCloud extends Biome
         spawnableCaveCreatureList.add(new Biome.SpawnListEntry(EntityBat.class, 10, 8, 8));
     }
 
+    /* (non-Javadoc)
+     * @see net.minecraft.world.biome.Biome#genTerrainBlocks(net.minecraft.world.World, java.util.Random, net.minecraft.world.chunk.ChunkPrimer, int, int, double)
+     */
     @Override
     public void genTerrainBlocks(World worldIn, Random rand, ChunkPrimer chunkPrimerIn, int x, int z, double noiseVal)
     {

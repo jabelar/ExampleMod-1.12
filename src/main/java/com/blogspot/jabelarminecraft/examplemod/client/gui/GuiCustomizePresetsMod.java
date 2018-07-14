@@ -1,3 +1,18 @@
+/**
+    Copyright (C) 2017 by jabelar
+
+    This file is part of jabelar's Minecraft Forge modding examples; as such,
+    you can redistribute it and/or modify it under the terms of the GNU
+    General Public License as published by the Free Software Foundation,
+    either version 3 of the License, or (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+    GNU General Public License for more details.
+
+    For a copy of the GNU General Public License see <http://www.gnu.org/licenses/>.
+*/
 package com.blogspot.jabelarminecraft.examplemod.client.gui;
 
 import java.io.IOException;
@@ -21,6 +36,7 @@ import net.minecraft.world.gen.ChunkGeneratorSettings;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+// TODO: Auto-generated Javadoc
 @SideOnly(Side.CLIENT)
 public class GuiCustomizePresetsMod extends GuiScreen
 {
@@ -33,6 +49,11 @@ public class GuiCustomizePresetsMod extends GuiScreen
     private String shareText;
     private String listText;
 
+    /**
+     * Instantiates a new gui customize presets mod.
+     *
+     * @param guiCustomizeWorldMod the gui customize world mod
+     */
     public GuiCustomizePresetsMod(GuiCustomizeWorldMod guiCustomizeWorldMod)
     {
         this.parent = guiCustomizeWorldMod;
@@ -61,6 +82,8 @@ public class GuiCustomizePresetsMod extends GuiScreen
 
     /**
      * Handles mouse input.
+     *
+     * @throws IOException Signals that an I/O exception has occurred.
      */
     @Override
     public void handleMouseInput() throws IOException
@@ -80,6 +103,11 @@ public class GuiCustomizePresetsMod extends GuiScreen
 
     /**
      * Called when the mouse is clicked. Args : mouseX, mouseY, clickedButton
+     *
+     * @param mouseX the mouse X
+     * @param mouseY the mouse Y
+     * @param mouseButton the mouse button
+     * @throws IOException Signals that an I/O exception has occurred.
      */
     @Override
     protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException
@@ -91,6 +119,10 @@ public class GuiCustomizePresetsMod extends GuiScreen
     /**
      * Fired when a key is typed (except F11 which toggles full screen). This is the equivalent of
      * KeyListener.keyTyped(KeyEvent e). Args : character (character on the key), keyCode (lwjgl Keyboard key code)
+     *
+     * @param typedChar the typed char
+     * @param keyCode the key code
+     * @throws IOException Signals that an I/O exception has occurred.
      */
     @Override
     protected void keyTyped(char typedChar, int keyCode) throws IOException
@@ -103,6 +135,9 @@ public class GuiCustomizePresetsMod extends GuiScreen
 
     /**
      * Called by the controls from the buttonList when activated. (Mouse pressed for buttons)
+     *
+     * @param button the button
+     * @throws IOException Signals that an I/O exception has occurred.
      */
     @Override
     protected void actionPerformed(GuiButton button) throws IOException
@@ -120,6 +155,10 @@ public class GuiCustomizePresetsMod extends GuiScreen
 
     /**
      * Draws the screen and all the components in it.
+     *
+     * @param mouseX the mouse X
+     * @param mouseY the mouse Y
+     * @param partialTicks the partial ticks
      */
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks)
@@ -143,6 +182,9 @@ public class GuiCustomizePresetsMod extends GuiScreen
         super.updateScreen();
     }
 
+    /**
+     * Update button validity.
+     */
     public void updateButtonValidity()
     {
         this.select.enabled = this.hasValidSelection();
@@ -185,6 +227,13 @@ public class GuiCustomizePresetsMod extends GuiScreen
             public ResourceLocation texture;
             public ChunkGeneratorSettings.Factory settings;
 
+            /**
+             * Instantiates a new info.
+             *
+             * @param nameIn the name in
+             * @param textureIn the texture in
+             * @param settingsIn the settings in
+             */
             public Info(String nameIn, ResourceLocation textureIn, ChunkGeneratorSettings.Factory settingsIn)
             {
                 this.name = nameIn;
@@ -198,11 +247,17 @@ public class GuiCustomizePresetsMod extends GuiScreen
     {
         public int selected = -1;
 
+        /**
+         * Instantiates a new list preset.
+         */
         public ListPreset()
         {
             super(GuiCustomizePresetsMod.this.mc, GuiCustomizePresetsMod.this.width, GuiCustomizePresetsMod.this.height, 80, GuiCustomizePresetsMod.this.height - 32, 38);
         }
 
+        /* (non-Javadoc)
+         * @see net.minecraft.client.gui.GuiSlot#getSize()
+         */
         @Override
         protected int getSize()
         {
@@ -210,7 +265,12 @@ public class GuiCustomizePresetsMod extends GuiScreen
         }
 
         /**
-         * The element in the slot that was clicked, boolean for whether it was double clicked or not
+         * The element in the slot that was clicked, boolean for whether it was double clicked or not.
+         *
+         * @param slotIndex the slot index
+         * @param isDoubleClick the is double click
+         * @param mouseX the mouse X
+         * @param mouseY the mouse Y
          */
         @Override
         protected void elementClicked(int slotIndex, boolean isDoubleClick, int mouseX, int mouseY)
@@ -221,7 +281,10 @@ public class GuiCustomizePresetsMod extends GuiScreen
         }
 
         /**
-         * Returns true if the element passed in is currently selected
+         * Returns true if the element passed in is currently selected.
+         *
+         * @param slotIndex the slot index
+         * @return true, if is selected
          */
         @Override
         protected boolean isSelected(int slotIndex)
@@ -229,6 +292,9 @@ public class GuiCustomizePresetsMod extends GuiScreen
             return slotIndex == this.selected;
         }
 
+        /* (non-Javadoc)
+         * @see net.minecraft.client.gui.GuiSlot#drawBackground()
+         */
         @Override
         protected void drawBackground()
         {
@@ -253,6 +319,9 @@ public class GuiCustomizePresetsMod extends GuiScreen
             tessellator.draw();
         }
 
+        /* (non-Javadoc)
+         * @see net.minecraft.client.gui.GuiSlot#drawSlot(int, int, int, int, int, int, float)
+         */
         @Override
         protected void drawSlot(int slotIndex, int xPos, int yPos, int heightIn, int mouseXIn, int mouseYIn, float partialTicks)
         {

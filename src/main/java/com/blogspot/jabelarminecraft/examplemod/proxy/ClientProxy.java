@@ -98,6 +98,9 @@ public class ClientProxy implements IProxy
     public static Field locale = ReflectionHelper.findField(LanguageManager.class, "CURRENT_LOCALE", "CURRENT_LOCALE");
     public static ModLocale MOD_LOCALE = new ModLocale();
 
+    /* (non-Javadoc)
+     * @see com.blogspot.jabelarminecraft.examplemod.proxy.IProxy#preInit(net.minecraftforge.fml.common.event.FMLPreInitializationEvent)
+     */
     @Override
     public void preInit(FMLPreInitializationEvent event)
     {
@@ -110,6 +113,9 @@ public class ClientProxy implements IProxy
         fixLocaleClass();
     }
     
+    /**
+     * Fix locale class.
+     */
     public void fixLocaleClass()
     {
         // DEBUG
@@ -151,6 +157,9 @@ public class ClientProxy implements IProxy
         }
     }
 
+    /* (non-Javadoc)
+     * @see com.blogspot.jabelarminecraft.examplemod.proxy.IProxy#init(net.minecraftforge.fml.common.event.FMLInitializationEvent)
+     */
     @Override
     public void init(FMLInitializationEvent event)
     {
@@ -164,6 +173,9 @@ public class ClientProxy implements IProxy
         createSphereCallList();
     }
 
+    /* (non-Javadoc)
+     * @see com.blogspot.jabelarminecraft.examplemod.proxy.IProxy#postInit(net.minecraftforge.fml.common.event.FMLPostInitializationEvent)
+     */
     @Override
     public void postInit(FMLPostInitializationEvent event)
     {
@@ -173,6 +185,9 @@ public class ClientProxy implements IProxy
         refreshLangResources();
     }
 
+    /**
+     * Refresh lang resources.
+     */
     public void refreshLangResources()
     {
         // DEBUG
@@ -190,6 +205,9 @@ public class ClientProxy implements IProxy
         LanguageMap.replaceWith(MOD_LOCALE.properties);
     }
 
+    /* (non-Javadoc)
+     * @see com.blogspot.jabelarminecraft.examplemod.proxy.IProxy#getPlayerEntityFromContext(net.minecraftforge.fml.common.network.simpleimpl.MessageContext)
+     */
     @Override
     public EntityPlayer getPlayerEntityFromContext(MessageContext ctx)
     {
@@ -241,6 +259,9 @@ public class ClientProxy implements IProxy
         GL11.glEndList();
     }
 
+    /* (non-Javadoc)
+     * @see com.blogspot.jabelarminecraft.examplemod.proxy.IProxy#handleMaterialAcceleration(net.minecraft.entity.Entity, net.minecraft.block.material.Material)
+     */
     @Override
     public boolean handleMaterialAcceleration(Entity entityIn, Material materialIn)
     {
@@ -331,12 +352,18 @@ public class ClientProxy implements IProxy
         return flag;
     }
 
+    /* (non-Javadoc)
+     * @see com.blogspot.jabelarminecraft.examplemod.proxy.IProxy#serverStarting(net.minecraftforge.fml.common.event.FMLServerStartingEvent)
+     */
     @Override
     public void serverStarting(FMLServerStartingEvent event)
     {
         // This will never get called on client side
     }
 
+    /* (non-Javadoc)
+     * @see com.blogspot.jabelarminecraft.examplemod.proxy.IProxy#setGraphicsLevel(com.blogspot.jabelarminecraft.examplemod.blocks.BlockLeavesCloud, boolean)
+     */
     @Override
     public void setGraphicsLevel(BlockLeavesCloud parBlock, boolean parFancyEnabled)
     {
@@ -345,6 +372,10 @@ public class ClientProxy implements IProxy
 
     public class MouseHelperAI extends MouseHelper
     {
+        
+        /**
+         * Instantiates a new mouse helper AI.
+         */
         public MouseHelperAI()
         {
             super();
@@ -352,6 +383,9 @@ public class ClientProxy implements IProxy
             System.out.println("Constructing MouseHelper for AI bots");
         }
         
+        /* (non-Javadoc)
+         * @see net.minecraft.util.MouseHelper#mouseXYChange()
+         */
         @Override
         public void mouseXYChange()
         {
@@ -435,6 +469,11 @@ public class ClientProxy implements IProxy
         event.setCanceled(true); // must cancel event for event handler to take effect
     }
     
+    /**
+     * On event.
+     *
+     * @param event the event
+     */
     @SubscribeEvent(priority = EventPriority.NORMAL, receiveCanceled = true)
     public static void onEvent(FogColors event)
     {
@@ -443,6 +482,11 @@ public class ClientProxy implements IProxy
         event.setBlue(0xFF);
     }
     
+    /**
+     * On event.
+     *
+     * @param event the event
+     */
     @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
     public static void onEvent(KeyInputEvent event)
     {
@@ -536,8 +580,8 @@ public class ClientProxy implements IProxy
     /**
      * Handling the gui open event to replace the world selection menu with one
      * that defaults to creative mode.
-     * 
-     * @param event
+     *
+     * @param event the event
      */
     @SubscribeEvent(priority = EventPriority.NORMAL, receiveCanceled = true)
     public static void onEvent(GuiOpenEvent event)

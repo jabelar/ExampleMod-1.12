@@ -23,6 +23,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+// TODO: Auto-generated Javadoc
 /**
  * @author jabelar
  *
@@ -54,12 +55,18 @@ public class ParticleMysterious extends Particle
         setRBGColorF(0x88, 0x00, 0x88);
     }
     
+    /* (non-Javadoc)
+     * @see net.minecraft.client.particle.Particle#onUpdate()
+     */
     @Override
     public void onUpdate()
     {
         super.onUpdate();
     }
     
+    /* (non-Javadoc)
+     * @see net.minecraft.client.particle.Particle#renderParticle(net.minecraft.client.renderer.BufferBuilder, net.minecraft.entity.Entity, float, float, float, float, float, float)
+     */
     @Override
     public void renderParticle(BufferBuilder buffer, Entity entityIn, float partialTicks, float rotationX, float rotationZ, float rotationYZ, float rotationXY, float rotationXZ)
     {

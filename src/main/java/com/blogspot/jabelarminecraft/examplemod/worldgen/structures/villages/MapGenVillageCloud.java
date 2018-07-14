@@ -1,3 +1,18 @@
+/**
+    Copyright (C) 2017 by jabelar
+
+    This file is part of jabelar's Minecraft Forge modding examples; as such,
+    you can redistribute it and/or modify it under the terms of the GNU
+    General Public License as published by the Free Software Foundation,
+    either version 3 of the License, or (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+    GNU General Public License for more details.
+
+    For a copy of the GNU General Public License see <http://www.gnu.org/licenses/>.
+*/
 package com.blogspot.jabelarminecraft.examplemod.worldgen.structures.villages;
 
 import java.util.Arrays;
@@ -18,6 +33,7 @@ import net.minecraft.world.gen.structure.StructureComponent;
 import net.minecraft.world.gen.structure.StructureStart;
 import net.minecraft.world.gen.structure.StructureVillagePieces;
 
+// TODO: Auto-generated Javadoc
 public class MapGenVillageCloud extends MapGenStructure
 {
     /** A list of all the biomes villages can spawn in. */
@@ -26,11 +42,19 @@ public class MapGenVillageCloud extends MapGenStructure
     private int size;
     private int averageSpacing;
     
+    /**
+     * Instantiates a new map gen village cloud.
+     */
     public MapGenVillageCloud()
     {
         averageSpacing = 12;
     }
 
+    /**
+     * Instantiates a new map gen village cloud.
+     *
+     * @param map the map
+     */
     public MapGenVillageCloud(Map<String, String> map)
     {
         this();
@@ -49,12 +73,18 @@ public class MapGenVillageCloud extends MapGenStructure
         }
     }
 
+    /* (non-Javadoc)
+     * @see net.minecraft.world.gen.structure.MapGenStructure#getStructureName()
+     */
     @Override
     public String getStructureName()
     {
         return "Cloud Village";
     }
 
+    /* (non-Javadoc)
+     * @see net.minecraft.world.gen.structure.MapGenStructure#canSpawnStructureAtCoords(int, int)
+     */
     @Override
     protected boolean canSpawnStructureAtCoords(int chunkX, int chunkZ)
     {
@@ -90,6 +120,9 @@ public class MapGenVillageCloud extends MapGenStructure
         return false;
     }
 
+    /* (non-Javadoc)
+     * @see net.minecraft.world.gen.structure.MapGenStructure#getNearestStructurePos(net.minecraft.world.World, net.minecraft.util.math.BlockPos, boolean)
+     */
     @Override
     public BlockPos getNearestStructurePos(World worldIn, BlockPos pos, boolean findUnexplored)
     {
@@ -97,6 +130,9 @@ public class MapGenVillageCloud extends MapGenStructure
         return findNearestStructurePosBySpacing(worldIn, this, pos, averageSpacing, 8, 10387312, false, 100, findUnexplored);
     }
 
+    /* (non-Javadoc)
+     * @see net.minecraft.world.gen.structure.MapGenStructure#getStructureStart(int, int)
+     */
     @Override
     protected StructureStart getStructureStart(int chunkX, int chunkZ)
     {
@@ -108,10 +144,22 @@ public class MapGenVillageCloud extends MapGenStructure
             /** well ... thats what it does */
             private boolean hasMoreThanTwoComponents;
 
+            /**
+             * Instantiates a new start.
+             */
             public Start()
             {
             }
 
+            /**
+             * Instantiates a new start.
+             *
+             * @param worldIn the world in
+             * @param rand the rand
+             * @param x the x
+             * @param z the z
+             * @param size the size
+             */
             public Start(World worldIn, Random rand, int x, int z, int size)
             {
                 super(x, z);
@@ -153,7 +201,9 @@ public class MapGenVillageCloud extends MapGenStructure
             }
 
             /**
-             * currently only defined for Villages, returns true if Village has more than 2 non-road components
+             * currently only defined for Villages, returns true if Village has more than 2 non-road components.
+             *
+             * @return true, if is sizeable structure
              */
             @Override
             public boolean isSizeableStructure()
@@ -161,6 +211,9 @@ public class MapGenVillageCloud extends MapGenStructure
                 return hasMoreThanTwoComponents;
             }
 
+            /* (non-Javadoc)
+             * @see net.minecraft.world.gen.structure.StructureStart#writeToNBT(net.minecraft.nbt.NBTTagCompound)
+             */
             @Override
             public void writeToNBT(NBTTagCompound tagCompound)
             {
@@ -168,6 +221,9 @@ public class MapGenVillageCloud extends MapGenStructure
                 tagCompound.setBoolean("Valid", hasMoreThanTwoComponents);
             }
 
+            /* (non-Javadoc)
+             * @see net.minecraft.world.gen.structure.StructureStart#readFromNBT(net.minecraft.nbt.NBTTagCompound)
+             */
             @Override
             public void readFromNBT(NBTTagCompound tagCompound)
             {

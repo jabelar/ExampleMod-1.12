@@ -30,6 +30,12 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 public class TerrainGenEventHandler
 {
+    
+    /**
+     * On event.
+     *
+     * @param event the event
+     */
     @SubscribeEvent(priority = EventPriority.NORMAL, receiveCanceled = true)
     public  void onEvent(PopulateChunkEvent.Populate event)
     {

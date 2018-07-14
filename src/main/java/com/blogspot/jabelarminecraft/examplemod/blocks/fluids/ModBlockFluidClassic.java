@@ -230,6 +230,9 @@ public class ModBlockFluidClassic extends BlockFluidClassic
         return fluidStack.amount;
     }
 
+    /* (non-Javadoc)
+     * @see net.minecraftforge.fluids.BlockFluidBase#getFogColor(net.minecraft.world.World, net.minecraft.util.math.BlockPos, net.minecraft.block.state.IBlockState, net.minecraft.entity.Entity, net.minecraft.util.math.Vec3d, float)
+     */
     @Override
     @SideOnly(Side.CLIENT)
     public Vec3d getFogColor(World world, BlockPos pos, IBlockState state, Entity entity, Vec3d originalColor, float partialTicks)
