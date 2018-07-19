@@ -19,6 +19,7 @@ package com.blogspot.jabelarminecraft.examplemod.proxy;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.List;
+import java.util.Map;
 
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
@@ -30,6 +31,8 @@ import com.blogspot.jabelarminecraft.examplemod.MainMod;
 import com.blogspot.jabelarminecraft.examplemod.blocks.BlockLeavesCloud;
 import com.blogspot.jabelarminecraft.examplemod.client.gui.GuiCreateWorldMod;
 import com.blogspot.jabelarminecraft.examplemod.client.localization.ModLocale;
+import com.blogspot.jabelarminecraft.examplemod.client.renderers.ModRenderItem;
+import com.blogspot.jabelarminecraft.examplemod.client.renderers.ModRenderPlayer;
 import com.blogspot.jabelarminecraft.examplemod.client.renderers.RenderFactories;
 import com.blogspot.jabelarminecraft.examplemod.init.ModBlockColors;
 import com.blogspot.jabelarminecraft.examplemod.init.ModKeyBindings;
@@ -50,9 +53,16 @@ import net.minecraft.client.gui.GuiCreateWorld;
 import net.minecraft.client.gui.GuiIngame;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
+import net.minecraft.client.renderer.ItemRenderer;
+import net.minecraft.client.renderer.RenderItem;
+import net.minecraft.client.renderer.block.model.ModelManager;
+import net.minecraft.client.renderer.entity.RenderEntityItem;
+import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.client.renderer.entity.RenderPlayer;
 import net.minecraft.client.resources.LanguageManager;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.MouseHelper;
@@ -92,9 +102,15 @@ public class ClientProxy implements IProxy
     public static int sphereIdOutside;
     public static int sphereIdInside;
     
-    // mouse helper
     public static MouseHelper mouseHelperAI; // used to intercept user mouse movement for "bot" functionality
 
+    public static ModRenderItem modRenderItem; // used to provide custom enchantment glint color
+    public static Field modelManager = ReflectionHelper.findField(Minecraft.class, "modelManager", "modelManager");
+    public static Field renderItem = ReflectionHelper.findField(Minecraft.class, "renderItem", "renderItem");
+    public static Field itemRenderer = ReflectionHelper.findField(ItemRenderer.class, "itemRenderer", "itemRenderer");
+    public static Field playerRenderer = ReflectionHelper.findField(RenderManager.class, "playerRender", "playerRenderer");
+    public static Field skinMap = ReflectionHelper.findField(RenderManager.class, "skinMap", "skinMap");
+    
     public static Field locale = ReflectionHelper.findField(LanguageManager.class, "CURRENT_LOCALE", "CURRENT_LOCALE");
     public static ModLocale MOD_LOCALE = new ModLocale();
 
@@ -106,8 +122,13 @@ public class ClientProxy implements IProxy
     {
         // DEBUG
         System.out.println("on Client side");
+        
+        Minecraft mc = Minecraft.getMinecraft();
+        
+        // Replace mouse helper with custom version
         mouseHelperAI = new MouseHelperAI();
-        Minecraft.getMinecraft().mouseHelper = mouseHelperAI;
+        mc.mouseHelper = mouseHelperAI;
+                
         RenderFactories.registerEntityRenderers();
         
         fixLocaleClass();
@@ -160,6 +181,7 @@ public class ClientProxy implements IProxy
     /* (non-Javadoc)
      * @see com.blogspot.jabelarminecraft.examplemod.proxy.IProxy#init(net.minecraftforge.fml.common.event.FMLInitializationEvent)
      */
+    @SuppressWarnings("unchecked")
     @Override
     public void init(FMLInitializationEvent event)
     {
@@ -168,7 +190,34 @@ public class ClientProxy implements IProxy
 
         ModKeyBindings.registerKeyBindings();
         ModBlockColors.registerBlockColors();
-
+        
+        Minecraft mc = Minecraft.getMinecraft();
+        
+        // Replace render item with custom version
+        modelManager.setAccessible(true);
+        renderItem.setAccessible(true);
+        playerRenderer.setAccessible(true);
+        try
+        {
+            modRenderItem = new ModRenderItem(mc.getTextureManager(), (ModelManager) modelManager.get(mc), mc.getItemColors(), ((RenderItem)renderItem.get(mc)).getItemModelMesher());
+            renderItem.set(mc, modRenderItem);
+            itemRenderer.set(mc.getItemRenderer(), modRenderItem);
+            // DEBUG
+            System.out.println("playerRenderer before reflection is "+playerRenderer.get(mc.getRenderManager()));
+            playerRenderer.set(mc.getRenderManager(), new ModRenderPlayer(mc.getRenderManager()));
+            // DEBUG
+            System.out.println("playerRenderer after reflection is "+playerRenderer.get(mc.getRenderManager()));
+            ((Map<String, RenderPlayer>)skinMap.get(mc.getRenderManager())).put("default", new ModRenderPlayer(mc.getRenderManager()));
+            ((Map<String, RenderPlayer>)skinMap.get(mc.getRenderManager())).put("slim", new ModRenderPlayer(mc.getRenderManager(), true));
+        }
+        catch (IllegalArgumentException | IllegalAccessException e)
+        {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        
+        mc.getRenderManager().entityRenderMap.put(EntityItem.class, new RenderEntityItem(mc.getRenderManager(), modRenderItem));
+        
         // create sphere call list
         createSphereCallList();
     }
@@ -188,6 +237,7 @@ public class ClientProxy implements IProxy
     /**
      * Refresh lang resources.
      */
+    @SuppressWarnings("unlikely-arg-type")
     public void refreshLangResources()
     {
         // DEBUG
