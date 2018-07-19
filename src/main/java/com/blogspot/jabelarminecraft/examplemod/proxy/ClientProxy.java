@@ -31,8 +31,13 @@ import com.blogspot.jabelarminecraft.examplemod.MainMod;
 import com.blogspot.jabelarminecraft.examplemod.blocks.BlockLeavesCloud;
 import com.blogspot.jabelarminecraft.examplemod.client.gui.GuiCreateWorldMod;
 import com.blogspot.jabelarminecraft.examplemod.client.localization.ModLocale;
+import com.blogspot.jabelarminecraft.examplemod.client.renderers.ModRenderArmorStand;
+import com.blogspot.jabelarminecraft.examplemod.client.renderers.ModRenderGiantZombie;
 import com.blogspot.jabelarminecraft.examplemod.client.renderers.ModRenderItem;
 import com.blogspot.jabelarminecraft.examplemod.client.renderers.ModRenderPlayer;
+import com.blogspot.jabelarminecraft.examplemod.client.renderers.ModRenderSkeleton;
+import com.blogspot.jabelarminecraft.examplemod.client.renderers.ModRenderZombie;
+import com.blogspot.jabelarminecraft.examplemod.client.renderers.ModRenderZombieVillager;
 import com.blogspot.jabelarminecraft.examplemod.client.renderers.RenderFactories;
 import com.blogspot.jabelarminecraft.examplemod.init.ModBlockColors;
 import com.blogspot.jabelarminecraft.examplemod.init.ModKeyBindings;
@@ -62,7 +67,12 @@ import net.minecraft.client.renderer.entity.RenderPlayer;
 import net.minecraft.client.resources.LanguageManager;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.item.EntityArmorStand;
 import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.monster.EntityGiantZombie;
+import net.minecraft.entity.monster.EntitySkeleton;
+import net.minecraft.entity.monster.EntityZombie;
+import net.minecraft.entity.monster.EntityZombieVillager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.MouseHelper;
@@ -217,6 +227,11 @@ public class ClientProxy implements IProxy
         }
         
         mc.getRenderManager().entityRenderMap.put(EntityItem.class, new RenderEntityItem(mc.getRenderManager(), modRenderItem));
+        mc.getRenderManager().entityRenderMap.put(EntitySkeleton.class, new ModRenderSkeleton(mc.getRenderManager()));
+        mc.getRenderManager().entityRenderMap.put(EntityZombie.class, new ModRenderZombie(mc.getRenderManager()));
+        mc.getRenderManager().entityRenderMap.put(EntityZombieVillager.class, new ModRenderZombieVillager(mc.getRenderManager()));
+        mc.getRenderManager().entityRenderMap.put(EntityGiantZombie.class, new ModRenderGiantZombie(mc.getRenderManager(), 6.0F));
+        mc.getRenderManager().entityRenderMap.put(EntityArmorStand.class, new ModRenderArmorStand(mc.getRenderManager()));
         
         // create sphere call list
         createSphereCallList();

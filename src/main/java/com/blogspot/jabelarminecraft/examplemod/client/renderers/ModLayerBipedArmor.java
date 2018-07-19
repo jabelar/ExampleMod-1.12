@@ -3,7 +3,10 @@ package com.blogspot.jabelarminecraft.examplemod.client.renderers;
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.renderer.entity.RenderLivingBase;
 import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
+@SideOnly(Side.CLIENT)
 public class ModLayerBipedArmor extends ModLayerArmorBase<ModelBiped>
 {
     public ModLayerBipedArmor(RenderLivingBase<?> rendererIn)
@@ -11,7 +14,7 @@ public class ModLayerBipedArmor extends ModLayerArmorBase<ModelBiped>
         super(rendererIn);
         
         // DEBUG
-        System.out.println("Replacing LayerBipedArmor for player to custom version");
+        System.out.println("Replacing LayerBipedArmor to custom version");
     }
 
     @Override
