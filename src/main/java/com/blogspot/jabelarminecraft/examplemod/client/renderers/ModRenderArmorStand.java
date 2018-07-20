@@ -13,7 +13,6 @@ public class ModRenderArmorStand extends RenderArmorStand
     {
         super(manager);
 
-//        layerRenderers.remove(0);
         ModLayerBipedArmor layerbipedarmor = new ModLayerBipedArmor(this)
         {
             @Override
@@ -24,6 +23,8 @@ public class ModRenderArmorStand extends RenderArmorStand
             }
         };
         addLayer(layerbipedarmor);
+        // DEBUG
+        System.out.println("ModRenderArmorStand layerRenderers = "+layerRenderers);
     }
 
 }

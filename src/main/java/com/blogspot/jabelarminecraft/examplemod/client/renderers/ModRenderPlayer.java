@@ -23,6 +23,8 @@ public class ModRenderPlayer extends RenderPlayer
         
         layerRenderers.remove(0);
         addLayer(new ModLayerBipedArmor(this));
+        // DEBUG
+        System.out.println("ModRenderPlayer layerRenderers = "+layerRenderers);
    }
 
 }

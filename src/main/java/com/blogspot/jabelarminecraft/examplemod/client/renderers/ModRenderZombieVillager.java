@@ -18,10 +18,13 @@ public class ModRenderZombieVillager extends RenderZombieVillager
             @Override
             protected void initArmor()
             {
-                this.modelLeggings = new ModelZombieVillager(0.5F, 0.0F, true);
-                this.modelArmor = new ModelZombieVillager(1.0F, 0.0F, true);
+                modelLeggings = new ModelZombieVillager(0.5F, 0.0F, true);
+                modelArmor = new ModelZombieVillager(1.0F, 0.0F, true);
             }
         };
-        this.addLayer(layerbipedarmor);
+        layerRenderers.remove(3);
+        addLayer(layerbipedarmor);
+        // DEBUG
+        System.out.println("ModRenderZombieVillager layerRenderers = "+layerRenderers);
     }
 }

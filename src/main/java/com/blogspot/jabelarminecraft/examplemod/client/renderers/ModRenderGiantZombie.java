@@ -18,12 +18,14 @@ public class ModRenderGiantZombie extends RenderGiantZombie
             @Override
             protected void initArmor()
             {
-                this.modelLeggings = new ModelZombie(0.5F, true);
-                this.modelArmor = new ModelZombie(1.0F, true);
+                modelLeggings = new ModelZombie(0.5F, true);
+                modelArmor = new ModelZombie(1.0F, true);
             }
         };
-        this.addLayer(layerbipedarmor);
-
+        layerRenderers.remove(1);
+        addLayer(layerbipedarmor);
+        // DEBUG
+        System.out.println("ModRenderGiantZombie layerRenderers = "+layerRenderers);
     }
 
 }

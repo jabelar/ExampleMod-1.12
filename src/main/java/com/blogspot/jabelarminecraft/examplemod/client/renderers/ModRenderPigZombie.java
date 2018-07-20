@@ -14,15 +14,17 @@ public class ModRenderPigZombie extends RenderPigZombie
     {
         super(renderManagerIn);
 
-//        this.layerRenderers.remove(1);
-        this.addLayer(new ModLayerBipedArmor(this)
+        layerRenderers.remove(3);
+        addLayer(new ModLayerBipedArmor(this)
         {
             @Override
             protected void initArmor()
             {
-                this.modelLeggings = new ModelZombie(0.5F, true);
-                this.modelArmor = new ModelZombie(1.0F, true);
+                modelLeggings = new ModelZombie(0.5F, true);
+                modelArmor = new ModelZombie(1.0F, true);
             }
         });
+        // DEBUG
+        System.out.println("ModRenderPigZombie layerRenderers = "+layerRenderers);
     }
 }

@@ -12,11 +12,14 @@ public class ModRenderWitherSkeleton extends ModRenderSkeleton
     public ModRenderWitherSkeleton(RenderManager manager)
     {
         super(manager);
+        // DEBUG
+        System.out.println("ModRenderWitherSkeleton layerRenderers = "+layerRenderers);
     }
 
     /**
      * Returns the location of an entity's texture. Doesn't seem to be called unless you call Render.bindEntityTexture.
      */
+    @Override
     protected ResourceLocation getEntityTexture(AbstractSkeleton entity)
     {
         return WITHER_SKELETON_TEXTURES;
@@ -25,6 +28,7 @@ public class ModRenderWitherSkeleton extends ModRenderSkeleton
     /**
      * Allows the render to do state modifications necessary before the model is rendered.
      */
+    @Override
     protected void preRenderCallback(AbstractSkeleton entitylivingbaseIn, float partialTickTime)
     {
         GlStateManager.scale(1.2F, 1.2F, 1.2F);

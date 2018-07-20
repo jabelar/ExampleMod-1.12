@@ -14,15 +14,17 @@ public class ModRenderSkeleton extends RenderSkeleton
     {
         super(renderManagerIn);
         
-//        this.layerRenderers.remove(1);
-        this.addLayer(new ModLayerBipedArmor(this)
+        layerRenderers.remove(4);
+        addLayer(new ModLayerBipedArmor(this)
         {
             @Override
             protected void initArmor()
             {
-                this.modelLeggings = new ModelSkeleton(0.5F, true);
-                this.modelArmor = new ModelSkeleton(1.0F, true);
+                modelLeggings = new ModelSkeleton(0.5F, true);
+                modelArmor = new ModelSkeleton(1.0F, true);
             }
         });
-    }
+         // DEBUG
+        System.out.println("ModRenderSkeleton layerRenderers = "+layerRenderers);
+   }
 }

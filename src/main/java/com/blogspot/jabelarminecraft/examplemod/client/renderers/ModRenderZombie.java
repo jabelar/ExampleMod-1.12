@@ -13,16 +13,19 @@ public class ModRenderZombie extends RenderZombie
     public ModRenderZombie(RenderManager renderManagerIn)
     {
         super(renderManagerIn);
-//        this.layerRenderers.remove(0);
+
+        layerRenderers.remove(3);
         ModLayerBipedArmor layerbipedarmor = new ModLayerBipedArmor(this)
         {
             @Override
             protected void initArmor()
             {
-                this.modelLeggings = new ModelZombie(0.5F, true);
-                this.modelArmor = new ModelZombie(1.0F, true);
+                modelLeggings = new ModelZombie(0.5F, true);
+                modelArmor = new ModelZombie(1.0F, true);
             }
         };
-        this.addLayer(layerbipedarmor);
+        addLayer(layerbipedarmor);
+        // DEBUG
+        System.out.println("ModRenderZombie layerRenderers = "+layerRenderers);
     }
 }
