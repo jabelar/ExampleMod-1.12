@@ -118,7 +118,7 @@ public abstract class ModLayerArmorBase<T extends ModelBase> implements LayerRen
         for (int i = 0; i < 2; ++i)
         {
             GlStateManager.disableLighting();
-            GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_COLOR, GlStateManager.DestFactor.ONE);
+            GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.DST_ALPHA);
             GlStateManager.color(ClientProxy.redFromColor(parColor), ClientProxy.greenFromColor(parColor), ClientProxy.blueFromColor(parColor), ClientProxy.alphaFromColor(parColor)); // originally was 0.38F, 0.19F, 0.608F, 1.0F);
             GlStateManager.matrixMode(5890);
             GlStateManager.loadIdentity();

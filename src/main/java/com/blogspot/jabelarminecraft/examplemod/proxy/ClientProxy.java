@@ -730,7 +730,7 @@ public class ClientProxy implements IProxy
         
     public static float alphaFromColor(int parColor)
     {
-        return 0.5F;
+        return 0.4F;
 //        return (parColor >> 24 & 255) / 255.0F;
     }
     
