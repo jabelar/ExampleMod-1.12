@@ -16,16 +16,43 @@
 
 package com.blogspot.jabelarminecraft.examplemod.proxy;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
+import java.util.List;
+import java.util.Map;
+
+import org.lwjgl.input.Keyboard;
+import org.lwjgl.input.Mouse;
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.util.glu.GLU;
+import org.lwjgl.util.glu.Sphere;
+
 import com.blogspot.jabelarminecraft.examplemod.MainMod;
 import com.blogspot.jabelarminecraft.examplemod.blocks.BlockLeavesCloud;
 import com.blogspot.jabelarminecraft.examplemod.client.gui.GuiCreateWorldMod;
 import com.blogspot.jabelarminecraft.examplemod.client.localization.ModLocale;
-import com.blogspot.jabelarminecraft.examplemod.client.renderers.*;
-import com.blogspot.jabelarminecraft.examplemod.init.*;
+import com.blogspot.jabelarminecraft.examplemod.client.renderers.ModRenderArmorStand;
+import com.blogspot.jabelarminecraft.examplemod.client.renderers.ModRenderGiantZombie;
+import com.blogspot.jabelarminecraft.examplemod.client.renderers.ModRenderHusk;
+import com.blogspot.jabelarminecraft.examplemod.client.renderers.ModRenderItem;
+import com.blogspot.jabelarminecraft.examplemod.client.renderers.ModRenderPigZombie;
+import com.blogspot.jabelarminecraft.examplemod.client.renderers.ModRenderPlayer;
+import com.blogspot.jabelarminecraft.examplemod.client.renderers.ModRenderSkeleton;
+import com.blogspot.jabelarminecraft.examplemod.client.renderers.ModRenderStray;
+import com.blogspot.jabelarminecraft.examplemod.client.renderers.ModRenderWitherSkeleton;
+import com.blogspot.jabelarminecraft.examplemod.client.renderers.ModRenderZombie;
+import com.blogspot.jabelarminecraft.examplemod.client.renderers.ModRenderZombieVillager;
+import com.blogspot.jabelarminecraft.examplemod.client.renderers.RenderFactories;
+import com.blogspot.jabelarminecraft.examplemod.init.ModBlockColors;
+import com.blogspot.jabelarminecraft.examplemod.init.ModKeyBindings;
+import com.blogspot.jabelarminecraft.examplemod.init.ModMaterials;
+import com.blogspot.jabelarminecraft.examplemod.init.ModNetworking;
+import com.blogspot.jabelarminecraft.examplemod.init.ModWorldGen;
 import com.blogspot.jabelarminecraft.examplemod.items.IExtendedReach;
 import com.blogspot.jabelarminecraft.examplemod.networking.MessageExtendedReachAttack;
 import com.blogspot.jabelarminecraft.examplemod.utilities.Utilities;
 import com.google.common.collect.Lists;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.material.Material;
@@ -43,15 +70,28 @@ import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.entity.RenderPlayer;
 import net.minecraft.client.resources.LanguageManager;
 import net.minecraft.client.settings.KeyBinding;
+import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityArmorStand;
 import net.minecraft.entity.item.EntityItem;
-import net.minecraft.entity.monster.*;
+import net.minecraft.entity.monster.EntityGiantZombie;
+import net.minecraft.entity.monster.EntityHusk;
+import net.minecraft.entity.monster.EntityPigZombie;
+import net.minecraft.entity.monster.EntitySkeleton;
+import net.minecraft.entity.monster.EntityStray;
+import net.minecraft.entity.monster.EntityWitherSkeleton;
+import net.minecraft.entity.monster.EntityZombie;
+import net.minecraft.entity.monster.EntityZombieVillager;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Enchantments;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.MouseHelper;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.*;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.translation.LanguageMap;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.EntityViewRenderEvent.FogColors;
@@ -70,16 +110,6 @@ import net.minecraftforge.fml.common.gameevent.InputEvent.KeyInputEvent;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import net.minecraftforge.fml.relauncher.Side;
-import org.lwjgl.input.Keyboard;
-import org.lwjgl.input.Mouse;
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.util.glu.GLU;
-import org.lwjgl.util.glu.Sphere;
-
-import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
-import java.util.List;
-import java.util.Map;
 
 
 // TODO: Auto-generated Javadoc
@@ -647,5 +677,75 @@ public class ClientProxy implements IProxy
                 e.printStackTrace();
             }
         }
+    }
+    
+    public static int getColorForEnchantment(Map<Enchantment, Integer> enchMap)
+    {
+        int alpha = 0xFF000000;
+        
+        // Sword enchantments
+        if (enchMap.containsKey(Enchantments.BANE_OF_ARTHROPODS)) return alpha | 0xcc00ff;
+        if (enchMap.containsKey(Enchantments.FIRE_ASPECT)) return alpha | 0xff4000;
+        if (enchMap.containsKey(Enchantments.KNOCKBACK)) return alpha | 0x6600ff;
+        if (enchMap.containsKey(Enchantments.LOOTING)) return alpha | 0xffe066;
+        if (enchMap.containsKey(Enchantments.SHARPNESS)) return alpha | 0xff9933;
+        if (enchMap.containsKey(Enchantments.SMITE)) return alpha | 0x00ccff;
+        if (enchMap.containsKey(Enchantments.SWEEPING)) return alpha | 0xccff33;
+        if (enchMap.containsKey(Enchantments.UNBREAKING)) return alpha | 0x00cc66;
+
+        // Bow enchantments
+        if (enchMap.containsKey(Enchantments.FLAME)) return alpha | 0xff4000;
+        if (enchMap.containsKey(Enchantments.INFINITY)) return alpha | 0xcc00ff;
+        if (enchMap.containsKey(Enchantments.POWER)) return alpha | 0xff9933;
+        if (enchMap.containsKey(Enchantments.PUNCH)) return alpha | 0x6600ff;
+
+        // Tool enchantments
+        if (enchMap.containsKey(Enchantments.EFFICIENCY)) return alpha | 0x33ccff;
+        if (enchMap.containsKey(Enchantments.FORTUNE)) return alpha | 0xffe066;
+        if (enchMap.containsKey(Enchantments.SILK_TOUCH)) return alpha | 0xccff99;
+
+        // Fishing rod enchantments
+        if (enchMap.containsKey(Enchantments.LUCK_OF_THE_SEA)) return alpha | 0xffe066;
+        if (enchMap.containsKey(Enchantments.LURE)) return alpha | 0x33ccff;
+
+        // Armor enchantments
+        if (enchMap.containsKey(Enchantments.AQUA_AFFINITY)) return alpha | 0x3366ff;
+        if (enchMap.containsKey(Enchantments.BLAST_PROTECTION)) return alpha | 0xcc6699;
+        if (enchMap.containsKey(Enchantments.DEPTH_STRIDER)) return alpha | 0x6666ff;
+        if (enchMap.containsKey(Enchantments.FEATHER_FALLING)) return alpha | 0xccff99;
+        if (enchMap.containsKey(Enchantments.FIRE_PROTECTION)) return alpha | 0xff4000;
+        if (enchMap.containsKey(Enchantments.FROST_WALKER)) return alpha | 0xccffff;
+        if (enchMap.containsKey(Enchantments.MENDING)) return alpha | 0xffe066;
+        if (enchMap.containsKey(Enchantments.PROJECTILE_PROTECTION)) return alpha | 0xcc99ff;
+        if (enchMap.containsKey(Enchantments.PROTECTION)) return alpha | 0x00cc99;
+        if (enchMap.containsKey(Enchantments.RESPIRATION)) return alpha | 0x3366ff;
+        if (enchMap.containsKey(Enchantments.THORNS)) return alpha | 0xff9933;
+
+        // Curses
+        if (enchMap.containsKey(Enchantments.VANISHING_CURSE)) return alpha | 0x6600cc;
+        if (enchMap.containsKey(Enchantments.BINDING_CURSE)) return alpha | 0xffffff;
+        
+        return -8372020;
+    }
+        
+    public static float alphaFromColor(int parColor)
+    {
+        return 0.5F;
+//        return (parColor >> 24 & 255) / 255.0F;
+    }
+    
+    public static float redFromColor(int parColor)
+    {
+        return (parColor >> 16 & 255) / 255.0F;
+    }
+    
+    public static float greenFromColor(int parColor)
+    {
+        return (parColor >> 8 & 255) / 255.0F;
+    }
+    
+    public static float blueFromColor(int parColor)
+    {
+        return (parColor & 255) / 255.0F;
     }
 }

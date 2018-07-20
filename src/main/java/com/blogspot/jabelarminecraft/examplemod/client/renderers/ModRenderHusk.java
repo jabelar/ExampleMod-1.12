@@ -20,7 +20,6 @@ public class ModRenderHusk extends ModRenderZombie
     @Override
     protected void preRenderCallback(EntityZombie entitylivingbaseIn, float partialTickTime)
     {
-        float f = 1.0625F;
         GlStateManager.scale(1.0625F, 1.0625F, 1.0625F);
         super.preRenderCallback(entitylivingbaseIn, partialTickTime);
     }

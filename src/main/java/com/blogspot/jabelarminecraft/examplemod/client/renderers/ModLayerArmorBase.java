@@ -2,6 +2,7 @@ package com.blogspot.jabelarminecraft.examplemod.client.renderers;
 
 import java.util.Map;
 
+import com.blogspot.jabelarminecraft.examplemod.proxy.ClientProxy;
 import com.google.common.collect.Maps;
 
 import net.minecraft.client.Minecraft;
@@ -9,6 +10,7 @@ import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.RenderLivingBase;
 import net.minecraft.client.renderer.entity.layers.LayerRenderer;
+import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemArmor;
@@ -33,17 +35,17 @@ public abstract class ModLayerArmorBase<T extends ModelBase> implements LayerRen
 
     public ModLayerArmorBase(RenderLivingBase<?> rendererIn)
     {
-        this.renderer = rendererIn;
-        this.initArmor();
+        renderer = rendererIn;
+        initArmor();
     }
 
     @Override
     public void doRenderLayer(EntityLivingBase entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale)
     {
-        this.renderArmorLayer(entitylivingbaseIn, limbSwing, limbSwingAmount, partialTicks, ageInTicks, netHeadYaw, headPitch, scale, EntityEquipmentSlot.CHEST);
-        this.renderArmorLayer(entitylivingbaseIn, limbSwing, limbSwingAmount, partialTicks, ageInTicks, netHeadYaw, headPitch, scale, EntityEquipmentSlot.LEGS);
-        this.renderArmorLayer(entitylivingbaseIn, limbSwing, limbSwingAmount, partialTicks, ageInTicks, netHeadYaw, headPitch, scale, EntityEquipmentSlot.FEET);
-        this.renderArmorLayer(entitylivingbaseIn, limbSwing, limbSwingAmount, partialTicks, ageInTicks, netHeadYaw, headPitch, scale, EntityEquipmentSlot.HEAD);
+        renderArmorLayer(entitylivingbaseIn, limbSwing, limbSwingAmount, partialTicks, ageInTicks, netHeadYaw, headPitch, scale, EntityEquipmentSlot.CHEST);
+        renderArmorLayer(entitylivingbaseIn, limbSwing, limbSwingAmount, partialTicks, ageInTicks, netHeadYaw, headPitch, scale, EntityEquipmentSlot.LEGS);
+        renderArmorLayer(entitylivingbaseIn, limbSwing, limbSwingAmount, partialTicks, ageInTicks, netHeadYaw, headPitch, scale, EntityEquipmentSlot.FEET);
+        renderArmorLayer(entitylivingbaseIn, limbSwing, limbSwingAmount, partialTicks, ageInTicks, netHeadYaw, headPitch, scale, EntityEquipmentSlot.HEAD);
     }
 
     @Override
@@ -62,12 +64,12 @@ public abstract class ModLayerArmorBase<T extends ModelBase> implements LayerRen
 
             if (itemarmor.getEquipmentSlot() == slotIn)
             {
-                T t = this.getModelFromSlot(slotIn);
+                T t = getModelFromSlot(slotIn);
                 t = getArmorModelHook(entityLivingBaseIn, itemstack, slotIn, t);
-                t.setModelAttributes(this.renderer.getMainModel());
+                t.setModelAttributes(renderer.getMainModel());
                 t.setLivingAnimations(entityLivingBaseIn, limbSwing, limbSwingAmount, partialTicks);
-                this.setModelSlotVisible(t, slotIn);
-                this.renderer.bindTexture(this.getArmorResource(entityLivingBaseIn, itemstack, slotIn, null));
+                setModelSlotVisible(t, slotIn);
+                renderer.bindTexture(getArmorResource(entityLivingBaseIn, itemstack, slotIn, null));
 
                 {
                     if (itemarmor.hasOverlay(itemstack)) // Allow this for anything, not only cloth
@@ -76,17 +78,17 @@ public abstract class ModLayerArmorBase<T extends ModelBase> implements LayerRen
                         float f = (i >> 16 & 255) / 255.0F;
                         float f1 = (i >> 8 & 255) / 255.0F;
                         float f2 = (i & 255) / 255.0F;
-                        GlStateManager.color(this.colorR * f, this.colorG * f1, this.colorB * f2, this.alpha);
+                        GlStateManager.color(colorR * f, colorG * f1, colorB * f2, alpha);
                         t.render(entityLivingBaseIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
-                        this.renderer.bindTexture(this.getArmorResource(entityLivingBaseIn, itemstack, slotIn, "overlay"));
+                        renderer.bindTexture(getArmorResource(entityLivingBaseIn, itemstack, slotIn, "overlay"));
                     }
                     { // Non-colored
-                        GlStateManager.color(this.colorR, this.colorG, this.colorB, this.alpha);
+                        GlStateManager.color(colorR, colorG, colorB, alpha);
                         t.render(entityLivingBaseIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
                     } // Default
-                        if (!this.skipRenderGlint && itemstack.hasEffect())
+                        if (!skipRenderGlint && itemstack.hasEffect())
                         {
-                            renderEnchantedGlint(this.renderer, entityLivingBaseIn, t, limbSwing, limbSwingAmount, partialTicks, ageInTicks, netHeadYaw, headPitch, scale);
+                            renderEnchantedGlint(renderer, entityLivingBaseIn, t, limbSwing, limbSwingAmount, partialTicks, ageInTicks, netHeadYaw, headPitch, scale, ClientProxy.getColorForEnchantment(EnchantmentHelper.getEnchantments(itemstack)));
                         }
                 }
             }
@@ -95,7 +97,7 @@ public abstract class ModLayerArmorBase<T extends ModelBase> implements LayerRen
 
     public T getModelFromSlot(EntityEquipmentSlot slotIn)
     {
-        return this.isLegSlot(slotIn) ? this.modelLeggings : this.modelArmor;
+        return isLegSlot(slotIn) ? modelLeggings : modelArmor;
     }
 
     private boolean isLegSlot(EntityEquipmentSlot slotIn)
@@ -103,28 +105,28 @@ public abstract class ModLayerArmorBase<T extends ModelBase> implements LayerRen
         return slotIn == EntityEquipmentSlot.LEGS;
     }
 
-    public static void renderEnchantedGlint(RenderLivingBase<?> p_188364_0_, EntityLivingBase p_188364_1_, ModelBase model, float p_188364_3_, float p_188364_4_, float p_188364_5_, float p_188364_6_, float p_188364_7_, float p_188364_8_, float p_188364_9_)
+    public static void renderEnchantedGlint(RenderLivingBase<?> parRenderLivingBase, EntityLivingBase parEntityLivingBase, ModelBase model, float parLimbSwing, float parLimbSwingAmount, float parPartialTicks, float parAgeInTicks, float parHeadYaw, float parHeadPitch, float parScale, int parColor)
     {
-        float f = p_188364_1_.ticksExisted + p_188364_5_;
-        p_188364_0_.bindTexture(ENCHANTED_ITEM_GLINT_RES);
+        float f = parEntityLivingBase.ticksExisted + parPartialTicks;
+        parRenderLivingBase.bindTexture(ENCHANTED_ITEM_GLINT_RES);
         Minecraft.getMinecraft().entityRenderer.setupFogColor(true);
         GlStateManager.enableBlend();
         GlStateManager.depthFunc(514);
         GlStateManager.depthMask(false);
-        GlStateManager.color(1.0F, 0.0F, 0.0F, 1.0F); // originally was 0.5F, 0.5F, 0.5F, 1.0F);
+        GlStateManager.color(ClientProxy.redFromColor(parColor), ClientProxy.greenFromColor(parColor), ClientProxy.blueFromColor(parColor), ClientProxy.alphaFromColor(parColor)); // originally was 0.5F, 0.5F, 0.5F, 1.0F);
 
         for (int i = 0; i < 2; ++i)
         {
             GlStateManager.disableLighting();
             GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_COLOR, GlStateManager.DestFactor.ONE);
-            GlStateManager.color(1.0F, 0.0F, 0.0F, 1.0F); // originally was 0.38F, 0.19F, 0.608F, 1.0F);
+            GlStateManager.color(ClientProxy.redFromColor(parColor), ClientProxy.greenFromColor(parColor), ClientProxy.blueFromColor(parColor), ClientProxy.alphaFromColor(parColor)); // originally was 0.38F, 0.19F, 0.608F, 1.0F);
             GlStateManager.matrixMode(5890);
             GlStateManager.loadIdentity();
             GlStateManager.scale(0.33333334F, 0.33333334F, 0.33333334F);
             GlStateManager.rotate(30.0F - i * 60.0F, 0.0F, 0.0F, 1.0F);
             GlStateManager.translate(0.0F, f * (0.001F + i * 0.003F) * 20.0F, 0.0F);
             GlStateManager.matrixMode(5888);
-            model.render(p_188364_1_, p_188364_3_, p_188364_4_, p_188364_6_, p_188364_7_, p_188364_8_, p_188364_9_);
+            model.render(parEntityLivingBase, parLimbSwing, parLimbSwingAmount, parAgeInTicks, parHeadYaw, parHeadPitch, parScale);
             GlStateManager.blendFunc(GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
         }
 

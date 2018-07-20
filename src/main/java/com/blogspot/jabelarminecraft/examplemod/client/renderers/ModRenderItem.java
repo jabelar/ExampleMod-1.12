@@ -2,6 +2,8 @@ package com.blogspot.jabelarminecraft.examplemod.client.renderers;
 
 import java.util.List;
 
+import com.blogspot.jabelarminecraft.examplemod.proxy.ClientProxy;
+
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;
@@ -20,7 +22,6 @@ import net.minecraft.client.renderer.texture.TextureUtil;
 import net.minecraft.client.renderer.tileentity.TileEntityItemStackRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.init.Enchantments;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
@@ -35,9 +36,6 @@ public class ModRenderItem extends RenderItem
     private final ItemColors itemColors;
     @SuppressWarnings("unused")
     private final ItemModelMesher itemModelMesher;
-    
-    private int color = 0xFF00FF00;
-
 
     public ModRenderItem(TextureManager parTextureManager, ModelManager parModelManager, ItemColors parItemColors, ItemModelMesher parItemModelMesher)
     {
@@ -66,20 +64,11 @@ public class ModRenderItem extends RenderItem
             }
             else
             {
-                this.renderModel(model, stack);
+                renderModel(model, stack);
 
                 if (stack.hasEffect())
                 {
-                    if (EnchantmentHelper.getEnchantmentLevel(Enchantments.FLAME, stack) > 0)
-                    {
-                        color = 0xFFFF0000;
-                    }
-                    else
-                    {
-                        color = 0xFF00FF00;
-                    }
-                    
-                    this.renderEffect(model);
+                    renderEffect(model, ClientProxy.getColorForEnchantment(EnchantmentHelper.getEnchantments(stack)));
                 }
             }
 
@@ -87,44 +76,44 @@ public class ModRenderItem extends RenderItem
         }
     }
     
-    private void renderEffect(IBakedModel model)
+    private void renderEffect(IBakedModel model, int color)
     {
         GlStateManager.depthMask(false);
         GlStateManager.depthFunc(514);
         GlStateManager.disableLighting();
         GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_COLOR, GlStateManager.DestFactor.ONE);
-        this.textureManager.bindTexture(RES_ITEM_GLINT);
+        textureManager.bindTexture(RES_ITEM_GLINT);
         GlStateManager.matrixMode(5890);
         GlStateManager.pushMatrix();
         GlStateManager.scale(8.0F, 8.0F, 8.0F);
         float f = Minecraft.getSystemTime() % 3000L / 3000.0F / 8.0F;
         GlStateManager.translate(f, 0.0F, 0.0F);
         GlStateManager.rotate(-50.0F, 0.0F, 0.0F, 1.0F);
-        this.renderModel(model, color); // original was -8372020);
+        renderModel(model, color); // original was -8372020);
         GlStateManager.popMatrix();
         GlStateManager.pushMatrix();
         GlStateManager.scale(8.0F, 8.0F, 8.0F);
         float f1 = Minecraft.getSystemTime() % 4873L / 4873.0F / 8.0F;
         GlStateManager.translate(-f1, 0.0F, 0.0F);
         GlStateManager.rotate(10.0F, 0.0F, 0.0F, 1.0F);
-        this.renderModel(model, color); // original was -8372020);
+        renderModel(model, color); // original was -8372020);
         GlStateManager.popMatrix();
         GlStateManager.matrixMode(5888);
         GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
         GlStateManager.enableLighting();
         GlStateManager.depthFunc(515);
         GlStateManager.depthMask(true);
-        this.textureManager.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
+        textureManager.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
     }
     
     private void renderModel(IBakedModel model, ItemStack stack)
     {
-        this.renderModel(model, -1, stack);
+        renderModel(model, -1, stack);
     }
 
     private void renderModel(IBakedModel model, int color)
     {
-        this.renderModel(model, color, ItemStack.EMPTY);
+        renderModel(model, color, ItemStack.EMPTY);
     }
 
     private void renderModel(IBakedModel model, int color, ItemStack stack)
@@ -135,10 +124,10 @@ public class ModRenderItem extends RenderItem
 
         for (EnumFacing enumfacing : EnumFacing.values())
         {
-            this.renderQuads(bufferbuilder, model.getQuads((IBlockState)null, enumfacing, 0L), color, stack);
+            renderQuads(bufferbuilder, model.getQuads((IBlockState)null, enumfacing, 0L), color, stack);
         }
 
-        this.renderQuads(bufferbuilder, model.getQuads((IBlockState)null, (EnumFacing)null, 0L), color, stack);
+        renderQuads(bufferbuilder, model.getQuads((IBlockState)null, (EnumFacing)null, 0L), color, stack);
         tessellator.draw();
     }
     
@@ -154,7 +143,7 @@ public class ModRenderItem extends RenderItem
 
             if (flag && bakedquad.hasTintIndex())
             {
-                k = this.itemColors.colorMultiplier(stack, bakedquad.getTintIndex());
+                k = itemColors.colorMultiplier(stack, bakedquad.getTintIndex());
 
                 if (EntityRenderer.anaglyphEnable)
                 {
