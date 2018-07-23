@@ -681,7 +681,7 @@ public class ClientProxy implements IProxy
     
     public static int getColorForEnchantment(Map<Enchantment, Integer> enchMap)
     {
-        int alpha = 0xFF000000;
+        int alpha = 0x66000000;
         
         // Sword enchantments
         if (enchMap.containsKey(Enchantments.BANE_OF_ARTHROPODS)) return alpha | 0xcc00ff;
@@ -730,7 +730,7 @@ public class ClientProxy implements IProxy
         
     public static float alphaFromColor(int parColor)
     {
-        return 0.4F;
+        return 0.32F;
 //        return (parColor >> 24 & 255) / 255.0F;
     }
     

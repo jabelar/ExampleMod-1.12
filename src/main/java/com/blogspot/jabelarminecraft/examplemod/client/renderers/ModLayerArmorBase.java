@@ -64,31 +64,31 @@ public abstract class ModLayerArmorBase<T extends ModelBase> implements LayerRen
 
             if (itemarmor.getEquipmentSlot() == slotIn)
             {
-                T t = getModelFromSlot(slotIn);
-                t = getArmorModelHook(entityLivingBaseIn, itemstack, slotIn, t);
-                t.setModelAttributes(renderer.getMainModel());
-                t.setLivingAnimations(entityLivingBaseIn, limbSwing, limbSwingAmount, partialTicks);
-                setModelSlotVisible(t, slotIn);
+                T model = getModelFromSlot(slotIn);
+                model = getArmorModelHook(entityLivingBaseIn, itemstack, slotIn, model);
+                model.setModelAttributes(renderer.getMainModel());
+                model.setLivingAnimations(entityLivingBaseIn, limbSwing, limbSwingAmount, partialTicks);
+                setModelSlotVisible(model, slotIn);
                 renderer.bindTexture(getArmorResource(entityLivingBaseIn, itemstack, slotIn, null));
 
                 {
                     if (itemarmor.hasOverlay(itemstack)) // Allow this for anything, not only cloth
                     {
-                        int i = itemarmor.getColor(itemstack);
-                        float f = (i >> 16 & 255) / 255.0F;
-                        float f1 = (i >> 8 & 255) / 255.0F;
-                        float f2 = (i & 255) / 255.0F;
-                        GlStateManager.color(colorR * f, colorG * f1, colorB * f2, alpha);
-                        t.render(entityLivingBaseIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
+                        int itemColor = itemarmor.getColor(itemstack);
+                        float itemRed = (itemColor >> 16 & 255) / 255.0F;
+                        float itemGreen = (itemColor >> 8 & 255) / 255.0F;
+                        float itemBlue = (itemColor & 255) / 255.0F;
+                        GlStateManager.color(colorR * itemRed, colorG * itemGreen, colorB * itemBlue, alpha);
+                        model.render(entityLivingBaseIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
                         renderer.bindTexture(getArmorResource(entityLivingBaseIn, itemstack, slotIn, "overlay"));
                     }
                     { // Non-colored
                         GlStateManager.color(colorR, colorG, colorB, alpha);
-                        t.render(entityLivingBaseIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
+                        model.render(entityLivingBaseIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
                     } // Default
                         if (!skipRenderGlint && itemstack.hasEffect())
                         {
-                            renderEnchantedGlint(renderer, entityLivingBaseIn, t, limbSwing, limbSwingAmount, partialTicks, ageInTicks, netHeadYaw, headPitch, scale, ClientProxy.getColorForEnchantment(EnchantmentHelper.getEnchantments(itemstack)));
+                            renderEnchantedGlint(renderer, entityLivingBaseIn, model, limbSwing, limbSwingAmount, partialTicks, ageInTicks, netHeadYaw, headPitch, scale, ClientProxy.getColorForEnchantment(EnchantmentHelper.getEnchantments(itemstack)));
                         }
                 }
             }
