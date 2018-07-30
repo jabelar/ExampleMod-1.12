@@ -2,6 +2,7 @@ package com.blogspot.jabelarminecraft.examplemod.client.renderers;
 
 import java.util.Map;
 
+import com.blogspot.jabelarminecraft.examplemod.MainMod;
 import com.blogspot.jabelarminecraft.examplemod.proxy.ClientProxy;
 import com.google.common.collect.Maps;
 
@@ -22,7 +23,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public abstract class ModLayerArmorBase<T extends ModelBase> implements LayerRenderer<EntityLivingBase>
 {
-    protected static final ResourceLocation ENCHANTED_ITEM_GLINT_RES = new ResourceLocation("textures/misc/enchanted_item_glint.png");
+    protected static final ResourceLocation ENCHANTED_ITEM_GLINT_RES = new ResourceLocation(MainMod.MODID, "textures/misc/enchanted_item_glint.png");
     protected T modelLeggings;
     protected T modelArmor;
     private final RenderLivingBase<?> renderer;
@@ -122,9 +123,9 @@ public abstract class ModLayerArmorBase<T extends ModelBase> implements LayerRen
             GlStateManager.color(ClientProxy.redFromColor(parColor), ClientProxy.greenFromColor(parColor), ClientProxy.blueFromColor(parColor), ClientProxy.alphaFromColor(parColor)); // originally was 0.38F, 0.19F, 0.608F, 1.0F);
             GlStateManager.matrixMode(5890);
             GlStateManager.loadIdentity();
-            GlStateManager.scale(0.33333334F, 0.33333334F, 0.33333334F);
+            GlStateManager.scale(3.0F, 3.0F, 3.0F);
             GlStateManager.rotate(30.0F - i * 60.0F, 0.0F, 0.0F, 1.0F);
-            GlStateManager.translate(0.0F, f * (0.001F + i * 0.003F) * 20.0F, 0.0F);
+            GlStateManager.translate(0.0F, f * (0.001F + i * 0.003F) * 5.0F, 0.0F);
             GlStateManager.matrixMode(5888);
             model.render(parEntityLivingBase, parLimbSwing, parLimbSwingAmount, parAgeInTicks, parHeadYaw, parHeadPitch, parScale);
             GlStateManager.blendFunc(GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);

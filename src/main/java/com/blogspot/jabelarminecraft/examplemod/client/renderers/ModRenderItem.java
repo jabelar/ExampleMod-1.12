@@ -2,6 +2,7 @@ package com.blogspot.jabelarminecraft.examplemod.client.renderers;
 
 import java.util.List;
 
+import com.blogspot.jabelarminecraft.examplemod.MainMod;
 import com.blogspot.jabelarminecraft.examplemod.proxy.ClientProxy;
 
 import net.minecraft.block.state.IBlockState;
@@ -31,7 +32,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class ModRenderItem extends RenderItem
 {
-    private static final ResourceLocation RES_ITEM_GLINT = new ResourceLocation("textures/misc/enchanted_item_glint.png");
+    private static final ResourceLocation RES_ITEM_GLINT = new ResourceLocation(MainMod.MODID, "textures/misc/enchanted_item_glint.png");
     private final TextureManager textureManager;
     private final ItemColors itemColors;
     @SuppressWarnings("unused")
@@ -86,13 +87,13 @@ public class ModRenderItem extends RenderItem
         GlStateManager.matrixMode(5890);
         GlStateManager.pushMatrix();
         GlStateManager.scale(8.0F, 8.0F, 8.0F);
-        float f = Minecraft.getSystemTime() % 3000L / 3000.0F / 8.0F;
-        GlStateManager.translate(f, 0.0F, 0.0F);
-        GlStateManager.rotate(-50.0F, 0.0F, 0.0F, 1.0F);
-        renderModel(model, color); // original was -8372020);
-        GlStateManager.popMatrix();
-        GlStateManager.pushMatrix();
-        GlStateManager.scale(8.0F, 8.0F, 8.0F);
+//        float f = Minecraft.getSystemTime() % 3000L / 3000.0F / 8.0F;
+//        GlStateManager.translate(f, 0.0F, 0.0F);
+//        GlStateManager.rotate(-50.0F, 0.0F, 0.0F, 1.0F);
+//        renderModel(model, color); // original was -8372020);
+//        GlStateManager.popMatrix();
+//        GlStateManager.pushMatrix();
+//        GlStateManager.scale(8.0F, 8.0F, 8.0F);
         float f1 = Minecraft.getSystemTime() % 4873L / 4873.0F / 8.0F;
         GlStateManager.translate(-f1, 0.0F, 0.0F);
         GlStateManager.rotate(10.0F, 0.0F, 0.0F, 1.0F);
