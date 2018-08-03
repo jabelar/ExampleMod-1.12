@@ -124,6 +124,13 @@ public class GuiConfigMod extends GuiConfig
             if (flag)
                 this.mc.displayGuiScreen(this.parentScreen);
         }
+        else if (button.id == 2001)
+        {
+            this.entryList.setAllToDefault(this.chkApplyGlobally.isChecked());
+        }
+        else if (button.id == 2002)
+        {
+            this.entryList.undoAllChanges(this.chkApplyGlobally.isChecked());
+        }
     }
-
 }
